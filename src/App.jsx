@@ -56,7 +56,7 @@ const App = () => {
                                 </Typography>
                             </CardBody>
 
-                            <CardFooter className="pt-0">
+                            {/* <CardFooter className="pt-0">
                                 <Button
                                     size="lg"
                                     color="dark"
@@ -66,7 +66,7 @@ const App = () => {
                                 >
                                     Profile Github
                                 </Button>
-                            </CardFooter>
+                            </CardFooter> */}
                         </Card>
                     ))}
                 </ul>
