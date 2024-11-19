@@ -3,6 +3,6 @@ import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  base: "https://Slinkter.github.io/myprojectapi01",
+    plugins: [react()],
+    base: "https://Slinkter.github.io/myprojectapi01",
 });
