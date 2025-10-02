@@ -1,6 +1,8 @@
-import { useState, useMemo, useTransition } from "react";
-import { useFetch } from "./hooks/useFetch.js";
+import { useEffect, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useTheme } from "./hooks/useTheme.js";
+import { setSearchTerm } from "./features/search/searchSlice";
+import { fetchUsers } from "./features/users/usersSlice";
 
 import PageHeader from "./components/layout/PageHeader";
 import ErrorDisplay from "./components/layout/ErrorDisplay";
@@ -8,14 +10,23 @@ import SkeletonGrid from "./components/layout/SkeletonGrid";
 import UserList from "./components/layout/UserList";
 import NotFound from "./components/layout/NotFound";
 
-const API_URL = "https://api.github.com/users";
-
 const App = () => {
     const [theme, toggleTheme] = useTheme();
-    const [searchTerm, setSearchTerm] = useState("");
-    const { data: users, isLoading, error, refetch } = useFetch(API_URL);
-    const [isPending, startTransition] = useTransition();
+    const dispatch = useDispatch();
 
+    // Selecciona el estado desde el store de Redux
+    const searchTerm = useSelector((state) => state.search.searchTerm);
+    const { users, isLoading, error } = useSelector((state) => state.users);
+
+    // Carga los usuarios en el primer renderizado
+    useEffect(() => {
+        // Solo carga los usuarios si no se han cargado o intentado cargar antes
+        if (isLoading === 'idle') {
+            dispatch(fetchUsers());
+        }
+    }, [isLoading, dispatch]);
+
+    // Filtrado de usuarios memorizado basado en el término de búsqueda
     const filteredUsers = useMemo(() => {
         if (!users) return [];
         return users.filter((user) =>
@@ -23,17 +34,25 @@ const App = () => {
         );
     }, [users, searchTerm]);
 
+    // Manejador para los cambios en el input de búsqueda
     const handleSearch = (e) => {
-        startTransition(() => setSearchTerm(e.target.value));
+        dispatch(setSearchTerm(e.target.value));
     };
 
-    if (error) {
-        return <ErrorDisplay message={error.message} onRetry={refetch} />;
-    }
+    // Manejador para reintentar la carga de datos
+    const handleRetry = () => {
+        dispatch(fetchUsers());
+    };
 
+    // Lógica de renderizado basada en el estado de Redux
     const renderContent = () => {
-        if (isLoading) {
+        const isLoadingOrIdle = isLoading === 'loading' || isLoading === 'idle';
+
+        if (isLoadingOrIdle) {
             return <SkeletonGrid />;
+        }
+        if (error) {
+            return <ErrorDisplay message={error} onRetry={handleRetry} />;
         }
         if (filteredUsers.length > 0) {
             return <UserList users={filteredUsers} />;
@@ -48,7 +67,7 @@ const App = () => {
                 toggleTheme={toggleTheme}
                 searchTerm={searchTerm}
                 handleSearch={handleSearch}
-                isSearching={isPending}
+                isSearching={isLoading === 'loading'}
             />
             {renderContent()}
         </main>
