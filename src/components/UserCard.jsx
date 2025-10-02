@@ -9,21 +9,23 @@ import {
 } from "@material-tailwind/react";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
 
-const UserCard = React.memo(({ item }) => {
+const UserCard = React.memo(({ user = {} }) => {
+    const { avatar_url, login, html_url } = user;
     const cardRef = useRef(null);
-    const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 }); // booleando
+    const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 });
+
+    const cardClasses = [
+        "w-full max-w-xs shadow-lg hover:shadow-xl rounded-xl overflow-hidden",
+        "bg-white transition-all duration-300 dark:bg-gray-800",
+        isVisible ? "animate-scale-in" : "opacity-0",
+    ].join(" ");
 
     return (
-        <Card
-            ref={cardRef}
-            className={`w-full max-w-xs shadow-lg hover:shadow-xl rounded-xl overflow-hidden bg-white dark:bg-gray-800 ${
-                isVisible ? "animate-scale-in" : "opacity-0"
-            }`}
-        >
+        <Card ref={cardRef} className={cardClasses}>
             <CardHeader floated={false} shadow={false} className="mx-auto mt-6">
                 <img
-                    src={item?.avatar_url}
-                    alt={item?.login}
+                    src={avatar_url}
+                    alt={`Avatar de ${login}`}
                     loading="lazy"
                     className="h-40 w-40 rounded-full object-cover object-center shadow-md"
                 />
@@ -34,15 +36,15 @@ const UserCard = React.memo(({ item }) => {
                     color="blue-gray"
                     className="mb-2 dark:text-white"
                 >
-                    {item?.login}
+                    {login}
                 </Typography>
             </CardBody>
             <CardFooter className="pt-0">
                 <a
-                    href={item?.html_url}
+                    href={html_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`Ver el perfil de ${item?.login} en Github`}
+                    aria-label={`Ver el perfil de ${login} en Github`}
                 >
                     <Button
                         color="amber"
@@ -57,6 +59,7 @@ const UserCard = React.memo(({ item }) => {
         </Card>
     );
 });
+
 UserCard.displayName = "UserCard";
 
 export default UserCard;

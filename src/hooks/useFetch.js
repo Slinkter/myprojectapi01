@@ -19,8 +19,8 @@ export const useFetch = (url) => {
             const response = await fetch(url); // Realiza la petición
             if (!response.ok) {
                 // Si la respuesta no es exitosa (ej. 404, 500)
-                const msjerror = `HTTP error! status: ${response.status} - ${response.statusText}`;
-                throw new Error(msjerror); // Lanza un error
+                const errorMessage = `HTTP error! status: ${response.status} - ${response.statusText}`;
+                throw new Error(errorMessage); // Lanza un error
             }
             const result = await response.json(); // Parsea la respuesta JSON
             setData(result); // Almacena los datos

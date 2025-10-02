@@ -36,7 +36,7 @@ module.exports = withMT({
                         transform: "translateY(0)",
                     },
                 },
-                "scale-in-card": {
+                "scale-in": {
                     "0%": {
                         opacity: "0",
                         transform: "scale(0.9)",
@@ -46,7 +46,7 @@ module.exports = withMT({
                         transform: "scale(1)",
                     },
                 },
-                "fade-in-no-found-user": {
+                "fade-in": {
                     "0%": {
                         opacity: "0",
                     },
@@ -57,8 +57,8 @@ module.exports = withMT({
             },
             animation: {
                 "fade-in-up": "fade-in-up 0.5s ease-out forwards",
-                "scale-in": "scale-in-card 0.5s ease-in-out forwards",
-                "fade-in": "fade-in-no-found-user 0.5s ease-in-out forwards",
+                "scale-in": "scale-in 0.5s ease-in-out forwards",
+                "fade-in": "fade-in 0.5s ease-in-out forwards",
             },
         },
     },
