@@ -1,91 +1,89 @@
 # Proyecto: Visor de Usuarios de GitHub con React
 
-pnpm run deploy
-
 ## 1. Demo en Vivo
 
 Puedes ver la aplicación funcionando en el siguiente enlace:
 
-https://slinkter.github.io/myprojectapi01/
+[https://slinkter.github.io/myprojectapi01/](https://slinkter.github.io/myprojectapi01/)
 
-!Captura de la aplicación
-
-![alt text](api01.png "Title")
-
-**Visor de Usuarios de GitHub en GitHub Pages**
+![Captura de la aplicación](api01.png "Visor de Usuarios de GitHub")
 
 ---
 
 ## 2. Descripción General
 
-Este proyecto es una aplicación web moderna construida con React que consume la API pública de GitHub para mostrar una lista de usuarios. Su propósito es servir como demostración de buenas prácticas en el desarrollo front-end, incluyendo:
+Esta es una aplicación web de página única (SPA) desarrollada con React que consume la API pública de GitHub para obtener y mostrar una lista de usuarios. La aplicación permite filtrar los usuarios en tiempo real y presenta una interfaz de usuario moderna, reactiva y con un tema claro/oscuro.
 
--   Abstracción de lógica en hooks personalizados.
--   Manejo avanzado de estado con características concurrentes de React.
--   Optimización de rendimiento (lazy loading, memoización, animaciones eficientes).
--   Diseño responsivo y una experiencia de usuario fluida.
+El proyecto está diseñado siguiendo las mejores prácticas de la industria, con un enfoque en un código limpio, escalable y mantenible a través de una arquitectura robusta.
+
+---
 
 ## 3. Características Principales
 
--   **Búsqueda y Filtrado en Tiempo Real**: Filtra la lista de usuarios de forma instantánea mientras el usuario escribe.
--   **Tema Claro/Oscuro**: Permite al usuario cambiar entre un tema claro y uno oscuro, persistiendo la preferencia.
--   **Carga Perezosa (Lazy Loading)**: Tanto los componentes de React como las imágenes se cargan de forma perezosa para optimizar el tiempo de carga inicial.
--   **UI Concurrente**: La búsqueda no bloquea la interfaz gracias a `useTransition`, manteniendo la aplicación siempre responsiva.
--   **Animaciones al Hacer Scroll**: Las tarjetas de usuario aparecen con una animación suave a medida que entran en el área visible de la pantalla.
--   **Manejo de Estados**: Muestra esqueletos de carga (skeletons) mientras se obtienen los datos y un mensaje claro en caso de error en la API.
+-   **Visualización de Usuarios:** Carga y muestra una lista de usuarios desde la API de GitHub.
+-   **Búsqueda en Tiempo Real:** Filtra la lista de usuarios de forma instantánea a medida que el usuario escribe.
+-   **Tema Claro/Oscuro:** Permite al usuario cambiar entre un tema claro y uno oscuro. La aplicación detecta la preferencia del sistema operativo en la primera visita y guarda la selección en `localStorage`.
+-   **Carga Asíncrona Optimizada:** Muestra una animación de "esqueleto" (skeleton) mientras se cargan los datos.
+-   **Animaciones Fluidas:** Utiliza animaciones sutiles para la aparición de elementos, como un efecto de cascada al mostrar la lista y efectos de entrada al hacer scroll.
+-   **Manejo de Errores:** Presenta un mensaje de error claro y un botón para reintentar la carga en caso de fallo.
+-   **Diseño Responsivo:** La interfaz se adapta correctamente a diferentes tamaños de pantalla.
 
-## 4. Tecnologías y Librerías
+---
 
--   **React (v18+)**: Utilizando características modernas como hooks, Suspense y transiciones.
--   **Vite**: Herramienta de construcción y servidor de desarrollo ultrarrápido.
--   **Tailwind CSS**: Framework CSS "utility-first" para un estilizado rápido y consistente.
--   **@material-tailwind/react**: Biblioteca de componentes de UI para elementos como tarjetas, botones e inputs.
+## 4. Arquitectura y Estructura del Proyecto
 
-## 5. Estructura del Proyecto y Lógica Clave
+La arquitectura de este proyecto es uno de sus puntos más fuertes y se basa en los siguientes patrones y principios:
 
-La arquitectura se centra en la reutilización de lógica a través de hooks personalizados y la clara separación de responsabilidades.
+### a. Arquitectura Basada en Componentes
 
-### Hooks Personalizados (`src/hooks/`)
+Siguiendo la filosofía de React, la aplicación se construye como un árbol de componentes reutilizables y bien definidos, ubicados en `src/components`.
 
-La lógica compleja se ha extraído en tres hooks reutilizables:
+### b. Patrón Contenedor/Presentacional
 
--   **`useFetch.js`**: Abstrae por completo la lógica de peticiones a la API. Devuelve el estado de carga (`isLoading`), los datos (`data`), el error (`error`) y una función para reintentar (`refetch`). Utiliza `useCallback` para optimizar la función de fetching.
--   **`useTheme.js`**: Gestiona el estado del tema (claro/oscuro). Lee y escribe en `localStorage` para persistir la preferencia del usuario y aplica la clase `dark` al elemento `<html>` para que Tailwind CSS funcione.
--   **`useIntersectionObserver.js`**: Un hook muy potente que utiliza la API `IntersectionObserver` del navegador para detectar eficientemente si un componente es visible en la pantalla. Es la base para las animaciones de aparición al hacer scroll.
+Se ha separado la lógica del aspecto visual:
 
-### Componentes Principales (`src/components/`)
+-   **Componente Contenedor (Inteligente):** `App.jsx` actúa como el orquestador principal. Se encarga de despachar acciones a Redux y seleccionar el estado global, pero delega el renderizado a otros componentes.
+-   **Componentes Presentacionales (Visuales):** La mayoría de los componentes (dentro de `src/components/layout`, `UserCard.jsx`, etc.) son puramente visuales. Reciben datos a través de props y los muestran, sin contener lógica de negocio.
 
--   **`App.jsx`**: Es el componente orquestador.
+### c. Gestión de Estado Centralizada con Redux Toolkit
 
-    -   Utiliza `useFetch` para obtener los datos de los usuarios.
-    -   Implementa `useTransition` para que la actualización del filtro de búsqueda no bloquee la interfaz, proporcionando una experiencia de usuario fluida.
-    -   Gestiona el renderizado condicional: muestra los `SkeletonCard` si `isLoading` es `true`, un mensaje de error si `error` existe, o la lista de usuarios.
-    -   Usa `React.lazy` y `Suspense` para la carga perezosa del componente `UserCard`.
+Se utiliza **Redux Toolkit** para un manejo de estado predecible y escalable:
 
--   **`UserCard.jsx`**: Componente de presentación para una única tarjeta de usuario.
+-   **Store Único:** `src/app/store.js` configura un único "store" que sirve como la fuente de verdad para toda la aplicación.
+-   **Slices:** El estado se divide en "slices" por funcionalidad en la carpeta `src/features`:
+    -   `usersSlice.js`: Gestiona todo lo relacionado con la API (la lista de usuarios, el estado de carga y los errores). Utiliza `createAsyncThunk` para manejar la llamada asíncrona.
+    -   `searchSlice.js`: Gestiona el estado de la UI, como el término de búsqueda del input.
 
-    -   Utiliza `useIntersectionObserver` para aplicar clases de animación (`opacity` y `scale`) solo cuando la tarjeta es visible.
-    -   Añade `loading="lazy"` al `<img>` para que el navegador posponga la carga de imágenes que no están en pantalla.
-    -   Está envuelto en `React.memo` para evitar re-renderizados innecesarios si sus `props` no cambian.
+### d. Hooks Personalizados
 
--   **`SkeletonCard.jsx`**: Un componente simple que muestra una versión "esquelética" de la tarjeta con una animación de pulso (`animate-pulse` de Tailwind), sirviendo como un placeholder de carga.
+Se han creado hooks personalizados en `src/hooks` para encapsular y reutilizar lógica:
+
+-   `useTheme.js`: Abstrae la lógica para el manejo del tema.
+-   `useIntersectionObserver.js`: Permite aplicar animaciones cuando un elemento entra en el campo de visión.
+
+---
+
+## 5. Tecnologías Utilizadas
+
+-   **React 18:** Para la construcción de la interfaz de usuario.
+-   **Vite:** Como herramienta de empaquetado y servidor de desarrollo.
+-   **Redux Toolkit:** Para la gestión del estado global de la aplicación.
+-   **Tailwind CSS:** Para un desarrollo de estilos rápido y personalizable.
+-   **Material Tailwind:** Como librería de componentes base para la UI.
+-   **ESLint:** Para mantener un código limpio y consistente, incluyendo el plugin `jsx-a11y` para reforzar la accesibilidad.
+
+---
 
 ## 6. Optimizaciones de Rendimiento y UX
 
-Este proyecto implementa varias técnicas clave para garantizar una experiencia rápida y agradable:
+1.  **Code Splitting con `React.lazy` y `Suspense`**: El código del componente `UserCard` no se incluye en el paquete inicial. Se descarga automáticamente solo cuando es necesario, reduciendo el tamaño del JavaScript inicial.
+2.  **Memoización con `useMemo` y `React.memo`**:
+    -   `useMemo` se usa para calcular `filteredUsers`, asegurando que el filtrado solo se re-ejecute si los datos relevantes cambian.
+    -   `React.memo` en `UserCard` previene que las tarjetas se vuelvan a renderizar innecesariamente.
+3.  **Observación de Intersección para Animaciones**: En lugar de usar eventos de scroll costosos, `IntersectionObserver` es una solución nativa y de alto rendimiento para activar animaciones.
+4.  **Gestión de Estado Eficiente**: Redux Toolkit gestiona las actualizaciones de estado de forma optimizada, previniendo re-renderizados innecesarios en componentes no afectados.
 
-1.  **Code Splitting con `React.lazy` y `Suspense`**: El código del componente `UserCard` no se incluye en el paquete inicial. Se descarga automáticamente solo cuando es necesario renderizarlo, reduciendo el tamaño del JavaScript inicial.
-
-2.  **Pre-carga de Componentes**: En `App.jsx`, se utiliza `useEffect(() => { import('./components/UserCard') }, [])` para indicarle al navegador que comience a descargar el código de `UserCard` en segundo plano, en paralelo a la petición de la API. Así, cuando los datos lleguen, el componente ya estará disponible.
-
-3.  **Transiciones con `useTransition`**: Al envolver la actualización del estado de búsqueda en `startTransition`, le decimos a React que esta actualización no es urgente. Esto permite que la UI (especialmente el input de texto) permanezca interactiva incluso si el filtrado de una lista grande es costoso.
-
-4.  **Memoización con `useMemo` y `React.memo`**:
-
-    -   `useMemo` se usa para calcular `filteredUsers`, asegurando que el filtrado solo se ejecute si la lista de usuarios o el término de búsqueda cambian.
-    -   `React.memo` en `UserCard` previene que las tarjetas individuales se vuelvan a renderizar si no hay cambios en sus datos.
-
-5.  **Observación de Intersección para Animaciones**: En lugar de usar eventos de scroll costosos, `IntersectionObserver` es una solución nativa y de alto rendimiento para detectar la visibilidad de elementos, ideal para animaciones y carga perezosa.
+---
 
 ## 7. Cómo Ejecutar el Proyecto Localmente
 
@@ -116,7 +114,3 @@ Este proyecto implementa varias técnicas clave para garantizar una experiencia 
 -   `pnpm build`: Compila la aplicación para producción.
 -   `pnpm preview`: Previsualiza la build de producción.
 -   `pnpm deploy`: Despliega la aplicación en GitHub Pages.
-
----
-
-!Captura de la aplicación
