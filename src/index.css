@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,11 +12,27 @@
     }
     body {
         font-family: "Roboto", sans-serif;
+        @apply bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100;
     }
 }
 
 @layer components {
-    .some-clase {
-        @apply text-red-300;
+    .app-container {
+        @apply min-h-dvh flex flex-col items-center p-4 sm:p-6;
+    }
+    .app-header {
+        @apply w-full max-w-screen-2xl my-8;
+    }
+    .theme-toggle-button {
+        @apply rounded-full border border-black dark:bg-gray-100;
+    }
+    .search-container {
+        @apply w-full max-w-md mx-auto mt-6;
+    }
+    .user-list {
+        @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 w-full max-w-screen-2xl;
+    }
+    .center-container {
+        @apply min-h-dvh flex flex-col justify-center items-center;
     }
 }

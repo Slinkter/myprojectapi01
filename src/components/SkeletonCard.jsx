@@ -6,7 +6,7 @@ import {
 } from "@material-tailwind/react";
 
 const SkeletonCard = () => (
-    <Card className="w-full max-w-xs shadow-lg rounded-xl animate-pulse">
+    <Card className="w-full max-w-xs shadow-lg rounded-xl animate-pulse transition-all duration-300 hover:scale-105 hover:shadow-2xl">
         <CardHeader
             shadow={false}
             floated={false}
@@ -21,4 +21,4 @@ const SkeletonCard = () => (
     </Card>
 );
 
-export default SkeletonCard;
+export { SkeletonCard };

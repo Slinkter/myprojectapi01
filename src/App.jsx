@@ -15,7 +15,8 @@ import {
 } from "@material-tailwind/react";
 import { useFetch } from "./hooks/useFetch.js";
 import { useTheme } from "./hooks/useTheme.js";
-import SkeletonCard from "./components/SkeletonCard";
+import { SkeletonCard } from "./components/SkeletonCard";
+import { MoonIcon, SunIcon } from "./assets/Icons.jsx";
 
 const UserCard = lazy(() => import("./components/UserCard"));
 
@@ -50,11 +51,8 @@ const App = () => {
     // Renderizado condicional: Muestra un mensaje de error con un botón para reintentar.
     if (error) {
         return (
-            <div className="min-h-dvh flex flex-col justify-center items-center bg-gray-100 dark:bg-gray-900">
-                <Typography variant="h3" color="red">
-                    Error
-                </Typography>
-                <Typography variant="h3" color="red">
+            <div className="center-container">
+                <Typography variant="h3" color="red" className="text-center">
                     {error.message}
                 </Typography>
                 <Button color="blue" onClick={refetch} className="mt-4 ">
@@ -66,12 +64,12 @@ const App = () => {
 
     // Renderiza la interfaz principal con la lista de usuarios una vez que los datos han sido cargados exitosamente.
     return (
-        <main className="min-h-dvh flex flex-col items-center p-4 sm:p-6 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-            <header className="w-full max-w-screen-2xl my-8">
+        <main className="app-container">
+            <header className="app-header">
                 <div className="flex justify-end mb-4">
                     <IconButton
                         variant="text"
-                        className="rounded-full border border-black dark:bg-gray-100"
+                        className="theme-toggle-button"
                         onChange={toggleTheme}
                         onClick={toggleTheme}
                         aria-label="Toggle theme"
@@ -79,13 +77,21 @@ const App = () => {
                         {theme === "dark" ? <SunIcon /> : <MoonIcon />}
                     </IconButton>
                 </div>
-                <Typography variant="h1" className="mb-2 text-center">
+                <Typography
+                    variant="h1"
+                    className="mb-2 text-center text-brand-dark dark:text-brand-light"
+                >
                     API Github Users
                 </Typography>
-                <Typography variant="lead" className="text-center">
-                    REACT - TAILDWIND
-                </Typography>
-                <div className="w-full max-w-md mx-auto mt-6 ">
+
+                {/* EJEMPLO DE PLUGIN: @tailwindcss/typography */}
+                <article className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert mx-auto mt-8">
+                    <p>
+                        Este proyecto demuestra las capacidades de React 18 con
+                        renderizado concurrente y Tailwind CSS .
+                    </p>
+                </article>
+                <div className="search-container">
                     <Input
                         type="text"
                         className="dark:text-white"
@@ -105,11 +111,16 @@ const App = () => {
 
             {/* El Suspense ahora puede usar el Skeleton como fallback, o simplemente envolver la lista de usuarios reales. */}
             {isLoading ? (
-                <div className="flex justify-center items-center h-64">
-                    <Spinner className="h-16 w-16" />
-                </div>
+                // Mostramos una cuadrícula de esqueletos durante la carga inicial
+                <ul className="user-list animate-fade-in">
+                    {Array.from({ length: 10 }).map((_, index) => (
+                        <li key={index} className="flex justify-center">
+                            <SkeletonCard />
+                        </li>
+                    ))}
+                </ul>
             ) : filteredUsers.length > 0 ? (
-                <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 w-full max-w-screen-2xl">
+                <ul className="user-list">
                     {filteredUsers.map((item) => (
                         <li key={item.id} className="flex justify-center">
                             {/* 3. Suspense por tarjeta:
@@ -122,7 +133,7 @@ const App = () => {
                     ))}
                 </ul>
             ) : (
-                <div className="text-center mt-10">
+                <div className="text-center mt-10 animate-fade-in">
                     <Typography variant="h3" className="dark:text-gray-300">
                         No se encontraron usuarios con {searchTerm} .
                     </Typography>
@@ -131,40 +142,5 @@ const App = () => {
         </main>
     );
 };
-
-// Componentes de íconos para claridad
-const MoonIcon = () => (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-6 h-6"
-    >
-        <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
-        />
-    </svg>
-);
-
-const SunIcon = () => (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-6 h-6"
-    >
-        <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
-        />
-    </svg>
-);
 
 export default App;

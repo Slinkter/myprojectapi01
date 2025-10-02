@@ -16,8 +16,9 @@ const UserCard = React.memo(({ item }) => {
     return (
         <Card
             ref={cardRef}
-            className={`w-full max-w-xs shadow-lg hover:shadow-xl rounded-xl overflow-hidden bg-white dark:bg-gray-800 transition-all duration-500 
-                ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
+            className={`w-full max-w-xs shadow-lg hover:shadow-xl rounded-xl overflow-hidden bg-white dark:bg-gray-800 ${
+                isVisible ? "animate-scale-in" : "opacity-0"
+            }`}
         >
             <CardHeader floated={false} shadow={false} className="mx-auto mt-6">
                 <img
@@ -37,17 +38,21 @@ const UserCard = React.memo(({ item }) => {
                 </Typography>
             </CardBody>
             <CardFooter className="pt-0">
-                <Button
-                    as="a"
+                <a
                     href={item?.html_url}
-                    color="amber"
-                    size="lg"
-                    className="hover:scale-[1.02] focus:scale-[1.02] active:scale-100"
-                    ripple={true}
-                    fullWidth={true}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Ver el perfil de ${item?.login} en Github`}
                 >
-                    Profile Github
-                </Button>
+                    <Button
+                        color="amber"
+                        size="lg"
+                        className="hover:scale-[1.02] focus:scale-[1.02] active:scale-100"
+                        fullWidth={true}
+                    >
+                        Profile Github
+                    </Button>
+                </a>
             </CardFooter>
         </Card>
     );
