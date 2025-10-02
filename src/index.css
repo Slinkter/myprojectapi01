@@ -11,17 +11,16 @@
         color-scheme: dark;
     }
     body {
-        font-family: "Roboto", sans-serif;
         @apply bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100;
     }
 }
 
 @layer components {
-    .app-container {
+    .main-container {
         @apply min-h-dvh flex flex-col items-center p-4 sm:p-6;
     }
-    .app-header {
-        @apply w-full max-w-screen-2xl my-8;
+    .main-header {
+        @apply flex flex-col w-full max-w-screen-2xl my-8 border-2 bg-gray-100;
     }
     .theme-toggle-button {
         @apply rounded-full border border-black dark:bg-gray-100;
@@ -34,5 +33,11 @@
     }
     .center-container {
         @apply min-h-dvh flex flex-col justify-center items-center;
+    }
+
+    /* Anulación de color para el título principal con alta especificidad */
+    .main-header-h1 {
+        /* Dejamos solo los estilos de layout y alineación */
+        @apply mb-2 text-center;
     }
 }

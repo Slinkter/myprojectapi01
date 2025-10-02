@@ -23,24 +23,28 @@ const UserCard = lazy(() => import("./components/UserCard"));
 // URL de la API de GitHub para obtener usuarios
 const API_URL = "https://api.github.com/users";
 
+// 1. useTransition para que la UI no se bloquee al filtrar.
+// 2. Preload del componente:
+// Disparamos la descarga del código de UserCard en paralelo a la petición de datos.
+// Así, cuando los datos lleguen, el componente ya estará listo para renderizarse.
+// Filtra los usuarios basándose en el término de búsqueda.
+// `useMemo` es crucial aquí para optimizar el rendimiento,
+// ya que evita recalcular la lista en cada render, solo cuando `users` o `searchTerm` cambian.// Filtra los usuarios basándose en el término de búsqueda.
+// `useMemo` es crucial aquí para optimizar el rendimiento,
+// ya que evita recalcular la lista en cada render, solo cuando `users` o `searchTerm` cambian.
+/* 3. Suspense por tarjeta:
+Cada tarjeta gestiona su propia carga. Si el bundle de UserCard
+  aún no ha llegado, esta tarjeta mostrará un SkeletonCard. */
 const App = () => {
     const [theme, toggleTheme] = useTheme(); // Hook para gestionar el tema (claro/oscuro)
     const [searchTerm, setSearchTerm] = useState("");
     const { data: users, isLoading, error, refetch } = useFetch(API_URL); // Utiliza el custom hook `useFetch`
-    // 1. useTransition para que la UI no se bloquee al filtrar.
     const [isPending, startTransition] = useTransition();
 
-    // 2. Preload del componente:
-    // Disparamos la descarga del código de UserCard en paralelo a la petición de datos.
-    // Así, cuando los datos lleguen, el componente ya estará listo para renderizarse.
     useEffect(() => {
-        // Esta importación dinámica solo pide el archivo, no lo ejecuta.
         import("./components/UserCard");
     }, []);
 
-    // Filtra los usuarios basándose en el término de búsqueda.
-    // `useMemo` es crucial aquí para optimizar el rendimiento,
-    // ya que evita recalcular la lista en cada render, solo cuando `users` o `searchTerm` cambian.
     const filteredUsers = useMemo(() => {
         if (!users) return [];
         return users.filter((user) =>
@@ -48,7 +52,7 @@ const App = () => {
         );
     }, [users, searchTerm]);
 
-    // Renderizado condicional: Muestra un mensaje de error con un botón para reintentar.
+    // Muestra un mensaje de error con un botón para reintentar.
     if (error) {
         return (
             <div className="center-container">
@@ -62,11 +66,10 @@ const App = () => {
         );
     }
 
-    // Renderiza la interfaz principal con la lista de usuarios una vez que los datos han sido cargados exitosamente.
     return (
-        <main className="app-container">
-            <header className="app-header">
-                <div className="flex justify-end mb-4">
+        <main className="main-container">
+            <header className="main-header">
+                <div className="flex justify-end mb-4 border-2">
                     <IconButton
                         variant="text"
                         className="theme-toggle-button"
@@ -79,13 +82,13 @@ const App = () => {
                 </div>
                 <Typography
                     variant="h1"
-                    className="mb-2 text-center text-brand-dark dark:text-brand-light"
+                    className="main-header-h1 text-brand-dark dark:text-brand-light"
                 >
                     API Github Users
                 </Typography>
 
                 {/* EJEMPLO DE PLUGIN: @tailwindcss/typography */}
-                <article className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert mx-auto mt-8">
+                <article className="text-center prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert mx-auto mt-8">
                     <p>
                         Este proyecto demuestra las capacidades de React 18 con
                         renderizado concurrente y Tailwind CSS .
@@ -123,9 +126,6 @@ const App = () => {
                 <ul className="user-list">
                     {filteredUsers.map((item) => (
                         <li key={item.id} className="flex justify-center">
-                            {/* 3. Suspense por tarjeta:
-                                Cada tarjeta gestiona su propia carga. Si el bundle de UserCard
-                                aún no ha llegado, esta tarjeta mostrará un SkeletonCard. */}
                             <Suspense fallback={<SkeletonCard />}>
                                 <UserCard item={item} />
                             </Suspense>
