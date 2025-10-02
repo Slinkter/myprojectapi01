@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 @layer base {
-    * {
-        @apply bg-gray-100;
-        @apply text-gray-900;
+    html.light {
+        color-scheme: light;
+    }
+    html.dark {
+        color-scheme: dark;
+    }
+    body {
         font-family: "Roboto", sans-serif;
     }
 }
