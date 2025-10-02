@@ -115,17 +115,31 @@ const App = () => {
             {/* El Suspense ahora puede usar el Skeleton como fallback, o simplemente envolver la lista de usuarios reales. */}
             {isLoading ? (
                 // Mostramos una cuadrícula de esqueletos durante la carga inicial
-                <ul className="user-list animate-fade-in">
-                    {Array.from({ length: 10 }).map((_, index) => (
-                        <li key={index} className="flex justify-center">
+                <ul className="user-list">
+                    {Array.from({ length: 100 }).map((_, index) => (
+                        <li
+                            key={index}
+                            className="flex justify-center animate-fade-in-up"
+                            style={{
+                                animationDelay: `${index * 100}ms`,
+                                animationFillMode: "backwards",
+                            }}
+                        >
                             <SkeletonCard />
                         </li>
                     ))}
                 </ul>
             ) : filteredUsers.length > 0 ? (
                 <ul className="user-list">
-                    {filteredUsers.map((item) => (
-                        <li key={item.id} className="flex justify-center">
+                    {filteredUsers.map((item, index) => (
+                        <li
+                            key={item.id}
+                            className="flex justify-center animate-fade-in-up"
+                            style={{
+                                animationDelay: `${index * 100}ms`,
+                                animationFillMode: "backwards",
+                            }}
+                        >
                             <Suspense fallback={<SkeletonCard />}>
                                 <UserCard item={item} />
                             </Suspense>

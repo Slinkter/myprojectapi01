@@ -27,7 +27,11 @@ export const useFetch = (url) => {
         } catch (err) {
             setError(err); // Almacena el error
         } finally {
-            setIsLoading(false); // Desactiva el estado de carga, siempre
+            // Agregamos un pequeño retraso para asegurar que el esqueleto de carga sea visible
+            // por un tiempo mínimo, mejorando la percepción de la transición.
+            setTimeout(() => {
+                setIsLoading(false); // Desactiva el estado de carga después del retraso
+            }, 1500); // 1 segundo de retraso
         }
     }, [url]); // La función se recrea solo si la URL cambia
 
