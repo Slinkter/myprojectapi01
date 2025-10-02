@@ -15,14 +15,18 @@ const UserCard = React.memo(({ user = {} }) => {
     const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 });
 
     const cardClasses = [
-        "w-full max-w-xs shadow-lg hover:shadow-xl rounded-xl overflow-hidden",
-        "bg-white transition-all duration-300 dark:bg-gray-800",
+        "w-full max-w-xs shadow-md hover:shadow-2xl rounded-xl overflow-hidden",
+        "bg-white transition-all duration-100 dark:bg-gray-600",
         isVisible ? "animate-scale-in" : "opacity-0",
     ].join(" ");
 
     return (
         <Card ref={cardRef} className={cardClasses}>
-            <CardHeader floated={false} shadow={false} className="mx-auto mt-6">
+            <CardHeader
+                floated={false}
+                shadow={false}
+                className="mx-auto mt-6 rounded-full object-cover object-center"
+            >
                 <img
                     src={avatar_url}
                     alt={`Avatar de ${login}`}

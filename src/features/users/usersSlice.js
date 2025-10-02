@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const API_URL = "https://api.github.com/users";
+const SLICE_NAME = "users/fetchUsers";
 
 export const fetchUsers = createAsyncThunk(
-    "users/fetchUsers",
+    SLICE_NAME,
     async (_, { rejectWithValue }) => {
         try {
             const response = await fetch(API_URL);
@@ -22,14 +23,14 @@ export const fetchUsers = createAsyncThunk(
 );
 
 const initialState = {
-    users: [],
     isLoading: "idle", // idle | loading | succeeded | failed
     error: null,
+    users: [],
 };
 
 export const usersSlice = createSlice({
     name: "users",
-    initialState,
+    initialState: initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder

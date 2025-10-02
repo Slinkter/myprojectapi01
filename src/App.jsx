@@ -15,13 +15,13 @@ const App = () => {
     const dispatch = useDispatch();
 
     // Selecciona el estado desde el store de Redux
-    const searchTerm = useSelector((state) => state.search.searchTerm);
     const { users, isLoading, error } = useSelector((state) => state.users);
+    const searchTerm = useSelector((state) => state.search.searchTerm);
 
     // Carga los usuarios en el primer renderizado
     useEffect(() => {
         // Solo carga los usuarios si no se han cargado o intentado cargar antes
-        if (isLoading === 'idle') {
+        if (isLoading === "idle") {
             dispatch(fetchUsers());
         }
     }, [isLoading, dispatch]);
@@ -46,7 +46,7 @@ const App = () => {
 
     // Lógica de renderizado basada en el estado de Redux
     const renderContent = () => {
-        const isLoadingOrIdle = isLoading === 'loading' || isLoading === 'idle';
+        const isLoadingOrIdle = isLoading === "loading" || isLoading === "idle";
 
         if (isLoadingOrIdle) {
             return <SkeletonGrid />;
@@ -67,7 +67,7 @@ const App = () => {
                 toggleTheme={toggleTheme}
                 searchTerm={searchTerm}
                 handleSearch={handleSearch}
-                isSearching={isLoading === 'loading'}
+                isSearching={isLoading === "loading"}
             />
             {renderContent()}
         </main>

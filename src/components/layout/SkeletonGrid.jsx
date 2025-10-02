@@ -1,6 +1,6 @@
 import { SkeletonCard } from "../SkeletonCard";
 
-const SKELETON_COUNT = 10;
+const SKELETON_COUNT = 30;
 
 const SkeletonGrid = () => (
     <ul className="user-list">
