@@ -8,6 +8,10 @@ Puedes ver la aplicación funcionando en el siguiente enlace:
 
 https://slinkter.github.io/myprojectapi01/
 
+!Captura de la aplicación
+
+![alt text](api01.png "Title")
+
 **Visor de Usuarios de GitHub en GitHub Pages**
 
 ---
