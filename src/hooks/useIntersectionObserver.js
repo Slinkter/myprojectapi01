@@ -13,10 +13,9 @@ const useIntersectionObserver = (elementRef, { threshold = 0.1 } = {}) => {
     useEffect(() => {
         const element = elementRef.current;
         if (!element) return;
-
+        // Actualiza el estado basado en si el elemento está o no en el viewport
         const observer = new IntersectionObserver(
             ([entry]) => {
-                // Actualiza el estado basado en si el elemento está o no en el viewport
                 setIsIntersecting(entry.isIntersecting);
             },
             { threshold }

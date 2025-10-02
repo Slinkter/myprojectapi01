@@ -13,11 +13,10 @@ import {
     IconButton,
     Spinner,
 } from "@material-tailwind/react";
-import useFetch from "./hooks/useFetch.js";
+import { useFetch } from "./hooks/useFetch.js";
 import { useTheme } from "./hooks/useTheme.js";
-
-// El Skeleton se importa de forma síncrona para que esté disponible inmediatamente como fallback.
 import SkeletonCard from "./components/SkeletonCard";
+
 const UserCard = lazy(() => import("./components/UserCard"));
 
 // URL de la API de GitHub para obtener usuarios
@@ -106,21 +105,16 @@ const App = () => {
 
             {/* El Suspense ahora puede usar el Skeleton como fallback, o simplemente envolver la lista de usuarios reales. */}
             {isLoading ? (
-                <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 w-full max-w-screen-2xl">
-                    {Array.from({ length: 10 }).map((_, index) => (
-                        <li key={index} className="flex justify-center">
-                            <SkeletonCard />
-                        </li>
-                    ))}
-                </ul>
+                <div className="flex justify-center items-center h-64">
+                    <Spinner className="h-16 w-16" />
+                </div>
             ) : filteredUsers.length > 0 ? (
                 <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 w-full max-w-screen-2xl">
                     {filteredUsers.map((item) => (
                         <li key={item.id} className="flex justify-center">
                             {/* 3. Suspense por tarjeta:
                                 Cada tarjeta gestiona su propia carga. Si el bundle de UserCard
-                                aún no ha llegado, esta tarjeta mostrará un SkeletonCard
-                                sin afectar a las demás. */}
+                                aún no ha llegado, esta tarjeta mostrará un SkeletonCard. */}
                             <Suspense fallback={<SkeletonCard />}>
                                 <UserCard item={item} />
                             </Suspense>

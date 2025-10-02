@@ -8,7 +8,7 @@ import { useState, useEffect, useCallback } from "react";
  * @param {string} url - La URL de la API a la que se realizará la petición.
  * @returns {{data: any, isLoading: boolean, error: Error | null, refetch: function}} - Un objeto con los datos, el estado de carga, el error y una función para reintentar.
  */
-const useFetch = (url) => {
+export const useFetch = (url) => {
     // Estado para almacenar los datos obtenidos de la API
     const [data, setData] = useState(null);
     // Estado para indicar si la petición está en curso
@@ -45,5 +45,3 @@ const useFetch = (url) => {
     // Retorna los estados y datos para que el componente los utilice
     return { data, isLoading, error, refetch: fetchData };
 };
-
-export default useFetch;

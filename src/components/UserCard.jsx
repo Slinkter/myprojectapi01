@@ -11,14 +11,13 @@ import useIntersectionObserver from "../hooks/useIntersectionObserver";
 
 const UserCard = React.memo(({ item }) => {
     const cardRef = useRef(null);
-    const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 });
+    const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 }); // booleando
 
     return (
         <Card
             ref={cardRef}
-            className={`w-full max-w-xs shadow-lg hover:shadow-xl rounded-xl overflow-hidden bg-white dark:bg-gray-800 transition-all duration-500 ${
-                isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
-            }`}
+            className={`w-full max-w-xs shadow-lg hover:shadow-xl rounded-xl overflow-hidden bg-white dark:bg-gray-800 transition-all duration-500 
+                ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
         >
             <CardHeader floated={false} shadow={false} className="mx-auto mt-6">
                 <img
