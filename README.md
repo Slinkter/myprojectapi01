@@ -1,8 +1,12 @@
 # Proyecto: Visor de Usuarios de GitHub con React
 
+pnpm run deploy
+
 ## 1. Demo en Vivo
 
 Puedes ver la aplicación funcionando en el siguiente enlace:
+
+https://slinkter.github.io/myprojectapi01/
 
 **Visor de Usuarios de GitHub en GitHub Pages**
 

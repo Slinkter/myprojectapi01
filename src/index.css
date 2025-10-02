@@ -20,7 +20,7 @@
         @apply min-h-dvh flex flex-col items-center p-4 sm:p-6;
     }
     .main-header {
-        @apply flex flex-col w-full max-w-screen-2xl my-8 border-2 bg-gray-100;
+        @apply flex flex-col w-full max-w-screen-2xl my-8;
     }
     .theme-toggle-button {
         @apply rounded-full border border-black dark:bg-gray-100;
