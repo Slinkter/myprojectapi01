@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 const defaultClasses = "w-6 h-6";
 
 export const MoonIcon = ({ className }) => (
@@ -19,6 +21,10 @@ export const MoonIcon = ({ className }) => (
     </svg>
 );
 
+MoonIcon.propTypes = {
+    className: PropTypes.string,
+};
+
 export const SunIcon = ({ className }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -37,3 +43,7 @@ export const SunIcon = ({ className }) => (
         />
     </svg>
 );
+
+SunIcon.propTypes = {
+    className: PropTypes.string,
+};

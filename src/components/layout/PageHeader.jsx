@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import {
     Typography,
     Input,
@@ -50,5 +51,13 @@ const PageHeader = ({
         </div>
     </header>
 );
+
+PageHeader.propTypes = {
+    theme: PropTypes.string.isRequired,
+    toggleTheme: PropTypes.func.isRequired,
+    searchTerm: PropTypes.string.isRequired,
+    handleSearch: PropTypes.func.isRequired,
+    isSearching: PropTypes.bool.isRequired,
+};
 
 export default PageHeader;

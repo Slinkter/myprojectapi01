@@ -1,4 +1,5 @@
 import { Typography, Button } from "@material-tailwind/react";
+import PropTypes from "prop-types";
 
 const ErrorDisplay = ({ message, onRetry }) => (
     <div className="center-container">
@@ -10,5 +11,10 @@ const ErrorDisplay = ({ message, onRetry }) => (
         </Button>
     </div>
 );
+
+ErrorDisplay.propTypes = {
+    message: PropTypes.string.isRequired,
+    onRetry: PropTypes.func.isRequired,
+};
 
 export default ErrorDisplay;
