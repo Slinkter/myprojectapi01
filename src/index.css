@@ -66,7 +66,7 @@
         @apply w-full max-w-xs shadow-md hover:shadow-2xl rounded-xl overflow-hidden bg-white transition-all duration-100 dark:bg-gray-600;
     }
     .user-card__avatar-container {
-        @apply mx-auto mt-6 rounded-full object-cover object-center;
+        @apply mt-6 flex justify-center;
     }
     .user-card__avatar {
         @apply h-40 w-40 rounded-full object-cover object-center shadow-md;
