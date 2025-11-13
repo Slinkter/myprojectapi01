@@ -44,8 +44,7 @@ const UserCard = React.memo(({ user = {} }) => {
 
     // Clases de CSS condicionales para la animación de entrada.
     const cardClasses = [
-        "w-full max-w-xs shadow-md hover:shadow-2xl rounded-xl overflow-hidden",
-        "bg-white transition-all duration-100 dark:bg-gray-600",
+        "user-card",
         isVisible ? "animate-scale-in" : "opacity-0", // Aplica la animación si es visible.
     ].join(" ");
 
@@ -54,20 +53,20 @@ const UserCard = React.memo(({ user = {} }) => {
             <CardHeader
                 floated={false}
                 shadow={false}
-                className="mx-auto mt-6 rounded-full object-cover object-center"
+                className="user-card__avatar-container"
             >
                 <img
                     src={avatar_url}
                     alt={`Avatar de ${login}`}
                     loading="lazy" // Carga diferida de la imagen.
-                    className="h-40 w-40 rounded-full object-cover object-center shadow-md"
+                    className="user-card__avatar"
                 />
             </CardHeader>
             <CardBody className="text-center">
                 <Typography
                     variant="h4"
                     color="blue-gray"
-                    className="mb-2 dark:text-white"
+                    className="user-card__login"
                 >
                     {login}
                 </Typography>
@@ -82,7 +81,7 @@ const UserCard = React.memo(({ user = {} }) => {
                     <Button
                         color="amber"
                         size="lg"
-                        className="hover:scale-[1.02] focus:scale-[1.02] active:scale-100"
+                        className="user-card__button"
                         fullWidth={true}
                     >
                         Profile Github

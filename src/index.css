@@ -16,28 +16,81 @@
 }
 
 @layer components {
-    .main-container {
+    .app {
         @apply min-h-dvh flex flex-col items-center p-4 sm:p-6;
     }
-    .main-header {
+    .page-header {
         @apply flex flex-col w-full max-w-screen-2xl my-8;
     }
-    .theme-toggle-button {
+    .page-header__theme-toggle {
         @apply rounded-full border border-black dark:bg-gray-100;
     }
-    .search-container {
+    .search-form {
         @apply w-full max-w-md mx-auto mt-6;
     }
-    .user-list {
+    .user-grid {
         @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 w-full max-w-screen-2xl;
     }
-    .center-container {
+    .user-grid__item {
+        @apply flex justify-center animate-fade-in-up;
+    }
+    .error-display {
         @apply min-h-dvh flex flex-col justify-center items-center;
     }
 
     /* Anulación de color para el título principal con alta especificidad */
-    .main-header-h1 {
+    .page-header__title {
         /* Dejamos solo los estilos de layout y alineación */
         @apply mb-2 text-center;
+    }
+    .page-header__prose {
+        @apply text-center prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert mx-auto mt-8;
+    }
+
+    /* SkeletonCard Styles */
+    .skeleton-card {
+        @apply w-full max-w-xs shadow-lg rounded-xl animate-pulse transition-all duration-300;
+    }
+    .skeleton-card__header {
+        @apply relative grid h-48 mx-auto place-items-center bg-gray-300;
+    }
+    .skeleton-card__body-line {
+        @apply h-6 w-3/4 mx-auto bg-gray-300 rounded-full;
+    }
+    .skeleton-card__footer-line {
+        @apply h-12 w-full bg-gray-300 rounded-lg;
+    }
+
+    /* UserCard Styles */
+    .user-card {
+        @apply w-full max-w-xs shadow-md hover:shadow-2xl rounded-xl overflow-hidden bg-white transition-all duration-100 dark:bg-gray-600;
+    }
+    .user-card__avatar-container {
+        @apply mx-auto mt-6 rounded-full object-cover object-center;
+    }
+    .user-card__avatar {
+        @apply h-40 w-40 rounded-full object-cover object-center shadow-md;
+    }
+    .user-card__login {
+        @apply mb-2 dark:text-white;
+    }
+    .user-card__button {
+        @apply hover:scale-[1.02] focus:scale-[1.02] active:scale-100;
+    }
+
+    /* NotFound Styles */
+    .not-found {
+        @apply text-center mt-10 animate-fade-in;
+    }
+    .not-found__text {
+        @apply dark:text-gray-300;
+    }
+
+    /* ErrorDisplay Styles */
+    .error-display__message {
+        @apply text-center;
+    }
+    .error-display__button {
+        @apply mt-4;
     }
 }

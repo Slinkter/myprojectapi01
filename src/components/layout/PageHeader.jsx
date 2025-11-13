@@ -14,11 +14,11 @@ const PageHeader = ({
     handleSearch,
     isSearching,
 }) => (
-    <header className="main-header">
+    <header className="page-header">
         <div className="flex justify-end mb-4">
             <IconButton
                 variant="text"
-                className="theme-toggle-button"
+                className="page-header__theme-toggle"
                 onClick={toggleTheme}
                 aria-label="Toggle theme"
             >
@@ -27,18 +27,18 @@ const PageHeader = ({
         </div>
         <Typography
             variant="h1"
-            className="main-header-h1 text-brand-dark dark:text-brand-light"
+            className="page-header__title text-brand-dark dark:text-brand-light"
         >
             API Github Users
         </Typography>
 
-        <article className="text-center prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert mx-auto mt-8">
+        <article className="page-header__prose">
             <p>
                 Este proyecto demuestra las capacidades de React 18 con
                 renderizado concurrente y Tailwind CSS.
             </p>
         </article>
-        <div className="search-container">
+        <div className="search-form">
             <Input
                 type="text"
                 className="dark:text-white"

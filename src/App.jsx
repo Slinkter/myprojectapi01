@@ -81,7 +81,7 @@ const App = () => {
     };
 
     return (
-        <main className="main-container">
+        <main className="app">
             {/* El cabecero de la página recibe el estado y los manejadores como props. */}
             <PageHeader
                 theme={theme}

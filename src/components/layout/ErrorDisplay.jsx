@@ -2,11 +2,11 @@ import { Typography, Button } from "@material-tailwind/react";
 import PropTypes from "prop-types";
 
 const ErrorDisplay = ({ message, onRetry }) => (
-    <div className="center-container">
-        <Typography variant="h3" color="red" className="text-center">
+    <div className="error-display">
+        <Typography variant="h3" color="red" className="error-display__message">
             {message}
         </Typography>
-        <Button color="blue" onClick={onRetry} className="mt-4">
+        <Button color="blue" onClick={onRetry} className="error-display__button">
             Reintentar
         </Button>
     </div>

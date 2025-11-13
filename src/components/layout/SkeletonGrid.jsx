@@ -3,11 +3,11 @@ import { SkeletonCard } from "../SkeletonCard";
 const SKELETON_COUNT = 30;
 
 const SkeletonGrid = () => (
-    <ul className="user-list">
+    <ul className="user-grid">
         {Array.from({ length: SKELETON_COUNT }).map((_, index) => (
             <li
                 key={index}
-                className="flex justify-center animate-fade-in-up"
+                className="user-grid__item"
                 style={{
                     animationDelay: `${index * 100}ms`,
                     animationFillMode: "backwards",

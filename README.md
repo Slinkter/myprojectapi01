@@ -73,6 +73,14 @@ Se han creado hooks personalizados en `src/hooks` para encapsular y reutilizar l
 -   `useTheme.js`: Abstrae la lógica para el manejo del tema.
 -   `useIntersectionObserver.js`: Permite aplicar animaciones cuando un elemento entra en el campo de visión.
 
+### e. Metodología BEM para CSS
+
+Para asegurar la escalabilidad y mantenibilidad de los estilos CSS, se ha adoptado la metodología BEM (Block, Element, Modifier).
+
+-   **Alternativas Consideradas:** Otras metodologías como OOCSS (Object-Oriented CSS) o SMACSS (Scalable and Modular Architecture for CSS) ofrecen enfoques similares para estructurar CSS. También se podría haber optado por CSS-in-JS o módulos CSS.
+-   **Justificación de la Elección:** BEM proporciona una convención de nomenclatura estricta que facilita la comprensión de la relación entre el HTML y el CSS, así como la reutilización de componentes. Al aplicar BEM, cada clase CSS en `index.css` sigue el patrón `bloque__elemento--modificador`, lo que mejora la claridad, evita conflictos de nombres y simplifica el mantenimiento de los estilos a medida que el proyecto crece. Esta metodología se integra perfectamente con Tailwind CSS, permitiendo definir clases semánticas que encapsulan un conjunto de utilidades de Tailwind.
+
+
 ---
 
 ## 5. Tecnologías Utilizadas

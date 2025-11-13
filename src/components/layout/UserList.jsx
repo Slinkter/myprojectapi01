@@ -4,11 +4,11 @@ import PropTypes from "prop-types";
 const UserCard = lazy(() => import("../UserCard"));
 
 const UserList = ({ users }) => (
-    <ul className="user-list">
+    <ul className="user-grid">
         {users.map((user, index) => (
             <li
                 key={user.id}
-                className="flex justify-center animate-fade-in-up"
+                className="user-grid__item"
                 style={{
                     animationDelay: `${index * 100}ms`,
                     animationFillMode: "backwards",
