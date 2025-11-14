@@ -30,11 +30,18 @@ export const searchSlice = createSlice({
         setSearchTerm: (state, action) => {
             state.searchTerm = action.payload;
         },
+        /**
+         * Reducer para limpiar el término de búsqueda y restablecerlo a su valor inicial.
+         * @param {object} state - El estado actual del slice.
+         */
+        clearSearchTerm: (state) => {
+            state.searchTerm = initialState.searchTerm;
+        },
     },
 });
 
-// La acción `setSearchTerm` generada automáticamente por `createSlice`.
-export const { setSearchTerm } = searchSlice.actions;
+// Las acciones generadas automáticamente por `createSlice`.
+export const { setSearchTerm, clearSearchTerm } = searchSlice.actions;
 
 //  Este reducer se combinará en el store principal.
 export default searchSlice.reducer;

@@ -43,30 +43,30 @@ const UserCard = React.memo(({ user = {} }) => {
     const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 });
 
     // Clases de CSS condicionales para la animación de entrada.
-    const cardClasses = [
-        "user-card",
-        isVisible ? "animate-scale-in" : "opacity-0", // Aplica la animación si es visible.
-    ].join(" ");
+    const animationClass = isVisible ? "animate-scale-in" : "opacity-0";
 
     return (
-        <Card ref={cardRef} className={cardClasses}>
+        <Card
+            ref={cardRef}
+            className={`w-full max-w-xs overflow-hidden bg-white dark:bg-gray-800 transition-all duration-100 hover:shadow-2xl ${animationClass}`}
+            shadow={true}
+        >
             <CardHeader
                 floated={false}
                 shadow={false}
-                className="user-card__avatar-container"
+                className="mx-auto mt-6 flex h-40 w-40 justify-center bg-white dark:bg-gray-800"
             >
                 <img
                     src={avatar_url}
                     alt={`Avatar de ${login}`}
                     loading="lazy" // Carga diferida de la imagen.
-                    className="user-card__avatar"
+                    className="h-full w-full rounded-full object-cover object-center shadow-md"
                 />
             </CardHeader>
             <CardBody className="text-center">
                 <Typography
                     variant="h4"
-                    color="blue-gray"
-                    className="user-card__login"
+                    className="mb-2 text-brand-dark dark:text-brand-light"
                 >
                     {login}
                 </Typography>
@@ -81,7 +81,7 @@ const UserCard = React.memo(({ user = {} }) => {
                     <Button
                         color="amber"
                         size="lg"
-                        className="user-card__button"
+                        className="transition-transform hover:scale-[1.02] focus:scale-[1.02] active:scale-100"
                         fullWidth={true}
                     >
                         Profile Github

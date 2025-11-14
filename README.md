@@ -1,4 +1,4 @@
-# Proyecto: Visor de Usuarios de GitHub con React
+# Proyecto: Buscador de Perfiles de GitHub con React
 
 ## 1. Demo en Vivo
 
@@ -14,7 +14,7 @@ Puedes ver la aplicación funcionando en el siguiente enlace:
 
 Esta es una aplicación web de página única (SPA) desarrollada con React que consume la API pública de GitHub para obtener y mostrar una lista de usuarios. La aplicación permite filtrar los usuarios en tiempo real y presenta una interfaz de usuario moderna, reactiva y con un tema claro/oscuro.
 
-El proyecto está diseñado siguiendo las mejores prácticas de la industria, con un enfoque en un código limpio, escalable y mantenible a través de una arquitectura robusta.
+El proyecto está diseñado siguiendo las mejores prácticas de la industria, con un enfoque en un código limpio, escalable y mantenible a través de una arquitectura robusta y bien documentada.
 
 ---
 
@@ -25,7 +25,7 @@ El proyecto está diseñado siguiendo las mejores prácticas de la industria, co
 -   **Tema Claro/Oscuro:** Permite al usuario cambiar entre un tema claro y uno oscuro. La aplicación detecta la preferencia del sistema operativo en la primera visita y guarda la selección en `localStorage`.
 -   **Carga Asíncrona Optimizada:** Muestra una animación de "esqueleto" (skeleton) mientras se cargan los datos.
 -   **Animaciones Fluidas:** Utiliza animaciones sutiles para la aparición de elementos, como un efecto de cascada al mostrar la lista y efectos de entrada al hacer scroll.
--   **Manejo de Errores:** Presenta un mensaje de error claro y un botón para reintentar la carga en caso de fallo.
+-   **Manejo de Errores:** Presenta un mensaje de error claro y un botón para reintentar la carga en caso de que la API falle.
 -   **Diseño Responsivo:** La interfaz se adapta correctamente a diferentes tamaños de pantalla.
 
 ---
@@ -51,7 +51,7 @@ Para organizar los componentes, se ha implementado una variación del patrón **
     -   **Componentes Presentacionales (Visuales):** La mayoría de los componentes (`UserList`, `UserCard`) son "tontos". Simplemente reciben datos a través de props y los renderizan. No saben de dónde vienen los datos ni cómo se modifican.
         Esta separación hace que los componentes visuales sean extremadamente reutilizables y fáciles de probar de forma aislada, ya que su renderizado es predecible para un conjunto de props determinado.
 
-### c. Gestión de Estado Centralizada con Redux Toolkit
+### c. Gestión de Estado Centralizada con Redux Toolkit (Feature-Sliced Design)
 
 Para el manejo del estado global, se eligió **Redux Toolkit**.
 
@@ -80,7 +80,6 @@ Para asegurar la escalabilidad y mantenibilidad de los estilos CSS, se ha adopta
 -   **Alternativas Consideradas:** Otras metodologías como OOCSS (Object-Oriented CSS) o SMACSS (Scalable and Modular Architecture for CSS) ofrecen enfoques similares para estructurar CSS. También se podría haber optado por CSS-in-JS o módulos CSS.
 -   **Justificación de la Elección:** BEM proporciona una convención de nomenclatura estricta que facilita la comprensión de la relación entre el HTML y el CSS, así como la reutilización de componentes. Al aplicar BEM, cada clase CSS en `index.css` sigue el patrón `bloque__elemento--modificador`, lo que mejora la claridad, evita conflictos de nombres y simplifica el mantenimiento de los estilos a medida que el proyecto crece. Esta metodología se integra perfectamente con Tailwind CSS, permitiendo definir clases semánticas que encapsulan un conjunto de utilidades de Tailwind.
 
-
 ---
 
 ## 5. Tecnologías Utilizadas
@@ -88,8 +87,10 @@ Para asegurar la escalabilidad y mantenibilidad de los estilos CSS, se ha adopta
 -   **React 18:** Para la construcción de la interfaz de usuario.
 -   **Vite:** Como herramienta de empaquetado y servidor de desarrollo.
 -   **Redux Toolkit:** Para la gestión del estado global de la aplicación.
+-   **React-Redux:** Para conectar los componentes de React con el store de Redux.
 -   **Tailwind CSS:** Para un desarrollo de estilos rápido y personalizable.
 -   **Material Tailwind:** Como librería de componentes base para la UI.
+-   **Prop-Types:** Para la validación de las props en los componentes, mejorando la robustez y la depuración.
 -   **ESLint:** Para mantener un código limpio y consistente, incluyendo el plugin `jsx-a11y` para reforzar la accesibilidad.
 
 ---
@@ -99,9 +100,10 @@ Para asegurar la escalabilidad y mantenibilidad de los estilos CSS, se ha adopta
 1.  **Code Splitting con `React.lazy` y `Suspense`**: El código del componente `UserCard` no se incluye en el paquete inicial. Se descarga automáticamente solo cuando es necesario, reduciendo el tamaño del JavaScript inicial.
 2.  **Memoización con `useMemo` y `React.memo`**:
     -   `useMemo` se usa para calcular `filteredUsers`, asegurando que el filtrado solo se re-ejecute si los datos relevantes cambian.
-    -   `React.memo` en `UserCard` previene que las tarjetas se vuelvan a renderizar innecesariamente.
+    -   `React.memo` en `UserCard` previene que las tarjetas se vuelvan a renderizar innecesariamente, optimizando el rendimiento de la lista.
 3.  **Observación de Intersección para Animaciones**: En lugar de usar eventos de scroll costosos, `IntersectionObserver` es una solución nativa y de alto rendimiento para activar animaciones.
 4.  **Gestión de Estado Eficiente**: Redux Toolkit gestiona las actualizaciones de estado de forma optimizada, previniendo re-renderizados innecesarios en componentes no afectados.
+5.  **Carga Perezosa de Imágenes (`loading="lazy"`):** Los avatares de los usuarios solo se descargan cuando están a punto de entrar en el área visible del navegador, ahorrando ancho de banda y mejorando el tiempo de carga inicial.
 
 ---
 
@@ -128,7 +130,7 @@ A continuación se detalla la estructura del proyecto y el propósito de cada ar
 │   └── useTheme.js      # Hook para la lógica del tema claro/oscuro.
 ├── App.jsx              # Componente principal que orquesta la aplicación.
 ├── main.jsx             # Punto de entrada de la aplicación.
-└── index.css            # Estilos globales y de Tailwind.
+└── index.css            # Estilos globales, capas de Tailwind y transiciones.
 ```
 
 -   **`main.jsx`**: Es el punto de entrada. Renderiza el componente `App` y lo envuelve en el `Provider` de Redux para que toda la aplicación tenga acceso al `store`.

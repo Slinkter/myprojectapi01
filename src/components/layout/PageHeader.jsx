@@ -5,7 +5,7 @@ import {
     IconButton,
     Spinner,
 } from "@material-tailwind/react";
-import { MoonIcon, SunIcon } from "../../assets/Icons.jsx";
+import { MoonIcon, SparklesIcon } from "@heroicons/react/24/outline";
 
 const PageHeader = ({
     theme,
@@ -15,22 +15,30 @@ const PageHeader = ({
     isSearching,
 }) => (
     <header className="page-header">
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-between items-center w-full mb-4">
+            {/* Espaciador invisible para ayudar a centrar el título */}
+            <div className="w-12" />
+
+            <Typography
+                variant="h1"
+                className="page-header__title text-brand-dark dark:text-brand-light"
+            >
+                API Github Users
+            </Typography>
+
             <IconButton
                 variant="text"
                 className="page-header__theme-toggle"
                 onClick={toggleTheme}
                 aria-label="Toggle theme"
             >
-                {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+                {theme === "dark" ? (
+                    <SparklesIcon className="h-6 w-6 text-blue-gray-900" />
+                ) : (
+                    <MoonIcon className="h-6 w-6 text-blue-gray-900" />
+                )}
             </IconButton>
         </div>
-        <Typography
-            variant="h1"
-            className="page-header__title text-brand-dark dark:text-brand-light"
-        >
-            API Github Users
-        </Typography>
 
         <article className="page-header__prose">
             <p>
