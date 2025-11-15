@@ -1,9 +1,10 @@
 /**
- * Este slice maneja todo el estado relacionado con los usuarios, incluyendo:
- * - El estado de la carga de datos desde la API (idle, loading, succeeded, failed).
- * - Cualquier error que ocurra durante la carga.
- * - La lista de usuarios.
- * Utiliza `createAsyncThunk` para gestionar la llamada asíncrona a la API de GitHub.
+ * @file Slice de Redux para los usuarios.
+ * @description
+ * Este archivo gestiona todo lo relacionado con los usuarios:
+ * - La lista de usuarios obtenida de la API.
+ * - El estado de la carga (si está cargando, si tuvo éxito o si falló).
+ * - El mensaje de error en caso de que algo salga mal.
  */
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -20,22 +21,22 @@ const SLICE_NAME = "users/fetchUsers";
  */
 export const fetchUsers = createAsyncThunk(
     SLICE_NAME,
-    async (_, { reject }) => {
+    async (_, { rejectWithValue }) => {
         try {
             const response = await fetch(API_URL);
             if (!response.ok) {
                 // Si la respuesta no es exitosa, rechaza la promesa con un mensaje de error formateado.
                 const errorMessage = `HTTP error! status: ${response.status} - ${response.statusText}`;
-                return reject(errorMessage);
+                return rejectWithValue(errorMessage);
             }
             const data = await response.json();
             // Se añade un retraso artificial para asegurar que la animación del esqueleto sea visible
             // y mejorar la experiencia de usuario en conexiones muy rápidas.
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 3000));
             return data; // El valor de retorno en caso de éxito se convierte en el `payload` de la acción `fulfilled`.
         } catch (error) {
             // Si ocurre un error en la red o en el fetch, rechaza la promesa con el mensaje de error.
-            return reject(error.message);
+            return rejectWithValue(error.message);
         }
     }
 );
@@ -43,13 +44,16 @@ export const fetchUsers = createAsyncThunk(
 // Crea el slice de usuarios.
 // `extraReducers` permite a un slice responder a acciones que no fueron definidas en su campo `reducers`.
 // Es ideal para manejar los estados de un `createAsyncThunk`.
+
+const initialState = {
+    isLoading: "idle", // El estado puede ser: 'idle', 'loading', 'succeeded', 'failed'
+    error: null, // Almacena el mensaje de error si la carga falla.
+    users: [], // Array para almacenar los datos de los usuarios.
+};
+
 export const usersSlice = createSlice({
     name: "users",
-    initialState: {
-        isLoading: "idle", // El estado puede ser: 'idle', 'loading', 'succeeded', 'failed'
-        error: null, // Almacena el mensaje de error si la carga falla.
-        users: [], // Array para almacenar los datos de los usuarios.
-    },
+    initialState: initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder

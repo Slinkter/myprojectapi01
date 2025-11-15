@@ -13,7 +13,9 @@ export const useTheme = () => {
             return savedTheme;
         }
         // 2. Si no hay tema guardado, revisa la preferencia del sistema operativo.
-        const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+        const prefersDark = window.matchMedia?.(
+            "(prefers-color-scheme: dark)"
+        ).matches;
         return prefersDark ? "dark" : "light";
     });
 

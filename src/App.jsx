@@ -1,16 +1,22 @@
 /**
- * Este componente actúa como el orquestador principal de la aplicación (componente contenedor).
+ * @file Componente principal de la aplicación (App).
+ * @author Luis Jesus CC
+ * @description
+ * Este componente es el "cerebro" de la aplicación. Actúa como el director de orquesta:
  * Sus responsabilidades son:
- * 1. Gestionar el estado global a través de Redux, suscribiéndose a los cambios en los `slices` de usuarios y búsqueda.
- * 2. Despachar la acción para cargar los usuarios (`fetchUsers`) cuando el componente se monta por primera vez.
- * 3. Filtrar los usuarios basándose en el término de búsqueda introducido por el usuario.
- * 4. Renderizar condicionalmente la interfaz de usuario según el estado de la aplicación (cargando, error, éxito, no encontrado).
- * 5. Pasar el estado y los manejadores de eventos necesarios a los componentes presentacionales hijos.
+ * 1. Se conecta al "almacén" central de datos (store de Redux) para saber qué está pasando.
+ * 2. Da la orden inicial de cargar los usuarios de GitHub.
+ * 3. Escucha lo que el usuario escribe en la barra de búsqueda para filtrar los resultados.
+ * 4. Decide qué mostrar en pantalla en cada momento: una animación de carga, un error, la lista de usuarios o un mensaje de "no encontrado".
+ * 5. Delega el trabajo de "dibujar" la interfaz a otros componentes más especializados.
  */
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { MoonIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { IconButton } from "@material-tailwind/react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTheme } from "./hooks/useTheme.js";
+
 import { setSearchTerm } from "./features/search/searchSlice";
 import { fetchUsers } from "./features/users/usersSlice";
 
@@ -21,38 +27,60 @@ import UserList from "./components/layout/UserList";
 import NotFound from "./components/layout/NotFound";
 
 const App = () => {
-    // Hook personalizado para gestionar el tema (claro/oscuro).
-    const [theme, toggleTheme] = useTheme();
-    const dispatch = useDispatch();
-
-    const searchTerm = useSelector((state) => state.search.searchTerm);
+    // `useSelector` es como un espía que mira dentro del estado de Redux y nos trae los datos que necesitamos.
+    // Aquí, obtenemos el término de búsqueda actual.
+    // Usaremos un estado local para el valor del input y un efecto para "debounce" la actualización a Redux.
+    const [localSearchTerm, setLocalSearchTerm] = useState("");
+    const { searchTerm } = useSelector((state) => state.search);
+    // Y aquí, obtenemos todo lo relacionado con los usuarios: la lista, si están cargando o si hubo un error.
     const { users, isLoading, error } = useSelector((state) => state.users);
+    // `dispatch` es la función que usamos para enviar "órdenes" o "acciones" a Redux.
+    const dispatch = useDispatch();
+    // Hook personalizado que encapsula toda la lógica para cambiar el tema (claro/oscuro).
+    const [theme, toggleTheme] = useTheme();
 
-    // Efecto para cargar los usuarios cuando el componente se monta.
-    // Se despacha la acción `fetchUsers` solo si el estado es 'idle',
-    // para evitar cargas repetidas si el estado ya es 'loading', 'succeeded' o 'failed'.
+    // `useEffect` se ejecuta después de que el componente se dibuja en pantalla.
+    // Lo usamos para realizar "efectos secundarios", como llamar a una API.
     useEffect(() => {
+        // Solo damos la orden de cargar usuarios (`fetchUsers`) si no se ha hecho antes (estado 'idle'=== reposo).
+        // Esto evita que se hagan llamadas a la API innecesarias en cada re-renderizado.
         if (isLoading === "idle") {
             dispatch(fetchUsers());
         }
     }, [isLoading, dispatch]);
 
-    // Filtrado de usuarios memorizado con `useMemo`.
-    // Esta función solo se re-ejecutará si `users` o `searchTerm` cambian,
-    // optimizando el rendimiento al evitar recálculos innecesarios en cada render.
+    // Efecto para aplicar "debounce" a la búsqueda.
+    // Solo actualiza el término de búsqueda en Redux cuando el usuario deja de escribir.
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            dispatch(setSearchTerm(localSearchTerm));
+        }, 300); // Espera 300ms después de la última pulsación de tecla.
+
+        // Función de limpieza: se ejecuta si el usuario vuelve a escribir antes de que pasen los 300ms.
+        // Esto cancela el temporizador anterior y evita actualizaciones innecesarias.
+        return () => clearTimeout(timerId);
+    }, [localSearchTerm, dispatch]);
+
+    // `useMemo`  "Memoriza" el resultado de una operación costosa.
+    // En este caso, la lista de usuarios filtrados solo se volverá a calcular si la lista
+    // original (`users`) o el término de búsqueda (`searchTerm`) cambian.
     const filteredUsers = useMemo(() => {
+        // caso 1 : si no hay lista de usuarios devolver vacio
         if (!users) return [];
+        // caso 2 : hay usuarios, filtrar segun searchTerm
         return users.filter((user) =>
             user.login.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [users, searchTerm]);
 
-    // Manejador para actualizar el término de búsqueda en el estado de Redux.
+    // Esta función se activa cada vez que el usuario escribe en el campo de búsqueda.
+    // Despacha una acción a Redux para que actualice el `searchTerm` en el estado global.
     const handleSearch = (e) => {
-        dispatch(setSearchTerm(e.target.value));
+        setLocalSearchTerm(e.target.value);
     };
 
-    // Manejador para reintentar la carga de datos en caso de error.
+    // Esta función se pasa al componente de error para que el usuario
+    // pueda intentar cargar los datos de nuevo si algo falló.
     const handleLoadUsers = () => {
         dispatch(fetchUsers());
     };
@@ -62,34 +90,45 @@ const App = () => {
      * @returns {JSX.Element} El componente a renderizar.
      */
     const renderContent = () => {
-        const isLoadingOrIdle = isLoading === "loading" || isLoading === "idle";
+        const isLoadingActive = isLoading === "loading" || isLoading === "idle";
 
-        // Si está cargando o en estado inicial, muestra el esqueleto.
-        if (isLoadingOrIdle) {
+        // Lógica de renderizado condicional:
+        // 1. Si los datos están cargando, mostramos una animación de esqueleto.
+        if (isLoadingActive) {
             return <SkeletonGrid />;
         }
-        // Si hay un error, muestra el componente de error.
+        // 2. Si hubo un error, mostramos un mensaje y un botón para reintentar.
         if (error) {
             return <ErrorDisplay message={error} onRetry={handleLoadUsers} />;
         }
-        // Si hay usuarios filtrados, muestra la lista de usuarios.
+        // 3. Si la búsqueda tiene resultados, mostramos la lista de usuarios.
         if (filteredUsers.length > 0) {
             return <UserList users={filteredUsers} />;
         }
-        // Si no hay resultados, muestra el componente de "no encontrado".
+        // 4. Si no hay resultados para la búsqueda, mostramos un mensaje indicándolo.
         return <NotFound searchTerm={searchTerm} />;
     };
 
     return (
         <main className="app">
-            {/* El cabecero de la página recibe el estado y los manejadores como props. */}
+            <IconButton
+                variant="text"
+                className="page-header__theme-toggle"
+                onClick={toggleTheme}
+                aria-label="Toggle theme"
+            >
+                {theme === "dark" ? (
+                    <SparklesIcon className="page-header__icon" />
+                ) : (
+                    <MoonIcon className="page-header__icon" />
+                )}
+            </IconButton>
             <PageHeader
-                theme={theme}
-                toggleTheme={toggleTheme}
-                searchTerm={searchTerm}
+                searchTerm={localSearchTerm}
                 handleSearch={handleSearch}
                 isSearching={isLoading === "loading"}
             />
+
             {/* Renderiza el contenido principal determinado por la lógica de `renderContent`. */}
             {renderContent()}
         </main>

@@ -7,7 +7,7 @@
     /* Aplica una transición suave a las propiedades de color en todos los elementos.
        Esto hace que el cambio entre modo claro y oscuro sea gradual y agradable. */
     * {
-        @apply transition-all duration-300 ease-in-out;
+        @apply transition-colors duration-300 ease-in-out;
     }
     html.light {
         color-scheme: light;
@@ -22,39 +22,48 @@
 
 @layer components {
     .app {
-        @apply min-h-dvh flex flex-col items-center p-4 sm:p-6;
+        @apply relative min-h-dvh flex flex-col items-center p-4 sm:p-6;
     }
+
+    /* --- Layout del Encabezado --- */
     .page-header {
-        @apply flex flex-col w-full max-w-screen-2xl my-8;
+        @apply flex flex-col w-full max-w-screen-2xl my-8 items-center px-4;
+    }
+    .page-header__top-bar {
+        @apply w-full max-w-3xl mb-4 text-center text-brand dark:text-brand-light;
     }
     .page-header__theme-toggle {
-        @apply rounded-full border border-black dark:bg-gray-100;
+        @apply absolute top-4 right-4 z-10 rounded-full border border-black dark:bg-gray-100;
     }
+    .page-header__icon {
+        @apply h-6 w-6;
+    }
+    .page-header__prose {
+        @apply text-center prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert mx-auto mt-4 mb-6;
+    }
+
+    /* --- Formulario de Búsqueda --- */
     .search-form {
-        @apply w-full max-w-md mx-auto mt-6;
+        @apply w-full max-w-md mx-auto;
     }
+
+    /* --- Contenedores de Contenido --- */
     .user-grid {
-        @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 w-full max-w-screen-2xl;
+        @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 w-full max-w-screen-2xl p-4;
     }
     .user-grid__item {
         @apply flex justify-center animate-fade-in-up;
     }
     .error-display {
-        @apply min-h-dvh flex flex-col justify-center items-center;
+        @apply min-h-dvh flex flex-col justify-center items-center text-center p-8 gap-4;
+    }
+    .not-found {
+        @apply flex items-center justify-center text-center p-8 mt-10 animate-fade-in;
     }
 
-    /* Anulación de color para el título principal con alta especificidad */
-    .page-header__title {
-        /* Dejamos solo los estilos de layout y alineación */
-        @apply mb-2 text-center;
-    }
-    .page-header__prose {
-        @apply text-center prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert mx-auto mt-8;
-    }
-
-    /* SkeletonCard Styles */
+    /* --- Estilos de Componentes Específicos --- */
     .skeleton-card {
-        @apply w-full max-w-xs shadow-lg rounded-xl animate-pulse transition-all duration-300;
+        @apply w-full max-w-xs shadow-lg rounded-xl animate-pulse;
     }
     .skeleton-card__header {
         @apply relative grid h-48 mx-auto place-items-center bg-gray-300;
@@ -66,15 +75,10 @@
         @apply h-12 w-full bg-gray-300 rounded-lg;
     }
 
-    /* NotFound Styles */
-    .not-found {
-        @apply text-center mt-10 animate-fade-in;
-    }
     .not-found__text {
         @apply dark:text-gray-300;
     }
 
-    /* ErrorDisplay Styles */
     .error-display__message {
         @apply text-center;
     }

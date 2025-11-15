@@ -1,68 +1,42 @@
 import PropTypes from "prop-types";
-import {
-    Typography,
-    Input,
-    IconButton,
-    Spinner,
-} from "@material-tailwind/react";
-import { MoonIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { Typography, Input, Spinner } from "@material-tailwind/react";
+import { XCircleIcon } from "@heroicons/react/24/solid";
 
-const PageHeader = ({
-    theme,
-    toggleTheme,
-    searchTerm,
-    handleSearch,
-    isSearching,
-}) => (
+const PageHeader = ({ searchTerm, handleSearch, isSearching }) => (
     <header className="page-header">
-        <div className="flex justify-between items-center w-full mb-4">
-            {/* Espaciador invisible para ayudar a centrar el título */}
-            <div className="w-12" />
-
-            <Typography
-                variant="h1"
-                className="page-header__title text-brand-dark dark:text-brand-light"
-            >
+        <div className="page-header__top-bar">
+            <Typography variant="h1" color="inherit">
                 API Github Users
             </Typography>
-
-            <IconButton
-                variant="text"
-                className="page-header__theme-toggle"
-                onClick={toggleTheme}
-                aria-label="Toggle theme"
-            >
-                {theme === "dark" ? (
-                    <SparklesIcon className="h-6 w-6 text-blue-gray-900" />
-                ) : (
-                    <MoonIcon className="h-6 w-6 text-blue-gray-900" />
-                )}
-            </IconButton>
         </div>
 
-        <article className="page-header__prose">
-            <p>
-                Este proyecto demuestra las capacidades de React 18 con
-                renderizado concurrente y Tailwind CSS.
-            </p>
-        </article>
         <div className="search-form">
             <Input
                 type="text"
                 className="dark:text-white"
-                label="Buscar usuario..."
-                color={theme === "dark" ? "white" : "black"}
+                label={isSearching ? "Cargando datos..." : "Buscar usuario..."}
+                color="black"
                 value={searchTerm}
                 onChange={handleSearch}
-                icon={isSearching && <Spinner className="h-5 w-5" />}
+                icon={
+                    isSearching ? (
+                        <Spinner className="h-5 w-5" />
+                    ) : searchTerm ? (
+                        <XCircleIcon
+                            className="h-5 w-5 cursor-pointer text-gray-500 hover:text-gray-700"
+                            onClick={() =>
+                                handleSearch({ target: { value: "" } })
+                            }
+                        />
+                    ) : null
+                }
+                disabled={isSearching}
             />
         </div>
     </header>
 );
 
 PageHeader.propTypes = {
-    theme: PropTypes.string.isRequired,
-    toggleTheme: PropTypes.func.isRequired,
     searchTerm: PropTypes.string.isRequired,
     handleSearch: PropTypes.func.isRequired,
     isSearching: PropTypes.bool.isRequired,

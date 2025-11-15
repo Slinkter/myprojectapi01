@@ -16,13 +16,13 @@ const initialState = {
 // Crea el slice de búsqueda.
 export const searchSlice = createSlice({
     name: "search", // Nombre del slice, usado como prefijo para los tipos de acción.
-    initialState, // El estado inicial del reducer.
+    initialState: initialState, // El estado inicial del reducer.
     // `reducers` es un objeto que contiene las funciones que actualizan el estado.
     // Redux Toolkit usa la librería Immer internamente, lo que permite escribir
     // lógica de actualización "mutativa" que se convierte en actualizaciones inmutables.
     reducers: {
         /**
-         * Reducer para establecer/actualizar el término de búsqueda.
+         * Reducer para actualizar el término de búsqueda.
          * @param {object} state - El estado actual del slice.
          * @param {object} action - La acción despachada. `action.payload` contiene el nuevo término.
          * Actualiza el `searchTerm` en el estado con el valor proporcionado en el payload de la acción.
