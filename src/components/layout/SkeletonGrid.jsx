@@ -9,7 +9,7 @@ const SkeletonGrid = () => (
                 key={index}
                 className="user-grid__item"
                 style={{
-                    animationDelay: `${index * 100}ms`,
+                    animationDelay: `${index * 150}ms`,
                     animationFillMode: "backwards",
                 }}
             >

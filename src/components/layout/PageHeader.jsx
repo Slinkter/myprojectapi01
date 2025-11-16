@@ -6,15 +6,15 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => (
     <header className="page-header">
         <div className="page-header__top-bar">
             <Typography variant="h1" color="inherit">
-                API Github Users
+                API - Github Users
             </Typography>
         </div>
 
         <div className="search-form">
             <Input
-                type="text"
                 className="dark:text-white"
                 label={isSearching ? "Cargando datos..." : "Buscar usuario..."}
+                type="text"
                 color="black"
                 value={searchTerm}
                 onChange={handleSearch}

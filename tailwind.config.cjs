@@ -29,7 +29,7 @@ module.exports = withMT({
                 "fade-in-up": {
                     "0%": {
                         opacity: "0",
-                        transform: "translateY(20px)",
+                        transform: "translateY(10px)",
                     },
                     "100%": {
                         opacity: "1",
@@ -56,9 +56,9 @@ module.exports = withMT({
                 },
             },
             animation: {
-                "fade-in-up": "fade-in-up 0.5s ease-out forwards",
-                "scale-in": "scale-in 0.5s ease-in-out forwards",
-                "fade-in": "fade-in 0.5s ease-in-out forwards",
+                "skeleton-loading": "fade-in-up 0.5s ease-out forwards",
+                "not-foundName": "fade-in 0.5s ease-in-out forwards",
+                "scale-in-nousada": "scale-in 0.5s ease-in-out forwards",
             },
         },
     },

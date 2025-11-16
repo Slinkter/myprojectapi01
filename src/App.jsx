@@ -30,20 +30,20 @@ const App = () => {
     // `useSelector` es como un espía que mira dentro del estado de Redux y nos trae los datos que necesitamos.
     // Aquí, obtenemos el término de búsqueda actual.
     // Usaremos un estado local para el valor del input y un efecto para "debounce" la actualización a Redux.
+    // Y aquí, obtenemos todo lo relacionado con los usuarios: la lista, si están cargando o si hubo un error.
+    // `dispatch` es la función que usamos para enviar "órdenes" o "acciones" a Redux.
+    // Hook personalizado que encapsula toda la lógica para cambiar el tema (claro/oscuro).
     const [localSearchTerm, setLocalSearchTerm] = useState("");
     const { searchTerm } = useSelector((state) => state.search);
-    // Y aquí, obtenemos todo lo relacionado con los usuarios: la lista, si están cargando o si hubo un error.
     const { users, isLoading, error } = useSelector((state) => state.users);
-    // `dispatch` es la función que usamos para enviar "órdenes" o "acciones" a Redux.
     const dispatch = useDispatch();
-    // Hook personalizado que encapsula toda la lógica para cambiar el tema (claro/oscuro).
     const [theme, toggleTheme] = useTheme();
 
     // `useEffect` se ejecuta después de que el componente se dibuja en pantalla.
     // Lo usamos para realizar "efectos secundarios", como llamar a una API.
+    // Solo damos la orden de cargar usuarios (`fetchUsers`) si no se ha hecho antes (estado 'idle'=== reposo).
+    // Esto evita que se hagan llamadas a la API innecesarias en cada re-renderizado.
     useEffect(() => {
-        // Solo damos la orden de cargar usuarios (`fetchUsers`) si no se ha hecho antes (estado 'idle'=== reposo).
-        // Esto evita que se hagan llamadas a la API innecesarias en cada re-renderizado.
         if (isLoading === "idle") {
             dispatch(fetchUsers());
         }
@@ -114,8 +114,8 @@ const App = () => {
             <IconButton
                 variant="text"
                 className="page-header__theme-toggle"
-                onClick={toggleTheme}
                 aria-label="Toggle theme"
+                onClick={toggleTheme}
             >
                 {theme === "dark" ? (
                     <SparklesIcon className="page-header__icon" />
