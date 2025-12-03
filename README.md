@@ -1,179 +1,151 @@
-# Proyecto: Buscador de Perfiles de GitHub con React
+# Proyecto: API - GitHub Users
 
-## 1. Demo en Vivo
+## Descripción y Propósito
 
-Puedes ver la aplicación funcionando en el siguiente enlace:
+Este proyecto es una aplicación web moderna construida con React y Redux Toolkit, diseñada para buscar y visualizar perfiles de usuarios de GitHub utilizando su API pública. La aplicación demuestra buenas prácticas en el desarrollo frontend, incluyendo:
 
-[https://slinkter.github.io/myprojectapi01/](https://slinkter.github.io/myprojectapi01/)
+-   **Arquitectura Limpia (Clean Architecture)**: Separación clara de las preocupaciones, con lógica de negocio encapsulada en hooks reutilizables.
+-   **Gestión de Estado Robusta**: Uso de Redux Toolkit para manejar el estado global de la aplicación, incluyendo estados de carga y errores de forma predecible.
+-   **Optimización de Rendimiento**: Implementación de lazy loading de componentes y debounce en las búsquedas para una experiencia de usuario fluida.
+-   **Diseño Responsivo y Tematización**: Soporte para temas claro/oscuro y una interfaz de usuario adaptable a diferentes tamaños de pantalla, construida con Tailwind CSS y Material Tailwind.
+-   **Experiencia de Usuario (UX) Detallada**: Animaciones sutiles, estados de carga con esqueletos y manejo amigable de errores y resultados no encontrados.
 
-![Captura de la aplicación](api01.png "Visor de Usuarios de GitHub")
+El propósito principal es servir como una demostración de un desarrollo frontend de alta calidad, enfocado en la mantenibilidad, escalabilidad y rendimiento.
 
----
+## Tecnologías Utilizadas
 
-## 2. Descripción General
+*   **Frontend**: React (con Vite para un entorno de desarrollo rápido)
+*   **Gestión de Estado**: Redux Toolkit
+*   **Estilos**: Tailwind CSS, Material Tailwind (librería de componentes UI de React basada en Tailwind CSS)
+*   **Iconografía**: Heroicons
+*   **Utilidades**: `prop-types` para validación de tipos
+*   **Herramientas de Desarrollo**: ESLint (para calidad de código)
 
-Esta es una aplicación web de página única (SPA) desarrollada con React que consume la API pública de GitHub para obtener y mostrar una lista de usuarios. La aplicación permite filtrar los usuarios en tiempo real y presenta una interfaz de usuario moderna, reactiva y con un tema claro/oscuro.
+## Arquitectura del Sistema
 
-El proyecto está diseñado siguiendo las mejores prácticas de la industria, con un enfoque en un código limpio, escalable y mantenible a través de una arquitectura robusta y bien documentada.
+El proyecto sigue una arquitectura modular y basada en características (Feature-Based Architecture), con una fuerte adherencia a los principios de Clean Architecture y la separación de preocupaciones.
 
----
+### Principios Aplicados
 
-## 3. Características Principales
+*   **DRY (Don't Repeat Yourself)**: La lógica reutilizable se extrae en hooks personalizados.
+*   **SOLID**: Especialmente el Principio de Responsabilidad Única (SRP), donde los componentes se enfocan en la UI y la lógica de negocio se delega a los hooks o Redux Slices.
+*   **KISS (Keep It Simple, Stupid)**: Se prefieren soluciones directas y fáciles de entender.
 
--   **Visualización de Usuarios:** Carga y muestra una lista de usuarios desde la API de GitHub.
--   **Búsqueda en Tiempo Real:** Filtra la lista de usuarios de forma instantánea a medida que el usuario escribe.
--   **Tema Claro/Oscuro:** Permite al usuario cambiar entre un tema claro y uno oscuro. La aplicación detecta la preferencia del sistema operativo en la primera visita y guarda la selección en `localStorage`.
--   **Carga Asíncrona Optimizada:** Muestra una animación de "esqueleto" (skeleton) mientras se cargan los datos.
--   **Animaciones Fluidas:** Utiliza animaciones sutiles para la aparición de elementos, como un efecto de cascada al mostrar la lista y efectos de entrada al hacer scroll.
--   **Manejo de Errores:** Presenta un mensaje de error claro y un botón para reintentar la carga en caso de que la API falle.
--   **Diseño Responsivo:** La interfaz se adapta correctamente a diferentes tamaños de pantalla.
+### Estructura de Carpetas
 
----
-
-## 4. Arquitectura y Estructura del Proyecto
-
-La arquitectura de este proyecto es uno de sus puntos más fuertes y se basa en los siguientes patrones y principios, elegidos cuidadosamente para garantizar un código limpio, escalable y fácil de mantener.
-
-### a. Arquitectura Basada en Componentes
-
-La aplicación sigue una **arquitectura basada en componentes**, que es el pilar fundamental de React.
-
--   **Alternativas Consideradas:** En el desarrollo web existen otros enfoques arquitectónicos como **MVC (Modelo-Vista-Controlador)**, popular en frameworks de backend como Ruby on Rails, o **MVVM (Modelo-Vista-VistaModelo)**, común en Angular y otros. También existen arquitecturas más monolíticas donde la separación de responsabilidades es menos estricta.
--   **Justificación de la Elección:** Se optó por una arquitectura de componentes porque se alinea perfectamente con la filosofía de React. Permite construir interfaces complejas a partir de piezas pequeñas, aisladas y reutilizables (`UserCard`, `SkeletonCard`, etc.). Esto no solo facilita el desarrollo y las pruebas, sino que también mejora la mantenibilidad a largo plazo, ya que cada componente tiene un propósito único y bien definido.
-
-### b. Patrón Contenedor/Presentacional
-
-Para organizar los componentes, se ha implementado una variación del patrón **Contenedor/Presentacional** (también conocido como "Smart/Dumb Components").
-
--   **Alternativas Consideradas:** Con la llegada de los Hooks de React, este patrón se ha vuelto más flexible. Una alternativa común hoy en día es crear componentes que mezclan lógica y presentación, utilizando hooks como `useState`, `useEffect` y `useContext` directamente donde se necesitan. Sin embargo, sin una disciplina clara, esto puede llevar a componentes sobrecargados y difíciles de reutilizar.
--   **Justificación de la Elección:** A pesar de la flexibilidad de los hooks, se decidió mantener una separación conceptual clara:
-    -   **Componentes Contenedores (Inteligentes):** `App.jsx` actúa como el orquestador. Conoce el estado de la aplicación (a través de Redux), despacha acciones y maneja la lógica de negocio.
-    -   **Componentes Presentacionales (Visuales):** La mayoría de los componentes (`UserList`, `UserCard`) son "tontos". Simplemente reciben datos a través de props y los renderizan. No saben de dónde vienen los datos ni cómo se modifican.
-        Esta separación hace que los componentes visuales sean extremadamente reutilizables y fáciles de probar de forma aislada, ya que su renderizado es predecible para un conjunto de props determinado.
-
-### c. Gestión de Estado Centralizada con Redux Toolkit (Feature-Sliced Design)
-
-Para el manejo del estado global, se eligió **Redux Toolkit**.
-
--   **Alternativas Consideradas:** El ecosistema de React ofrece múltiples soluciones para la gestión de estado:
-    1.  **React Context API + `useReducer`:** Es la solución nativa de React. Ideal para estados simples o para pasar datos a través de componentes sin "prop drilling", pero puede volverse complejo de escalar y optimizar en aplicaciones grandes.
-    2.  **Zustand:** Una solución más simple y menos "boilerplate" que Redux. Utiliza un enfoque basado en hooks y es muy fácil de aprender.
-    3.  **MobX:** Utiliza un enfoque de programación reactiva funcional (FRP) que actualiza el estado de forma más automática, pero con una curva de aprendizaje diferente.
-    4.  **Recoil:** Una solución experimental de Facebook que introduce el concepto de "átomos" de estado.
--   **Justificación de la Elección:** Se seleccionó **Redux Toolkit** por las siguientes razones:
-    -   **Escalabilidad y Predictibilidad:** Es la solución más robusta para aplicaciones que se espera que crezcan. El flujo de datos unidireccional y las transiciones de estado explícitas hacen que la aplicación sea más fácil de depurar.
-    -   **Herramientas de Desarrollo:** Las **Redux DevTools** son invaluables para inspeccionar el estado, viajar en el tiempo entre acciones y entender cómo cambia el estado de la aplicación.
-    -   **Opiniones y Estándares:** Redux Toolkit es la forma recomendada y moderna de usar Redux. Elimina gran parte del código repetitivo ("boilerplate") del Redux tradicional y establece patrones claros (como los "slices") que guían hacia una estructura de código organizada y mantenible.
-    -   **Manejo de Lógica Asíncrona:** Su integración con `createAsyncThunk` proporciona una forma estandarizada y robusta de manejar efectos secundarios, como las llamadas a APIs.
-
-### d. Hooks Personalizados
-
-Se han creado hooks personalizados en `src/hooks` para encapsular y reutilizar lógica:
-
--   `useTheme.js`: Abstrae la lógica para el manejo del tema.
--   `useIntersectionObserver.js`: Permite aplicar animaciones cuando un elemento entra en el campo de visión.
-
-### e. Metodología BEM para CSS
-
-Para asegurar la escalabilidad y mantenibilidad de los estilos CSS, se ha adoptado la metodología BEM (Block, Element, Modifier).
-
--   **Alternativas Consideradas:** Otras metodologías como OOCSS (Object-Oriented CSS) o SMACSS (Scalable and Modular Architecture for CSS) ofrecen enfoques similares para estructurar CSS. También se podría haber optado por CSS-in-JS o módulos CSS.
--   **Justificación de la Elección:** BEM proporciona una convención de nomenclatura estricta que facilita la comprensión de la relación entre el HTML y el CSS, así como la reutilización de componentes. Al aplicar BEM, cada clase CSS en `index.css` sigue el patrón `bloque__elemento--modificador`, lo que mejora la claridad, evita conflictos de nombres y simplifica el mantenimiento de los estilos a medida que el proyecto crece. Esta metodología se integra perfectamente con Tailwind CSS, permitiendo definir clases semánticas que encapsulan un conjunto de utilidades de Tailwind.
-
----
-
-## 5. Tecnologías Utilizadas
-
--   **React 18:** Para la construcción de la interfaz de usuario.
--   **Vite:** Como herramienta de empaquetado y servidor de desarrollo.
--   **Redux Toolkit:** Para la gestión del estado global de la aplicación.
--   **React-Redux:** Para conectar los componentes de React con el store de Redux.
--   **Tailwind CSS:** Para un desarrollo de estilos rápido y personalizable.
--   **Material Tailwind:** Como librería de componentes base para la UI.
--   **Prop-Types:** Para la validación de las props en los componentes, mejorando la robustez y la depuración.
--   **ESLint:** Para mantener un código limpio y consistente, incluyendo el plugin `jsx-a11y` para reforzar la accesibilidad.
-
----
-
-## 6. Optimizaciones de Rendimiento y UX
-
-1.  **Code Splitting con `React.lazy` y `Suspense`**: El código del componente `UserCard` no se incluye en el paquete inicial. Se descarga automáticamente solo cuando es necesario, reduciendo el tamaño del JavaScript inicial.
-2.  **Memoización con `useMemo` y `React.memo`**:
-    -   `useMemo` se usa para calcular `filteredUsers`, asegurando que el filtrado solo se re-ejecute si los datos relevantes cambian.
-    -   `React.memo` en `UserCard` previene que las tarjetas se vuelvan a renderizar innecesariamente, optimizando el rendimiento de la lista.
-3.  **Observación de Intersección para Animaciones**: En lugar de usar eventos de scroll costosos, `IntersectionObserver` es una solución nativa y de alto rendimiento para activar animaciones.
-4.  **Gestión de Estado Eficiente**: Redux Toolkit gestiona las actualizaciones de estado de forma optimizada, previniendo re-renderizados innecesarios en componentes no afectados.
-5.  **Carga Perezosa de Imágenes (`loading="lazy"`):** Los avatares de los usuarios solo se descargan cuando están a punto de entrar en el área visible del navegador, ahorrando ancho de banda y mejorando el tiempo de carga inicial.
-
----
-
-## 7. Estructura de Archivos y Roles
-
-A continuación se detalla la estructura del proyecto y el propósito de cada archivo o directorio clave:
+La organización de carpetas está diseñada para la modularidad y la escalabilidad:
 
 ```
-/src
-├── app/
-│   └── store.js         # Configura el store global de Redux.
-├── assets/              # Contiene assets estáticos como SVGs e iconos.
-├── components/
-│   ├── layout/          # Componentes estructurales (Header, Grids, etc.).
-│   ├── SkeletonCard.jsx # Componente de carga (esqueleto).
-│   └── UserCard.jsx     # Tarjeta para mostrar un usuario.
-├── features/
-│   ├── search/
-│   │   └── searchSlice.js # Slice de Redux para la lógica de búsqueda.
+src/
+├── app/                  # Configuración global de la aplicación (ej. store de Redux)
+│   └── store.js
+├── assets/               # Recursos estáticos (imágenes, iconos, etc.)
+│   ├── Icons.jsx
+│   └── react.svg
+├── components/           # Componentes UI reutilizables
+│   ├── layout/           # Componentes de diseño de página (ej. PageHeader, ErrorDisplay)
+│   │   ├── ErrorDisplay.jsx
+│   │   ├── NotFound.jsx
+│   │   ├── PageHeader.jsx
+│   │   ├── SkeletonGrid.jsx
+│   │   └── UserList.jsx
+│   ├── SkeletonCard.jsx  # Tarjeta esqueleto para estados de carga
+│   └── UserCard.jsx      # Tarjeta individual de usuario
+├── features/             # Módulos/Características específicas (cada uno con su propia lógica de Redux)
 │   └── users/
-│       └── usersSlice.js  # Slice de Redux para la lógica de usuarios (API).
-├── hooks/
-│   ├── useIntersectionObserver.js # Hook para animaciones en scroll.
-│   └── useTheme.js      # Hook para la lógica del tema claro/oscuro.
-├── App.jsx              # Componente principal que orquesta la aplicación.
-├── main.jsx             # Punto de entrada de la aplicación.
-└── index.css            # Estilos globales, capas de Tailwind y transiciones.
+│       └── usersSlice.js  # Slice de Redux para la gestión de usuarios y fetching de API
+├── hooks/                # Hooks personalizados para encapsular lógica reutilizable
+│   ├── useDebouncedSearch.js  # Lógica de debounce para inputs
+│   ├── useIntersectionObserver.js # Lógica para detectar visibilidad de elementos
+│   ├── useTheme.js            # Lógica para gestión de temas claro/oscuro
+│   └── useUserFetching.js     # Lógica para obtención de datos de usuarios de la API
+├── App.jsx               # Componente principal de la aplicación (orquestador de UI)
+├── index.css             # Estilos globales y de Tailwind
+└── main.jsx              # Punto de entrada de la aplicación (montaje de React y Redux Provider)
 ```
 
--   **`main.jsx`**: Es el punto de entrada. Renderiza el componente `App` y lo envuelve en el `Provider` de Redux para que toda la aplicación tenga acceso al `store`.
--   **`App.jsx`**: Actúa como el componente "inteligente" o contenedor principal. Gestiona el estado de alto nivel, despacha las acciones para cargar datos y pasa el estado y las funciones a los componentes presentacionales.
--   **`app/store.js`**: Centraliza la configuración del `store` de Redux, combinando los diferentes `reducers` (de usuarios y de búsqueda).
--   **`features/`**: Este directorio sigue la convención de Redux Toolkit de organizar la lógica por "características" o "funcionalidades".
-    -   `usersSlice.js`: Define el estado relacionado con los usuarios (`users`, `isLoading`, `error`) y la lógica asíncrona (`fetchUsers`) para comunicarse con la API de GitHub.
-    -   `searchSlice.js`: Gestiona el estado simple del campo de búsqueda.
--   **`components/`**: Contiene todos los componentes de React.
-    -   `layout/`: Almacena componentes que definen la estructura de la página, como `PageHeader` y `UserList`.
-    -   `UserCard.jsx`: Es un componente presentacional "tonto" que solo se encarga de mostrar los datos de un usuario. Utiliza `React.memo` para optimizar el rendimiento.
--   **`hooks/`**: Contiene lógica reutilizable extraída en hooks personalizados.
-    -   `useTheme.js`: Encapsula toda la lógica para cambiar el tema y persistirlo, manteniendo los componentes limpios.
-    -   `useIntersectionObserver.js`: Proporciona una forma declarativa y eficiente de detectar cuándo un componente es visible en pantalla.
+### Flujo de Datos y Estado (Redux Toolkit)
 
----
+1.  **Redux Store (`app/store.js`)**: Configura el store central de Redux, que ahora solo contiene el `usersSlice`.
+2.  **Slice (`features/users/usersSlice.js`)**: Gestiona el array de `users`, su `status` (estado de la petición) y `error`. Contiene el `createAsyncThunk` `fetchUsers` para interactuar con la API de GitHub, aceptando un término de búsqueda.
+3.  **Hooks Personalizados (`hooks/`)**:
+    *   `useDebouncedSearch`: Maneja el estado local del input de búsqueda y produce un `debouncedSearchTerm` que se actualiza solo después de una pausa en la escritura.
+    *   `useUserFetching`: Utiliza `useDispatch` y `useSelector` para interactuar con `usersSlice`. Despacha `fetchUsers` con el `debouncedSearchTerm` y selecciona los datos (`users`, `status`, `error`) del store, exponiéndolos al componente que lo usa.
+4.  **Componente `App.jsx`**: Es el orquestador principal de la UI.
+    *   Utiliza `useTheme` para la tematización.
+    *   Utiliza `useDebouncedSearch` para obtener el término de búsqueda actual y su versión "debounced".
+    *   Utiliza `useUserFetching` para obtener el estado y los datos de los usuarios.
+    *   Renderiza condicionalmente `SkeletonGrid`, `ErrorDisplay`, `UserList` o `NotFound` basándose en el `status` y los datos de `useUserFetching`.
+    *   **Manejo Específico de Errores (403 Forbidden)**: En caso de que la API de GitHub responda con un error 403 (Forbidden), lo que ocurre con búsquedas no válidas o por exceso de peticiones, la aplicación ahora muestra un componente `<NotFound />` en lugar de un error genérico. Esto mejora la experiencia del usuario al proporcionar un mensaje más contextualizado ("Usuario no encontrado") para este tipo de escenarios.
+    *   Pasa `searchTerm` y el handler de búsqueda al `PageHeader`.
 
-## 8. Cómo Ejecutar el Proyecto Localmente
+### Decisiones de Diseño Clave
 
-1.  Clona el repositorio:
+*   **Separación Lógica/UI**: `App.jsx` ha sido refactorizado para ser puramente presentacional. Toda la lógica de obtención de datos y de "debounce" ha sido extraída a `useUserFetching` y `useDebouncedSearch`, respectivamente. Esto facilita la reutilización de la lógica en otros contextos o proyectos.
+*   **Lazy Loading**: Uso de `React.lazy` y `Suspense` para la carga perezosa de `UserCard`, con un `fallback` adecuado (`SkeletonCard`) para mejorar la UX y el rendimiento.
+*   **Optimización de Rendimiento**: `useIntersectionObserver` se emplea en `UserCard` para la carga perezosa de imágenes, y `useDebouncedSearch` reduce las llamadas a la API.
+*   **Tematización**: El hook `useTheme` implementa un sistema robusto de temas claro/oscuro con persistencia en `localStorage` y detección de preferencias del sistema.
 
+## Cómo Instalar y Levantar el Proyecto
+
+Para poner en marcha este proyecto en tu máquina local, sigue los siguientes pasos:
+
+### Prerrequisitos
+
+Asegúrate de tener instalado [Node.js](https://nodejs.org/) (versión 18 o superior) y `pnpm` (administrador de paquetes recomendado).
+
+### Instalación
+
+1.  **Clona el repositorio:**
     ```bash
-    git clone https://github.com/Slinkter/myprojectapi01.git
-    cd myprojectapi01
+    git clone [URL_DEL_REPOSITORIO]
+    cd [nombre_del_directorio_del_proyecto]
     ```
-
-2.  Instala las dependencias (se recomienda `pnpm`):
-
+2.  **Instala las dependencias:**
     ```bash
     pnpm install
     ```
 
-3.  Inicia el servidor de desarrollo:
+### Ejecución en Modo Desarrollo
 
-    ```bash
-    pnpm dev
-    ```
+Para ejecutar la aplicación en modo desarrollo con Vite:
 
-4.  Abre http://localhost:5173 en tu navegador.
+```bash
+pnpm dev
+```
 
-### Scripts Disponibles
+La aplicación estará disponible en `http://localhost:5173` (o el puerto que Vite asigne).
 
--   `pnpm dev`: Inicia el servidor de desarrollo.
--   `pnpm build`: Compila la aplicación para producción.
--   `pnpm preview`: Previsualiza la build de producción.
--   `pnpm deploy`: Despliega la aplicación en GitHub Pages.
+### Construcción para Producción
+
+Para generar una versión optimizada para producción:
+
+```bash
+pnpm build
+```
+
+Los archivos estáticos generados se encontrarán en la carpeta `dist/`.
+
+### Previsualización de la Versión de Producción
+
+Para previsualizar la compilación de producción localmente:
+
+```bash
+pnpm preview
+```
+
+## Pruebas
+
+*(Actualmente no hay pruebas unitarias ni de integración configuradas. Este sería un buen punto para futuras mejoras.)*
+
+## TODOs y Roadmap de Mejoras
+
+*   **Implementar Pruebas Unitarias/Integración**: Añadir pruebas exhaustivas para componentes, hooks y Redux slices.
+*   **Gestión de APIs**: Podría abstraerse la lógica de llamada a la API a una capa de servicio dedicada fuera del slice de Redux para mayor flexibilidad.
+*   **Paginación/Infinite Scroll**: Implementar paginación o carga infinita para manejar grandes volúmenes de resultados de búsqueda de forma más eficiente.
+*   **Internacionalización (i18n)**: Soporte para múltiples idiomas.
+*   **Accesibilidad (a11y)**: Realizar una auditoría de accesibilidad completa y aplicar mejoras.
+
+## Explicaciones Pedagógicas y Fragmentos de Código
+
+*(Estos se detallarán en el `tutorial_completo.md` y en el Documento Técnico de Software.)*

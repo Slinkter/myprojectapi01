@@ -43,7 +43,10 @@ const UserCard = React.memo(({ user = {} }) => {
     const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 });
 
     // Clases de CSS condicionales para la animación de entrada.
-    const animationClass = isVisible ? "animate-scale-in" : "opacity-0";
+    // Se usa una combinación de opacidad y escala para el estado inicial, permitiendo que el IntersectionObserver detecte el elemento.
+    const animationClass = isVisible
+        ? "animate-scale-in opacity-100 scale-100"
+        : "opacity-0 scale-90";
 
     return (
         <Card

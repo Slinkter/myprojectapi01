@@ -11,7 +11,9 @@ const SkeletonCard = () => (
             shadow={false}
             floated={false}
             className="skeleton-card__header"
-        ></CardHeader>
+        >
+            &nbsp;
+        </CardHeader>
         <CardBody className="text-center">
             <div className="skeleton-card__body-line"></div>
         </CardBody>
@@ -21,4 +23,4 @@ const SkeletonCard = () => (
     </Card>
 );
 
-export { SkeletonCard };
+export default SkeletonCard;

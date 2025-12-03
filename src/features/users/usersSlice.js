@@ -9,45 +9,46 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const API_URL = "https://api.github.com/users";
+const API_BASE_URL = "https://api.github.com";
 const SLICE_NAME = "users/fetchUsers";
 
 /**
  * @function fetchUsers
  * @description Thunk asíncrono para obtener los usuarios de la API de GitHub.
- * Un thunk es una función que envuelve una expresión para retrasar su evaluación.
- * En Redux, los thunks permiten escribir lógica que puede despachar acciones y tener efectos secundarios, como las llamadas a API.
- * `createAsyncThunk` genera automáticamente los tipos de acción para los estados del ciclo de vida de la promesa (pending, fulfilled, rejected).
+ * Acepta un término de búsqueda opcional para filtrar los resultados.
+ * En caso de error, `rejectWithValue` devuelve un objeto con `{ message: string, status?: number }`.
  */
 export const fetchUsers = createAsyncThunk(
     SLICE_NAME,
-    async (_, { rejectWithValue }) => {
+    async (searchTerm = "", { rejectWithValue }) => {
         try {
-            const response = await fetch(API_URL);
+            // Construye la URL correcta dependiendo de si se proporciona un término de búsqueda.
+            const url = searchTerm
+                ? `${API_BASE_URL}/search/users?q=${searchTerm}`
+                : `${API_BASE_URL}/users`;
+
+            const response = await fetch(url);
+
             if (!response.ok) {
-                // Si la respuesta no es exitosa, rechaza la promesa con un mensaje de error formateado.
                 const errorMessage = `HTTP error! status: ${response.status} - ${response.statusText}`;
-                return rejectWithValue(errorMessage);
+                return rejectWithValue({ message: errorMessage, status: response.status });
             }
+
             const data = await response.json();
-            // Se añade un retraso artificial para asegurar que la animación del esqueleto sea visible
-            // y mejorar la experiencia de usuario en conexiones muy rápidas.
-            await new Promise((resolve) => setTimeout(resolve, 3000));
-            return data; // El valor de retorno en caso de éxito se convierte en el `payload` de la acción `fulfilled`.
+
+            // La API de búsqueda de GitHub devuelve los usuarios en la propiedad `items`.
+            // Si no hay término de búsqueda, la respuesta es el array de usuarios directamente.
+            return searchTerm ? data.items : data;
         } catch (error) {
-            // Si ocurre un error en la red o en el fetch, rechaza la promesa con el mensaje de error.
-            return rejectWithValue(error.message);
+            return rejectWithValue({ message: error.message, status: undefined });
         }
     }
 );
 
-// Crea el slice de usuarios.
-// `extraReducers` permite a un slice responder a acciones que no fueron definidas en su campo `reducers`.
-// Es ideal para manejar los estados de un `createAsyncThunk`.
-
+// Define el estado inicial para este slice
 const initialState = {
     isLoading: "idle", // El estado puede ser: 'idle', 'loading', 'succeeded', 'failed'
-    error: null, // Almacena el mensaje de error si la carga falla.
+    error: null, // Almacena el objeto de error si la carga falla: `{ message: string, status?: number }`.
     users: [], // Array para almacenar los datos de los usuarios.
 };
 

@@ -1,6 +1,7 @@
 import { Suspense, lazy } from "react";
 import PropTypes from "prop-types";
 
+import SkeletonCard from "../SkeletonCard"; // Importar SkeletonCard como default
 const UserCard = lazy(() => import("../UserCard"));
 
 const UserList = ({ users }) => (
@@ -14,7 +15,7 @@ const UserList = ({ users }) => (
                     animationFillMode: "backwards",
                 }}
             >
-                <Suspense fallback={null}>
+                <Suspense fallback={<SkeletonCard />}>
                     <UserCard user={user} />
                 </Suspense>
             </li>
