@@ -227,19 +227,20 @@ export const fetchUsers = createAsyncThunk(
                 : `${API_BASE_URL}/users`;
             const response = await fetch(url);
             if (!response.ok) {
-                return rejectWithValue(`HTTP error! status: ${response.status}`);
+                const errorMessage = `HTTP error! status: ${response.status} - ${response.statusText}`;
+                return rejectWithValue({ message: errorMessage, status: response.status });
             }
             const data = await response.json();
             return searchTerm ? data.items : data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue({ message: error.message, status: undefined });
         }
     }
 );
 
 const initialState = {
     isLoading: "idle",
-    error: null,
+    error: null, // Almacena el objeto de error si la carga falla: `{ message: string, status?: number }`.
     users: [],
 };
 
@@ -751,6 +752,12 @@ const App = () => {
         dispatch(fetchUsers(debouncedSearchTerm));
     };
 
+    /**
+     * Determina qué componente renderizar basado en el estado de la petición (loading, succeeded, failed).
+     * Si la petición falla con un estado 403, renderiza el componente `NotFound`.
+     * Para otros errores, renderiza `ErrorDisplay`.
+     * @returns {JSX.Element | null} El componente a renderizar o `null` si no hay contenido.
+     */
     const renderContent = () => {
         const isLoading = status === 'loading' || status === 'idle';
 
@@ -758,7 +765,11 @@ const App = () => {
             return <SkeletonGrid />;
         }
         if (status === 'failed') {
-            return <ErrorDisplay message={error} onRetry={handleRetry} />;
+            // Check if the error is a 403 Forbidden specifically from the API
+            if (error && error.status === 403) {
+                return <NotFound searchTerm={debouncedSearchTerm} />;
+            }
+            return <ErrorDisplay message={error.message} onRetry={handleRetry} />;
         }
         if (status === 'succeeded' && users && users.length > 0) {
             return <UserList users={users} />;
@@ -766,6 +777,7 @@ const App = () => {
         if (status === 'succeeded' && (!users || users.length === 0)) {
             return <NotFound searchTerm={debouncedSearchTerm} />;
         }
+
         return null;
     };
 

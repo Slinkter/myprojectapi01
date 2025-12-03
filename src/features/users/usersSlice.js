@@ -19,61 +19,64 @@ const SLICE_NAME = "users/fetchUsers";
  * En caso de error, `rejectWithValue` devuelve un objeto con `{ message: string, status?: number }`.
  */
 export const fetchUsers = createAsyncThunk(
-    SLICE_NAME,
-    async (searchTerm = "", { rejectWithValue }) => {
-        try {
-            // Construye la URL correcta dependiendo de si se proporciona un término de búsqueda.
-            const url = searchTerm
-                ? `${API_BASE_URL}/search/users?q=${searchTerm}`
-                : `${API_BASE_URL}/users`;
+  SLICE_NAME,
+  async (searchTerm = "", { rejectWithValue }) => {
+    try {
+      // Construye la URL correcta dependiendo de si se proporciona un término de búsqueda.
+      const url = searchTerm
+        ? `${API_BASE_URL}/search/users?q=${searchTerm}`
+        : `${API_BASE_URL}/users`;
 
-            const response = await fetch(url);
+      const response = await fetch(url);
 
-            if (!response.ok) {
-                const errorMessage = `HTTP error! status: ${response.status} - ${response.statusText}`;
-                return rejectWithValue({ message: errorMessage, status: response.status });
-            }
+      if (!response.ok) {
+        const errorMessage = `HTTP error! status: ${response.status} - ${response.statusText}`;
+        return rejectWithValue({
+          message: errorMessage,
+          status: response.status,
+        });
+      }
 
-            const data = await response.json();
+      const data = await response.json();
 
-            // La API de búsqueda de GitHub devuelve los usuarios en la propiedad `items`.
-            // Si no hay término de búsqueda, la respuesta es el array de usuarios directamente.
-            return searchTerm ? data.items : data;
-        } catch (error) {
-            return rejectWithValue({ message: error.message, status: undefined });
-        }
+      // La API de búsqueda de GitHub devuelve los usuarios en la propiedad `items`.
+      // Si no hay término de búsqueda, la respuesta es el array de usuarios directamente.
+      return searchTerm ? data.items : data;
+    } catch (error) {
+      return rejectWithValue({ message: error.message, status: undefined });
     }
+  }
 );
 
 // Define el estado inicial para este slice
 const initialState = {
-    isLoading: "idle", // El estado puede ser: 'idle', 'loading', 'succeeded', 'failed'
-    error: null, // Almacena el objeto de error si la carga falla: `{ message: string, status?: number }`.
-    users: [], // Array para almacenar los datos de los usuarios.
+  isLoading: "idle", // El estado puede ser: 'idle', 'loading', 'succeeded', 'failed'
+  error: null, // Almacena el objeto de error si la carga falla: `{ message: string, status?: number }`.
+  users: [], // Array para almacenar los datos de los usuarios.
 };
 
 export const usersSlice = createSlice({
-    name: "users",
-    initialState: initialState,
-    reducers: {},
-    extraReducers: (builder) => {
-        builder
-            // Caso 1: La petición está en curso (`pending`).
-            .addCase(fetchUsers.pending, (state) => {
-                state.isLoading = "loading"; // Cambia el estado a 'loading'.
-                state.error = null; // Limpia cualquier error anterior.
-            })
-            // Caso 2: La petición se completó con éxito (`fulfilled`).
-            .addCase(fetchUsers.fulfilled, (state, action) => {
-                state.isLoading = "succeeded"; // Cambia el estado a 'succeeded'.
-                state.users = action.payload; // Almacena los usuarios recibidos en el estado.
-            })
-            // Caso 3: La petición falló (`rejected`).
-            .addCase(fetchUsers.rejected, (state, action) => {
-                state.isLoading = "failed"; // Cambia el estado a 'failed'.
-                state.error = action.payload; // Almacena el mensaje de error en el estado.
-            });
-    },
+  name: "users",
+  initialState: initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      // Caso 1: La petición está en curso (`pending`).
+      .addCase(fetchUsers.pending, (state) => {
+        state.isLoading = "loading"; // Cambia el estado a 'loading'.
+        state.error = null; // Limpia cualquier error anterior.
+      })
+      // Caso 2: La petición se completó con éxito (`fulfilled`).
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.isLoading = "succeeded"; // Cambia el estado a 'succeeded'.
+        state.users = action.payload; // Almacena los usuarios recibidos en el estado.
+      })
+      // Caso 3: La petición falló (`rejected`).
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.isLoading = "failed"; // Cambia el estado a 'failed'.
+        state.error = action.payload; // Almacena el mensaje de error en el estado.
+      });
+  },
 });
 
 export default usersSlice.reducer;
