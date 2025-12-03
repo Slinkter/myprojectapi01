@@ -55,22 +55,20 @@ const UserCard = React.memo(({ user = {} }) => {
             shadow={true}
         >
             <CardHeader
+                color="transparent"
                 floated={false}
                 shadow={false}
-                className="user-card__header"
+                className="user-card__header self-center"
             >
                 <img
                     src={avatar_url}
                     alt={`Avatar de ${login}`}
-                    loading="lazy" // Carga diferida de la imagen.
+                    loading="lazy"
                     className="user-card__avatar"
                 />
             </CardHeader>
             <CardBody className="text-center">
-                <Typography
-                    variant="h4"
-                    className="user-card__name"
-                >
+                <Typography variant="h4" className="user-card__name">
                     {login}
                 </Typography>
             </CardBody>

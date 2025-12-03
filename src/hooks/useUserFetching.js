@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchUsers } from '../features/users/usersSlice';
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUsers } from "../features/users/usersSlice";
 
 /**
  * @hook useUserFetching
@@ -8,22 +8,21 @@ import { fetchUsers } from '../features/users/usersSlice';
  * Abstrae la lógica de despacho de acciones de Redux y la selección de estado,
  * exponiendo únicamente los datos y el estado de la petición.
  *
- * @param {string} debouncedSearchTerm - El término de búsqueda "debounced", que dispara la llamada a la API.
+ * @param {string} text - El término de búsqueda "debounced", que dispara la llamada a la API.
  * @returns {object} - Un objeto con el estado de la petición:
  *   - `users` (Array): La lista de usuarios obtenida.
  *   - `status` (string): El estado actual de la petición ('idle', 'loading', 'succeeded', 'failed').
  *   - `error` (string|null): El mensaje de error si la petición falla.
  */
-export const useUserFetching = (debouncedSearchTerm) => {
+export const useUserFetching = (text) => {
+    const { users, isLoading, error } = useSelector((state) => state.users);
     const dispatch = useDispatch();
 
-    const { users, isLoading, error } = useSelector((state) => state.users);
-
     useEffect(() => {
-        dispatch(fetchUsers(debouncedSearchTerm));
-    }, [debouncedSearchTerm, dispatch]);
+        dispatch(fetchUsers(text));
+    }, [text, dispatch]);
 
-    const status = isLoading; // Renombramos para consistencia
+    const status = isLoading;
 
     return { users, status, error };
 };
