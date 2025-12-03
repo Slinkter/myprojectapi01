@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const ErrorDisplay = ({ message, onRetry }) => (
     <div className="error-display">
-        <Typography variant="h3" color="red" className="error-display__message">
+        <Typography variant="h3" className="error-display__message">
             {message}
         </Typography>
         <Button color="blue" onClick={onRetry} className="error-display__button">

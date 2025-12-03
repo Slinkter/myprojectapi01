@@ -4,19 +4,56 @@
 @tailwind utilities;
 
 @layer base {
+    :root {
+        /* Colores */
+        --color-background-light: #f3f4f6; /* gray-100 */
+        --color-background-dark: #111827;  /* gray-900 */
+        --color-text-light: #111827;       /* gray-900 */
+        --color-text-dark: #f9fafb;        /* gray-50 */
+        --color-primary: #3b82f6;          /* blue-500 */
+        --color-secondary: #6b7280;       /* gray-500 */
+        --card-background-light: #ffffff;
+        --card-background-dark: #1f2937; /* gray-800 */
+        --skeleton-color-light: #d1d5db;   /* gray-300 */
+        --skeleton-color-dark: #4b5563;    /* gray-600 */
+
+        --color-error: #ef4444; /* red-500 */
+
+        --color-brand-light: #6ee7b7;
+        --color-brand-dark: #047857;
+
+        /* Tipografía */
+        --font-family-sans: "Inter", sans-serif;
+        --font-size-base: 1rem;
+        --font-size-lg: 1.125rem;
+        --font-size-xl: 1.25rem;
+        --font-size-h1: 2.25rem;
+        --font-size-h3: 1.5rem;
+        --font-size-h4: 1.25rem;
+
+        /* Tamaños y Espaciado */
+        --spacing-4: 1rem;
+        --spacing-6: 1.5rem;
+        --spacing-8: 2rem;
+        --card-border-radius: 0.75rem; /* rounded-xl */
+        --button-border-radius: 0.5rem; /* rounded-lg */
+    }
+
     /* Aplica una transición suave a las propiedades de color en todos los elementos.
        Esto hace que el cambio entre modo claro y oscuro sea gradual y agradable. */
     * {
         @apply transition-colors duration-300 ease-in-out;
     }
-    html.light {
-        color-scheme: light;
-    }
-    html.dark {
-        color-scheme: dark;
-    }
+
     body {
-        @apply bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+        font-family: var(--font-family-sans);
+        background-color: var(--color-background-light);
+        color: var(--color-text-light);
+    }
+
+    html.dark body {
+        background-color: var(--color-background-dark);
+        color: var(--color-text-dark);
     }
 }
 
@@ -33,7 +70,11 @@
         @apply w-full max-w-3xl mb-4 text-center text-brand dark:text-brand-light;
     }
     .page-header__theme-toggle {
-        @apply absolute top-4 right-4 z-10 rounded-sm border border-gray-700 dark:bg-gray-100;
+        @apply absolute top-4 right-4 z-10 rounded-sm border;
+        border-color: var(--color-secondary);
+    }
+    html.dark .page-header__theme-toggle {
+        background-color: var(--color-background-light);
     }
     .page-header__icon {
         @apply h-6 w-6;
@@ -45,6 +86,31 @@
     /* --- Formulario de Búsqueda --- */
     .search-form {
         @apply w-full max-w-md mx-auto;
+    }
+
+    .search-form__input {
+        /* This class is for the wrapper of the input */
+    }
+    .search-form__input input {
+        color: var(--color-text-light); /* This should target the actual input */
+    }
+    html.dark .search-form__input input {
+        color: var(--color-text-dark);
+    }
+
+    .search-form__spinner {
+        @apply h-5 w-5;
+    }
+
+    .search-form__clear-icon {
+        @apply h-5 w-5 cursor-pointer;
+        color: var(--color-secondary);
+    }
+    .search-form__clear-icon:hover {
+        color: var(--color-text-light);
+    }
+    html.dark .search-form__clear-icon:hover {
+        color: var(--color-text-dark);
     }
 
     /* --- Contenedores de Contenido --- */
@@ -64,25 +130,81 @@
     /* --- Estilos de Componentes Específicos --- */
     .skeleton-card {
         @apply w-full max-w-xs shadow-lg rounded-xl animate-pulse;
+        background-color: var(--card-background-light);
     }
+    html.dark .skeleton-card {
+        background-color: var(--card-background-dark);
+    }
+
     .skeleton-card__header {
-        @apply relative grid h-48 mx-auto place-items-center bg-gray-300;
+        @apply relative grid h-48 mx-auto place-items-center;
+        background-color: var(--skeleton-color-light);
     }
+    html.dark .skeleton-card__header {
+        background-color: var(--skeleton-color-dark);
+    }
+
     .skeleton-card__body-line {
-        @apply h-6 w-3/4 mx-auto bg-gray-300 rounded-full;
+        @apply h-6 w-3/4 mx-auto rounded-full;
+        background-color: var(--skeleton-color-light);
     }
+    html.dark .skeleton-card__body-line {
+        background-color: var(--skeleton-color-dark);
+    }
+
     .skeleton-card__footer-line {
-        @apply h-12 w-full bg-gray-300 rounded-lg;
+        @apply h-12 w-full rounded-lg;
+        background-color: var(--skeleton-color-light);
+    }
+    html.dark .skeleton-card__footer-line {
+        background-color: var(--skeleton-color-dark);
     }
 
     .not-found__text {
-        @apply dark:text-gray-300;
+        color: var(--color-text-light);
+        font-size: var(--font-size-h3);
+    }
+    html.dark .not-found__text {
+        color: var(--color-text-dark);
     }
 
     .error-display__message {
         @apply text-center;
+        color: var(--color-error);
+        font-size: var(--font-size-h3);
     }
     .error-display__button {
         @apply mt-4;
+    }
+
+    .user-card {
+        @apply w-full max-w-xs overflow-hidden transition-all duration-100 hover:shadow-2xl;
+        background-color: var(--card-background-light);
+        border-radius: var(--card-border-radius);
+    }
+    html.dark .user-card {
+        background-color: var(--card-background-dark);
+    }
+
+    .user-card__header {
+        @apply mx-auto mt-6 flex h-40 w-40 justify-center;
+        background-color: transparent;
+    }
+
+    .user-card__avatar {
+        @apply h-full w-full rounded-full object-cover object-center shadow-md;
+    }
+
+    .user-card__name {
+        @apply mb-2;
+        color: var(--color-brand-dark);
+        font-size: var(--font-size-h4);
+    }
+    html.dark .user-card__name {
+        color: var(--color-brand-light);
+    }
+
+    .user-card__button {
+        @apply transition-transform hover:scale-[1.02] focus:scale-[1.02] active:scale-100;
     }
 }

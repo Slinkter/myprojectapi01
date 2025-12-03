@@ -146,6 +146,87 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
 ---
 
+## Despliegue en GitHub Pages
+
+Una vez que tu aplicación está lista, puedes desplegarla fácilmente en GitHub Pages para compartirla con el mundo.
+
+### 1. Configurar `homepage` en `package.json`
+
+Primero, necesitas decirle a tu aplicación en qué ruta se servirá. Agrega la propiedad `homepage` a tu `package.json`:
+
+```json
+{
+  "homepage": "https://<tu-usuario-de-github>.github.io/<el-nombre-de-tu-repositorio>",
+  "name": "myprojectapi01",
+  "private": true,
+  // ... resto del archivo
+}
+```
+*   Reemplaza `<tu-usuario-de-github>` con tu nombre de usuario de GitHub.
+*   Reemplaza `<el-nombre-de-tu-repositorio>` con el nombre de tu repositorio en GitHub.
+
+### 2. Configurar la Ruta Base en Vite
+
+Para que Vite sepa que los recursos se servirán desde una subcarpeta, necesitas configurar `base` en tu archivo `vite.config.js`.
+
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  base: '/<el-nombre-de-tu-repositorio>/' // ¡Importante!
+})
+```
+*   Reemplaza `<el-nombre-de-tu-repositorio>` con el nombre de tu repositorio.
+
+### 3. Instalar `gh-pages`
+
+El paquete `gh-pages` facilita el proceso de despliegue. Ya lo tenemos como dependencia de desarrollo. Si no lo tuvieras, lo instalarías así:
+
+```bash
+pnpm add -D gh-pages
+```
+
+### 4. Añadir Scripts de Despliegue
+
+Añade los scripts `predeploy` y `deploy` a tu `package.json`. Estos scripts ya están configurados en este proyecto:
+
+```json
+"scripts": {
+  // ... otros scripts
+  "predeploy": "pnpm build",
+  "deploy": "gh-pages -d dist"
+},
+```
+*   `predeploy`: Este script se ejecuta automáticamente antes del `deploy` y se encarga de construir la versión de producción de tu aplicación.
+*   `deploy`: Este script toma la carpeta `dist` (la salida de la construcción) y la publica en la rama `gh-pages` de tu repositorio.
+
+### 5. Desplegar la Aplicación
+
+Ahora, todo lo que necesitas hacer es ejecutar el siguiente comando en tu terminal:
+
+```bash
+pnpm run deploy
+```
+
+Este comando construirá tu aplicación y la desplegará. Después de unos minutos, tu aplicación estará disponible en la URL que especificaste en la propiedad `homepage`.
+
+### 6. Configurar el Repositorio de GitHub
+
+Finalmente, asegúrate de que tu repositorio de GitHub esté configurado para servir desde la rama `gh-pages`.
+
+1.  Ve a tu repositorio en GitHub.
+2.  Haz clic en "Settings" (Configuración).
+3.  En el menú de la izquierda, selecciona "Pages".
+4.  En la sección "Build and deployment", bajo "Branch", asegúrate de que la rama `gh-pages` y la carpeta `/ (root)` estén seleccionadas.
+
+¡Y eso es todo! Tu aplicación ahora está en vivo.
+
+---
+
 ## 3. Estructura de Carpetas (Clean Architecture y Feature-Based)
 
 Una estructura de carpetas bien organizada es crucial para la mantenibilidad y escalabilidad. Adoptamos un enfoque híbrido:

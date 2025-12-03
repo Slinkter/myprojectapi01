@@ -13,7 +13,7 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => (
     <div className="search-form">
       <Input
         key="search-input"
-        className="dark:text-white"
+        className="search-form__input"
         label={isSearching ? "Cargando datos..." : "Buscar usuario..."}
         type="text"
         color="black"
@@ -21,10 +21,10 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => (
         onChange={handleSearch}
         icon={
           isSearching ? (
-            <Spinner className="h-5 w-5" />
+            <Spinner className="search-form__spinner" />
           ) : searchTerm ? (
             <XCircleIcon
-              className="h-5 w-5 cursor-pointer text-gray-500 hover:text-gray-700"
+              className="search-form__clear-icon"
               onClick={() => handleSearch({ target: { value: "" } })}
             />
           ) : null

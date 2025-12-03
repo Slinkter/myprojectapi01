@@ -51,25 +51,25 @@ const UserCard = React.memo(({ user = {} }) => {
     return (
         <Card
             ref={cardRef}
-            className={`w-full max-w-xs overflow-hidden bg-white dark:bg-gray-800 transition-all duration-100 hover:shadow-2xl ${animationClass}`}
+            className={`user-card ${animationClass}`}
             shadow={true}
         >
             <CardHeader
                 floated={false}
                 shadow={false}
-                className="mx-auto mt-6 flex h-40 w-40 justify-center bg-white dark:bg-gray-800"
+                className="user-card__header"
             >
                 <img
                     src={avatar_url}
                     alt={`Avatar de ${login}`}
                     loading="lazy" // Carga diferida de la imagen.
-                    className="h-full w-full rounded-full object-cover object-center shadow-md"
+                    className="user-card__avatar"
                 />
             </CardHeader>
             <CardBody className="text-center">
                 <Typography
                     variant="h4"
-                    className="mb-2 text-brand-dark dark:text-brand-light"
+                    className="user-card__name"
                 >
                     {login}
                 </Typography>
@@ -84,7 +84,7 @@ const UserCard = React.memo(({ user = {} }) => {
                     <Button
                         color="amber"
                         size="lg"
-                        className="transition-transform hover:scale-[1.02] focus:scale-[1.02] active:scale-100"
+                        className="user-card__button"
                         fullWidth={true}
                     >
                         Profile Github
