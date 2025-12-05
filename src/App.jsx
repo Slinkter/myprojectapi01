@@ -1,6 +1,6 @@
 /**
  * @file Componente principal de la aplicación (App).
- * @author Luis Jesus CC
+ * @author Luis cueva
  * @description
  * Este componente es el núcleo visual de la aplicación. Su única responsabilidad
  * es componer la interfaz de usuario a partir de los datos y el estado que le
