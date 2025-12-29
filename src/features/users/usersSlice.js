@@ -22,6 +22,7 @@ const SLICE_NAME = "users/fetchUsers";
 export const fetchUsers = createAsyncThunk(
     SLICE_NAME,
     async (searchTerm = "", { rejectWithValue }) => {
+        console.log("fetchUsers - searchTerm:", searchTerm);
         console.log("se llama a la funcion fetchUsers");
         try {
             // Construye la URL correcta dependiendo de si se proporciona un término de búsqueda.
@@ -80,11 +81,19 @@ const usersSlice = createSlice({
             .addCase(fetchUsers.fulfilled, (state, action) => {
                 state.isLoading = "succeeded"; // Cambia el estado a 'succeeded'.
                 state.users = action.payload; // Almacena los usuarios recibidos en el estado.
+                console.log(
+                    "usersSlice - fetchUsers.fulfilled payload:",
+                    action.payload
+                );
             })
             // Caso 3: La petición falló (`rejected`).
             .addCase(fetchUsers.rejected, (state, action) => {
                 state.isLoading = "failed"; // Cambia el estado a 'failed'.
                 state.error = action.payload; // Almacena el mensaje de error en el estado.
+                console.log(
+                    "usersSlice - fetchUsers.rejected payload:",
+                    action.payload
+                );
             });
     },
 });
