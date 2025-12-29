@@ -70,7 +70,7 @@ src/
 2.  **Slice (`features/users/usersSlice.js`)**: Gestiona el array de `users`, su `status` (estado de la petición) y `error`. Contiene el `createAsyncThunk` `fetchUsers` para interactuar con la API de GitHub, aceptando un término de búsqueda.
 3.  **Hooks Personalizados (`hooks/`)**:
     *   `useDebouncedSearch`: Maneja el estado local del input de búsqueda y produce un `debouncedSearchTerm` que se actualiza solo después de una pausa en la escritura.
-    *   `useUserFetching`: Utiliza `useDispatch` y `useSelector` para interactuar con `usersSlice`. Despacha `fetchUsers` con el `debouncedSearchTerm` y selecciona los datos (`users`, `status`, `error`) del store, exponiéndolos al componente que lo usa.
+    *   `useUserFetching`: Utiliza `useDispatch` y `useSelector` para interactuar con `usersSlice`. Despacha `fetchUsers` con el `debouncedSearchTerm`. **En la carga inicial, cuando `debouncedSearchTerm` está vacío, esto obtiene una lista de usuarios por defecto.** Selecciona los datos (`users`, `status`, `error`) del store, exponiéndolos al componente que lo usa.
 4.  **Componente `App.jsx`**: Es el orquestador principal de la UI.
     *   Utiliza `useTheme` para la tematización.
     *   Utiliza `useDebouncedSearch` para obtener el término de búsqueda actual y su versión "debounced".

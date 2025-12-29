@@ -11,7 +11,7 @@ El caso de uso principal es la búsqueda de usuarios de GitHub por nombre de usu
 ### Flujo Principal de Búsqueda de Usuarios
 
 1.  **Inicio de la Aplicación**: El usuario abre la aplicación en su navegador.
-2.  **Carga Inicial**: La aplicación intenta cargar un conjunto inicial de usuarios (o espera una búsqueda). Se muestra un `SkeletonGrid` mientras se obtienen los datos.
+2.  **Carga Inicial**: La aplicación carga automáticamente un conjunto inicial de usuarios por defecto. Se muestra un `SkeletonGrid` mientras se obtienen los datos.
 3.  **Input de Búsqueda**: El usuario interactúa con el campo de búsqueda (`PageHeader`).
 4.  **Debounce de Búsqueda**: A medida que el usuario escribe, el `searchTerm` se actualiza localmente, pero la solicitud a la API se retrasa (debounced) hasta que el usuario deja de escribir por un breve período.
 5.  **Solicitud a la API**: Cuando el `debouncedSearchTerm` cambia, se dispara una acción para obtener usuarios de la API de GitHub.
@@ -148,7 +148,7 @@ El estado de la aplicación se gestiona principalmente a través de **Redux Tool
 *   **`users` slice**:
     *   `users`: `Array<User>` (ej. `[{ id: 1, login: "octocat", ... }]`).
     *   `status`: `enum` (`"idle" | "loading" | "succeeded" | "failed"`).
-    *   `error`: `string | null` (ej. `"Network Error"`).
+    *   `error`: `object | null` (ej. `{ message: "Network Error", status: 500 }`).
 
 ### Estado Local (Hooks)
 

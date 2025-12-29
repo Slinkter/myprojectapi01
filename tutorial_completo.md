@@ -494,33 +494,38 @@ import { fetchUsers } from '../features/users/usersSlice';
 /**
  * @hook useUserFetching
  * @description Hook personalizado para gestionar la obtención de datos de usuarios.
- * Abstrae la lógica de despacho de acciones de Redux y la selección de estado,
- * exponiendo únicamente los datos y el estado de la petición.
+ * Este hook ahora inicia la carga de usuarios al montar el componente (con una lista por defecto si 'text' está vacío)
+ * y también gestiona la búsqueda en tiempo real. Abstrae la lógica de despacho de acciones de Redux
+ * y la selección de estado, exponiendo únicamente los datos y el estado de la petición.
  *
- * @param {string} debouncedSearchTerm - El término de búsqueda "debounced", que dispara la llamada a la API.
+ * @param {string} text - El término de búsqueda "debounced". Si está vacío (""), se obtiene una lista de usuarios por defecto.
+ *                      De lo contrario, dispara la búsqueda de la API con el término proporcionado.
  * @returns {object} - Un objeto con el estado de la petición:
  *   - `users` (Array): La lista de usuarios obtenida.
  *   - `status` (string): El estado actual de la petición ('idle', 'loading', 'succeeded', 'failed').
- *   - `error` (string|null): El mensaje de error si la petición falla.
+ *   - `error` (object|null): El objeto de error si la petición falla.
  */
-export const useUserFetching = (debouncedSearchTerm) => {
+export const useUserFetching = (text) => {
+    // Renombramos 'isLoading' a 'status' para más claridad,
+    // ya que contiene el estado real de la carga.
+    const {
+        users = [],
+        isLoading: status,
+        error,
+    } = useSelector((state) => state.users || {});
     const dispatch = useDispatch();
 
-    const {
-        users,
-        isLoading: status, // Renombramos isLoading a status para mayor claridad
-        error
-    } = useSelector((state) => state.users);
-
     useEffect(() => {
-        // Dispara la acción asíncrona para obtener los usuarios.
-        dispatch(fetchUsers(debouncedSearchTerm));
-    }, [debouncedSearchTerm, dispatch]);
+        // Ahora, la acción se dispara siempre que 'text' cambia,
+        // o en la carga inicial cuando 'text' es "".
+        dispatch(fetchUsers(text));
+    }, [text, dispatch]);
 
+    // Devolvemos directamente el estado de Redux, que es la fuente de verdad.
     return { users, status, error };
 };
 ```
-*   **Decisión clave**: El hook `useUserFetching` ahora toma el `debouncedSearchTerm` como argumento, lo que simplifica enormemente la lógica en `App.jsx`. Hemos renombrado `isLoading` a `status` al desestructurar el `useSelector` para una API más consistente con el nombre usado en `App.jsx`.
+*   **Decisión clave**: El hook `useUserFetching` ahora se encarga de la carga inicial y de las búsquedas. Al recibir un `debouncedSearchTerm` vacío, busca una lista de usuarios por defecto. Además, el `status` se toma directamente del estado de Redux (`isLoading`) para reflejar siempre el estado real de la petición, solucionando un bug donde el estado inicial se mostraba incorrectamente como `idle`.
 
 ---
 
