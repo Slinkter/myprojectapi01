@@ -8,6 +8,6 @@ import "./index.css";
 // componente anidado acceda al `store` de Redux a través de hooks como `useSelector` y `useDispatch`.
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <App />
+      <App />
   </Provider>
 );

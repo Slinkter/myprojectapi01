@@ -8,53 +8,30 @@
  */
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { fetchUsersAPI } from "../../services/userService";
 
-const API_BASE_URL = "https://api.github.com";
 const SLICE_NAME = "users/fetchUsers";
 
 /** ====================================
  * @function fetchUsers
  * @description Thunk asíncrono para obtener los usuarios de la API de GitHub.
- * Acepta un término de búsqueda opcional para filtrar los resultados.
+ * Utiliza el servicio `fetchUsersAPI` para realizar la llamada a la API.
  * En caso de error, `rejectWithValue` devuelve un objeto con `{ message: string, status?: number }`.
  */
-
 export const fetchUsers = createAsyncThunk(
     SLICE_NAME,
     async (searchTerm = "", { rejectWithValue }) => {
-        console.log("fetchUsers - searchTerm:", searchTerm);
-        console.log("se llama a la funcion fetchUsers");
         try {
-            // Construye la URL correcta dependiendo de si se proporciona un término de búsqueda.
-            const url = searchTerm
-                ? `${API_BASE_URL}/search/users?q=${searchTerm}`
-                : `${API_BASE_URL}/users`;
-
-            console.log(url);
-
-            console.time("API Call");
-            const response = await fetch(url);
-            console.timeEnd("API Call");
-
-            if (!response.ok) {
-                const errorMessage = `HTTP error! status: ${response.status} - ${response.statusText}`;
-                const objError = {
-                    message: errorMessage,
-                    status: response.status,
-                };
-                return rejectWithValue(objError);
-            }
-
-            const data = await response.json();
-
-            console.log(data);
-
-            return searchTerm ? data.items : data;
+            const users = await fetchUsersAPI(searchTerm);
+            return users;
         } catch (error) {
-            return rejectWithValue({
-                message: error.message,
-                status: undefined,
-            });
+            // The service layer might throw a stringified JSON object or a generic Error.
+            // We try to parse it to maintain the error object structure.
+            try {
+                return rejectWithValue(JSON.parse(error.message));
+            } catch (e) {
+                return rejectWithValue({ message: error.message });
+            }
         }
     }
 );
@@ -81,19 +58,13 @@ const usersSlice = createSlice({
             .addCase(fetchUsers.fulfilled, (state, action) => {
                 state.isLoading = "succeeded"; // Cambia el estado a 'succeeded'.
                 state.users = action.payload; // Almacena los usuarios recibidos en el estado.
-                console.log(
-                    "usersSlice - fetchUsers.fulfilled payload:",
-                    action.payload
-                );
+                console.log("usersSlice - payload:", action.payload);
             })
             // Caso 3: La petición falló (`rejected`).
             .addCase(fetchUsers.rejected, (state, action) => {
                 state.isLoading = "failed"; // Cambia el estado a 'failed'.
                 state.error = action.payload; // Almacena el mensaje de error en el estado.
-                console.log(
-                    "usersSlice - fetchUsers.rejected payload:",
-                    action.payload
-                );
+                console.log("usersSlice - rejected payload:", action.payload);
             });
     },
 });
