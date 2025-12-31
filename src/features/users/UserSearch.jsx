@@ -27,6 +27,7 @@ const UserSearch = () => {
     );
     // Hook that manages fetching and the state of user data
     const { users, status, error } = useUserFetching(debouncedSearchTerm);
+    //
     const dispatch = useDispatch();
 
     // Function to retry fetching users in case of an error
@@ -41,8 +42,15 @@ const UserSearch = () => {
     };
 
     /**
-     * Renders the main content based on the current fetching status.
-     * @returns {JSX.Element} The component to render.
+     * Helper Function for Conditional Rendering.
+     * ----------------------------------------------------------------------
+     * Este patrón NO es "Render Props" ni "Render Function" como patrón de diseño.
+     * Es una función auxiliar privada que encapsula lógica condicional (if/else)
+     * para mantener el JSX del 'return' principal limpio y legible.
+     *
+     * Evalúa el estado actual (`status`) y devuelve el componente de UI apropiado.
+     *
+     * @returns {JSX.Element|null} El componente a renderizar (Skeleton, Error, Lista o null).
      */
     const renderContent = () => {
         const isLoading = status === "loading" || status === "idle";
@@ -56,7 +64,7 @@ const UserSearch = () => {
                 return <NotFound searchTerm={debouncedSearchTerm} />;
             }
             return (
-                <ErrorDisplay message={error?.message || 'An unknown error occurred'} onRetry={handleRetry} />
+                <ErrorDisplay message={error?.message} onRetry={handleRetry} />
             );
         }
 

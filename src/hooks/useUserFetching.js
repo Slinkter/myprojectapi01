@@ -24,15 +24,12 @@ export const useUserFetching = (text) => {
         isLoading: status,
         error,
     } = useSelector((state) => state.users || {});
+
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(fetchUsers(text));
     }, [text, dispatch]);
-
-    console.log("useUserFetching - users:", users);
-    console.log("useUserFetching - status (from redux):", status);
-    console.log("useUserFetching - error:", error);
 
     // Devolvemos directamente el estado de Redux, que es la fuente de verdad.
     return { users, status, error };

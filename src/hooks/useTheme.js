@@ -16,6 +16,7 @@ export const useTheme = () => {
         const prefersDark = window.matchMedia?.(
             "(prefers-color-scheme: dark)"
         ).matches;
+        // 3. Si no hay preferencia del sistema operativo, usa el tema claro por defecto.
         return prefersDark ? "dark" : "light";
     });
 

@@ -1,5 +1,5 @@
 import { Typography } from "@material-tailwind/react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 const NotFound = ({ searchTerm }) => (
     <div className="not-found">

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Typography, Input, Spinner } from "@material-tailwind/react";
-import { XCircleIcon } from "@heroicons/react/24/solid";
+import { MdCancel } from "react-icons/md";
 
 const PageHeader = ({ searchTerm, handleSearch, isSearching }) => (
     <header className="page-header">
@@ -23,8 +23,8 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => (
                     isSearching ? (
                         <Spinner className="search-form__spinner" />
                     ) : searchTerm ? (
-                        <XCircleIcon
-                            className="search-form__clear-icon"
+                        <MdCancel
+                            className="h-5 w-5 cursor-pointer text-gray-500 hover:text-gray-900 dark:hover:text-gray-50"
                             onClick={() =>
                                 handleSearch({ target: { value: "" } })
                             }

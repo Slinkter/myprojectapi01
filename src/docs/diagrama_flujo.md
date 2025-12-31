@@ -5,7 +5,7 @@ sequenceDiagram
     participant useDebouncedSearch as "useDebouncedSearch.js"
     participant usersSlice as "usersSlice.js (Redux)"
     participant userService as "userService.js"
-    participant APIExterna as "API Externa"
+    participant APIExterna as "GitHub API"
     participant UserList as "UserList.jsx"
 
     Usuario->>UserSearch: Escribe término de búsqueda

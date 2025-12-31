@@ -4,25 +4,27 @@ Este tutorial te guiará a través de la estructura y el código del proyecto, e
 
 ## 1. Introducción y Tecnologías
 
-Esta aplicación permite buscar y visualizar perfiles de `randomuser.me`. Utiliza un stack moderno de frontend:
+Esta aplicación permite buscar y visualizar perfiles de la **GitHub API**. Utiliza un stack moderno de frontend:
 
 -   **React**: Para construir la interfaz de usuario.
 -   **Vite**: Como herramienta de construcción y servidor de desarrollo.
 -   **Redux Toolkit**: Para una gestión de estado predecible.
--   **Tailwind CSS**: Para un estilizado rápido y personalizable.
--   **Material Tailwind**: Para componentes de UI pre-construidos.
+-   **Tailwind CSS**: Estilizado utility-first usando la paleta estándar (Green, Gray, Blue, etc.).
+-   **Material Tailwind**: Para componentes de UI pre-construidos totalmente integrados.
 
 ## 2. Configuración del Proyecto
 
 Para ejecutar este proyecto localmente, sigue estos pasos:
 
 1.  **Clona el repositorio:**
+
     ```bash
     git clone <URL_DEL_REPOSITORIO>
     cd <NOMBRE_DEL_PROYECTO>
     ```
 
 2.  **Instala las dependencias:** Se recomienda usar `pnpm`.
+
     ```bash
     pnpm install
     ```
@@ -51,7 +53,7 @@ La arquitectura actual se centra en el componente `App.jsx`, que actúa como el 
 Todo comienza con la definición de nuestro estado global. Usando `createSlice` de Redux Toolkit, definimos el estado inicial, los reducers y las acciones asíncronas (thunks).
 
 -   **`initialState`**: Mantiene la lista de `users`, el `status` de la petición (cargando, éxito, fallo), `error`, información de `paginación`, y el `searchQuery`.
--   **`createAsyncThunk ('fetchUsers')`**: Gestiona la llamada a la API `https://randomuser.me/api/`. Se encarga de la lógica asíncrona y despacha acciones `pending`, `fulfilled`, o `rejected` automáticamente.
+-   **`createAsyncThunk ('fetchUsers')`**: Gestiona la llamada a la **GitHub API** (`https://api.github.com/`). Se encarga de la lógica asíncrona y despacha acciones `pending`, `fulfilled`, o `rejected` automáticamente.
 -   **`extraReducers`**: Escucha las acciones despachadas por el thunk y actualiza el estado correspondientemente. Por ejemplo, cuando `fetchUsers.fulfilled` se dispara, añade los nuevos usuarios a la lista.
 
 ```javascript
@@ -87,7 +89,7 @@ const App = () => {
     const [theme, toggleTheme] = useTheme();
     const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebouncedSearch("", 300);
     const { users, status, error } = useUserFetching(debouncedSearchTerm);
-    
+
     // 2. Define cómo renderizar basado en el estado
     const renderContent = () => {
         if (status === "loading") return <SkeletonGrid />;

@@ -2,7 +2,7 @@
 
 ## 1. Resumen Ejecutivo y Propósito del Proyecto
 
-Este documento ofrece un análisis técnico de nivel postgrado de una aplicación web construida con React, diseñada para buscar y mostrar perfiles de usuarios de la API de `randomuser.me`. El propósito del análisis fue evaluar la arquitectura, identificar problemas y actualizar la documentación para reflejar el estado real del código.
+Este documento ofrece un análisis técnico de nivel postgrado de una aplicación web construida con React, diseñada para buscar y mostrar perfiles de usuarios de la **GitHub API**. El propósito del análisis fue evaluar la arquitectura, identificar problemas y actualizar la documentación para reflejar el estado real del código.
 
 Inicialmente, la documentación del proyecto describía una arquitectura limpia y desacoplada. Sin embargo, el análisis del código reveló una implementación más centralizada, con un componente principal (`App.jsx`) que actúa como "God Component", gestionando la mayor parte del estado y la lógica de la aplicación. Este informe detalla la arquitectura real, los problemas críticos encontrados y las correcciones aplicadas, culminando en una base de código funcional y una documentación precisa.
 
@@ -16,8 +16,8 @@ El análisis del archivo `package.json` revela un stack tecnológico moderno par
 -   **Build Tool**: `vite` (v5.4.21), que proporciona un entorno de desarrollo rápido y eficiente.
 -   **Gestión de Estado**: `@reduxjs/toolkit` (v2.11.0) y `react-redux` (v9.2.0), implementando un store centralizado para el estado de los usuarios.
 -   **Estilos y Componentes UI**:
-    -   `tailwindcss` (v3.4.18): Un framework "utility-first" para la creación rápida de interfaces personalizadas.
-    -   `@material-tailwind/react` (v2.1.10): Una librería de componentes React basados en Material Design y Tailwind CSS.
+    -   **Tailwind CSS** (v3.4.18): Framework "utility-first" utilizado bajo su estándar estricto (sin variables CSS personalizadas).
+    -   **@material-tailwind/react** (v2.1.10): Librería de componentes React basados en Material Design y Tailwind CSS Standard.
     -   `@heroicons/react` (v2.2.0): Para la iconografía.
 -   **Linting y Calidad de Código**: `eslint` con plugins para React, hooks, y accesibilidad (`jsx-a11y`).
 -   **Tipado de Props**: `prop-types` para la validación en tiempo de ejecución de las props de los componentes.
@@ -55,7 +55,7 @@ useUserFetching (Hook)
     v
 usersSlice.js (Redux Slice)
     |--> `fetchUsers.pending`: status = 'loading'
-    |--> Llama a la API de randomuser.me
+    |--> Llama a la **GitHub API**
     |--> `fetchUsers.fulfilled`: status = 'succeeded', añade usuarios al estado
     |--> `fetchUsers.rejected`: status = 'failed', guarda el error
     |
@@ -73,7 +73,7 @@ Renderizado Condicional
 
 1.  **Componente Orquestador (`App.jsx`)**: Este componente es el cerebro de la aplicación. Utiliza hooks personalizados para gestionar el estado de la búsqueda, el tema y la obtención de datos. Contiene la lógica principal de renderizado condicional.
 2.  **Hooks Personalizados (`src/hooks/`)**: Abstraen lógicas específicas pero son consumidos principalmente por `App.jsx`.
-3.  **Redux (`src/features/users/`)**: Actúa como un contenedor de estado puro. La lógica de negocio para decidir *cuándo* buscar datos reside en `App.jsx` y `useUserFetching`, mientras que la lógica de *cómo* buscar y almacenar los datos está en `usersSlice.js`.
+3.  **Redux (`src/features/users/`)**: Actúa como un contenedor de estado puro. La lógica de negocio para decidir _cuándo_ buscar datos reside en `App.jsx` y `useUserFetching`, mientras que la lógica de _cómo_ buscar y almacenar los datos está en `usersSlice.js`.
 4.  **Componentes de UI (`src/components/`)**: Son en su mayoría componentes "presentacionales" que reciben datos a través de props.
 
 ---
@@ -89,11 +89,12 @@ Durante el análisis, se identificaron dos errores críticos que impedían el fu
 
 ### 4.2. Bug Crítico 2: Inconsistencia de Archivos y `useIntersectionObserver`
 
--   **Problema**: Durante el análisis inicial, se detectó una inconsistencia severa entre los archivos del proyecto. Algunas versiones de `useIntersectionObserver.js` esperaban una función de *callback* (típico para scroll infinito), mientras que el componente `UserCard.jsx` le pasaba un objeto de *opciones* (típico para observar un estado booleano). Esto indicaba un bug de `TypeError`.
+-   **Problema**: Durante el análisis inicial, se detectó una inconsistencia severa entre los archivos del proyecto. Algunas versiones de `useIntersectionObserver.js` esperaban una función de _callback_ (típico para scroll infinito), mientras que el componente `UserCard.jsx` le pasaba un objeto de _opciones_ (típico para observar un estado booleano). Esto indicaba un bug de `TypeError`.
 -   **Diagnóstico**: Tras múltiples lecturas, se concluyó que el estado del sistema de archivos era inestable o presentaba versiones contradictorias de los mismos archivos. Sin embargo, la versión más reciente y consistente de los archivos mostró que `useIntersectionObserver.js` sí estaba diseñado para aceptar un objeto de opciones y devolver un booleano, y que `UserCard.jsx` lo usaba correctamente.
 -   **Solución Aplicada**: Aunque se planificó una refactorización del hook, el estado final y consistente de los archivos demostró que el código era funcional. El problema real fue la inconsistencia del entorno de análisis. La corrección del bug de `useTheme` fue suficiente para que la aplicación funcionara como se esperaba. Se concluye que no se requería ninguna modificación de código para este bug en la versión final de los archivos.
 
 ---
+
 ## 5. Conclusión y Pasos Futuros
 
 El proyecto, en su estado actual y funcional, sirve como un ejemplo de una aplicación React con gestión de estado centralizada. Aunque se desvía de la arquitectura "limpia" descrita en su documentación original, la base de código es coherente en su enfoque de "God Component".

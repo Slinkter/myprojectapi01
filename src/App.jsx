@@ -1,11 +1,3 @@
-/**
- * @file Main application component (App).
- * @author Luis cueva
- * @description
- * This component acts as the main layout shell for the application.
- * It handles the overall theme and renders the primary features.
- */
-import { MoonIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { IconButton } from "@material-tailwind/react";
 import PropTypes from "prop-types";
 
@@ -15,10 +7,9 @@ import { useTheme } from "./hooks/useTheme.js";
 // Feature Components
 import UserSearch from "./features/users/UserSearch.jsx";
 
-/**
- * A button component to toggle between light and dark themes.
- * @param {{ toggleTheme: () => void, theme: string }} props - Component properties.
- */
+import { FaStar } from "react-icons/fa";
+import { MdDarkMode } from "react-icons/md";
+
 const ThemeToggleButton = ({ toggleTheme, theme }) => {
     return (
         <IconButton
@@ -28,9 +19,9 @@ const ThemeToggleButton = ({ toggleTheme, theme }) => {
             onClick={toggleTheme}
         >
             {theme === "dark" ? (
-                <SparklesIcon className="page-header__icon" />
+                <FaStar className="h-6 w-6" />
             ) : (
-                <MoonIcon className="page-header__icon" />
+                <MdDarkMode className="h-6 w-6" />
             )}
         </IconButton>
     );

@@ -30,9 +30,5 @@ export const useDebouncedSearch = (initialValue, delay) => {
         };
     }, [inputValue, delay]); // Solo se vuelve a ejecutar si el valor del input o el delay cambian.
 
-    console.log("useDebouncedSearch - inputValue:", inputValue);
-    console.log("useDebouncedSearch - debouncedValue:", debouncedValue);
-
-
     return [inputValue, setInputValue, debouncedValue];
 };
