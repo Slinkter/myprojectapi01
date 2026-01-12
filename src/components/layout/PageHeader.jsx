@@ -41,7 +41,7 @@ import { MdCancel } from "react-icons/md";
  */
 const PageHeader = ({ searchTerm, handleSearch, isSearching }) => (
   <header className="flex flex-col w-full max-w-screen-2xl my-8 items-center px-4">
-    <div className="w-full max-w-3xl mb-4 text-center text-green-500 dark:text-green-300">
+    <div className="w-full max-w-3xl mb-4 text-center text-secondary-500 dark:text-secondary-300">
       <Typography variant="h1" color="inherit">
         API - Github Users
       </Typography>

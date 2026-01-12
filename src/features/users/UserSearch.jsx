@@ -54,10 +54,8 @@ import NotFound from "@/components/layout/NotFound";
  */
 const UserSearch = () => {
   // Hook for handling search logic with debounce (300ms delay)
-  const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebouncedSearch(
-    "",
-    300
-  );
+  const [searchTerm, setSearchTerm, debouncedSearchTerm] =
+    useDebouncedSearch("");
 
   // Hook that manages fetching and the state of user data
   const { users, status, error } = useUserFetching(debouncedSearchTerm);

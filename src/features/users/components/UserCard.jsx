@@ -124,7 +124,8 @@ const UserCard = React.memo(({ user = {} }) => {
       <CardBody className="text-center">
         <Typography
           variant="h4"
-          className="mb-2 text-xl text-green-700 dark:text-green-300"
+          className="mb-2 text-xl text-secondary-500 dark:text-white"
+          color="inherit"
         >
           {login}
         </Typography>
@@ -132,7 +133,8 @@ const UserCard = React.memo(({ user = {} }) => {
       <CardFooter className="pt-0 flex flex-col gap-2">
         <Link to={`/user/${login}`}>
           <Button
-            color="green"
+            color="secondary"
+            variant="gradient"
             size="lg"
             className="transition-transform hover:scale-[1.02] focus:scale-[1.02] active:scale-100"
             fullWidth={true}
@@ -147,10 +149,9 @@ const UserCard = React.memo(({ user = {} }) => {
           aria-label={`Ver el perfil de ${login} en Github`}
         >
           <Button
-            color="amber"
+            className="transition-transform hover:scale-[1.02] focus:scale-[1.02] active:scale-100 text-secondary-500 dark:text-white"
             variant="outlined"
             size="lg"
-            className="transition-transform hover:scale-[1.02] focus:scale-[1.02] active:scale-100"
             fullWidth={true}
           >
             GitHub Profile

@@ -51,7 +51,7 @@ import {
  * @returns {JSX.Element} User detail page with profile information
  *
  * @example
- * // Rendered via React Router
+ * Rendered via React Router
  * <Route path="/user/:login" element={<UserDetail />} />
  */
 const UserDetail = () => {
