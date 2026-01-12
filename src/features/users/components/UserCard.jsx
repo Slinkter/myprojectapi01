@@ -1,18 +1,21 @@
 /**
- * Este es un componente presentacional que se encarga de renderizar
- * la información de un único usuario que recibe a través de sus props.
+ * @file User Card Component
+ * @description
+ * Presentational component that renders a single user's information in a card format.
+ * Implements performance optimizations including memoization, lazy loading, and
+ * intersection observer for scroll animations.
  *
- * Optimizaciones de rendimiento:
- * - `React.memo`: Evita que el componente se vuelva a renderizar si sus props no han cambiado.
- *   Esto es crucial en una lista larga para evitar que todas las tarjetas se rendericen de nuevo
- *   cuando solo una parte de la lista cambia.
+ * Performance Optimizations:
+ * - React.memo: Prevents re-renders when props haven't changed
+ * - useIntersectionObserver: Triggers animation only when card enters viewport
+ * - loading="lazy": Defers image loading until needed
  *
- * - `useIntersectionObserver`: Utiliza un hook personalizado para detectar cuándo la tarjeta
- *   entra en el viewport, aplicando una animación de entrada solo en ese momento. Esto mejora
- *   la percepción de rendimiento y añade un efecto visual agradable.
- *
- * - `loading="lazy"` en la imagen: El navegador solo cargará la imagen del avatar cuando
- *   esté a punto de entrar en el viewport, ahorrando ancho de banda.
+ * Features:
+ * - Material Tailwind card design
+ * - Smooth scale-in animation on scroll
+ * - Dark mode support
+ * - Lazy-loaded avatar images
+ * - Links to user detail page and GitHub profile
  */
 
 import React, { useRef } from "react";
@@ -28,23 +31,73 @@ import {
 } from "@material-tailwind/react";
 import useIntersectionObserver from "@/hooks/useIntersectionObserver";
 
+/**
+ * User Card Component
+ *
+ * @component
+ * @description
+ * Displays a user's information in a card format with avatar, username,
+ * and action buttons. Optimized for performance in long lists.
+ *
+ * Performance Features:
+ * - Memoized with React.memo to prevent unnecessary re-renders
+ * - Intersection Observer for viewport-based animations
+ * - Lazy image loading for bandwidth optimization
+ * - Smooth hover effects and transitions
+ *
+ * Visual Features:
+ * - Scale-in animation when entering viewport
+ * - Hover shadow effect
+ * - Responsive design
+ * - Dark mode support
+ * - Circular avatar with shadow
+ *
+ * @param {Object} props - Component props
+ * @param {Object} props.user - User object from GitHub API
+ * @param {string} props.user.avatar_url - URL of user's avatar image
+ * @param {string} props.user.login - GitHub username
+ * @param {string} props.user.html_url - URL to user's GitHub profile
+ *
+ * @returns {JSX.Element} User card with avatar and action buttons
+ *
+ * @example
+ * <UserCard
+ *   user={{
+ *     avatar_url: "https://avatars.githubusercontent.com/u/1?v=4",
+ *     login: "octocat",
+ *     html_url: "https://github.com/octocat"
+ *   }}
+ * />
+ */
 const UserCard = React.memo(({ user = {} }) => {
   const { avatar_url, login, html_url } = user;
-  const cardRef = useRef(null); // Ref para el elemento de la tarjeta, usado por el Intersection Observer.
 
-  // Hook que devuelve `true` si el elemento referenciado es visible en pantalla.
-  // threshold : umbral o limite
-  // threshold : 0.0 y 1.0
-  /*   
-    Esto significa que la variable isVisible se convertirá en true en 
-    el momento exacto en que el 10% de la tarjeta UserCard aparezca 
-    en el viewport (el área visible del navegador) 
-    */
+  // Ref for the card element, used by Intersection Observer
+  const cardRef = useRef(null);
 
+  /**
+   * Intersection observer hook
+   *
+   * @description
+   * Returns true when the referenced element is visible on screen.
+   *
+   * threshold: 0.1 means the callback fires when 10% of the card
+   * appears in the viewport (visible area of the browser).
+   *
+   * This triggers the scale-in animation at the right moment.
+   */
   const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 });
 
-  // Clases de CSS condicionales para la animación de entrada.
-  // Se usa una combinación de opacidad y escala para el estado inicial, permitiendo que el IntersectionObserver detecte el elemento.
+  /**
+   * Conditional CSS classes for entry animation
+   *
+   * @description
+   * Uses a combination of opacity and scale for the initial state,
+   * allowing the IntersectionObserver to detect the element.
+   *
+   * - Before visible: opacity-0 scale-90 (invisible, slightly smaller)
+   * - After visible: opacity-100 scale-100 + animation (visible, full size)
+   */
   const animationClass = isVisible
     ? "animate-scale-in opacity-100 scale-100"
     : "opacity-0 scale-90";
@@ -108,9 +161,16 @@ const UserCard = React.memo(({ user = {} }) => {
   );
 });
 
-// Asignar un nombre para mostrar en las herramientas de desarrollo de React.
+// Display name for React DevTools
 UserCard.displayName = "UserCard";
 
+/**
+ * PropTypes validation
+ *
+ * @description
+ * Ensures the component receives the correct prop types.
+ * The user object must contain avatar_url, login, and html_url strings.
+ */
 UserCard.propTypes = {
   user: PropTypes.shape({
     avatar_url: PropTypes.string,

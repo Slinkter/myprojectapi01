@@ -1,52 +1,95 @@
+/**
+ * @file Intersection Observer Hook
+ * @description
+ * Custom hook that detects when an element becomes visible in the viewport.
+ * Uses the Intersection Observer API for efficient visibility detection.
+ */
+
 import { useState, useEffect } from "react";
 
 /**
- * Custom hook que detecta si un elemento es visible en el viewport.
- * @param {React.RefObject} elementRef - La referencia al elemento del DOM que se quiere observar.
- * @param {object} options - Opciones para el IntersectionObserver (threshold, root, rootMargin).
- * @param {number} options.threshold - Un número entre 0 y 1 que indica qué porcentaje del elemento debe estar visible para que se active.
- * @returns {boolean} - Devuelve `true` si el elemento está intersectando (visible), de lo contrario `false`.
+ * Custom hook for detecting element visibility in viewport
+ *
+ * @hook
+ * @function useIntersectionObserver
+ * @param {React.RefObject} elementRef - Reference to the DOM element to observe
+ * @param {Object} [options={}] - Intersection Observer configuration options
+ * @param {number} [options.threshold=0.1] - Percentage of element visibility (0-1) required to trigger
+ * @param {Element} [options.root] - Element used as viewport for checking visibility (defaults to browser viewport)
+ * @param {string} [options.rootMargin] - Margin around root element (CSS margin syntax)
+ * @returns {boolean} True if element is intersecting (visible), false otherwise
+ *
+ * @description
+ * Wraps the Intersection Observer API to provide a simple boolean state
+ * indicating whether the observed element is visible in the viewport.
+ *
+ * Common use cases:
+ * - Infinite scroll / lazy loading
+ * - Triggering animations on scroll
+ * - Analytics tracking (viewport visibility)
+ * - Performance optimization (render only visible content)
+ *
+ * The hook automatically:
+ * - Creates and configures the observer
+ * - Observes the target element
+ * - Cleans up observer on unmount
+ * - Re-observes if ref or options change
+ *
+ * @example
+ * function InfiniteScroll() {
+ *   const sentinelRef = useRef(null);
+ *   const isVisible = useIntersectionObserver(sentinelRef, { threshold: 0.1 });
+ *
+ *   useEffect(() => {
+ *     if (isVisible) {
+ *       loadMoreItems();
+ *     }
+ *   }, [isVisible]);
+ *
+ *   return (
+ *     <div>
+ *       {items.map(item => <Item key={item.id} {...item} />)}
+ *       <div ref={sentinelRef}>Loading...</div>
+ *     </div>
+ *   );
+ * }
  */
 const useIntersectionObserver = (elementRef, { threshold = 0.1 } = {}) => {
-    const [isIntersecting, setIsIntersecting] = useState(false);
+  const [isIntersecting, setIsIntersecting] = useState(false);
 
-    useEffect(() => {
-        const card = elementRef.current;
-        if (!card) return;
-        // Actualiza el estado basado en si el elemento está o no en el viewport
-        // Se crea una nueva instancia de IntersectionObserver.
-        // Esta API del navegador permite observar de forma asíncrona los cambios
-        // en la intersección de un elemento con un elemento ancestro o con el viewport.
-        const observer = new IntersectionObserver(
-            // El primer argumento es una función de callback que se ejecuta
-            // cuando la visibilidad del elemento observado cambia.
-            ([entry]) => {
-                // El callback recibe una lista de entradas (IntersectionObserverEntry),
-                // pero en este caso solo nos interesa la primera (y única).
-                // `entry.isIntersecting` es un booleano que es `true` si el elemento
-                // está actualmente intersectando el viewport (es decir, está visible).
-                // Se actualiza el estado para reflejar si el elemento es visible o no.
-                setIsIntersecting(entry.isIntersecting);
-            },
-            // El segundo argumento es un objeto de configuración.
-            {
-                // `threshold` define qué porcentaje de visibilidad del elemento
-                // debe alcanzarse para que se ejecute el callback.
-                // Por ejemplo, un `threshold` de 0.1 significa que el callback
-                // se ejecutará cuando al menos el 10% del elemento sea visible.
-                threshold,
-            }
-        );
+  useEffect(() => {
+    const card = elementRef.current;
+    if (!card) return;
 
-        observer.observe(card);
+    // Create IntersectionObserver instance
+    // This browser API asynchronously observes changes in the intersection
+    // of a target element with an ancestor element or the viewport
+    const observer = new IntersectionObserver(
+      // Callback function executed when visibility changes
+      ([entry]) => {
+        // The callback receives a list of IntersectionObserverEntry objects,
+        // but we only care about the first (and only) one
+        // entry.isIntersecting is true when element is visible in viewport
+        setIsIntersecting(entry.isIntersecting);
+      },
+      // Configuration object
+      {
+        // threshold defines what percentage of element visibility
+        // must be reached to trigger the callback
+        // e.g., threshold of 0.1 means callback fires when 10% is visible
+        threshold,
+      }
+    );
 
-        // Limpia el observador cuando el componente se desmonta
-        return () => {
-            observer.unobserve(card);
-        };
-    }, [elementRef, threshold]);
+    observer.observe(card);
 
-    return isIntersecting;
+    // Clean up observer when component unmounts
+    return () => {
+      observer.unobserve(card);
+    };
+  }, [elementRef, threshold]);
+
+  return isIntersecting;
 };
 
 export default useIntersectionObserver;

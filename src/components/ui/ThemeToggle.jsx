@@ -1,7 +1,45 @@
+/**
+ * @file Theme Toggle Component
+ * @description
+ * UI component for toggling between light and dark themes.
+ * Features smooth icon transitions and visual feedback.
+ */
+
 import { IconButton } from "@material-tailwind/react";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 import PropTypes from "prop-types";
 
+/**
+ * Theme Toggle Component
+ *
+ * @component
+ * @description
+ * Floating button that toggles between light and dark themes.
+ * Displays animated sun/moon icons with smooth transitions.
+ *
+ * Features:
+ * - Fixed position in top-right corner
+ * - Smooth icon rotation and fade transitions
+ * - Glow effect matching current theme
+ * - Hover and active state animations
+ * - Accessible with aria-label
+ *
+ * Visual States:
+ * - Light mode: Sun icon, white background, subtle shadow
+ * - Dark mode: Moon icon, dark background, yellow glow
+ *
+ * @param {Object} props - Component props
+ * @param {string} props.theme - Current theme ('light' | 'dark')
+ * @param {Function} props.toggleTheme - Callback to toggle theme
+ *
+ * @returns {JSX.Element} Theme toggle button
+ *
+ * @example
+ * <ThemeToggle
+ *   theme={theme}
+ *   toggleTheme={toggleTheme}
+ * />
+ */
 export const ThemeToggle = ({ theme, toggleTheme }) => {
   return (
     <div className="fixed top-6 right-6 z-50">
@@ -40,6 +78,9 @@ export const ThemeToggle = ({ theme, toggleTheme }) => {
   );
 };
 
+/**
+ * PropTypes validation
+ */
 ThemeToggle.propTypes = {
   theme: PropTypes.string.isRequired,
   toggleTheme: PropTypes.func.isRequired,

@@ -1,3 +1,10 @@
+/**
+ * @file User Detail Component
+ * @description
+ * Feature component that displays detailed information about a specific GitHub user.
+ * Fetches and renders user profile data including stats, bio, and links.
+ */
+
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
@@ -18,15 +25,59 @@ import {
 } from "react-icons/fa";
 
 /**
- * UserDetail Component
- * Displays detailed information about a specific GitHub user
+ * User Detail Component
+ *
+ * @component
+ * @description
+ * Displays comprehensive information about a GitHub user including:
+ * - Profile avatar and bio
+ * - Statistics (repos, followers, following, gists)
+ * - Location, company, and website
+ * - Link to full GitHub profile
+ *
+ * Features:
+ * - Dynamic route parameter extraction (username from URL)
+ * - Client-side data fetching with loading states
+ * - Error handling with user-friendly messages
+ * - Responsive card layout with gradient header
+ * - Dark mode support
+ * - Smooth fade-in animation
+ *
+ * States:
+ * - loading: Shows spinner during data fetch
+ * - error: Shows error message with back button
+ * - success: Shows full user profile
+ *
+ * @returns {JSX.Element} User detail page with profile information
+ *
+ * @example
+ * // Rendered via React Router
+ * <Route path="/user/:login" element={<UserDetail />} />
  */
 const UserDetail = () => {
+  // Extract username from URL parameters
   const { login } = useParams();
+
+  // Component state
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  /**
+   * Fetches user details from GitHub API
+   *
+   * @description
+   * Effect hook that runs when the login parameter changes.
+   * Fetches detailed user information and updates component state.
+   *
+   * API Endpoint: https://api.github.com/users/{login}
+   *
+   * Response includes:
+   * - name, login, bio
+   * - avatar_url, html_url
+   * - public_repos, followers, following, public_gists
+   * - company, location, blog
+   */
   useEffect(() => {
     const fetchUserDetail = async () => {
       try {
@@ -49,6 +100,7 @@ const UserDetail = () => {
     fetchUserDetail();
   }, [login]);
 
+  // Loading state
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
@@ -57,6 +109,7 @@ const UserDetail = () => {
     );
   }
 
+  // Error state
   if (error) {
     return (
       <div className="w-full max-w-4xl">
@@ -80,6 +133,7 @@ const UserDetail = () => {
     );
   }
 
+  // Success state - render user profile
   return (
     <div className="w-full max-w-4xl animate-fade-in-up">
       <Link to="/" className="inline-block mb-6">

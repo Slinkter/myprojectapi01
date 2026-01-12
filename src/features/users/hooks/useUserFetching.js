@@ -1,24 +1,60 @@
+/**
+ * @file User Fetching Hook
+ * @description
+ * Custom hook for managing user data fetching from GitHub API.
+ * Abstracts Redux state management and provides a clean interface for components.
+ */
+
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUsers } from "../usersSlice";
 
 /**
- * @hook useUserFetching
- * @description Hook personalizado para gestionar la obtención de datos de usuarios.
- * Este hook ahora inicia la carga de usuarios al montar el componente (con una lista por defecto si 'text' está vacío)
- * y también gestiona la búsqueda en tiempo real. Abstrae la lógica de despacho de acciones de Redux
- * y la selección de estado, exponiendo únicamente los datos y el estado de la petición.
+ * Custom hook for fetching and managing user data
  *
- * @param {string} text - El término de búsqueda "debounced". Si está vacío (""), se obtiene una lista de usuarios por defecto.
- *                      De lo contrario, dispara la búsqueda de la API con el término proporcionado.
- * @returns {object} - Un objeto con el estado de la petición:
- *   - `users` (Array): La lista de usuarios obtenida.
- *   - `status` (string): El estado actual de la petición ('idle', 'loading', 'succeeded', 'failed').
- *   - `error` (object|null): El objeto de error si la petición falla.
+ * @hook
+ * @function useUserFetching
+ * @param {string} text - Debounced search term. Empty string fetches default user list
+ * @returns {Object} User data and request state
+ * @returns {Array<Object>} returns.users - Array of user objects from GitHub API
+ * @returns {'idle'|'loading'|'succeeded'|'failed'} returns.status - Current request status
+ * @returns {Object|null} returns.error - Error object if request fails, null otherwise
+ * @returns {string} returns.error.message - Error message
+ * @returns {number} [returns.error.status] - HTTP status code if available
+ *
+ * @description
+ * Manages the complete lifecycle of user data fetching:
+ * - Dispatches Redux action to fetch users on mount and when search term changes
+ * - Provides real-time loading states for UI feedback
+ * - Exposes error information for error handling
+ * - Returns user data from Redux store (single source of truth)
+ *
+ * Features:
+ * - Automatic data fetching on search term change
+ * - Default user list when search is empty
+ * - Loading state management
+ * - Error handling with status codes
+ * - Redux state abstraction
+ *
+ * @example
+ * function UserSearch() {
+ *   const [inputValue, setInputValue, debouncedValue] = useDebouncedSearch('', 500);
+ *   const { users, status, error } = useUserFetching(debouncedValue);
+ *
+ *   if (status === 'loading') return <Spinner />;
+ *   if (status === 'failed') return <Error message={error.message} />;
+ *
+ *   return (
+ *     <div>
+ *       <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+ *       <UserList users={users} />
+ *     </div>
+ *   );
+ * }
  */
 export const useUserFetching = (text) => {
-  // Renombramos 'isLoading' a 'status' para más claridad,
-  // ya que contiene el estado real de la carga.
+  // Rename 'isLoading' to 'status' for clarity
+  // as it contains the actual loading state
   const {
     users = [],
     isLoading: status,
@@ -31,6 +67,6 @@ export const useUserFetching = (text) => {
     dispatch(fetchUsers(text));
   }, [text, dispatch]);
 
-  // Devolvemos directamente el estado de Redux, que es la fuente de verdad.
+  // Return Redux state directly as the single source of truth
   return { users, status, error };
 };

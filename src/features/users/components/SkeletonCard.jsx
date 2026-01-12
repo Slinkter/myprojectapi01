@@ -1,3 +1,10 @@
+/**
+ * @file Skeleton Card Component
+ * @description
+ * Loading placeholder component that mimics the structure of UserCard.
+ * Provides visual feedback during data fetching.
+ */
+
 import {
   Card,
   CardBody,
@@ -5,6 +12,31 @@ import {
   CardHeader,
 } from "@material-tailwind/react";
 
+/**
+ * Skeleton Card Component
+ *
+ * @component
+ * @description
+ * Animated loading placeholder that matches the UserCard layout.
+ * Uses pulse animation to indicate loading state.
+ *
+ * Features:
+ * - Matches UserCard dimensions and structure
+ * - Pulse animation for loading indication
+ * - Dark mode support
+ * - Placeholder blocks for avatar, username, and buttons
+ *
+ * Structure:
+ * - Header: Avatar placeholder (48px height)
+ * - Body: Username placeholder (centered, 75% width)
+ * - Footer: Button placeholder (full width)
+ *
+ * @returns {JSX.Element} Animated skeleton card
+ *
+ * @example
+ * // Used in SkeletonGrid during loading
+ * <SkeletonCard />
+ */
 const SkeletonCard = () => (
   <Card className="w-full max-w-xs shadow-lg rounded-xl animate-pulse bg-white dark:bg-dark-surface">
     <CardHeader

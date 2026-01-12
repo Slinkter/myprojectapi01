@@ -1,18 +1,42 @@
-import { configureStore } from "@reduxjs/toolkit";
-// Importa solo el `reducer` del slice de estado de usuarios.
-import usersReducer from "@/features/users/usersSlice";
 /**
- * @file Configuración del store global de Redux para la aplicación.
+ * @file Redux Store Configuration
  * @description
- * El contenedor centralizado para todo el estado de la aplicación.
- * El uso de un store  único facilita la gestión y depuración del estado.
+ * Centralized Redux store configuration for the application using Redux Toolkit.
+ * This file sets up the global state management system with all reducers and middleware.
  *
- * Se utiliza `configureStore` de Redux Toolkit, una función que simplifica la
- * configuración del store al incluir buenas prácticas por defecto:
- * - Combina automáticamente los `reducers` de los diferentes "slices" del estado.
- * - Agrega el middleware `redux-thunk` para manejar la lógica asíncrona (como llamadas a APIs).
- * - Habilita la extensión Redux DevTools para inspeccionar el estado y las acciones en el navegador.
- * - `users`: Gestiona el estado de los usuarios (ej. la lista de usuarios, estado de carga, errores).
+ * Features:
+ * - Uses configureStore from Redux Toolkit for simplified setup
+ * - Automatically includes redux-thunk middleware for async operations
+ * - Enables Redux DevTools Extension for debugging
+ * - Combines all feature reducers into a single store
+ *
+ * State Structure:
+ * - users: Manages user data, loading states, and errors
+ */
+
+import { configureStore } from "@reduxjs/toolkit";
+import usersReducer from "@/features/users/usersSlice";
+
+/**
+ * Redux store instance
+ *
+ * @constant
+ * @type {import('@reduxjs/toolkit').EnhancedStore}
+ * @description
+ * The centralized Redux store that holds the complete state tree of the application.
+ *
+ * Configured with:
+ * - Redux Toolkit's configureStore for best practices
+ * - Automatic middleware setup (thunk, serialization checks, immutability checks)
+ * - Redux DevTools integration
+ *
+ * Reducers:
+ * - users: Handles user-related state (list, pagination, loading, errors)
+ *
+ * @example
+ * // Access in components
+ * import { useSelector } from 'react-redux';
+ * const users = useSelector(state => state.users.list);
  */
 export const store = configureStore({
   reducer: {

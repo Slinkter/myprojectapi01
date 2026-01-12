@@ -1,8 +1,17 @@
 /**
- * Users Feature - Index
+ * @file Users Feature - Barrel Export
+ * @description
+ * Central export point for the users feature module.
+ * Follows Feature-Based Architecture principles where each feature is self-contained
+ * with its own components, hooks, and state management.
  *
- * This file exports all public components and hooks from the users feature.
- * Following Feature-Based Architecture principles, this feature is self-contained.
+ * Exports:
+ * - Main component: UserSearch
+ * - UI Components: UserCard, UserList, SkeletonCard, SkeletonGrid
+ * - Custom Hooks: useUserFetching
+ * - Redux: usersReducer, fetchUsers thunk
+ *
+ * @module features/users
  */
 
 // Main feature component

@@ -1,7 +1,44 @@
+/**
+ * @file Page Header Component
+ * @description
+ * Header component with application title and search input.
+ * Provides real-time search functionality with visual feedback.
+ */
+
 import PropTypes from "prop-types";
 import { Typography, Input, Spinner } from "@material-tailwind/react";
 import { MdCancel } from "react-icons/md";
 
+/**
+ * Page Header Component
+ *
+ * @component
+ * @description
+ * Application header containing the title and search input field.
+ * Displays loading state and provides clear button for search input.
+ *
+ * Features:
+ * - Centered responsive layout
+ * - Search input with controlled value
+ * - Loading spinner during search
+ * - Clear button when search has value
+ * - Dark mode support
+ * - Focus ring styling
+ *
+ * @param {Object} props - Component props
+ * @param {string} props.searchTerm - Current search input value
+ * @param {Function} props.handleSearch - Callback for search input changes
+ * @param {boolean} props.isSearching - Whether a search is in progress
+ *
+ * @returns {JSX.Element} Header with title and search input
+ *
+ * @example
+ * <PageHeader
+ *   searchTerm={searchTerm}
+ *   handleSearch={(e) => setSearchTerm(e.target.value)}
+ *   isSearching={status === 'loading'}
+ * />
+ */
 const PageHeader = ({ searchTerm, handleSearch, isSearching }) => (
   <header className="flex flex-col w-full max-w-screen-2xl my-8 items-center px-4">
     <div className="w-full max-w-3xl mb-4 text-center text-green-500 dark:text-green-300">
@@ -38,6 +75,9 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => (
   </header>
 );
 
+/**
+ * PropTypes validation
+ */
 PageHeader.propTypes = {
   searchTerm: PropTypes.string.isRequired,
   handleSearch: PropTypes.func.isRequired,
