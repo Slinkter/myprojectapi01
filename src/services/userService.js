@@ -1,37 +1,46 @@
 const API_BASE_URL = "https://api.github.com";
 
 /**
+ * Custom error class for API errors.
+ */
+class ApiError extends Error {
+  constructor(message, status) {
+    super(message);
+    this.status = status;
+    this.name = "ApiError";
+  }
+}
+
+/**
  * Fetches users from the GitHub API.
- * It can either search for users based on a search term or fetch a default list of users.
  *
- * @param {string} [searchTerm=""] - The term to search for. If empty, fetches all users.
+ * @param {string} [searchTerm=""] - The term to search for. If empty, requests the default users list.
  * @returns {Promise<Array>} A promise that resolves to the array of users.
- * @throws {Error} Throws an error if the network response is not ok.
+ * @throws {ApiError} Throws an ApiError with status and message if the request fails.
  */
 export const fetchUsersAPI = async (searchTerm = "") => {
-    try {
-        const url = searchTerm
-            ? `${API_BASE_URL}/search/users?q=${searchTerm}`
-            : `${API_BASE_URL}/users`;
+  const url = searchTerm
+    ? `${API_BASE_URL}/search/users?q=${encodeURIComponent(searchTerm)}`
+    : `${API_BASE_URL}/users`;
 
-        const response = await fetch(url);
+  try {
+    const response = await fetch(url);
 
-        if (!response.ok) {
-            const errorData = {
-                status: response.status,
-                statusText: response.statusText,
-                message: `HTTP error! status: ${response.status} - ${response.statusText}`,
-            };
-            throw new Error(JSON.stringify(errorData));
-        }
-
-        const data = await response.json();
-
-        // The GitHub search API returns users in an `items` property.
-        return searchTerm ? data.items : data;
-    } catch (error) {
-        console.error("Failed to fetch users from GitHub API:", error);
-        // Re-throw for the thunk to catch.
-        throw error;
+    if (!response.ok) {
+      throw new ApiError(
+        `HTTP error! status: ${response.status}`,
+        response.status
+      );
     }
+
+    const data = await response.json();
+
+    // The GitHub search API returns users in an `items` property.
+    // The default users endpoint returns an array directly.
+    return searchTerm ? data.items : data;
+  } catch (error) {
+    // Log the error for debugging purposes (could be connected to a logging service)
+    console.error("Service: Failed to fetch users:", error);
+    throw error;
+  }
 };

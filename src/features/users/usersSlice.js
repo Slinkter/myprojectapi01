@@ -19,54 +19,56 @@ const SLICE_NAME = "users/fetchUsers";
  * En caso de error, `rejectWithValue` devuelve un objeto con `{ message: string, status?: number }`.
  */
 export const fetchUsers = createAsyncThunk(
-    SLICE_NAME,
-    async (searchTerm = "", { rejectWithValue }) => {
-        try {
-            const users = await fetchUsersAPI(searchTerm);
-            return users;
-        } catch (error) {
-            // The service layer might throw a stringified JSON object or a generic Error.
-            // We try to parse it to maintain the error object structure.
-            try {
-                return rejectWithValue(JSON.parse(error.message));
-            } catch (e) {
-                return rejectWithValue({ message: error.message });
-            }
-        }
+  SLICE_NAME,
+  async (searchTerm = "", { rejectWithValue }) => {
+    try {
+      const users = await fetchUsersAPI(searchTerm);
+      return users;
+    } catch (error) {
+      // Check if it's our custom ApiError with a status
+      if (error.name === "ApiError" || error.status) {
+        return rejectWithValue({
+          message: error.message,
+          status: error.status,
+        });
+      }
+      // Fallback for network errors or other unexpected errors
+      return rejectWithValue({ message: error.message || "Unknown Error" });
     }
+  }
 );
 
 // Define el estado inicial para este slice
 const initialState = {
-    isLoading: "idle", // El estado puede ser: 'idle', 'loading', 'succeeded', 'failed'
-    error: null, // Almacena el objeto de error si la carga falla: `{ message: string, status?: number }`.
-    users: [], // Array para almacenar los datos de los usuarios.
+  isLoading: "idle", // El estado puede ser: 'idle', 'loading', 'succeeded', 'failed'
+  error: null, // Almacena el objeto de error si la carga falla: `{ message: string, status?: number }`.
+  users: [], // Array para almacenar los datos de los usuarios.
 };
 
 const usersSlice = createSlice({
-    name: "users",
-    initialState: initialState,
-    reducers: {},
-    extraReducers: (builder) => {
-        builder
-            // Caso 1: La petición está en curso (`pending`).
-            .addCase(fetchUsers.pending, (state) => {
-                state.isLoading = "loading"; // Cambia el estado a 'loading'.
-                state.error = null; // Limpia cualquier error anterior.
-            })
-            // Caso 2: La petición se completó con éxito (`fulfilled`).
-            .addCase(fetchUsers.fulfilled, (state, action) => {
-                state.isLoading = "succeeded"; // Cambia el estado a 'succeeded'.
-                state.users = action.payload; // Almacena los usuarios recibidos en el estado.
-                console.log("usersSlice - payload:", action.payload);
-            })
-            // Caso 3: La petición falló (`rejected`).
-            .addCase(fetchUsers.rejected, (state, action) => {
-                state.isLoading = "failed"; // Cambia el estado a 'failed'.
-                state.error = action.payload; // Almacena el mensaje de error en el estado.
-                console.log("usersSlice - rejected payload:", action.payload);
-            });
-    },
+  name: "users",
+  initialState: initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      // Caso 1: La petición está en curso (`pending`).
+      .addCase(fetchUsers.pending, (state) => {
+        state.isLoading = "loading"; // Cambia el estado a 'loading'.
+        state.error = null; // Limpia cualquier error anterior.
+      })
+      // Caso 2: La petición se completó con éxito (`fulfilled`).
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.isLoading = "succeeded"; // Cambia el estado a 'succeeded'.
+        state.users = action.payload; // Almacena los usuarios recibidos en el estado.
+        console.log("usersSlice - payload:", action.payload);
+      })
+      // Caso 3: La petición falló (`rejected`).
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.isLoading = "failed"; // Cambia el estado a 'failed'.
+        state.error = action.payload; // Almacena el mensaje de error en el estado.
+        console.log("usersSlice - rejected payload:", action.payload);
+      });
+  },
 });
 
 export default usersSlice.reducer;
