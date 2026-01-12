@@ -1,50 +1,25 @@
-import { IconButton } from "@material-tailwind/react";
-import PropTypes from "prop-types";
-
-// Custom hooks for state management and logic.
-import { useTheme } from "./hooks/useTheme.js";
-
-// Feature Components
-import UserSearch from "./features/users/UserSearch.jsx";
-
-import { FaStar } from "react-icons/fa";
-import { MdDarkMode } from "react-icons/md";
-
-const ThemeToggleButton = ({ toggleTheme, theme }) => {
-    return (
-        <IconButton
-            variant="text"
-            className="page-header__theme-toggle"
-            aria-label="Toggle theme"
-            onClick={toggleTheme}
-        >
-            {theme === "dark" ? (
-                <FaStar className="h-6 w-6" />
-            ) : (
-                <MdDarkMode className="h-6 w-6" />
-            )}
-        </IconButton>
-    );
-};
-
-ThemeToggleButton.propTypes = {
-    toggleTheme: PropTypes.func.isRequired,
-    theme: PropTypes.string.isRequired,
-};
+import { Routes, Route } from "react-router-dom";
+import { useTheme } from "@/hooks/useTheme.js";
+import UserSearch from "@/features/users/UserSearch.jsx";
+import UserDetail from "@/features/user-detail/UserDetail.jsx";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const App = () => {
-    // Hook for managing the theme (light/dark).
-    const [theme, toggleTheme] = useTheme();
+  // Hook for managing the theme (light/dark).
+  const [theme, toggleTheme] = useTheme();
 
-    return (
-        <main className="app">
-            <ThemeToggleButton toggleTheme={toggleTheme} theme={theme} />
-            <UserSearch />
-        </main>
-    );
+  return (
+    <main className="relative min-h-dvh flex flex-col items-center p-4 sm:p-6">
+      <ThemeToggle toggleTheme={toggleTheme} theme={theme} />
+
+      <Routes>
+        <Route path="/" element={<UserSearch />} />
+        <Route path="/user/:login" element={<UserDetail />} />
+      </Routes>
+    </main>
+  );
 };
 
 export default App;
 
-ThemeToggleButton.displayName = "ThemeToggleButton";
 App.displayName = "App";

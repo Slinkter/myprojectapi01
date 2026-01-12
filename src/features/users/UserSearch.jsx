@@ -8,86 +8,84 @@
 import { useDispatch } from "react-redux";
 
 // Custom hooks for state management and logic
-import { useDebouncedSearch } from "../../hooks/useDebouncedSearch.js";
-import { useUserFetching } from "../../hooks/useUserFetching.js";
+import { useDebouncedSearch } from "@/hooks/useDebouncedSearch.js";
+import { useUserFetching } from "./hooks/useUserFetching.js";
 import { fetchUsers } from "./usersSlice.js";
 
 // UI Components
-import PageHeader from "../../components/layout/PageHeader";
-import ErrorDisplay from "../../components/layout/ErrorDisplay";
-import SkeletonGrid from "../../components/layout/SkeletonGrid";
-import UserList from "../../components/layout/UserList";
-import NotFound from "../../components/layout/NotFound";
+import PageHeader from "@/components/layout/PageHeader";
+import ErrorDisplay from "@/components/layout/ErrorDisplay";
+import SkeletonGrid from "./components/SkeletonGrid";
+import UserList from "./components/UserList";
+import NotFound from "@/components/layout/NotFound";
 
 const UserSearch = () => {
-    // Hook for handling search logic with "debounce"
-    const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebouncedSearch(
-        "",
-        300
-    );
-    // Hook that manages fetching and the state of user data
-    const { users, status, error } = useUserFetching(debouncedSearchTerm);
-    //
-    const dispatch = useDispatch();
+  // Hook for handling search logic with "debounce"
+  const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebouncedSearch(
+    "",
+    300
+  );
+  // Hook that manages fetching and the state of user data
+  const { users, status, error } = useUserFetching(debouncedSearchTerm);
+  //
+  const dispatch = useDispatch();
 
-    // Function to retry fetching users in case of an error
-    const handleRetry = () => {
-        const currentTerm = debouncedSearchTerm;
-        // Force a new API call to re-trigger the useEffect in useUserFetching
-        if (searchTerm === currentTerm) {
-            dispatch(fetchUsers(currentTerm));
-        } else {
-            setSearchTerm(currentTerm);
-        }
-    };
+  // Function to retry fetching users in case of an error
+  const handleRetry = () => {
+    const currentTerm = debouncedSearchTerm;
+    // Force a new API call to re-trigger the useEffect in useUserFetching
+    if (searchTerm === currentTerm) {
+      dispatch(fetchUsers(currentTerm));
+    } else {
+      setSearchTerm(currentTerm);
+    }
+  };
 
-    /**
-     * Helper Function for Conditional Rendering.
-     * ----------------------------------------------------------------------
-     * Este patrón NO es "Render Props" ni "Render Function" como patrón de diseño.
-     * Es una función auxiliar privada que encapsula lógica condicional (if/else)
-     * para mantener el JSX del 'return' principal limpio y legible.
-     *
-     * Evalúa el estado actual (`status`) y devuelve el componente de UI apropiado.
-     *
-     * @returns {JSX.Element|null} El componente a renderizar (Skeleton, Error, Lista o null).
-     */
-    const renderContent = () => {
-        const isLoading = status === "loading" || status === "idle";
+  /**
+   * Helper Function for Conditional Rendering.
+   * ----------------------------------------------------------------------
+   * Este patrón NO es "Render Props" ni "Render Function" como patrón de diseño.
+   * Es una función auxiliar privada que encapsula lógica condicional (if/else)
+   * para mantener el JSX del 'return' principal limpio y legible.
+   *
+   * Evalúa el estado actual (`status`) y devuelve el componente de UI apropiado.
+   *
+   * @returns {JSX.Element|null} El componente a renderizar (Skeleton, Error, Lista o null).
+   */
+  const renderContent = () => {
+    const isLoading = status === "loading" || status === "idle";
 
-        if (isLoading) {
-            return <SkeletonGrid />;
-        }
+    if (isLoading) {
+      return <SkeletonGrid />;
+    }
 
-        if (status === "failed") {
-            if (error && error.status === 403) {
-                return <NotFound searchTerm={debouncedSearchTerm} />;
-            }
-            return (
-                <ErrorDisplay message={error?.message} onRetry={handleRetry} />
-            );
-        }
+    if (status === "failed") {
+      if (error && error.status === 403) {
+        return <NotFound searchTerm={debouncedSearchTerm} />;
+      }
+      return <ErrorDisplay message={error?.message} onRetry={handleRetry} />;
+    }
 
-        if (status === "succeeded") {
-            if (users && users.length > 0) {
-                return <UserList users={users} />;
-            }
-            return <NotFound searchTerm={debouncedSearchTerm} />;
-        }
+    if (status === "succeeded") {
+      if (users && users.length > 0) {
+        return <UserList users={users} />;
+      }
+      return <NotFound searchTerm={debouncedSearchTerm} />;
+    }
 
-        return null;
-    };
+    return null;
+  };
 
-    return (
-        <>
-            <PageHeader
-                searchTerm={searchTerm}
-                handleSearch={(e) => setSearchTerm(e.target.value)}
-                isSearching={status === "loading"}
-            />
-            {renderContent()}
-        </>
-    );
+  return (
+    <>
+      <PageHeader
+        searchTerm={searchTerm}
+        handleSearch={(e) => setSearchTerm(e.target.value)}
+        isSearching={status === "loading"}
+      />
+      {renderContent()}
+    </>
+  );
 };
 
 UserSearch.displayName = "UserSearch";

@@ -1,116 +1,23 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Outfit:wght@400;500;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-    * {
-        @apply transition-colors duration-300 ease-in-out;
-    }
+  * {
+    @apply transition-colors duration-300 ease-in-out;
+  }
 
-    body {
-        @apply font-sans bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-50;
-    }
-}
+  body {
+    @apply font-sans bg-gray-50 text-gray-900 dark:bg-dark-bg dark:text-dark-text;
+  }
 
-@layer components {
-    .app {
-        @apply relative min-h-dvh flex flex-col items-center p-4 sm:p-6;
-    }
-
-    /* --- Layout del Encabezado --- */
-    .page-header {
-        @apply flex flex-col w-full max-w-screen-2xl my-8 items-center px-4;
-    }
-    .page-header__top-bar {
-        @apply w-full max-w-3xl mb-4 text-center text-green-500 dark:text-green-300;
-    }
-    .page-header__theme-toggle {
-        @apply absolute top-4 right-4 z-10 rounded-sm border border-gray-500 dark:bg-gray-100 dark:text-gray-900;
-    }
-    .page-header__icon {
-        @apply h-6 w-6;
-    }
-    .page-header__prose {
-        @apply text-center prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert mx-auto mt-4 mb-6;
-    }
-
-    /* --- Formulario de Búsqueda --- */
-    .search-form {
-        @apply w-full max-w-md mx-auto;
-    }
-
-    .search-form__input input {
-        @apply text-gray-900 dark:text-gray-50;
-    }
-
-    .search-form__spinner {
-        @apply h-5 w-5;
-    }
-
-    .search-form__clear-icon {
-        @apply h-5 w-5 cursor-pointer text-gray-500 hover:text-gray-900 dark:hover:text-gray-50;
-    }
-
-    /* --- Contenedores de Contenido --- */
-    .user-grid {
-        @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 w-full max-w-screen-2xl p-4;
-    }
-    .user-grid__item {
-        @apply animate-skeleton-loading flex justify-center;
-    }
-    .error-display {
-        @apply min-h-dvh flex flex-col justify-center items-center text-center p-8 gap-4;
-    }
-    .not-found {
-        @apply animate-not-foundName flex items-center justify-center text-center p-8 mt-10;
-    }
-
-    /* --- Estilos de Componentes Específicos --- */
-    .skeleton-card {
-        @apply w-full max-w-xs shadow-lg rounded-xl animate-pulse bg-white dark:bg-gray-800;
-    }
-
-    .skeleton-card__header {
-        @apply relative grid h-48 mx-auto place-items-center bg-gray-300 dark:bg-gray-600;
-    }
-
-    .skeleton-card__body-line {
-        @apply h-6 w-3/4 mx-auto rounded-full bg-gray-300 dark:bg-gray-600;
-    }
-
-    .skeleton-card__footer-line {
-        @apply h-12 w-full rounded-lg bg-gray-300 dark:bg-gray-600;
-    }
-
-    .not-found__text {
-        @apply text-3xl text-gray-900 dark:text-gray-50;
-    }
-
-    .error-display__message {
-        @apply text-center text-3xl text-red-500;
-    }
-    .error-display__button {
-        @apply mt-4;
-    }
-
-    .user-card {
-        @apply w-full max-w-xs overflow-hidden transition-all duration-100 hover:shadow-2xl rounded-xl bg-white dark:bg-gray-800;
-    }
-
-    .user-card__header {
-        @apply mx-auto mt-6 flex h-40 w-40 justify-center items-center bg-transparent;
-    }
-
-    .user-card__avatar {
-        @apply h-full w-full rounded-full object-cover object-center shadow-md;
-    }
-
-    .user-card__name {
-        @apply mb-2 text-xl text-green-700 dark:text-green-300;
-    }
-
-    .user-card__button {
-        @apply transition-transform hover:scale-[1.02] focus:scale-[1.02] active:scale-100;
-    }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading tracking-tight;
+  }
 }

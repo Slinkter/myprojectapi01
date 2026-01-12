@@ -8,7 +8,7 @@
  */
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchUsersAPI } from "../../services/userService";
+import { fetchUsersAPI } from "@/services/userService";
 
 const SLICE_NAME = "users/fetchUsers";
 

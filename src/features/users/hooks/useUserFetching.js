@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUsers } from "../features/users/usersSlice";
+import { fetchUsers } from "../usersSlice";
 
 /**
  * @hook useUserFetching
@@ -17,20 +17,20 @@ import { fetchUsers } from "../features/users/usersSlice";
  *   - `error` (object|null): El objeto de error si la petición falla.
  */
 export const useUserFetching = (text) => {
-    // Renombramos 'isLoading' a 'status' para más claridad,
-    // ya que contiene el estado real de la carga.
-    const {
-        users = [],
-        isLoading: status,
-        error,
-    } = useSelector((state) => state.users || {});
+  // Renombramos 'isLoading' a 'status' para más claridad,
+  // ya que contiene el estado real de la carga.
+  const {
+    users = [],
+    isLoading: status,
+    error,
+  } = useSelector((state) => state.users || {});
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(fetchUsers(text));
-    }, [text, dispatch]);
+  useEffect(() => {
+    dispatch(fetchUsers(text));
+  }, [text, dispatch]);
 
-    // Devolvemos directamente el estado de Redux, que es la fuente de verdad.
-    return { users, status, error };
+  // Devolvemos directamente el estado de Redux, que es la fuente de verdad.
+  return { users, status, error };
 };
