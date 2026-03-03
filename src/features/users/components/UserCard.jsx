@@ -1,6 +1,6 @@
 /**
  * @file User Card Component
- * @description Compact user card with Motion animations
+ * @description Compact user card with Motion animations - Mobile First
  */
 
 import React from "react";
@@ -43,10 +43,11 @@ const UserCard = React.memo(({ user = {} }) => {
     >
       <Card
         className="
-          w-64 overflow-hidden rounded-xl
+          w-full max-w-[280px] overflow-hidden rounded-xl
           bg-white dark:bg-dark-surface
           border border-gray-200 dark:border-dark-border
           shadow-sm hover:shadow-md
+          transition-shadow duration-200
         "
         shadow={false}
       >
@@ -54,19 +55,19 @@ const UserCard = React.memo(({ user = {} }) => {
           color="transparent"
           floated={false}
           shadow={false}
-          className="mx-auto mt-6 mb-2 flex h-20 w-20 justify-center items-center bg-transparent"
+          className="mx-auto mt-6 mb-2 flex h-16 w-16 sm:h-20 sm:w-20 justify-center items-center bg-transparent"
         >
           <img
             src={avatar_url}
             alt={`Avatar de ${login}`}
             loading="lazy"
-            className="h-20 w-20 rounded-full object-cover border-2 border-gray-100 dark:border-dark-border"
+            className="h-16 w-16 sm:h-20 sm:w-20 rounded-full object-cover border-2 border-gray-100 dark:border-dark-border"
           />
         </CardHeader>
         <CardBody className="text-center pb-2 px-4">
           <Typography
             variant="h5"
-            className="text-base font-medium text-gray-900 dark:text-dark-text"
+            className="text-sm sm:text-base font-medium text-gray-900 dark:text-dark-text truncate"
           >
             {login}
           </Typography>
@@ -77,7 +78,7 @@ const UserCard = React.memo(({ user = {} }) => {
               color="blue"
               variant="filled"
               size="sm"
-              className="w-full text-sm"
+              className="w-full text-xs sm:text-sm"
             >
               Ver Detalles
             </Button>
@@ -92,7 +93,7 @@ const UserCard = React.memo(({ user = {} }) => {
               variant="outlined"
               color="blue"
               size="sm"
-              className="w-full text-sm"
+              className="w-full text-xs sm:text-sm"
             >
               GitHub
             </Button>

@@ -13,7 +13,7 @@ import {
 const SkeletonCard = () => (
   <Card
     className="
-      w-64 overflow-hidden rounded-xl
+      w-full max-w-[280px] overflow-hidden rounded-xl
       bg-white dark:bg-dark-surface
       border border-gray-200 dark:border-dark-border
       shadow-sm animate-pulse
@@ -23,9 +23,9 @@ const SkeletonCard = () => (
     <CardHeader
       shadow={false}
       floated={false}
-      className="mx-auto mt-6 mb-2 flex h-20 w-20 justify-center items-center bg-transparent"
+      className="mx-auto mt-6 mb-2 flex h-16 w-16 sm:h-20 sm:w-20 justify-center items-center bg-transparent"
     >
-      <div className="h-20 w-20 rounded-full bg-gray-200 dark:bg-gray-700" />
+      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-gray-200 dark:bg-gray-700" />
     </CardHeader>
     <CardBody className="text-center pb-2 px-4">
       <div className="h-5 w-24 mx-auto rounded-full bg-gray-200 dark:bg-gray-700" />

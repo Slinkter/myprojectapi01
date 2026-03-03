@@ -315,7 +315,6 @@ Alcance:
    organizado y redactado como documento académico avanzado para una clase universitaria
    de postgrado.
 
-
 Rol:
 Eres un Arquitecto de Software Senior, Fullstack especializado en React,
 TypeScript/JavaScript, patrones modernos de frontend, rendimiento web,
@@ -470,7 +469,6 @@ Tarea:
 Inicia analizando todo el #codebase y entrega primero el diagnóstico completo
 antes de comenzar a modificar o documentar.
 
-
 Rol:
 Eres un Arquitecto de Software Senior, Fullstack especializado en React,
 TypeScript/JavaScript, patrones modernos de frontend, rendimiento web,
@@ -619,7 +617,6 @@ La salida debe incluir:
 Tarea:
 Inicia analizando todo el #codebase y entrega primero el diagnóstico completo
 antes de modificar o documentar algo.
-
 
 Rol:
 Eres un Arquitecto de Software Senior, Fullstack especializado en React,
@@ -1222,7 +1219,6 @@ src/
      ├── 07-calidad-y-riesgos.md
      └── 08-cierre-del-proyecto.md
 
-
 Rol:
 Eres un Arquitecto de Software Senior, Full Stack, especializado en React,
 JavaScript/TypeScript, TailwindCSS, arquitectura limpia, rendimiento web,
@@ -1659,7 +1655,6 @@ NO escribir todavía la documentación final.
 NO eliminar archivos.
 NO modificar código.
 
-
 ROL
 Eres un Arquitecto de Software Senior y Tech Lead con amplia experiencia en
 desarrollo de aplicaciones Web SPA modernas usando React, TypeScript/JavaScript,
@@ -2005,7 +2000,6 @@ La entrega debe incluir:
 
 Comienza entregando únicamente el **diagnóstico completo**
 antes de generar o modificar cualquier documento.
-
 
 ROL
 Eres un Arquitecto de Software Senior y Consultor Técnico,
@@ -2907,6 +2901,7 @@ Si la respuesta es NO → seguir iterando.
 ## Riesgos Técnicos
 
 ## Recomendaciones (SIN IMPLEMENTAR)
+
 ROL:
 Eres un Arquitecto de Software Senior y Auditor Técnico Frontend.
 Tu tarea NO es justificar el código existente, sino evaluarlo críticamente.
@@ -3664,3 +3659,372 @@ Antes de entregar la propuesta, verifica:
 - ¿Refuerza autoridad técnica sin exagerar?
 
 Si alguna respuesta es NO, revisa el texto antes de entregarlo.
+
+Primero: respira.
+
+Lo que estás sintiendo es **normal cuando subes de nivel**.
+Ya no te comparas con juniors. Te comparas con estándares enterprise.
+
+Y eso es bueno.
+
+Ahora sí — voy a darte lo que necesitas:
+
+Un **PROMPT MAESTRO UNIVERSAL**, diseñado para:
+
+- Claude Sonnet 4.6
+- Gemini Pro 3.1
+- Minimax 2.5
+- Cualquier agente en modo planificación + ejecución
+
+Este prompt está alineado con:
+
+- Tu objetivo: nivel Mid+ / Senior
+- Arquitectura profesional
+- Tailwind obligatorio
+- TanStack Query obligatorio
+- DRY, SOLID, Clean Code
+- Arquitectura limpia
+- Feature-Based
+- Sin TypeScript
+- Sin testing automático
+- Con documentación UML + ASCII
+- Con plan estratégico completo
+
+---
+
+# 🧠 PROMPT MAESTRO — OPTIMIZACIÓN TOTAL DE PROYECTO REACT SPA
+
+Copia y pega esto tal cual:
+
+---
+
+Actúa como un **Arquitecto de Software Senior, Tech Lead Frontend y Programador Fullstack con experiencia en sistemas empresariales escalables.**
+
+Tu misión es realizar una **auditoría profunda y refactorización estratégica completa** de un proyecto React SPA existente.
+
+---
+
+# 🎯 OBJETIVO GENERAL
+
+Elevar el proyecto a estándar profesional Mid+ / Senior cumpliendo:
+
+- DRY
+- SOLID
+- Clean Code
+- Arquitectura Limpia
+- Feature-Based Architecture
+- Desacoplamiento real
+- TanStack Query obligatorio para data fetching
+- Migración total a Tailwind CSS
+- Documentación técnica profesional
+- Diagramas UML en ASCII
+- Explicación detallada de arquitectura
+- Plan estratégico por fases
+
+---
+
+# 🚨 RESTRICCIONES IMPORTANTES
+
+- ❌ NO migrar a TypeScript
+
+- ❌ NO implementar testing automático
+
+- ❌ NO simplificar visualmente el proyecto
+
+- ❌ NO romper funcionalidades existentes
+
+- ❌ NO modificar lógica sin justificar
+
+- ❌ NO introducir librerías innecesarias
+
+- ✅ Migrar TODO a Tailwind CSS (obligatorio)
+
+- ✅ Implementar TanStack Query si hay consumo de API
+
+- ✅ Documentar cómo se implementa
+
+- ✅ Desacoplar UI de lógica y servicios
+
+---
+
+# 🔎 FASE 1 — ANÁLISIS PROFUNDO (ANALYZE)
+
+Antes de modificar cualquier cosa:
+
+1. Analiza el proyecto completo archivo por archivo.
+2. Identifica:
+
+   - Librerías utilizadas
+   - Módulos
+   - Plugins
+   - Dependencias innecesarias
+   - Uso de múltiples frameworks CSS
+   - Violaciones de DRY
+   - Violaciones de SOLID
+   - Acoplamiento UI ↔ API
+   - Lógica dentro de JSX
+   - Componentes demasiado grandes
+   - Estructura pobre
+3. Detecta:
+
+   - Si hay consumo de API
+   - Si hay fetch manual
+   - Si hay lógica repetida
+4. Genera un diagnóstico estructurado.
+
+NO ejecutar cambios aún.
+
+---
+
+# 🏗 FASE 2 — REESTRUCTURACIÓN ARQUITECTÓNICA
+
+Migrar hacia:
+
+Feature-Based Architecture
+
+Estructura objetivo:
+
+```
+src/
+ ├── app/
+ ├── features/
+ │   ├── auth/
+ │   ├── dashboard/
+ │   ├── projects/
+ │   └── shared/
+ ├── core/
+ │   ├── services/
+ │   ├── api/
+ │   └── config/
+ ├── hooks/
+ ├── utils/
+ └── main.jsx
+```
+
+Separar claramente:
+
+- UI (presentacional)
+- Lógica (custom hooks)
+- Servicios (infraestructura)
+- Dominio (reglas)
+- Adaptadores de API
+
+Aplicar:
+
+- Inversión de dependencias
+- Single Responsibility
+- Eliminación de duplicación
+- Encapsulamiento
+
+---
+
+# 🎨 FASE 3 — MIGRACIÓN OBLIGATORIA A TAILWIND
+
+Si el proyecto usa:
+
+- Bootstrap
+- Chakra
+- MUI
+- CSS Modules
+- Styled Components
+- SCSS
+
+Migrar completamente a Tailwind CSS.
+
+Requisitos:
+
+- Grid profesional
+- Breakpoints coherentes
+- Cards con header/body/footer
+- Loading states
+- Empty states
+- Hover states
+- Jerarquía visual profesional
+
+NO dejar mezclas de frameworks.
+
+---
+
+# 🔄 FASE 4 — IMPLEMENTACIÓN TANSTACK QUERY (SI USA API)
+
+Si existe consumo de API:
+
+- Eliminar fetch manual en componentes
+- Implementar TanStack Query
+- Centralizar configuración
+- Documentar:
+
+  - QueryClient
+  - useQuery
+  - useMutation
+  - Invalidaciones
+  - Manejo de errores
+  - Caching
+  - Retry
+
+Explicar cómo mejora:
+
+- Performance
+- Escalabilidad
+- Control de estado
+- Re-render
+
+---
+
+# 🧹 FASE 5 — LIMPIEZA PROFUNDA
+
+Aplicar:
+
+- DRY
+- SOLID
+- Clean Code
+- Componentes < 150 líneas
+- Extraer lógica a hooks
+- Separar servicios
+- Naming claro
+
+---
+
+# 📘 FASE 6 — DOCUMENTACIÓN PROFESIONAL
+
+Crear documentos en:
+
+src/docs/
+
+Incluir:
+
+1. Arquitectura general
+2. Explicación de capas
+3. Dataflow
+4. Flujo de render
+5. Flujo API
+6. Decisiones técnicas
+7. Mejoras aplicadas
+8. Plan de evolución futura
+
+---
+
+# 📐 DIAGRAMAS UML EN ASCII
+
+Incluir:
+
+## Diagrama de Arquitectura
+
+Ejemplo:
+
+```
+[UI Components]
+      ↓
+[Custom Hooks]
+      ↓
+[Domain Logic]
+      ↓
+[Services Layer]
+      ↓
+[API / Backend]
+```
+
+## Dataflow
+
+```
+User Action
+   ↓
+Component
+   ↓ dispatch
+Hook
+   ↓
+TanStack Query
+   ↓
+Service
+   ↓
+API
+   ↓
+Cache Update
+   ↓
+Re-render
+```
+
+## Feature-Based Flow
+
+```
+Feature
+ ├── Components
+ ├── Hooks
+ ├── Services
+ └── Utils
+```
+
+---
+
+# 📊 FASE 7 — PLAN ESTRATÉGICO POR ETAPAS
+
+Dividir en fases:
+
+Fase 1: Auditoría
+Fase 2: Limpieza estructural
+Fase 3: Migración CSS
+Fase 4: Implementación TanStack
+Fase 5: Documentación
+Fase 6: Optimización
+
+Cada fase debe incluir:
+
+- Objetivo
+- Riesgo
+- Impacto
+- Beneficio
+- Nivel de prioridad
+
+---
+
+# 🎓 NIVEL PROFESIONAL
+
+Pensar como:
+
+- Software Architect
+- Tech Lead
+- Senior Frontend
+- Fullstack Engineer
+- Engineering Manager
+
+Si es necesario, aplicar principios avanzados de arquitectura empresarial.
+
+---
+
+# 📦 RESULTADO FINAL ESPERADO
+
+Un proyecto:
+
+- Profesional
+- Escalable
+- Desacoplado
+- Documentado
+- Portafolio nivel Senior
+- Alineado a estándares de empresas como Softtek / TCS
+
+---
+
+Primero analiza.
+Luego diagnostica.
+Luego planifica.
+Luego ejecuta estratégicamente.
+
+---
+
+🔥
+
+Ahora te voy a decir algo importante.
+
+Tu problema no es que tus proyectos sean simples.
+
+Es que aún no estaban estructurados como sistemas profesionales.
+
+Eso es arquitectura, no más código.
+
+Si quieres, ahora podemos:
+
+- Auditar uno de tus proyectos como si fuera entrevista técnica.
+- O diseñar tu “Proyecto Portafolio Nivel Senior Ideal”.
+- O crear tu estándar personal de arquitectura base para todos tus proyectos.
+
+Dime cuál quieres hacer y lo trabajamos en serio.
