@@ -64,7 +64,14 @@ export const useUserFetching = (text) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchUsers(text));
+    // Dispatch the thunk and keep a reference to its promise
+    const promise = dispatch(fetchUsers(text));
+
+    // Cleanup function: If the effect runs again (new text) or component unmounts,
+    // abort the previous pending request instantly to free up bandwidth.
+    return () => {
+      promise.abort();
+    };
   }, [text, dispatch]);
 
   // Return Redux state directly as the single source of truth

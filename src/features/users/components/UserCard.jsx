@@ -1,37 +1,25 @@
 /**
  * @file User Card Component
- * @description User card with Motion animations - Mobile First
+ * @description Standardized, high-quality User Card with proper widths.
  */
 
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  Typography,
-  Button,
-  CardHeader,
-} from "@material-tailwind/react";
+import { FaArrowRight } from "react-icons/fa";
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
     y: 0,
-    transition: { duration: 0.3, ease: "easeOut" }
+    transition: { duration: 0.3, ease: "easeOut" },
   },
 };
 
-/**
- * User Card Component
- * @component
- * @description Displays user info with Motion animations
- */
 const UserCard = React.memo(({ user = {} }) => {
-  const { avatar_url, login, html_url } = user;
+  const { avatar_url, login } = user;
 
   return (
     <motion.div
@@ -39,53 +27,41 @@ const UserCard = React.memo(({ user = {} }) => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      whileHover={{ y: -4 }}
+      className="h-full w-full max-w-[300px] sm:max-w-none mx-auto"
     >
-      <Card
-        className="
-          w-full overflow-hidden rounded-xl
-          bg-white dark:bg-dark-surface
-          border border-gray-200 dark:border-dark-border
-          shadow-md hover:shadow-xl
-          transition-all duration-200
-        "
-        shadow={false}
-      >
-        <CardHeader
-          floated={false}
-          shadow={false}
-          className="h-32 sm:h-40 bg-gradient-to-r from-accent-500 to-accent-600 dark:from-accent-600 dark:to-accent-700 m-0"
-        >
-          <div className="h-full w-full flex items-center justify-center pt-8 sm:pt-10">
-            <img
-              src={avatar_url}
-              alt={`Avatar de ${login}`}
-              loading="lazy"
-              className="h-20 w-20 sm:h-24 sm:w-24 rounded-full object-cover border-4 border-white dark:border-dark-surface shadow-lg -mt-8 sm:-mt-10"
-            />
-          </div>
-        </CardHeader>
-        <CardBody className="text-center pb-2 pt-8 sm:pt-10 px-4">
-          <Typography
-            variant="h4"
-            className="text-base sm:text-lg font-semibold text-gray-900 dark:text-dark-text truncate px-2"
-          >
+      <div className="flex flex-col h-full w-full rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-dark-surface hover:shadow-lg transition-all duration-300">
+        {/* Card Body: Content & Media */}
+        <div className="p-6 md:p-8 flex flex-col items-center flex-grow relative overflow-hidden">
+          {/* Subtle Background Glow for Avatar */}
+          <div className="absolute top-8 left-1/2 -translate-x-1/2 w-24 h-24 bg-brand-500/10 dark:bg-brand-500/20 rounded-full blur-2xl"></div>
+
+          <img
+            src={avatar_url}
+            alt={`Avatar de ${login}`}
+            loading="lazy"
+            className="relative w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border-4 border-white dark:border-dark-surface shadow-md bg-white dark:bg-dark-surface z-10"
+          />
+          <h3 className="mt-5 text-xl font-bold text-gray-900 dark:text-gray-100 text-center truncate w-full tracking-tight">
             {login}
-          </Typography>
-        </CardBody>
-        <CardFooter className="pt-0 px-4 pb-4">
-          <Link to={`/user/${login}`}>
-            <Button
-              color="blue"
-              variant="filled"
-              size="sm"
-              className="w-full"
+          </h3>
+          <p className="mt-1 text-sm font-semibold text-brand-600 dark:text-brand-400 text-center tracking-wide">
+            @{login}
+          </p>
+        </div>
+
+        {/* Card Footer: Action */}
+        <div className="p-6 md:p-8 pt-0 mt-auto w-full">
+          <Link to={`/user/${login}`} className="w-full block">
+            <button
+              className="w-full inline-flex justify-center items-center gap-x-2 text-sm font-bold rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-white hover:bg-gray-100 hover:text-brand-600 dark:hover:text-brand-400 dark:hover:bg-gray-700 py-3 px-4 transition-all focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:focus:ring-offset-dark-surface cursor-pointer shadow-sm active:scale-[0.98]"
+              aria-label={`Ver perfil de ${login}`}
             >
               Ver Perfil
-            </Button>
+              <FaArrowRight size={16} />
+            </button>
           </Link>
-        </CardFooter>
-      </Card>
+        </div>
+      </div>
     </motion.div>
   );
 });
@@ -96,7 +72,6 @@ UserCard.propTypes = {
   user: PropTypes.shape({
     avatar_url: PropTypes.string,
     login: PropTypes.string,
-    html_url: PropTypes.string,
   }).isRequired,
 };
 

@@ -46,11 +46,17 @@ const SLICE_NAME = "users/fetchUsers";
  */
 export const fetchUsers = createAsyncThunk(
   SLICE_NAME,
-  async (searchTerm = "", { rejectWithValue }) => {
+  async (searchTerm = "", { rejectWithValue, signal }) => {
     try {
-      const users = await fetchUsersAPI(searchTerm);
+      // Pasamos el signal para abortar la petición vía red (AbortController)
+      const users = await fetchUsersAPI(searchTerm, signal);
       return users;
     } catch (error) {
+      // AbortError is a standard DOM exception when fetch is cancelled
+      if (error.name === "AbortError") {
+        throw error; // Let Redux handle the cancellation silently
+      }
+
       // Check if it's our custom ApiError with a status
       if (error.name === "ApiError" || error.status) {
         return rejectWithValue({
@@ -61,7 +67,7 @@ export const fetchUsers = createAsyncThunk(
       // Fallback for network errors or other unexpected errors
       return rejectWithValue({ message: error.message || "Unknown Error" });
     }
-  }
+  },
 );
 
 /**

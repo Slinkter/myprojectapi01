@@ -1,66 +1,61 @@
-# Flujo de Datos y Estado
+# 05 - Arquitectura de Flujo de Datos
 
-## 1. Arquitectura de Estado
-Este proyecto utiliza una **arquitectura cliente pura** sin backend propio.
-El estado es gestionado de manera híbrida:
-- **Global:** Redux Toolkit (`usersSlice`) para datos de dominio (Usuarios, Status API).
-- **Local:** `useState` para inputs, interactividad efímera y lógica de UI.
-- **Persistente:** `localStorage` para preferencias de usuario (Tema).
+## 🌊 Arquitectura de Estado
+
+Este proyecto utiliza una **Arquitectura Cliente Pura**. El estado es alojado cien por ciento de manera local o cliente mediante:
+
+- **Redux Toolkit**: Concentración del App State macro, inyectado mediante Provider a toda la jerarquía de UI.
+- **LocalStorage**: Memoria precaria de corto alcance para preferencias frígidas (Theming Light/Dark).
 
 **No aplica:**
-- ❌ Integración con Firebase/Supabase
-- ❌ Base de datos remota propia
 
-## 2. Diagrama de Flujo de Datos (Data Flow)
+- ❌ Bases de datos remotas.
+- ❌ Firebase/Supabase (Serverless auth/functions).
+- ❌ Mutación asincróna (Solo se lee - _GET_ Data de Github, no POST).
 
-El siguiente diagrama detalla cómo viaja la información desde la interacción del usuario hasta la actualización de la UI.
+## ⏱️ Diagrama de Secuencia Asíncrona (Mermaid)
 
 ```mermaid
 sequenceDiagram
-    actor Usuario
-    participant Input as Componente UI (Search)
-    participant Hook as useDebouncedSearch
-    participant Thunk as Redux Thunk (fetchUsers)
-    participant Service as UserService
-    participant API as GitHub API
-    participant Store as Redux Store
-    participant List as Componente UI (UserList)
+    autonumber
+    actor U as Usuario (UI)
+    participant C as Componente (React DOM)
+    participant R as Redux Thunk
+    participant S as Slice Reducer
+    participant A as GitHub API
 
-    Note over Usuario, Input: Interacción Inicial
-    Usuario->>Input: Escribe "luis"
-    Input->>Hook: Actualiza estado local
-    Hook-->>Hook: Espera 300ms (Debounce)
+    U->>C: Introduce "Alex" en Header
+    C-->>R: Dispatch (fetchUsers("Alex"))
+    R->>S: loading = true (Pending Action)
+    S-->>C: Props Update (Render Skeletons)
+    R->>A: GET /search/users?q=Alex
+    A-->>R: Return JSON Promise (Array de Profiles)
 
-    Note over Hook, API: Lógica de Negocio
-    Hook->>Thunk: Despacha acción con "luis"
-    Thunk->>Service: Llama fetchUsersAPI("luis")
-    Service->>API: GET /search/users?q=luis
-    API-->>Service: JSON { items: [...] }
-    Service-->>Thunk: Retorna Array de Usuarios
-
-    Note over Thunk, List: Actualización de Estado y UI
-    Thunk->>Store: Dispatch FULFILLED (payload: users)
-    Store-->>Store: Actualiza state.users.list
-    Store-->>List: Selector notifica cambio
-    List->>List: Re-renderiza con nuevos datos
+    alt Si API 200 OK
+        R->>S: Action Fulfilled (Payload = Array)
+        S-->>C: state.data Update (Render UserCards)
+    else Si Rate Limit API / Error 404
+        R->>S: Action Rejected
+        S-->>C: state.error Update (Render NotFound)
+    end
 ```
 
-## 3. Modelo de Datos (Store)
+## 🌳 Grafo de Árbol de Invocaciones (Props Tree) - ASCII Art
 
-El *Slice* de usuarios (`usersSlice`) mantiene la siguiente estructura:
+El Flujo de datos asienta las responsabilidades usando el patrón funcional React clásico. Un contenedor inteligente habla con el store, las piezas tontas solo mapean las _Props_.
 
-```javascript
-{
-  users: [
-    {
-      id: 123,
-      login: "usuario",
-      avatar_url: "https://...",
-      html_url: "https://..."
-    },
-    // ... más usuarios
-  ],
-  status: "idle" | "loading" | "succeeded" | "failed",
-  error: null | { message: string, status: number }
-}
+```text
+<App> (Inyecta Redux Store + Rutas)
+  │
+  ├─ <ThemeToggle> --------- (Lee y Escribe Context/Local Storage: "DarkMode")
+  │
+  ├─ <Home (Search View)> -- (Suscripto a state.users.data)
+  │   │
+  │   ├─ <PageHeader> ------ (Recibe handleSearch() / Devuelve eventOnChange)
+  │   │
+  │   └─ <UserCard> x N ---- (Componente Tonto. Recibe `user={avatar, login}` puramente visual Tailwind v4)
+  │
+  └─ <UserDetail> ---------- (Recibe route Param /user/:login)
+      │
+      └─ Fetch Effect ------ (Busca Independientemente en API)
 ```

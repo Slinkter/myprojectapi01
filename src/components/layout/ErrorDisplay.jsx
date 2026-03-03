@@ -4,7 +4,6 @@
  * Error state component that displays error messages with retry functionality.
  */
 
-import { Typography, Button } from "@material-tailwind/react";
 import PropTypes from "prop-types";
 
 /**
@@ -29,12 +28,15 @@ import PropTypes from "prop-types";
  */
 const ErrorDisplay = ({ message, onRetry }) => (
   <div className="min-h-dvh flex flex-col justify-center items-center text-center p-8 gap-4">
-    <Typography variant="h3" className="text-center text-3xl text-red-500">
+    <h3 className="text-center text-3xl text-red-500 font-heading">
       {message}
-    </Typography>
-    <Button color="blue" onClick={onRetry} className="mt-4">
+    </h3>
+    <button
+      onClick={onRetry}
+      className="mt-4 px-6 py-2 bg-blue-500 hover:bg-blue-600 outline-none text-white rounded-lg transition-colors duration-200 cursor-pointer"
+    >
       Reintentar
-    </Button>
+    </button>
   </div>
 );
 

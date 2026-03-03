@@ -75,18 +75,18 @@ class ApiError extends Error {
  *   Search for specific users
  * const results = await fetchUsersAPI('octocat');
  */
-export const fetchUsersAPI = async (searchTerm = "") => {
+export const fetchUsersAPI = async (searchTerm = "", signal) => {
   const url = searchTerm
     ? `${API_BASE_URL}/search/users?q=${encodeURIComponent(searchTerm)}`
     : `${API_BASE_URL}/users`;
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { signal });
 
     if (!response.ok) {
       throw new ApiError(
         `HTTP error! status: ${response.status}`,
-        response.status
+        response.status,
       );
     }
 

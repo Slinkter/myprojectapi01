@@ -54,7 +54,7 @@ import { useState, useEffect } from "react";
  *   );
  * }
  */
-export const useDebouncedSearch = (initialValue, delay = 300) => {
+export const useDebouncedSearch = (initialValue, delay = 200) => {
   const [inputValue, setInputValue] = useState(initialValue);
   const [debouncedValue, setDebouncedValue] = useState(initialValue);
 

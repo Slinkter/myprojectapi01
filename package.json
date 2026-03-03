@@ -12,7 +12,6 @@
         "deploy": "gh-pages -d dist"
     },
     "dependencies": {
-        "@material-tailwind/react": "^2.1.10",
         "@reduxjs/toolkit": "^2.11.2",
         "motion": "^12.34.4",
         "prop-types": "^15.8.1",

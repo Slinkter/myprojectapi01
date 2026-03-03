@@ -1,60 +1,66 @@
-# Arquitectura del Sistema
+# 02 - Arquitectura
 
-## 1. Estructura de Carpetas (Feature-Based Híbrida)
-El proyecto implementa una estructura modular orientada a características (*features*), facilitando la escalabilidad y el mantenimiento.
+## 🏢 Estructura de Carpetas (Feature-Sliced Design)
 
-```
+La migración promueve la separación de la lógica del negocio frente a la infraestructura técnica. El proyecto ha sido moldeado bajo un FSD estricto, logrando que el equipo escale en features sin pisar dominios ajenos.
+
+```text
 src/
-├── app/                # Configuración global del Store (Redux)
-├── components/         # Componentes UI reutilizables y Layouts
-│   ├── layout/         # Componentes estructurales (Header, Grid)
-│   └── UserCard.jsx    # Componente de presentación principal
-├── docs/               # Documentación centralizada del proyecto
-├── features/           # Módulos de dominio (Lógica + UI específica)
-│   ├── users/          # Feature: Gestión de Usuarios (Search, List, Slice)
-│   └── search/         # (Futuro/Refactor) Lógica de búsqueda
-├── hooks/              # Custom Hooks globales (Theme, Debounce, Observer)
-├── services/           # Capa de integración con APIs externas
-└── main.jsx            # Punto de entrada de la aplicación
+├── app/                  # Orquestador: store.js (Redux root)
+├── features/             # Slices de Negocio Aisladas
+│   ├── users/            # (Search, UI lists genéricas, actions)
+│   └── user-detail/      # (Single User View profile route)
+├── components/           # UI Compartida agnóstica de negocio
+│   ├── layout/           # (ErrorDisplay, NotFound, PageHeader)
+│   └── ui/               # (ThemeToggle, Modals, Primates HTML)
+├── hooks/                # Reglas reactivas custom (ej. useTheme)
+├── services/             # Abstracción limpia (endpoints APIs)
+├── routes/               # Declaración de react-router (opcional por ahora)
+├── utils/                # Funciones agnósticas (clsx + twMerge, formats)
+└── docs/                 # "La Biblia del Proyecto"
 ```
 
-## 2. Capas de Responsabilidad
+## 🧩 Patrones Utilizados
 
-### Capa de Presentación (Components & Features UI)
-- Responsable solo de renderizar datos y capturar eventos.
-- **Patrón:** *Container/Presenter* (implícito). `UserSearch` actúa como contenedor que conecta con Redux, mientras que `UserCard` es un componente presentacional puro optimizado con `React.memo`.
+- **Feature-Based Architecture:** La carpeta `users/` contiene tanto su UI, como su slice the Redux (logic), sus componentes atómicos, aislando todo su dominio.
+- **Container/Presenter Pattern:** Redux o Hooks manejan el estado y lo inyectan hacia `UserCard` (Presenter), garantizando que el diseño visual pueda testearse aislado de la Red.
+- **Utility-First (Tailwind Puro):** Todo elemento UI hereda y compone clases CSS estandarizadas mediante `className={cn(...)}`, mitigando la colisión de nombres CSS e imposibilitando la fragmentación visual que provocaba el BEM legacy o las UI externas de Material Tailwind.
 
-### Capa de Lógica de Estado (Redux & Hooks)
-- Mantiene la verdad única del estado de la aplicación.
-- `usersSlice.js`: Maneja el estado de la lista de usuarios, flags de carga (`status`) y errores.
-- Custom Hooks: Encapsulan lógica reutilizable como el *theme switching* o la detección de visibilidad.
+## 📐 Diagrama de Clases UML del Store/Context (Mermaid)
 
-### Capa de Servicios (Services)
-- `userService.js`: Abstrae la comunicación con la API de GitHub.
-- Desacopla la lógica de red de los componentes React. Si la API cambia, solo se modifica este archivo.
-
-## 3. Patrones de Diseño Aplicados
-
-### Custom Hooks
-- **`useDebouncedSearch`**: Implementa el patrón *Debounce* para optimizar llamadas a la API.
-- **`useTheme`**: Gestiona la persistencia y cambio de tema (Light/Dark).
-- **`useIntersectionObserver`**: Implementa *Lazy Loading* visual de componentes.
-
-### Optimización de Renderizado
-- **`React.memo`**: Previene re-renderizados innecesarios en `UserCard`.
-- **Lazy Loading**: Imágenes y componentes se cargan bajo demanda.
-
-## 4. Diagrama de Componentes
 ```mermaid
-graph TD
-    App[App.jsx] --> ThemeToggle[ThemeToggleButton]
-    App --> UserSearch[UserSearch Feature]
-    UserSearch --> Input[Search Input]
-    UserSearch --> Layout[PageHeader]
-    UserSearch --> Grid[SkeletonGrid / UserList]
-    Grid --> Card[UserCard]
-    Card --> LazyImg[Lazy Image]
+classDiagram
+    class RootState {
+        +UserSlice users
+    }
+    class UserSlice {
+        +Array data
+        +String status : 'idle' | 'loading' | 'failed'
+        +String error
+        +fetchUsers() Action
+    }
+    class UserDetail {
+        +String avatar_url
+        +String login
+        +Int public_repos
+        +String bio
+    }
+
+    RootState --> UserSlice : contains
+    UserSlice "1" *-- "many" UserDetail : manages
 ```
 
-## 5. Nota sobre Arquitectura Serverless
-**No aplica.** Este proyecto utiliza una **Arquitectura Cliente Pura**. No existe backend propio ni integración con servicios como Firebase o Supabase. Toda la persistencia es local (`localStorage` para tema) o efímera (estado Redux).
+## 🗺️ Mapeo Estructural y Dependencias (ASCII)
+
+```text
+ [ Redux Provider ] (Capa Superior)
+         │
+         ▼
+ [ App Router ] (Intercepta URLs)
+         │
+         ├─ /         ─▶ [ UserSearchContainer ] ─▶ (Fetch GitHub)
+         │                       └─▶ [ UserCard List (Tailwind) ]
+         │
+         └─ /user/:id ─▶ [ UserDetailFeature ]
+                                 └─▶ (Fetch Single User API Endpoint)
+```

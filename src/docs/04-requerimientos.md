@@ -1,38 +1,28 @@
-# Requerimientos del Sistema
+# 04 - Requerimientos Funcionales y No Funcionales
 
-## 1. Requerimientos Funcionales (RF)
+## 📊 Requerimientos Funcionales (RF)
 
-| ID | Requerimiento | Prioridad |
-|----|---------------|-----------|
-| **RF-01** | El sistema debe permitir buscar usuarios de GitHub por nombre de usuario *login*. | Alta |
-| **RF-02** | La búsqueda debe implementar un mecanismo de *debounce* para optimizar llamadas. | Alta |
-| **RF-03** | Se debe mostrar una lista de resultados con: Avatar, Login y Enlace al perfil. | Alta |
-| **RF-04** | El sistema debe mostrar *Skeletons* o indicadores visuales durante la carga de datos. | Media |
-| **RF-05** | Se debe notificar al usuario si no se encuentran resultados (`User Not Found`). | Media |
-| **RF-06** | Se debe manejar y mostrar errores de conexión o API de forma explícita. | Media |
-| **RF-07** | El sistema debe permitir alternar entre tema Claro y Oscuro. | Baja |
-| **RF-08** | La preferencia de tema debe persistir al recargar la página. | Baja |
+| ID         | Área               | Descripción                                                                                                                         | Prioridad |
+| ---------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| **RF-001** | Búsqueda           | El sistema DEBE buscar usuarios en base a un input libre utilizando la API de GitHub (`/search/users`).                             | Alta      |
+| **RF-002** | Filtrado Asíncrono | El _fetching_ DEBE implementarse en tiempo real aplicando un debounce prudente (~300-500ms) para proteger _rate limits_.            | Alta      |
+| **RF-003** | Visualización      | El grid de perfiles DEBE pintar los avatares, usernames y proveer un hipervínculo interno a un view específico.                     | Alta      |
+| **RF-004** | Perfil Específico  | La ruta `/user/:login` DEBE aislar el contexto y pintar Repos, Seguidores de manera ampliada, con _link_ absoluto al GitHub origin. | Crítica   |
+| **RF-005** | Fallback UX        | El sistema DEBE ofrecer _Skeletons_ ante red lenta y pantallas amigables de NotFound.                                               | Media     |
+| **RF-006** | Theming            | El usuario DEBE poder alternar entre Light y Dark Mode sin perder ese estado al recargar la página.                                 | Media     |
 
-## 2. Requerimientos No Funcionales (RNF)
+## 🏗️ Requerimientos No Funcionales (RNF)
 
-### RNF-01: Performance (Rendimiento)
-- **LCP (Largest Contentful Paint):** < 2.5s.
-- **Optimización:** Uso de `React.memo` para evitar re-renders masivos en listas largas.
-- **Carga de Recursos:** Imágenes con `loading="lazy"` y componentes animados con `IntersectionObserver`.
+| ID          | Criterio (Atributos de Calidad) | Descripción y Constreñimientos Arquitectónicos (El Refactor v4)                                                                                      |
+| ----------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **RNF-001** | **Performance (Lighthouse)**    | El ecosistema DEBE prescindir de UI Kits macro como `@material-tailwind` y reducirse a un bundle enano, logrando puntuaciones Lighthouse de **>95**. |
+| **RNF-002** | **Accesibilidad (A11y)**        | Todos los botones nativos DEBEN contar con su atributo `aria-label`, contraste AAA entre Light/Dark y tags `<svg>` escondidos para screen readers.   |
+| **RNF-003** | **DRY y Refactoring**           | No DEBEN existir estilos duplicados embebidos o redundancias `className`. DEBE regir la composición por Tailwind `@theme` y el utilitario `cn()`.    |
+| **RNF-004** | **Usabilidad Móvil**            | Obligatoriedad extrema de usar layout táctico: `grid-cols-1 md:grid-cols-2`. Sin scrolls horizontales no deseados.                                   |
+| **RNF-005** | **Arquitectura Cliente Pura**   | Toda persistencia del App State o "negocio" debe ser puramente efímera en Memoria (Redux) o LocalStorage. Serverless prohibido en este scope.        |
 
-### RNF-02: Usabilidad (UX)
-- **Feedback:** El usuario siempre debe conocer el estado del sistema (Cargando, Error, Éxito, Vacío).
-- **Animaciones:** Transiciones suaves (*Scale In*) al mostrar resultados para mejorar la percepción de fluidez.
+## 📐 Relación de Casos vs Requerimientos (ASCII Matrix)
 
-### RNF-03: Mantenibilidad
-- **Código:** Adherencia a arquitectura modular (*Feature-Based*) y principios *Clean Code*.
-- **Tecnología:** Uso de librerías estándar y modernas (Redux Toolkit, Vite).
-
-### RNF-04: Responsividad
-- La interfaz debe adaptarse fluidamente a dispositivos:
-  - Móvil (< 640px)
-  - Tablet (640px - 1024px)
-  - Desktop (> 1024px)
-
-### RNF-05: Seguridad
-- **Sanitización:** Los términos de búsqueda deben ser codificados (`encodeURIComponent`) antes de enviarse a la API para prevenir inyecciones básicas en URLs.
+1. BÚSQUEDA ---> [RF-001] [RF-002] [RNF-004]
+2. PERFIL ---> [RF-004] [RNF-001]
+3. THEME ---> [RF-006] [RNF-002]

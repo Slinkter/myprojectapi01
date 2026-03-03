@@ -1,32 +1,25 @@
-# Calidad, Riesgos y Mantenibilidad
+# 07 - Calidad y Deuda Técnica (Análisis y Riesgos Posteriores al Refactor)
 
-## 1. Estrategia de Calidad
-La calidad del proyecto se asegura mediante:
-- **Linting Estático:** ESLint configurado con reglas para React y React Hooks.
-- **Tipado Dinámico:** Uso de `PropTypes` en componentes para validar los datos de entrada en tiempo de ejecución.
-- **Optimización Preventiva:** Implementación de `Debounce` y `Lazy Loading` para evitar cuellos de botella de rendimiento comunes.
+## 🩺 Criterios de Calidad Implementados
 
-## 2. Deuda Técnica Identificada
-La siguiente deuda técnica debe ser abordada en futuros *sprints*:
+El Master Prompt y la refactorización arquitectónica (Tailwind v4 / Feature-Sliced / Cliente Puro) han garantizado que el sistema cumpla con una exigente vara de ingeniería:
 
-| Ítem | Descripción | Prioridad |
-|------|-------------|-----------|
-| **Estilos Híbridos** | Eliminación de clases BEM en `index.css` y migración total a Tailwind. | Media |
-| **Imports Relativos** | Configurar alias absolutos (`@/`) en Vite. | Baja |
-| **Testing** | Ausencia de pruebas unitarias (Jest/Vitest) y de integración. | Alta |
+1. **Reducción de Deuda Técnica UI:** Se purgó inclemente `@material-tailwind`, eliminando el pesado acoplamiento de componentes macro. Esto purificó la abstracción de diseño.
+2. **Principio SOLID y DRY:** La arquitectura por _Slices_ y la extracción a `cn()` evitan duplicidad. Todo es modular, el diseño en `src/features/` delega 1 función (Single Responsibility) por archivo en `UI/`.
+3. **Escalabilidad Inmediata y Tipado Semántico:** FSD garantiza que escalar implique una carpeta adyacente en el codebase. Las animaciones con _Framer Motion_ se rigen de Layouts y variants re-usables.
 
-## 3. Riesgos Técnicos
+## ⚠️ Mitigación de Riesgos Remanentes
 
-### Dependencia de API Pública (GitHub)
-- **Riesgo:** La API de GitHub tiene límites de tasa (*rate limits*). Si muchos usuarios usan la app desde la misma IP (o sin token), las peticiones fallarán con 403.
-- **Mitigación Actual:** Manejo de errores en UI (`ErrorDisplay`).
-- **Mitigación Futura:** Implementar autenticación o un proxy con caché.
+| Riesgo                             | Impacto | Estrategia de Mitigación Implementada                                                                                                 |
+| ---------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **API Limit (403 Github)**         | High    | Consumo directo por IP desprotegida (Sin Serverless proxy). Se aplicó Debounce extremo a `handleSearch` minimizando Renders inútiles. |
+| **Pérdida de Configuración Theme** | Low     | El componente agnóstico `ThemeToggle` ataca directo al LocalStorage y HTML root `class="dark"`.                                       |
+| **Bundle Bloat (Peso Inicial JS)** | Medium  | La purga de librerías extrañas de UI y la filosofía Utility-first bajó drásticamente el Payload de carga.                             |
+| **Complejidad de Mantenimiento**   | Low     | Reflejado en esta alta densidad documental y diagramas ASCII/Mermaid para Onboarding instantáneo al nuevo desarrollador.              |
 
-### Escalabilidad del Estado
-- **Riesgo:** Si la aplicación crece, `usersSlice` puede volverse monolítico.
-- **Mitigación:** Dividir el store en múltiples *slices* por dominio (ej: `authSlice`, `reposSlice`).
+## 🧪 Estrategia de Testing (A Nivel Conceptual)
 
-## 4. Recomendaciones Futuras
-1. **Implementar CI/CD:** Automatizar el *linting* y el *build* en GitHub Actions antes del despliegue.
-2. **Añadir Testing:** Incorporar Vitest y React Testing Library para cubrir, al menos, la lógica de los *reducers* y componentes críticos como `UserCard`.
-3. **Accesibilidad (a11y):** Auditar el contraste de colores y la navegación por teclado en el modo Oscuro.
+Aunque el entorno actual no está instrumentado para ello, la estructura preparada en `/features` permite inmediatamente:
+
+- Realizar Mocks con jest a `slices/*.js` ignorando la capa visual.
+- Testing automatizado E2E de Accesibilidad de la Interfaz depurada de Tailwind.

@@ -1,62 +1,72 @@
-# Guía para Desarrolladores
+# 06 - Guía de Operaciones para Desarrolladores (DevGuide)
 
-## 1. Instalación y Setup
+## 🏁 Instalación & Contrato Operativo
 
-Prerrequisitos: Node.js 18+ y npm/pnpm.
+Este repositorio está migrado completamente al paradigma **Zero-Config-UI** apoyándose exclusivame en **Tailwind v4** y **Clean Code**.
+
+Para correr este proyecto:
 
 ```bash
-# Clonar el repositorio
-git clone <repo-url>
-
-# Instalar dependencias
-npm install 
-# o
+# 1. Copiar el repositorio o abrir CWD
+# 2. Instalar el ecosistema puro (FSD y Tailwind)
 pnpm install
 
-# Iniciar servidor de desarrollo
-npm run dev
+# 3. Lanzar el compilador HMR de Vite
+pnpm dev
+
+# 4. Formatear y auditar la deuda local
+pnpm run lint
 ```
 
-## 2. Scripts Disponibles
+## 🏗️ Convenciones de Proyecto
 
-- `npm run dev`: Inicia el servidor local con Vite (HMR activo).
-- `npm run build`: Genera la versión de producción en la carpeta `dist/`.
-- `npm run preview`: Sirve localmente la build de producción para pruebas.
-- `npm run lint`: Ejecuta ESLint para verificar calidad de código.
+### FSD (Feature-Sliced Design) Extremo
 
-## 3. Convenciones del Proyecto
+Al agregar una funcionalidad (por ejemplo, buscar organizaziones Github), no agregues reducers random en el root ni componentes regados fuera. Debes aislarlo bajo `src/features/`.
 
-### Naming
-- **Componentes:** `PascalCase.jsx` (Ej: `UserCard.jsx`).
-- **Hooks:** `camelCase` con prefijo `use` (Ej: `useTheme.js`).
-- **Funciones/Variables:** `camelCase` (Ej: `fetchUsersAPI`, `isLoading`).
-- **Constantes:** `UPPER_SNAKE_CASE` (Ej: `API_BASE_URL`).
+- La lógica de negocio (`thunks.js`), la UI atada (`views/`) y su contexto coexisten modularmente.
+- Cualquier componente UI en `src/components/ui/` es puramente agnóstico, nativo (un `<button>`).
 
-### Estructura de Archivos (Feature-Based)
-Al crear una nueva funcionalidad, agrégala en `src/features/nombre-feature/`.
-Evita agregar lógica de negocio compleja directamente en componentes de UI.
+### 🎨 Guía de Estilos - Sistema Taildwind CSS (Obligatorio)
 
-## 4. Guía de Estilos (Híbrida - Advertencia)
+Este proyecto eliminó el Vendor Lock-in (Chakra, `@material-tailwind`, Bootstrap).
 
-⚠️ **Estado Actual:** El proyecto tiene una mezcla de **Material Tailwind**, **Tailwind CSS puro** y clases **BEM** heredadas.
+**Instancia y Composición `cn()`:**
+Nunca construyas clases condicionales a mano (spaghetti strings). Has uso del utilitario `clsx/tailwind-merge` unificado:
 
-**Convención Recomendada (Refactor Futuro):**
-Priorizar el enfoque *Utility-First* de Tailwind CSS.
+```jsx
+// ❌ PROHIBIDO
+<div className={`bg-gray-800 ${isActive ? "text-white" : "text-gray-500"}`} />;
 
-- **Correcto (Tailwind):**
-  ```jsx
-  <div className="flex items-center justify-center p-4 bg-gray-100">
-  ```
+// ✅ OBLIGATORIO Y ESTÁNDAR
+import { cn } from "@/utils/cn.js";
 
-- **A evitar (BEM + Tailwind mezlado):**
-  ```jsx
-  <div className="user-card__header flex p-4"> 
-  {/* user-card__header está definido en index.css */}
-  ```
+<div
+  className={cn(
+    "bg-gray-800 text-gray-500 rounded-lg p-4 transition-all",
+    isActive && "text-white shadow-xl bg-accent-600",
+  )}
+/>;
+```
 
-Si necesitas estilos personalizados complejos, úsalos en `index.css` con `@apply` de Tailwind, pero prefiere siempre las clases utilitarias directa o componentes de Material Tailwind.
+**Prohibiciones Críticas CSS:**
 
-## 5. Buenas Prácticas
-1. **Compromiso con Clean Code:** Mantén funciones pequeñas y con una única responsabilidad.
-2. **Imports:** (Pendiente) Se recomienda configurar alias `@/` para evitar `../../../`.
-3. **Manejo de Errores:** Usa bloques `try/catch` en servicios asíncronos y maneja los errores en el UI mediante el estado de Redux.
+- ❌ **NO APTO**: Estilo en línea (`<div style={{color: 'red'}}>`).
+- ❌ **NO APTO**: BEM o CSS Modules (`<div className="card__header--dark">`). La filosofía de nuestro sistema es `Utility-First` escalable.
+- ❌ **NO APTO**: Reinstalar envoltorios tipo Mui/Chakra en este ambiente purificado.
+
+### Reglas de Configuración de Paths (Alias `@`)
+
+Asegura la legibilidad impoluta.
+
+```jsx
+// ❌ MAL
+import Button from "../../../components/ui/Button";
+
+// ✅ EXCELENTE (Importación Absoluta DX)
+import Button from "@/components/ui/Button";
+```
+
+### Accesibilidad por Defecto (a11y)
+
+Cada pieza añadible debe respetar las métricas de contraste requeridas por WCAG (AAA ideal). Toda mutación del DOM tiene que asegurar Focus Rings (`focus:ring-2 focus:ring-accent-500`).

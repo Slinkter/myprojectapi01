@@ -1,48 +1,42 @@
-# Overview del Sistema
+# 01 - Overview del Sistema
 
-## 1. Propósito del Proyecto
-La aplicación **"API - GitHub Users"** tiene como objetivo proporcionar una interfaz moderna, eficiente y visualmente atractiva para buscar y explorar perfiles de usuarios de GitHub. Su propósito técnico es demostrar la implementación de una **Single Page Application (SPA)** robusta utilizando React, Redux Toolkit y estrategias de optimización de rendimiento en un entorno de **Arquitectura Cliente Pura**.
+## 📖 Propósito del Proyecto
 
-## 2. Alcance Funcional
-El sistema permite a los usuarios:
-- Buscar usuarios de GitHub en tiempo real (con optimización *debounce*).
-- Visualizar resultados en tarjetas interactivas con carga perezosa (*lazy loading*).
-- Gestionar estados de carga, error y "no encontrado" de manera fluida.
-- Alternar entre modos Claro y Oscuro para mejorar la experiencia de usuario.
+El proyecto `myprojectapi01` es una **Single Page Application (SPA) - Cliente Puro**, diseñada como un buscador y visor de perfiles técnicos expuestos por la API pública de GitHub. Su intención central es demostrar el dominio avanzado sobre arquitecturas modernas de Frontend (React 18), la gestión robusta del estado y transiciones fluidas de interfaz.
 
-## 3. Tecnologías Utilizadas
-### Core
-- **React 18**: Librería principal de UI.
-- **Vite**: Herramienta de build y servidor de desarrollo rápido.
+Tras la Auditoría y Refactorización, este proyecto persigue el estándar **Clean Code** y **Feature-Sliced Design (FSD)** apoyado puramente por **Tailwind CSS v4 (Utility-first nativo)** sin dependencias de UI anticuadas.
 
-### UI & Estilos
-- **Tailwind CSS**: Framework de utilidades para estilos.
-- **Material Tailwind**: Componentes pre-diseñados (Cards, Buttons).
-- **React Icons**: Iconografía vectorizada.
+## 🚀 Alcance Funcional
 
-### Estado & Lógica
-- **Redux Toolkit**: Gestión de estado global (usuarios, status, errores).
-- **React Hooks**: Implementación de lógica encapsulada (`useTheme`, `useDebouncedSearch`, `useIntersectionObserver`).
+- **Búsqueda en Tiempo Real**: Debounce sobre el input de búsqueda.
+- **Renderizado Dinámico**: Visualización de cards por usuario y perfiles de detalle profundos (bio, repos, seguidores, etc).
+- **Manejo de Estados de Red**: Skeletons adaptativos en tiempos de carga y manejo de NotFound/Errors amigable.
+- **Theming**: Toggle funcional entre Light Mode y minimalista Dark Mode.
 
-### Integraciones
-- **GitHub API**: Fuente de datos externa (REST).
+## 🛠️ Tecnologías Principales (Refactorizado)
 
-## 4. Arquitectura General
-El proyecto sigue una arquitectura **Client-Side Rendering (CSR)** desacoplada, donde la UI reacciona a los cambios en el estado global gestionado por Redux. La lógica de negocio (búsqueda, integraciones) está separada de los componentes visuales mediante *Custom Hooks* y *Services*.
+| Capa           | Herramienta          | Razón de Elección (Senior Level)                                   |
+| -------------- | -------------------- | ------------------------------------------------------------------ |
+| **Core**       | React 18, Vite       | HMR instantáneo y hooks concurrente.                               |
+| **State**      | RTK (Redux Toolkit)  | Centralización para thunks y el fetching state.                    |
+| **Styling**    | Tailwind CSS v4 Puro | Sin `@material-tailwind`. Diseño cohesivo, Cero UI Vendor Lock-in. |
+| **Animations** | Framer Motion 12     | Flujo interactivo complejo (layout shifts, hover bounds).          |
+
+## 📐 Diagrama de Arquitectura de Alto Nivel (Mermaid)
 
 ```mermaid
 graph TD
-    User -->|Interactúa| UI[Interfaz de Usuario]
-    UI -->|Dispara| Actions[Redux Actions / Hooks]
-    Actions -->|Invoca| Service[UserService]
-    Service -->|Solicita| API[GitHub API]
-    API -->|Responde| Service
-    Service -->|Actualiza| Store[Redux Store]
-    Store -->|Notifica| UI
+    A[Usuario Final] -->|Interactúa| B(UI React App - Cliente Puro)
+    B -->|Búsqueda / Clicks| C{Store de Redux}
+    C -->|Thunks / Async Logic| D[GitHub Public API]
+    D -->|Retorna JSON de Perfiles| C
+    C -->|Actualiza 'state.users'| B
+    B -->|Theming/LocalPrefs| E[(Local Storage)]
 ```
 
-## 5. Flujo Principal
-1. **Inicio:** Carga inicial de usuarios por defecto.
-2. **Búsqueda:** El usuario escribe -> *Debounce* -> Petición API.
-3. **Renderizado:** Los datos fluyen del Store a la lista de usuarios.
-4. **Optimización:** Las imágenes y tarjetas se cargan solo cuando son visibles (*Intersection Observer*).
+## 🌊 Flujo Principal de la Aplicación
+
+1. **Punto de Entrada (`/`)**: Renderiza el Layout y el Input de Búsqueda de `features/users`.
+2. **Obtención de datos (`fetching`)**: Al tipear, se abortan llamadas redundantes y Redux asume el status de carga.
+3. **Pintado de Pantalla (`rendering`)**: Tailwind re-calcula las proporciones CSS-Grid nativamente y dibuja los `UserCard`.
+4. **Navegación Profunda (`/user/:login`)**: `react-router-dom` intercepta el mount y gatilla el useEffect para detalles atómicos del perfil.

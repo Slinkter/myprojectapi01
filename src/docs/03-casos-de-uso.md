@@ -1,45 +1,46 @@
-# Casos de Uso y Reglas de Negocio
+# 03 - Casos de Uso
 
-## 1. Casos de Uso Principales
+Este documento aborda las interacciones macro del usuario dentro del ecosistema del cliente SPA, desligándose de lógicas backend (ausentes en el proyecto).
 
-### CU-01: Buscar Usuarios
-- **Actor:** Usuario Final
-- **Descripción:** El usuario ingresa texto en el campo de búsqueda para encontrar perfiles de GitHub.
-- **Flujo:**
-  1. Usuario escribe en el input.
-  2. Sistema espera 300ms (debounce) desde la última tecla presionada.
-  3. Sistema realiza petición a la API.
-  4. Sistema muestra indicador de carga (*Skeleton*).
-  5. Sistema presenta lista de tarjetas de usuario o mensaje "No encontrado".
+## 🧑‍💻 Actores
 
-### CU-02: Visualizar Perfil
-- **Actor:** Usuario Final
-- **Descripción:** El usuario visualiza los detalles básicos y accede al perfil completo en GitHub.
-- **Flujo:**
-  1. Usuario hace scroll hasta visualizar una tarjeta.
-  2. Sistema anima la entrada de la tarjeta (*Scale in*).
-  3. Usuario hace clic en "Profile Github".
-  4. Sistema redirige a `github.com` en una nueva pestaña.
+- **Usuario Invitado (Guest):** Único actor del ecosistema, interactúa sin necesidades de autenticación ya que el frontend consume APIs JWT-less y Open endpoints de Github.
 
-### CU-03: Cambiar Tema (Dark/Light)
-- **Actor:** Usuario Final
-- **Descripción:** El usuario alterna entre modo claro y oscuro.
-- **Flujo:**
-  1. Usuario hace clic en el botón de tema (Sol/Luna).
-  2. Sistema invierte el esquema de colores globlal.
-  3. Sistema guarda la preferencia en `localStorage`.
+## 🗂️ Casos de Uso Principales
 
-## 2. Reglas de Negocio
+### 1. Búsqueda Activa de Perfiles
 
-### RN-01: Optimización de Búsqueda
-- **Regla:** No se debe llamar a la API por cada tecla pulsada.
-- **Implementación:** Se requiere un retraso (*debounce*) mínimo de 300ms.
+**Descripción:** El usuario ingresa un alias, nombre parcial o cuenta de Github en el _PageHeader_ y en tiempo real recupera las correspondencias.
+**Flujo Principal:**
+User tipea "LJCR". Redux activa flag `loading: true`. El input se de-bouncea. Frontend ataca a `api.github.com/search/users?q=LJCR`. Redux parsea el Payload. UI hidrata las `UserCard`.
 
-### RN-02: Manejo de Errores de API
-- **Regla:** Si la API falla (ej. límite de *rate limit* excedido), se debe informar al usuario amigablemente y permitir reintentar, sin romper la aplicación.
+### 2. Exploración de Detalles Extensos
 
-### RN-03: Persistencia de Preferencias
-- **Regla:** La elección de tema visual debe recordarse entre sesiones del navegador.
+**Descripción:** De un resultado en la grilla principal, el usuario transita hacia una vista inmersiva completa (/user/LJCR).
+**Flujo Principal:**
+User pulsa "Ver Perfil". `<Link>` redirige por react-router evitando recarga de motor. El componente `UserDetail` se monta, dispara Effect para buscar la URI del usuario exacto y pinta Repositorios, Seguidores, y Biografía extra.
 
-### RN-04: Carga Eficiente
-- **Regla:** Las imágenes de avatares no deben cargarse si no están en el *viewport* visible del usuario.
+### 3. Persistencia de Visualización (Theming)
+
+**Descripción:** Modificar el esquema visual general preservándolo al recargar.
+**Flujo Principal:**
+User pulsa `ThemeToggle`. El Hook altera la var `"dark"` del HTML classlist y sincroniza `localStorage.setItem('theme', 'dark')`.
+
+## 📐 Diagrama de Casos de Uso (Mermaid)
+
+```mermaid
+usecaseDiagram
+    actor Usuario Invitado as User
+
+    package "Client SPA Frontend" {
+        usecase "Buscar Usuarios de GitHub" as UC1
+        usecase "Refrescar Theming de UI" as UC2
+        usecase "Acceder a Ficha Técnica Profunda" as UC3
+        usecase "Manejar Error 404/Empty" as UC4
+
+        User --> UC1
+        User --> UC2
+        User --> UC3
+        UC1 ..> UC4 : <<includes>>
+    }
+```
