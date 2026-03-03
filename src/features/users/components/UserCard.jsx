@@ -1,6 +1,6 @@
 /**
  * @file User Card Component
- * @description Compact user card with Motion animations - Mobile First
+ * @description User card with Motion animations - Mobile First
  */
 
 import React from "react";
@@ -39,65 +39,51 @@ const UserCard = React.memo(({ user = {} }) => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -4 }}
     >
       <Card
         className="
-          w-full max-w-[280px] overflow-hidden rounded-xl
+          w-full overflow-hidden rounded-xl
           bg-white dark:bg-dark-surface
           border border-gray-200 dark:border-dark-border
-          shadow-sm hover:shadow-md
-          transition-shadow duration-200
+          shadow-md hover:shadow-xl
+          transition-all duration-200
         "
         shadow={false}
       >
         <CardHeader
-          color="transparent"
           floated={false}
           shadow={false}
-          className="mx-auto mt-6 mb-2 flex h-16 w-16 sm:h-20 sm:w-20 justify-center items-center bg-transparent"
+          className="h-32 sm:h-40 bg-gradient-to-r from-accent-500 to-accent-600 dark:from-accent-600 dark:to-accent-700 m-0"
         >
-          <img
-            src={avatar_url}
-            alt={`Avatar de ${login}`}
-            loading="lazy"
-            className="h-16 w-16 sm:h-20 sm:w-20 rounded-full object-cover border-2 border-gray-100 dark:border-dark-border"
-          />
+          <div className="h-full w-full flex items-center justify-center pt-8 sm:pt-10">
+            <img
+              src={avatar_url}
+              alt={`Avatar de ${login}`}
+              loading="lazy"
+              className="h-20 w-20 sm:h-24 sm:w-24 rounded-full object-cover border-4 border-white dark:border-dark-surface shadow-lg -mt-8 sm:-mt-10"
+            />
+          </div>
         </CardHeader>
-        <CardBody className="text-center pb-2 px-4">
+        <CardBody className="text-center pb-2 pt-8 sm:pt-10 px-4">
           <Typography
-            variant="h5"
-            className="text-sm sm:text-base font-medium text-gray-900 dark:text-dark-text truncate"
+            variant="h4"
+            className="text-base sm:text-lg font-semibold text-gray-900 dark:text-dark-text truncate px-2"
           >
             {login}
           </Typography>
         </CardBody>
-        <CardFooter className="pt-0 px-4 pb-4 flex flex-col gap-2">
+        <CardFooter className="pt-0 px-4 pb-4">
           <Link to={`/user/${login}`}>
             <Button
               color="blue"
               variant="filled"
               size="sm"
-              className="w-full text-xs sm:text-sm"
+              className="w-full"
             >
-              Ver Detalles
+              Ver Perfil
             </Button>
           </Link>
-          <a
-            href={html_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Ver el perfil de ${login} en Github`}
-          >
-            <Button
-              variant="outlined"
-              color="blue"
-              size="sm"
-              className="w-full text-xs sm:text-sm"
-            >
-              GitHub
-            </Button>
-          </a>
         </CardFooter>
       </Card>
     </motion.div>
