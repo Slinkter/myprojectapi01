@@ -10,35 +10,40 @@ module.exports = withMT({
         heading: ["Outfit", "sans-serif"],
       },
       colors: {
-        // Custom Premium Palette
-        primary: {
-          50: "#eff6ff",
-          100: "#dbeafe",
-          200: "#bfdbfe",
-          300: "#93c5fd",
-          400: "#60a5fa",
-          500: "#3b82f6", // Blue 500
-          600: "#2563eb",
-          700: "#1d4ed8",
-          800: "#1e40af",
-          900: "#1e3a8a",
+        // Minimalist Grayscale Palette
+        gray: {
+          50: "#fafafa",
+          100: "#f5f5f5",
+          200: "#e5e5e5",
+          300: "#d4d4d4",
+          400: "#a3a3a3",
+          500: "#737373",
+          600: "#525252",
+          700: "#404040",
+          800: "#262626",
+          900: "#171717",
+          950: "#0a0a0a",
         },
-        secondary: {
-          50: "#f0fdfa",
-          100: "#ccfbf1",
-          200: "#99f6e4",
-          300: "#5eead4",
-          400: "#2dd4bf",
-          500: "#14b8a6", // Main Secondary
-          600: "#0d9488",
-          700: "#0f766e",
-          800: "#115e59",
-          900: "#134e4a",
+        // Accent - Minimalist Blue
+        accent: {
+          50: "#f0f9ff",
+          100: "#e0f2fe",
+          200: "#bae6fd",
+          300: "#7dd3fc",
+          400: "#38bdf8",
+          500: "#0ea5e9",
+          600: "#0284c7",
+          700: "#0369a1",
+          800: "#075985",
+          900: "#0c4a6e",
         },
+        // Dark mode semantic colors
         dark: {
-          bg: "#0f172a", // Slate 900
-          surface: "#1e293b", // Slate 800
-          text: "#f8fafc", // Slate 50
+          bg: "#09090b",
+          surface: "#18181b",
+          border: "#27272a",
+          text: "#fafafa",
+          muted: "#a1a1aa",
         },
       },
       keyframes: {
@@ -60,10 +65,19 @@ module.exports = withMT({
             opacity: "1",
           },
         },
+        "shimmer": {
+          "0%": {
+            backgroundPosition: "-200% 0",
+          },
+          "100%": {
+            backgroundPosition: "200% 0",
+          },
+        },
       },
       animation: {
         "skeleton-loading": "fade-in-up 0.5s ease-out forwards",
         "not-foundName": "fade-in 0.5s ease-in-out forwards",
+        shimmer: "shimmer 2s infinite linear",
       },
     },
   },

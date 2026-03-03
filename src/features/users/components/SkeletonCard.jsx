@@ -1,8 +1,6 @@
 /**
  * @file Skeleton Card Component
- * @description
- * Loading placeholder component that mimics the structure of UserCard.
- * Provides visual feedback during data fetching.
+ * @description Loading placeholder matching UserCard dimensions
  */
 
 import {
@@ -12,45 +10,29 @@ import {
   CardHeader,
 } from "@material-tailwind/react";
 
-/**
- * Skeleton Card Component
- *
- * @component
- * @description
- * Animated loading placeholder that matches the UserCard layout.
- * Uses pulse animation to indicate loading state.
- *
- * Features:
- * - Matches UserCard dimensions and structure
- * - Pulse animation for loading indication
- * - Dark mode support
- * - Placeholder blocks for avatar, username, and buttons
- *
- * Structure:
- * - Header: Avatar placeholder (48px height)
- * - Body: Username placeholder (centered, 75% width)
- * - Footer: Button placeholder (full width)
- *
- * @returns {JSX.Element} Animated skeleton card
- *
- * @example
- * // Used in SkeletonGrid during loading
- * <SkeletonCard />
- */
 const SkeletonCard = () => (
-  <Card className="w-full max-w-xs shadow-lg rounded-xl animate-pulse bg-white dark:bg-dark-surface">
+  <Card
+    className="
+      w-64 overflow-hidden rounded-xl
+      bg-white dark:bg-dark-surface
+      border border-gray-200 dark:border-dark-border
+      shadow-sm animate-pulse
+    "
+    shadow={false}
+  >
     <CardHeader
       shadow={false}
       floated={false}
-      className="relative grid h-48 mx-auto place-items-center bg-gray-300 dark:bg-gray-700"
+      className="mx-auto mt-6 mb-2 flex h-20 w-20 justify-center items-center bg-transparent"
     >
-      &nbsp;
+      <div className="h-20 w-20 rounded-full bg-gray-200 dark:bg-gray-700" />
     </CardHeader>
-    <CardBody className="text-center">
-      <div className="h-6 w-3/4 mx-auto rounded-full bg-gray-300 dark:bg-gray-700"></div>
+    <CardBody className="text-center pb-2 px-4">
+      <div className="h-5 w-24 mx-auto rounded-full bg-gray-200 dark:bg-gray-700" />
     </CardBody>
-    <CardFooter className="pt-0">
-      <div className="h-12 w-full rounded-lg bg-gray-300 dark:bg-gray-700"></div>
+    <CardFooter className="pt-0 px-4 pb-4 flex flex-col gap-2">
+      <div className="h-8 w-full rounded-lg bg-gray-200 dark:bg-gray-700" />
+      <div className="h-8 w-full rounded-lg bg-gray-200 dark:bg-gray-700" />
     </CardFooter>
   </Card>
 );
