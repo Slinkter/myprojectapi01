@@ -18,6 +18,7 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchUsersAPI } from "@/services/userService";
+import { log } from "@/app/logger";
 
 /**
  * Slice name constant for the async thunk
@@ -48,6 +49,7 @@ export const fetchUsers = createAsyncThunk(
   SLICE_NAME,
   async (searchTerm = "", { rejectWithValue, signal }) => {
     try {
+      log.flow("fetch");
       // Pasamos el signal para abortar la petición vía red (AbortController)
       const users = await fetchUsersAPI(searchTerm, signal);
       return users;
@@ -104,20 +106,21 @@ const usersSlice = createSlice({
     builder
       // Case 1: Request is pending
       .addCase(fetchUsers.pending, (state) => {
+        log.redux("fetchUsers.pending");
         state.isLoading = "loading";
         state.error = null;
       })
       // Case 2: Request succeeded
       .addCase(fetchUsers.fulfilled, (state, action) => {
+        log.redux("fetchUsers.fulfilled", { count: action.payload?.length });
         state.isLoading = "succeeded";
         state.users = action.payload;
-        console.log("usersSlice - payload:", action.payload);
       })
       // Case 3: Request failed
       .addCase(fetchUsers.rejected, (state, action) => {
+        log.redux("fetchUsers.rejected", action.payload);
         state.isLoading = "failed";
         state.error = action.payload;
-        console.log("usersSlice - rejected payload:", action.payload);
       });
   },
 });

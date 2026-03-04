@@ -8,6 +8,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUsers } from "../usersSlice";
+import { log } from "@/app/logger";
 
 /**
  * Custom hook for fetching and managing user data
@@ -53,6 +54,7 @@ import { fetchUsers } from "../usersSlice";
  * }
  */
 export const useUserFetching = (text) => {
+  log.effect(`useUserFetching check for text: "${text}"`);
   // Rename 'isLoading' to 'status' for clarity
   // as it contains the actual loading state
   const {
@@ -64,12 +66,14 @@ export const useUserFetching = (text) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    log.effect(`Triggering Redux fetchUsers for: "${text}"`);
     // Dispatch the thunk and keep a reference to its promise
     const promise = dispatch(fetchUsers(text));
 
     // Cleanup function: If the effect runs again (new text) or component unmounts,
     // abort the previous pending request instantly to free up bandwidth.
     return () => {
+      log.effect(`Abort triggered for: "${text}"`);
       promise.abort();
     };
   }, [text, dispatch]);

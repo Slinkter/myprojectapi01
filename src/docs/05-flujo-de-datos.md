@@ -1,61 +1,58 @@
-# 05 - Arquitectura de Flujo de Datos
+# 05 - Arquitectura de Flujo de Datos y Algoritmos
 
-## 🌊 Arquitectura de Estado
+## 🌊 Flujo de Datos (ASCII Sequence Diagram)
 
-Este proyecto utiliza una **Arquitectura Cliente Pura**. El estado es alojado cien por ciento de manera local o cliente mediante:
-
-- **Redux Toolkit**: Concentración del App State macro, inyectado mediante Provider a toda la jerarquía de UI.
-- **LocalStorage**: Memoria precaria de corto alcance para preferencias frígidas (Theming Light/Dark).
-
-**No aplica:**
-
-- ❌ Bases de datos remotas.
-- ❌ Firebase/Supabase (Serverless auth/functions).
-- ❌ Mutación asincróna (Solo se lee - _GET_ Data de Github, no POST).
-
-## ⏱️ Diagrama de Secuencia Asíncrona (Mermaid)
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor U as Usuario (UI)
-    participant C as Componente (React DOM)
-    participant R as Redux Thunk
-    participant S as Slice Reducer
-    participant A as GitHub API
-
-    U->>C: Introduce "Alex" en Header
-    C-->>R: Dispatch (fetchUsers("Alex"))
-    R->>S: loading = true (Pending Action)
-    S-->>C: Props Update (Render Skeletons)
-    R->>A: GET /search/users?q=Alex
-    A-->>R: Return JSON Promise (Array de Profiles)
-
-    alt Si API 200 OK
-        R->>S: Action Fulfilled (Payload = Array)
-        S-->>C: state.data Update (Render UserCards)
-    else Si Rate Limit API / Error 404
-        R->>S: Action Rejected
-        S-->>C: state.error Update (Render NotFound)
-    end
+```text
+Usuario      Input      Debounce      Redux      Adapter      API (GitHub)
+  │            │           │            │           │            │
+  │── (escribe)▶           │            │           │            │
+  │            │── (wait) ─▶            │           │            │
+  │            │           │──(fetch)──▶│           │            │
+  │            │           │            │──(Abort prev)─────────▶│
+  │            │           │            │           │            │
+  │            │           │            │──(request)────────────▶│
+  │            │           │            │           │            │
+  │            │           │            │◀──(raw response)───────│
+  │            │           │            │           │            │
+  │            │           │            │◀──(Adapted data)───────│
+  │            │           │            │           │            │
+  │◀──(Render Data)────────│            │           │            │
 ```
 
-## 🌳 Grafo de Árbol de Invocaciones (Props Tree) - ASCII Art
+## ⏱️ Algoritmos Clave
 
-El Flujo de datos asienta las responsabilidades usando el patrón funcional React clásico. Un contenedor inteligente habla con el store, las piezas tontas solo mapean las _Props_.
+### 1. Algoritmo de Debouncing (Control de Frecuencia)
+**Ubicación:** `useDebouncedSearch.js`
+*   **Funcionamiento:** Cada tecla reinicia un `setTimeout`. Solo cuando el usuario para de escribir (ej. 300ms), se actualiza el valor que dispara la búsqueda.
+*   **Eficiencia:** $O(1)$ por pulsación, ahorrando hasta un 90% de llamadas innecesarias a la API.
+
+### 2. Algoritmo de Reconciliación (Fiber)
+**Ubicación:** Interno de React
+*   **Funcionamiento:** Diferenciación (Diffing) heurística de $O(n)$ entre árboles virtuales. Mapea cambios mínimos al DOM real usando `keys`.
+
+### 3. Algoritmo de Intersección (AABB)
+**Ubicación:** `useIntersectionObserver.js` y `UserCard.jsx`
+*   **Funcionamiento:** Comprueba colisión entre el Viewport y el elemento. Si hay intersección, renderiza; si no, mantiene un placeholder ligero.
+*   **Performance:** Reduce el costo de renderizado fuera de pantalla (Virtualización Lite).
+
+### 4. Algoritmo de Cancelación de Tareas (AbortController)
+**Ubicación:** `useUserFetching.js` y `userService.js`
+*   **Funcionamiento:** Previene **Race Conditions**. Si una nueva petición "B" inicia antes de que "A" termine, la petición "A" es abortada por el navegador.
+
+## 🌳 Grafo de Árbol de Invocaciones (Props Tree)
 
 ```text
 <App> (Inyecta Redux Store + Rutas)
   │
-  ├─ <ThemeToggle> --------- (Lee y Escribe Context/Local Storage: "DarkMode")
+  ├─ <ThemeToggle> --------- (Lee/Escribe LocalStorage: "DarkMode")
   │
-  ├─ <Home (Search View)> -- (Suscripto a state.users.data)
+  ├─ <UserSearch> ---------- (Facade: useUserSearchFacade)
   │   │
-  │   ├─ <PageHeader> ------ (Recibe handleSearch() / Devuelve eventOnChange)
+  │   ├─ <PageHeader> ------ (isSearching / handleSearch)
   │   │
-  │   └─ <UserCard> x N ---- (Componente Tonto. Recibe `user={avatar, login}` puramente visual Tailwind v4)
+  │   └─ <ResultFactory> --- (Fábrica de Tarjetas: Decide User vs Org)
+  │       │
+  │       └─ <UserCard> ---- (Compound Component: Avatar, Header, Footer)
   │
-  └─ <UserDetail> ---------- (Recibe route Param /user/:login)
-      │
-      └─ Fetch Effect ------ (Busca Independientemente en API)
+  └─ <UserDetail> ---------- (Carga asíncrona vía React.lazy)
 ```

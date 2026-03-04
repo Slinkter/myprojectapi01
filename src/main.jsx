@@ -21,6 +21,8 @@ import { store } from "./app/store";
 import App from "./App.jsx";
 import "./index.css";
 
+console.log("[ENTRY] main.jsx: Application starting...");
+
 /**
  * Renders the application root.
  *

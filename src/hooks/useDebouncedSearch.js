@@ -6,6 +6,7 @@
  */
 
 import { useState, useEffect } from "react";
+import { log } from "@/app/logger";
 
 /**
  * Custom hook for debouncing search input values
@@ -59,14 +60,17 @@ export const useDebouncedSearch = (initialValue, delay = 200) => {
   const [debouncedValue, setDebouncedValue] = useState(initialValue);
 
   useEffect(() => {
+    log.effect(`Debounce timer set for: "${inputValue}"`);
     // 1. Set up timer to update debounced value
     const handler = setTimeout(() => {
+      log.effect(`Debounce timer completed for: "${inputValue}"`);
       setDebouncedValue(inputValue);
     }, delay);
 
     // 2. Clean up timer if input value changes
     // This prevents debounced value from updating while user is still typing
     return () => {
+      log.effect(`Debounce timer cleared for: "${inputValue}"`);
       clearTimeout(handler);
     };
   }, [inputValue, delay]); // Re-run only if input value or delay changes

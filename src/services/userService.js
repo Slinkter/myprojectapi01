@@ -45,35 +45,15 @@ class ApiError extends Error {
   }
 }
 
+import { usersCollectionAdapter } from "@/models/adapters/userAdapter";
+
 /**
  * Fetches users from the GitHub API
  *
  * @async
  * @function fetchUsersAPI
  * @param {string} [searchTerm=""] - Search term to filter users. If empty, fetches default user list
- * @returns {Promise<Array<Object>>} Array of user objects
- * @throws {ApiError} Throws ApiError with status code and message if request fails
- * @throws {Error} Throws generic Error for network failures
- *
- * @description
- * Makes HTTP request to GitHub API to fetch users.
- * - With searchTerm: Uses search endpoint and returns data.items
- * - Without searchTerm: Uses default users endpoint and returns data directly
- *
- * Response Structure (per user):
- * - login: string - GitHub username
- * - id: number - User ID
- * - avatar_url: string - Profile picture URL
- * - html_url: string - Profile page URL
- * - type: string - User type (User, Organization)
- *
- * @example
- *   Fetch default users
- * const users = await fetchUsersAPI();
- *
- * @example
- *   Search for specific users
- * const results = await fetchUsersAPI('octocat');
+ * @returns {Promise<Array<Object>>} Array of standardized user objects
  */
 export const fetchUsersAPI = async (searchTerm = "", signal) => {
   const url = searchTerm
@@ -91,10 +71,10 @@ export const fetchUsersAPI = async (searchTerm = "", signal) => {
     }
 
     const data = await response.json();
+    const rawUsers = searchTerm ? data.items : data;
 
-    // The GitHub search API returns users in an `items` property.
-    // The default users endpoint returns an array directly.
-    return searchTerm ? data.items : data;
+    // APPLY ADAPTER PATTERN: Data normalization
+    return usersCollectionAdapter(rawUsers);
   } catch (error) {
     // Log the error for debugging purposes (could be connected to a logging service)
     console.error("Service: Failed to fetch users:", error);
