@@ -1,46 +1,69 @@
-# 02 - Arquitectura de Patrones Avanzados
+# 🏗️ Arquitectura de Software: API - GitHub Users
 
-## 🏢 Estructura de Carpetas (FSD + Pattern Oriented)
+## 1. Visión General
+Este sistema utiliza una arquitectura **Feature-Sliced Design (FSD)** adaptada, centrada en el desacoplamiento entre la infraestructura (APIs externas) y la lógica de dominio (la Aplicación).
 
-```text
+## 2. Patrones de Diseño Aplicados (The Senior Core)
+
+### A. Pattern: Adapter (Modelo de Datos)
+El sistema implementa un **Adapter Pattern** en la capa `src/models/adapters/`. Su propósito es proteger la UI de los cambios en los esquemas de la API de GitHub.
+
+- **Input:** Raw Data de la API (ej. `avatar_url`, `login`).
+- **Output:** Standardized Model `UserProfile` (ej. `photo`, `username`).
+- **Beneficio:** Si la API cambia su estructura, solo se modifica el adaptador, no los componentes.
+
+### B. Pattern: Facade (Interfaz de Feature)
+Cada módulo en `src/features/` expone un **Hook de Fachada** (`useUserSearchFacade`).
+- **Propósito:** Encapsular la complejidad de Redux, Dispatchers y Thunks.
+- **Beneficio:** Los componentes de presentación (`UserSearch.jsx`) son "limpios" y solo consumen propiedades booleanas y handlers simples.
+
+### C. Patrón Smart/Presentational (Container/View)
+- **Smart Hooks (Hooks de Capa):** Gestionan el estado de Redux y asincronía.
+- **Dumb Components:** Reciben props y renderizan UI de alta fidelidad.
+
+---
+
+## 3. Flujo Arquitectónico ASCII
+
+```
+[ API EXTERNA: GitHub ]
+           |
+           v
+[ CAPA SERVICIO: userService.js ] -- (HTTP/Fetch)
+           |
+           v
+[ CAPA ADAPTADOR: userAdapter.js ] -- (Normalización de Datos)
+           |
+           v
+[ GLOBAL STORE: Redux Toolkit ] -- (Single Source of Truth)
+           |
+           v
+[ SELECTORES MEMOIZADOS: createSelector ] -- (Optimización de Re-renders)
+           |
+           v
+[ FACADE HOOK: useUserSearchFacade ] -- (Abstracción de Lógica)
+           |
+           v
+[ COMPONENTE UI: UserSearch.jsx ] -- (Renderizado de Artifacts)
+```
+
+---
+
+## 4. Estructura de Directorios
+
+```
 src/
-├── app/                  # Orquestador: store.js y logger.js (Debug system)
-├── components/           # UI Compartida y Patrones Estructurales
-│   ├── common/           # (ErrorBoundary - Resilience Pattern)
-│   ├── factories/        # (ResultFactory - Creational Factory Pattern)
-│   ├── layout/           # (PageHeader, ErrorDisplay, NotFound)
-│   └── ui/               # (ThemeToggle, Modals, FaSpinner)
-├── features/             # Slices de Negocio (Dominios)
-│   ├── users/            
-│   │   ├── hooks/        # (useUserSearchFacade - Facade Pattern)
-│   │   └── components/   # (UserCard - Compound Component Pattern)
-│   └── user-detail/      
-├── models/               # Modelos de Datos
-│   └── adapters/         # (UserAdapter - Structural Adapter Pattern)
-├── hooks/                # Hooks globales (useTheme, useDebounce)
-├── services/             # API Layer (Standard Fetch + Adapter usage)
-└── docs/                 # "Tutorial Book & Architecture Guide"
+├── app/          # Core: Configuración de Redux Store y Loggers globales.
+├── components/   # UI: Botones, Toggles y Layouts agnósticos al dominio.
+├── features/     # Dominios: Lógica de negocio encapsulada por funcionalidad.
+│   └── users/    # Módulo de Usuarios (Componentes, Hooks, Redux Slice).
+├── hooks/        # Utilitarios: useDebounce, useTheme, etc.
+├── models/       # Dominio: Adaptadores y esquemas de datos.
+├── services/     # Infraestructura: Definiciones de API externas.
+└── docs/         # Ingeniería: Documentación técnica centralizada.
 ```
 
-## 📐 Diagrama de Relaciones de Datos (ASCII)
-
-```text
-  ┌─────────────────┐       ┌──────────────────┐       ┌─────────────────┐
-  │   Redux Store   │       │   UserAdapter    │       │   GitHub API    │
-  │ (Single Source) │◀──────│  (Normalizador)  │◀──────│   (External)    │
-  └────────┬────────┘       └──────────────────┘       └─────────────────┘
-           │
-           ▼ [useSelector]
-  ┌─────────────────┐       ┌──────────────────┐       ┌─────────────────┐
-  │  UserSearch     │       │  ResultFactory   │       │   UserCard      │
-  │    (Facade)     │──────▶│   (Decisor)      │──────▶│ (Presentation)  │
-  └─────────────────┘       └──────────────────┘       └─────────────────┘
-```
-
-## 🧩 Catálogo de Patrones Implementados
-
-1.  **Factory Method (`ResultFactory.jsx`):** La lista de resultados no decide qué renderizar; la factoría evalúa el tipo de dato y devuelve el componente adecuado.
-2.  **Adapter Pattern (`userAdapter.js`):** Traduce la API externa a nuestro modelo interno (`photo`, `username`).
-3.  **Compound Components (`UserCard.jsx`):** Divide el componente en `Avatar`, `Header`, `Footer` para máxima flexibilidad.
-4.  **Facade Pattern (`useUserSearchFacade.js`):** Oculta la complejidad de Redux y Fetching tras una interfaz simple.
-5.  **Error Boundary:** Red de seguridad para capturar fallos de renderizado.
+## 5. Decisiones Técnicas (The Whys)
+- **Vite:** Por su motor de desarrollo instantáneo y soporte de Lightning CSS.
+- **Tailwind v4:** Por su motor de temas nativo y reducción drástica de la configuración JS.
+- **Motion v12:** Por su gestión de animaciones por hardware y soporte de React 19.

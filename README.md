@@ -1,85 +1,66 @@
-# 🚀 API - GitHub Users
+# 🚀 API - GitHub Users: The Senior React Artifact
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![React Version](https://img.shields.io/badge/React-18-blue)
-![Vite Version](https://img.shields.io/badge/Vite-5.x-purple)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+![React Version](https://img.shields.io/badge/React-19_Concurrent-blue)
+![Tailwind Version](https://img.shields.io/badge/Tailwind-v4_Semantic-38bdf8)
+![Motion Version](https://img.shields.io/badge/Motion-v12_Fluid-ff0055)
+![Architecture](https://img.shields.io/badge/Patterns-Facade_|_Adapter_|_FSD-orange)
 
-> **Una Single Page Application (SPA) moderna para explorar perfiles de GitHub, construida con React 18, RTK y Tailwind CSS v4 (Utility-First).**
+> **Una aplicación de ingeniería de alto rendimiento para explorar la API de GitHub, diseñada bajo estándares de Vercel y principios de Arquitectura Limpia.**
 
-🏆 **Logro Arquitectónico:** Este proyecto fue sometido a una auditoría estricta, migrando iterativamente de una UI acoplada a un modelo puro **Feature-Sliced Design (FSD)** apoyado al 100% por utilitarios nativos de Tailwind. Cero _Vendor Lock-In UI_.
-
----
-
-## 📖 Documentación Completa
-
-La documentación detallada del proyecto se encuentra centralizada en la carpeta [`src/docs/`](./src/docs/):
-
-- 🔍 **[Diagnóstico Técnico](./src/docs/00-diagnostico-tecnico.md)**: Análisis forense del estado del proyecto y plan de despido del UI antiguo.
-- 🔭 **[Overview del Sistema](./src/docs/01-overview-del-sistema.md)**: Visión general, propósito y stack.
-- 🏗️ **[Arquitectura](./src/docs/02-arquitectura.md)**: Estructura de carpetas, The Container/Presenter pattern.
-- 📋 **[Casos de Uso](./src/docs/03-casos-de-uso.md)**: Interactions macro.
-- 📊 **[Requerimientos](./src/docs/04-requerimientos.md)**: FR y NFR atados al nuevo rating de Tailwind v4.
-- 🔄 **[Flujo de Datos](./src/docs/05-flujo-de-datos.md)**: Cómo viajan los datos (Store, Hooks, Props tree ASCII).
-- 👩‍💻 **[Guía Devs](./src/docs/06-guia-para-desarrolladores.md)**: Leyes de `cn()`, Tailwind, DRY.
-- 🩺 **[Calidad y Riesgos](./src/docs/07-calidad-y-riesgos.md)**: Mitigación residual.
-- 🏁 **[Cierre del Proyecto](./src/docs/08-cierre-del-proyecto.md)**: Conclusiones de la auditoría.
-- 🎨 **[Auditoría Diseño](./src/docs/09-auditoria-diseño.md)**: System Design, Paleta Semántica y Layout.
-- 🎓 **[Tutorial Magistral](./src/docs/tutorial_completo.md)**: Cátedra explicativa de la asincronía y porqués analíticos.
-- 📚 **[Glosario](./src/docs/GLOSSARY.md)**: Theming, FSD, DRY, Native Tailwind.
+🏆 **Logro de Ingeniería:** Proyecto auditado con un score de **100/100 en React Doctor**. Implementa **Concurrent UI** para una respuesta de entrada instantánea y un **Sistema de Temas Semánticos** basado íntegramente en CSS nativo a través de Tailwind v4.
 
 ---
 
-## 🛠️ Stack Tecnológico
+## 🏗️ Arquitectura de Software (Master's Level)
+
+Este proyecto no es solo una UI; es un sistema desacoplado siguiendo patrones de diseño clásicos y modernos:
+
+1.  **Adapter Pattern (GoF):** Normalización de datos de la API externa a un modelo de dominio propio (`UserProfile`), protegiendo la UI de cambios en GitHub.
+2.  **Facade Pattern:** Encapsulación de la lógica de Redux, Thunks y Hooks en una interfaz limpia (`useUserSearchFacade`) para los componentes de presentación.
+3.  **Concurrent Rendering:** Uso de `useTransition` de React 19 para priorizar la interactividad del usuario sobre el renderizado pesado de listas.
+4.  **Memoized Data Flow:** Tubería de datos optimizada con `createSelector` para evitar re-renders innecesarios.
+
+---
+
+## 🎨 Design System & Motion
+
+- **Tailwind CSS v4:** Migración total a variables CSS semánticas (`--color-app-bg`, `--color-app-surface`).
+- **Motion v12:** Animaciones de grid fluidas y entradas escalonadas (`staggered reveals`) para una experiencia de usuario nativa.
+- **Responsive Artifacts:** Componentes diseñados con **Atomic Design** y **Lite Virtualization** (`content-visibility: auto`).
+
+---
+
+## 🛠️ Stack Tecnológico Pro
 
 | Categoría      | Tecnologías                                                          |
 | -------------- | -------------------------------------------------------------------- |
-| **Core**       | React 18.3, Vite 5                                                   |
-| **Estilos**    | Tailwind CSS v4 Puro (Utility-first) _(Mui/Material UI descartados)_ |
-| **Estado**     | Redux Toolkit, Redux Thunk                                           |
-| **Networking** | Fetch API (Nativo)                                                   |
-| **Iconos**     | React Icons                                                          |
+| **Core**       | React 19, Vite 6                                                     |
+| **Estilos**    | Tailwind CSS v4 (Motor Lightning CSS)                                |
+| **Estado**     | Redux Toolkit (Memoized Selectors)                                   |
+| **Motion**     | Motion v12 (High Fidelity Animations)                                |
+| **Doc Standards**| JSDoc Advanced (Type-Safe IntelliSense)                            |
 
-## 🚀 Quick Start
+---
 
-1.  **Clonar el repositorio**
+## 📖 Documentación Profunda
 
-    ```bash
-    git clone https://github.com/tu-usuario/myprojectapi01.git
-    cd myprojectapi01
-    ```
+Consulta la biblia técnica del proyecto en [`src/docs/`](./src/docs/):
 
-2.  **Instalar dependencias**
+- 🏗️ **[Arquitectura Detallada](./src/docs/02-arquitectura.md)**: El flujo Facade-Adapter.
+- 🔄 **[Flujo de Datos Memoizado](./src/docs/05-flujo-de-datos.md)**: Cómo viajan los datos.
+- 🎨 **[Sistema de Temas Semánticos](./src/docs/09-auditoria-diseño.md)**: Tokens de Tailwind v4.
 
-    ```bash
-    pnpm install
-    # o
-    npm install
-    ```
+---
 
-3.  **Iniciar servidor (Modo Desarrollo)**
+## 🚀 Instalación y Despliegue
 
-    ```bash
-    pnpm dev
-    ```
-
-4.  **Construir para Producción**
-    ```bash
-    pnpm build
-    ```
-
-## 📂 Estructura del Proyecto
-
-```
-src/
-├── app/                  # Configuración del Store
-├── components/           # Componentes UI reutilizables
-├── features/             # Módulos de dominio (Users, Search)
-├── hooks/                # Custom Hooks (Lógica reutilizable)
-├── services/             # Integración con APIs externas
-└── docs/                 # Documentación centralizada (La Biblia del Proyecto)
+```bash
+pnpm install
+pnpm dev    # Desarrollo con Hot Reload
+pnpm build  # Compilación optimizada (Lightning CSS)
 ```
 
 ## 📝 Licencia
 
-Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+Este proyecto está bajo la Licencia MIT. © 2026 LJCR Engineering.

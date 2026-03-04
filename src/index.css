@@ -1,64 +1,62 @@
 @import "tailwindcss";
 
 /* 
- * SENIOR ARCHITECTURE: THEME VARIABLES 
- * Using native CSS variables for high-performance theme switching.
+ * SENIOR ARCHITECTURE: CUSTOM BRAND PALETTE 
+ * Integrated via Native CSS Variables for Zero-Lag Theme Switching.
  */
 :root {
-  /* Brand Palette (Indigo) */
-  --brand-50: #eef2ff;
-  --brand-500: #6366f1;
-  --brand-600: #4f46e5;
-  --brand-400: #818cf8;
+  /* Hex Palette provided by Engineer */
+  --hex-deep-navy: #00002a;
+  --hex-corp-blue: #1a3f75;
+  --hex-muted-steel: #4e6a9c;
+  --hex-electric-cyan: #4ea4cc;
 
-  /* Neutral Palette (Slate) */
-  --neutral-50: #f8fafc;
-  --neutral-100: #f1f5f9;
-  --neutral-200: #e2e8f0;
-  --neutral-300: #cbd5e1;
-  --neutral-400: #94a3b8;
-  --neutral-500: #64748b;
-  --neutral-800: #1e293b;
-  --neutral-900: #0f172a;
-  --neutral-950: #020617;
-
-  /* Default (Light) Theme Semantic Tokens */
-  --color-app-bg: var(--neutral-50);
+  /* Semantic Tokens - Light Mode */
+  --color-app-bg: #f8fafc;
   --color-app-surface: #ffffff;
-  --color-app-border: var(--neutral-200);
-  --color-app-text: var(--neutral-900);
-  --color-app-muted: var(--neutral-500);
-  --color-app-accent: var(--brand-600);
-  --shadow-premium: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+  --color-app-border: var(--hex-muted-steel);
+  --color-app-text: var(--hex-deep-navy);
+  --color-app-muted: var(--hex-muted-steel);
+  --color-app-accent: var(--hex-corp-blue);
+  --color-app-action: var(--hex-electric-cyan);
+
+  /* New Premium Tokens */
+  --brand-500: #4ea4cc;
+  --brand-600: #1a3f75;
+  --brand-700: #00002a;
+
+  --shadow-premium: 0 10px 30px -10px rgba(0, 0, 42, 0.1);
+  --shadow-dark-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 /* 
- * DARK THEME OVERRIDES 
- * Triggered by the .dark class on <html> added by useTheme hook.
+ * Semantic Tokens - Dark Mode 
+ * Pure CSS Overrides for Instant Reactivity.
  */
 .dark {
-  --color-app-bg: var(--neutral-950);
-  --color-app-surface: var(--neutral-900);
-  --color-app-border: var(--neutral-800);
-  --color-app-text: var(--neutral-50);
-  --color-app-muted: var(--neutral-400);
-  --color-app-accent: var(--brand-400);
-  --shadow-premium: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  --color-app-bg: var(--hex-deep-navy);
+  --color-app-surface: var(--hex-corp-blue);
+  --color-app-border: var(--hex-muted-steel);
+  --color-app-text: #f8fafc;
+  --color-app-muted: var(--hex-muted-steel);
+  --color-app-accent: var(--hex-electric-cyan);
+  --color-app-action: var(--hex-electric-cyan);
+
+  --shadow-premium: 0 10px 40px -10px rgba(0, 0, 0, 0.6);
 }
 
 @theme {
-  /* Mapping CSS Variables to Tailwind v4 Utilities */
+  /* Mapping to Tailwind v4 Design Tokens */
   --color-app-bg: var(--color-app-bg);
   --color-app-surface: var(--color-app-surface);
   --color-app-border: var(--color-app-border);
   --color-app-text: var(--color-app-text);
   --color-app-muted: var(--color-app-muted);
   --color-app-accent: var(--color-app-accent);
-  
-  --color-brand-500: var(--brand-500);
-  
+  --color-app-action: var(--color-app-action);
+
   --shadow-premium: var(--shadow-premium);
-  
+
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "Outfit", sans-serif;
 
@@ -66,15 +64,23 @@
 }
 
 @keyframes fade-in-up {
-  0% { opacity: 0; transform: translateY(10px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @layer base {
-  *, ::after, ::before {
+  *,
+  ::after,
+  ::before {
     @apply transition-colors duration-200 border-app-border;
   }
-  
+
   body {
     @apply bg-app-bg text-app-text font-sans antialiased m-0 min-h-screen;
   }
@@ -84,12 +90,16 @@
   .artifact-container {
     @apply w-full max-w-screen-2xl mx-auto px-4 sm:px-6;
   }
-  
+
   .glass-card {
-    @apply bg-app-surface border border-app-border rounded-2xl shadow-premium hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.6)] transition-all duration-300;
+    @apply bg-app-surface/90 backdrop-blur-md border border-app-border/30 rounded-2xl shadow-premium hover:shadow-[0_20px_40px_-15px_rgba(0,0,42,0.2)] dark:hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.8)] transition-all duration-300;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-app-surface border border-app-border text-app-text font-bold hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all active:scale-[0.98] shadow-sm;
+    @apply inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-app-action text-white font-bold hover:brightness-110 transition-all active:scale-[0.98] shadow-sm;
+  }
+
+  .text-brand {
+    @apply text-app-accent;
   }
 }

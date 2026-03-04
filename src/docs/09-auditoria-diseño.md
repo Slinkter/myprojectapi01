@@ -1,52 +1,39 @@
-# Auditoría de Diseño: Frontend Design Expert (LJCR System Design)
+# 🎨 Auditoría de Diseño y Temas (Tailwind v4)
 
-## 🎨 Fase 1: Fundamentos de Marca y Paleta Premium
+## 1. Filosofía de Diseño: "The Artifact"
+Buscamos una estética **Senior & Refined**: brutalmente minimalista con acentos de marca potentes.
 
-La auditoría de diseño revela que la aplicación carecía de una cohesión visual fuerte. Se ha implementado un nuevo **System Design** basado en una paleta de **Indigo Industrial** y **Neutrales de Slate**, eliminando los tonos genéricos.
+## 2. Sistema de Temas Semánticos (CSS v4 Pure)
 
-### 🌓 Paleta de Colores Semántica (Theming)
+Hemos abandonado la configuración en JS (`tailwind.config.js`) en favor de **Variables CSS Nativas**. El cambio de tema es 100% manejado por la cascada de CSS.
 
-| Elemento            | Tema Light (Premium Slate) | Tema Dark (Midnight Deep Navy) |
-| ------------------- | -------------------------- | ------------------------------ |
-| **Fondo**           | `#f8fafc`                  | `#020617`                      |
-| **Superficie**      | `#ffffff`                  | `#0f172a`                      |
-| **Borde**           | `#e2e8f0`                  | `#1e293b`                      |
-| **Texto Principal** | `#0f172a`                  | `#f8fafc`                      |
-| **Accento (Brand)** | `#6366f1` (Indigo 500)     | `#4f46e5` (Indigo 600)         |
+### Tokens de Marca (v4 Directives)
+- **Primary/Brand:** Indigo (`--color-brand-600`) para acentos.
+- **Grayscale:** Slate/Navy para superficies y texto.
 
-## 📐 Fase 2: Estandarización de Skeletons (Paridad 1:1)
+### Mapeo Semántico (Dark/Light Protocol)
 
-Se detectó una inconsistencia crítica: el `SkeletonCard` no respetaba las dimensiones ni la estructura del `UserCard` real.
+| Token CSS | Light Value | Dark Value |
+| :--- | :--- | :--- |
+| `--color-app-bg` | `#f8fafc` | `#020617` |
+| `--color-app-surface` | `#ffffff` | `#0f172a` |
+| `--color-app-text` | `#0f172a` | `#f8fafc` |
+| `--color-app-accent` | `#4f46e5` | `#818cf8` |
 
-- **Acción:** Se refactorizaron ambos componentes para compartir el mismo esqueleto de contenedores.
-- **Mejora:** Se implementó una animación `shimmer` personalizada mediante keyframes en Tailwind, eliminando saltos visuales (_Layout Shifts_) durante la hidratación de datos.
+---
 
-## 📱 Fase 3: Responsividad y UX
+## 3. Clases de Abstracción (DRY Cleaner)
 
-- **Mobile First:** Las tarjetas ahora ocupan el 100% del ancho en móviles con padding generoso, escalando a grids de 2 a 4 columnas en desktop.
-- **Interacción Premium:** Se añadieron efectos de _Glow_ y _Glassmorphism_ en el header para elevar la percepción de calidad del producto (Anthropic Aesthetic).
+Hemos extraído patrones repetitivos para garantizar consistencia visual:
 
-## 📐 Diagrama de Jerarquía de Diseño (ASCII)
+- **`.glass-card`**: Tarjeta con efecto de transparencia, bordes definidos y sombras premium.
+- **`.btn-primary`**: Botón táctil con feedback interactivo y soporte nativo de dark mode.
+- **`.artifact-container`**: Contenedor maestro con padding seguro para dispositivos móviles.
 
-```text
-[ System Design Tokens ]
-          │
-          ├─▶ Colors (@brand, @light, @dark)
-          ├─▶ Shadows (Premium & Dark Premium)
-          └─▶ Spacing (Rounded-2xl, Rounded-3xl)
-                    │
-                    ▼
-          [ Global Components ]
-          ┌───────────────────────┐
-          │     PageHeader        │ (Glassmorphism & Glow)
-          └──────────┬────────────┘
-                     │
-          ┌──────────┴────────────┐
-          │     System Cards      │
-          │  (UserCard == Skeleton) │ (Paridad Estructural)
-          └───────────────────────┘
-```
+---
 
-## 🚀 Conclusión de Optimización
+## 4. Animaciones Cinematográficas (Motion v12)
 
-La aplicación ahora no solo es funcional, sino que proyecta una imagen de **software profesional de alto nivel**. Se ha optimizado el CSS eliminando los wrappers de Material Tailwind y recuperando el control total del árbol del DOM.
+- **Grid Staggering:** Las tarjetas de usuario entran una a una con un retraso escalonado de `0.05s`.
+- **Hardware Acceleration:** Uso de la propiedad `layout` para animaciones fluidas de reorganización de grid a 60 FPS.
+- **Micro-Interactions:** Escalado sutil (`0.98`) al presionar botones para feedback táctil instantáneo.

@@ -24,7 +24,8 @@ const cardVariants = {
 const UserAvatar = ({ url, login }) => (
   <div className="relative p-6 md:p-8 flex flex-col items-center">
     <div className="absolute top-8 left-1/2 -translate-x-1/2 w-24 h-24 bg-brand-500/20 rounded-full blur-2xl"></div>
-    <img
+    <motion.img
+      layoutId={`avatar-${login}`}
       src={url}
       alt={`Avatar de ${login}`}
       loading="lazy"
@@ -85,7 +86,10 @@ const UserCard = ({ children }) => {
   const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 });
 
   return (
-    <div ref={cardRef} className="h-full w-full max-w-[300px] sm:max-w-none mx-auto min-h-[320px]">
+    <div
+      ref={cardRef}
+      className="h-full w-full max-w-[300px] sm:max-w-none mx-auto min-h-[320px]"
+    >
       {isVisible ? (
         <motion.div
           variants={cardVariants}

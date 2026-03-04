@@ -1,58 +1,45 @@
-# 05 - Arquitectura de Flujo de Datos y Algoritmos
+# 🔄 Flujo de Datos y Estado (Senior Protocol)
 
-## 🌊 Flujo de Datos (ASCII Sequence Diagram)
+## 1. Single Source of Truth
+El estado de la aplicación reside en el **Redux Store**, organizado mediante **Slices** de Redux Toolkit.
 
-```text
-Usuario      Input      Debounce      Redux      Adapter      API (GitHub)
-  │            │           │            │           │            │
-  │── (escribe)▶           │            │           │            │
-  │            │── (wait) ─▶            │           │            │
-  │            │           │──(fetch)──▶│           │            │
-  │            │           │            │──(Abort prev)─────────▶│
-  │            │           │            │           │            │
-  │            │           │            │──(request)────────────▶│
-  │            │           │            │           │            │
-  │            │           │            │◀──(raw response)───────│
-  │            │           │            │           │            │
-  │            │           │            │◀──(Adapted data)───────│
-  │            │           │            │           │            │
-  │◀──(Render Data)────────│            │           │            │
+## 2. El Ciclo de Datos (Master's Level Flow)
+
+1.  **Activación:** El usuario escribe en el buscador. El `useUserSearchFacade` detecta el cambio (con debouncing).
+2.  **Transición:** Se usa `useTransition` de React para mantener el input fluido mientras se procesa la búsqueda.
+3.  **Acción:** Se dispara el Thunk `fetchUsers`.
+4.  **Normalización:** El thunk recibe datos crudos, los pasa por el **Adaptador** y guarda solo el modelo estandarizado en el Store.
+5.  **Derivación (Selectors):** Los componentes no leen el Store directamente; usan `createSelector` para derivar estados como `selectIsUsersEmpty`.
+6.  **Renderizado:** La UI recibe los datos refinados y los anima mediante **Motion v12**.
+
+---
+
+## 3. Optimización de Performance (Vercel Standards)
+
+### Selectores Memoizados (`reselect`)
+Hemos implementado selectores que evitan que un componente se re-renderice si la parte del estado que consume no ha cambiado.
+
+```javascript
+// Ejemplo de Selector Senior
+export const selectIsUsersEmpty = createSelector(
+  [selectAllUsers, selectUsersStatus],
+  (users, status) => status === "succeeded" && users.length === 0
+);
 ```
 
-## ⏱️ Algoritmos Clave
+### Abort Signals
+Cada petición HTTP está atada a un `AbortController`. Si el usuario cambia la búsqueda antes de que termine la petición anterior, esta se cancela automáticamente para liberar ancho de banda.
 
-### 1. Algoritmo de Debouncing (Control de Frecuencia)
-**Ubicación:** `useDebouncedSearch.js`
-*   **Funcionamiento:** Cada tecla reinicia un `setTimeout`. Solo cuando el usuario para de escribir (ej. 300ms), se actualiza el valor que dispara la búsqueda.
-*   **Eficiencia:** $O(1)$ por pulsación, ahorrando hasta un 90% de llamadas innecesarias a la API.
+---
 
-### 2. Algoritmo de Reconciliación (Fiber)
-**Ubicación:** Interno de React
-*   **Funcionamiento:** Diferenciación (Diffing) heurística de $O(n)$ entre árboles virtuales. Mapea cambios mínimos al DOM real usando `keys`.
+## 4. Estructura del Store
 
-### 3. Algoritmo de Intersección (AABB)
-**Ubicación:** `useIntersectionObserver.js` y `UserCard.jsx`
-*   **Funcionamiento:** Comprueba colisión entre el Viewport y el elemento. Si hay intersección, renderiza; si no, mantiene un placeholder ligero.
-*   **Performance:** Reduce el costo de renderizado fuera de pantalla (Virtualización Lite).
-
-### 4. Algoritmo de Cancelación de Tareas (AbortController)
-**Ubicación:** `useUserFetching.js` y `userService.js`
-*   **Funcionamiento:** Previene **Race Conditions**. Si una nueva petición "B" inicia antes de que "A" termine, la petición "A" es abortada por el navegador.
-
-## 🌳 Grafo de Árbol de Invocaciones (Props Tree)
-
-```text
-<App> (Inyecta Redux Store + Rutas)
-  │
-  ├─ <ThemeToggle> --------- (Lee/Escribe LocalStorage: "DarkMode")
-  │
-  ├─ <UserSearch> ---------- (Facade: useUserSearchFacade)
-  │   │
-  │   ├─ <PageHeader> ------ (isSearching / handleSearch)
-  │   │
-  │   └─ <ResultFactory> --- (Fábrica de Tarjetas: Decide User vs Org)
-  │       │
-  │       └─ <UserCard> ---- (Compound Component: Avatar, Header, Footer)
-  │
-  └─ <UserDetail> ---------- (Carga asíncrona vía React.lazy)
+```javascript
+store: {
+  users: {
+    users: Array<UserProfile>, // Modelos adaptados
+    isLoading: 'idle' | 'loading' | 'succeeded' | 'failed',
+    error: { message: string, status?: number }
+  }
+}
 ```
