@@ -16,7 +16,7 @@
  * - Support for search and default user list
  */
 
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
 import { fetchUsersAPI } from "@/services/userService";
 import { log } from "@/app/logger";
 
@@ -36,37 +36,24 @@ const SLICE_NAME = "users/fetchUsers";
  * @param {Function} thunkAPI.rejectWithValue - Function to return custom error payload
  * @returns {Promise<Array<Object>>} Array of user objects from GitHub API
  * @throws {Object} Error object with message and optional status code
- *
- * @example
- * Fetch default users
- * dispatch(fetchUsers());
- *
- * @example
- * Search for specific users
- * dispatch(fetchUsers('octocat'));
  */
 export const fetchUsers = createAsyncThunk(
   SLICE_NAME,
   async (searchTerm = "", { rejectWithValue, signal }) => {
     try {
       log.flow("fetch");
-      // Pasamos el signal para abortar la petición vía red (AbortController)
       const users = await fetchUsersAPI(searchTerm, signal);
       return users;
     } catch (error) {
-      // AbortError is a standard DOM exception when fetch is cancelled
       if (error.name === "AbortError") {
-        throw error; // Let Redux handle the cancellation silently
+        throw error;
       }
-
-      // Check if it's our custom ApiError with a status
       if (error.name === "ApiError" || error.status) {
         return rejectWithValue({
           message: error.message,
           status: error.status,
         });
       }
-      // Fallback for network errors or other unexpected errors
       return rejectWithValue({ message: error.message || "Unknown Error" });
     }
   },
@@ -86,37 +73,22 @@ const initialState = {
   users: [],
 };
 
-/**
- * Users slice configuration
- *
- * @constant
- * @type {import('@reduxjs/toolkit').Slice}
- * @description
- * Manages user-related state with automatic reducer generation.
- * Handles three states for the fetchUsers async thunk:
- * - pending: Sets loading state and clears errors
- * - fulfilled: Stores fetched users and sets success state
- * - rejected: Stores error information and sets failed state
- */
 const usersSlice = createSlice({
   name: "users",
   initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Case 1: Request is pending
       .addCase(fetchUsers.pending, (state) => {
         log.redux("fetchUsers.pending");
         state.isLoading = "loading";
         state.error = null;
       })
-      // Case 2: Request succeeded
       .addCase(fetchUsers.fulfilled, (state, action) => {
         log.redux("fetchUsers.fulfilled", { count: action.payload?.length });
         state.isLoading = "succeeded";
         state.users = action.payload;
       })
-      // Case 3: Request failed
       .addCase(fetchUsers.rejected, (state, action) => {
         log.redux("fetchUsers.rejected", action.payload);
         state.isLoading = "failed";
@@ -125,8 +97,54 @@ const usersSlice = createSlice({
   },
 });
 
+// --- SELECTORS (Senior Architecture Pattern) ---
+
 /**
- * Users reducer
- * @type {import('@reduxjs/toolkit').Reducer}
+ * Base selector to get the users state
+ * @param {Object} state - Global state
+ * @returns {UsersState}
  */
+const selectUsersBaseState = (state) => state.users;
+
+/**
+ * Memoized selector to get the list of users
+ * @type {import('@reduxjs/toolkit').Selector}
+ */
+export const selectAllUsers = createSelector(
+  [selectUsersBaseState],
+  (usersState) => usersState.users
+);
+
+/**
+ * Memoized selector to get the current loading status
+ */
+export const selectUsersStatus = createSelector(
+  [selectUsersBaseState],
+  (usersState) => usersState.isLoading
+);
+
+/**
+ * Memoized selector to get the current error
+ */
+export const selectUsersError = createSelector(
+  [selectUsersBaseState],
+  (usersState) => usersState.error
+);
+
+/**
+ * Derived selector to check if the state is loading
+ */
+export const selectIsUsersLoading = createSelector(
+  [selectUsersStatus],
+  (status) => status === "loading"
+);
+
+/**
+ * Derived selector to check if the search returned no results
+ */
+export const selectIsUsersEmpty = createSelector(
+  [selectAllUsers, selectUsersStatus],
+  (users, status) => status === "succeeded" && users.length === 0
+);
+
 export default usersSlice.reducer;
