@@ -1,25 +1,71 @@
 /**
- * @file User List Component
- * @description Container component with responsive grid of user cards
+ * @file User List Component (Data Model Sincronized)
+ * @description Uses the standardized UserProfile model from the adapter.
  */
 
+import React from "react";
 import PropTypes from "prop-types";
-import ResultFactory from "@/components/factories/ResultFactory";
+import { AnimatePresence, motion } from "motion/react";
+import UserCard from "./UserCard";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.05 },
+  },
+  exit: {
+    opacity: 0,
+    transition: { staggerChildren: 0.02, staggerDirection: -1 }
+  }
+};
 
 const UserList = ({ users }) => {
   return (
-    <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 w-full max-w-screen-2xl mx-auto p-4">
-      {users.map((user) => (
-        <li key={user.id} className="flex justify-center">
-          <ResultFactory data={user} />
-        </li>
-      ))}
-    </ul>
+    <div className="artifact-container mt-8 md:mt-12 pb-20">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        layout
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
+        style={{ contentVisibility: "auto" }}
+      >
+        <AnimatePresence mode="popLayout">
+          {users.map((user) => (
+            <motion.div
+              key={user.id} // Standardized 'id'
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+            >
+              <UserCard>
+                {/* 
+                  DATA MODEL SYNC:
+                  'photo' instead of 'avatar_url'
+                  'username' instead of 'login'
+                */}
+                <UserCard.Avatar url={user.photo} login={user.username} />
+                <UserCard.Header login={user.username} />
+                <UserCard.Footer login={user.username} />
+              </UserCard>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
+    </div>
   );
 };
 
 UserList.propTypes = {
-  users: PropTypes.array.isRequired,
+  // Array of standardized UserProfile objects
+  users: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    username: PropTypes.string.isRequired,
+    photo: PropTypes.string.isRequired,
+  })).isRequired,
 };
 
-export default UserList;
+export default React.memo(UserList);

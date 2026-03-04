@@ -1,6 +1,5 @@
 /**
- * @file Theme Toggle Component
- * @description UI component for toggling between light and dark themes.
+ * @file Theme Toggle Component (v4 Semantic Refactor)
  */
 
 import { MdDarkMode, MdLightMode } from "react-icons/md";
@@ -11,13 +10,13 @@ export const ThemeToggle = ({ theme, toggleTheme }) => {
     <div className="fixed top-6 right-6 z-50">
       <button
         onClick={toggleTheme}
-        className="rounded-full p-2 bg-gray-100 dark:bg-dark-surface border border-gray-200 dark:border-dark-border cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200"
+        className="btn-primary p-3 rounded-full shadow-premium hover:scale-110 active:scale-95 transition-all"
         aria-label="Toggle theme"
       >
         {theme === "dark" ? (
-          <MdDarkMode className="w-5 h-5 text-dark-muted" />
+          <MdDarkMode className="w-5 h-5 text-app-accent" />
         ) : (
-          <MdLightMode className="w-5 h-5 text-gray-600" />
+          <MdLightMode className="w-5 h-5 text-app-accent" />
         )}
       </button>
     </div>

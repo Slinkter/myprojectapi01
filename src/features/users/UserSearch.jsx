@@ -8,7 +8,7 @@
  * - Retry functionality for failed requests
  */
 
-import { useRef } from "react";
+import { useRef, useTransition } from "react";
 import { log } from "@/app/logger";
 import { useUserSearchFacade } from "./hooks/useUserSearchFacade";
 
@@ -20,17 +20,20 @@ import UserList from "./components/UserList";
 import NotFound from "@/components/layout/NotFound";
 
 /**
- * User Search Component (Facade Pattern Refactor)
+ * User Search Component (Concurrent UI Refactor)
  * 
- * Now this component only cares about WHAT to display, 
- * not HOW the data is debounced or fetched.
+ * @description
+ * Implements React Transitions to prioritize input responsiveness 
+ * while results are being processed/rendered.
  */
 const UserSearch = () => {
   const renderCount = useRef(1);
-  log.render("UserSearch (Facade)", renderCount.current);
+  log.render("UserSearch (Concurrent)", renderCount.current);
   renderCount.current++;
 
-  // Everything extracted from the Facade
+  // React Transition for heavy search updates
+  const [isPending, startTransition] = useTransition();
+
   const {
     searchTerm,
     setSearchTerm,
@@ -45,15 +48,25 @@ const UserSearch = () => {
     isEmpty
   } = useUserSearchFacade();
 
-  log.state("Facade Output", { usersCount: users?.length, status });
-  if (isLoading) log.flow("loading");
-  if (isSuccess) log.flow("success");
+  /**
+   * Prioritizes the input update while deferring result render if needed.
+   * @param {React.ChangeEvent<HTMLInputElement>} e 
+   */
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    // The search term state update is wrapped in startTransition 
+    // to keep the input feel snappy.
+    startTransition(() => {
+      setSearchTerm(value);
+    });
+  };
 
   /**
    * Helper function for UI state logic
    */
   const renderContent = () => {
-    if (isLoading) return <SkeletonGrid />;
+    // Show Loading state if API is fetching OR React is transitioning results
+    if (isLoading || isPending) return <SkeletonGrid />;
     
     if (isError) {
       if (error && error.status === 403) return <NotFound searchTerm={debouncedSearchTerm} />;
@@ -70,9 +83,9 @@ const UserSearch = () => {
   return (
     <>
       <PageHeader
-        isSearching={status === "loading"}
+        isSearching={isLoading || isPending}
         searchTerm={searchTerm}
-        handleSearch={(e) => setSearchTerm(e.target.value)}
+        handleSearch={handleSearchChange}
       />
       {renderContent()}
     </>
