@@ -3,7 +3,7 @@
  * @description Flexible User Card that only renders content when visible.
  */
 
-import React, { useRef } from "react";
+import { useRef } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
@@ -34,6 +34,11 @@ const UserAvatar = ({ url, login }) => (
   </div>
 );
 
+UserAvatar.propTypes = {
+  url: PropTypes.string.isRequired,
+  login: PropTypes.string.isRequired,
+};
+
 /**
  * Sub-component: Info/Header
  */
@@ -47,6 +52,10 @@ const UserHeader = ({ login }) => (
     </p>
   </div>
 );
+
+UserHeader.propTypes = {
+  login: PropTypes.string.isRequired,
+};
 
 /**
  * Sub-component: Footer Action
@@ -64,6 +73,10 @@ const UserFooter = ({ login }) => (
     </Link>
   </div>
 );
+
+UserFooter.propTypes = {
+  login: PropTypes.string.isRequired,
+};
 
 /**
  * Main UserCard Component (Container with Lite Virtualization)
@@ -89,6 +102,10 @@ const UserCard = ({ children }) => {
       )}
     </div>
   );
+};
+
+UserCard.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 // Attaching sub-components

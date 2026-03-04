@@ -5,7 +5,7 @@
  * Decides which specialized component to render based on the data type.
  */
 
-import React from "react";
+import PropTypes from "prop-types";
 import UserCard from "@/features/users/components/UserCard";
 import { FaBuilding } from "react-icons/fa";
 
@@ -22,6 +22,13 @@ const OrganizationCard = ({ org }) => (
     <UserCard.Footer login={org.username} />
   </UserCard>
 );
+
+OrganizationCard.propTypes = {
+  org: PropTypes.shape({
+    photo: PropTypes.string,
+    username: PropTypes.string,
+  }).isRequired,
+};
 
 /**
  * Result Factory
@@ -45,6 +52,14 @@ const ResultFactory = ({ data }) => {
         </UserCard>
       );
   }
+};
+
+ResultFactory.propTypes = {
+  data: PropTypes.shape({
+    type: PropTypes.string,
+    photo: PropTypes.string,
+    username: PropTypes.string,
+  }).isRequired,
 };
 
 export default ResultFactory;
