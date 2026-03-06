@@ -16,20 +16,20 @@ const containerVariants = {
   },
   exit: {
     opacity: 0,
-    transition: { staggerChildren: 0.02, staggerDirection: -1 }
-  }
+    transition: { staggerChildren: 0.02, staggerDirection: -1 },
+  },
 };
 
 const UserList = ({ users }) => {
   return (
-    <div className="artifact-container mt-8 md:mt-12 pb-20">
+    <div className="layout-stack py-12">
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         exit="exit"
         layout
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8"
         style={{ contentVisibility: "auto" }}
       >
         <AnimatePresence mode="popLayout">
@@ -61,11 +61,13 @@ const UserList = ({ users }) => {
 
 UserList.propTypes = {
   // Array of standardized UserProfile objects
-  users: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    username: PropTypes.string.isRequired,
-    photo: PropTypes.string.isRequired,
-  })).isRequired,
+  users: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      username: PropTypes.string.isRequired,
+      photo: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default React.memo(UserList);

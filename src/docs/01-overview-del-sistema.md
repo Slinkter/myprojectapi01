@@ -2,41 +2,39 @@
 
 ## 📖 Propósito del Proyecto
 
-El proyecto `myprojectapi01` es una **Single Page Application (SPA) - Cliente Puro**, diseñada como un buscador y visor de perfiles técnicos expuestos por la API pública de GitHub. Su intención central es demostrar el dominio avanzado sobre arquitecturas modernas de Frontend (React 18), la gestión robusta del estado y transiciones fluidas de interfaz.
-
-Tras la Auditoría y Refactorización, este proyecto persigue el estándar **Clean Code** y **Feature-Sliced Design (FSD)** apoyado puramente por **Tailwind CSS v4 (Utility-first nativo)** sin dependencias de UI anticuadas.
+El proyecto `myprojectapi01` es una **Single Page Application (SPA) - Cliente Puro**, diseñada para la exploración de perfiles técnicos a través de la API de GitHub. El objetivo es demostrar un dominio de nivel Senior en el ecosistema React moderno, priorizando la **Simplicidad Arquitectónica**, la **Performance de Carga** y una **UX Minimalista de Alta Gama**.
 
 ## 🚀 Alcance Funcional
 
-- **Búsqueda en Tiempo Real**: Debounce sobre el input de búsqueda.
-- **Renderizado Dinámico**: Visualización de cards por usuario y perfiles de detalle profundos (bio, repos, seguidores, etc).
-- **Manejo de Estados de Red**: Skeletons adaptativos en tiempos de carga y manejo de NotFound/Errors amigable.
-- **Theming**: Toggle funcional entre Light Mode y minimalista Dark Mode.
+- **Búsqueda con Caché Inteligente**: Implementación de TanStack Query para evitar re-peticiones de red innecesarias.
+- **UX Minimalista v3**: Interfaz limpia (Essentialism) con enfoque en la legibilidad y el rendimiento percibido.
+- **Normalización de Datos**: Aplicación estricta del Patrón Adapter para desacoplar la API de la UI.
+- **Theming OLED**: Modo oscuro optimizado para pantallas de alta fidelidad y modo claro estilo Apple.
 
-## 🛠️ Tecnologías Principales (Refactorizado)
+## 🛠️ Tecnologías Principales (Refactor v3)
 
-| Capa           | Herramienta          | Razón de Elección (Senior Level)                                   |
-| -------------- | -------------------- | ------------------------------------------------------------------ |
-| **Core**       | React 18, Vite       | HMR instantáneo y hooks concurrente.                               |
-| **State**      | RTK (Redux Toolkit)  | Centralización para thunks y el fetching state.                    |
-| **Styling**    | Tailwind CSS v4 Puro | Sin `@material-tailwind`. Diseño cohesivo, Cero UI Vendor Lock-in. |
-| **Animations** | Framer Motion 12     | Flujo interactivo complejo (layout shifts, hover bounds).          |
+| Capa            | Herramienta            | Razón de Elección (Senior Level)                                    |
+| --------------- | ---------------------- | ------------------------------------------------------------------- |
+| **Core**        | React 18, Vite         | Estándar de la industria por velocidad y concurrencia.              |
+| **Data/Server** | TanStack (React Query) | El mejor motor de sincronización y caché para estados de servidor.  |
+| **State (UI)**  | RTK / Custom Hooks     | Manejo ligero de preferencias locales y estados de UI persistentes. |
+| **Styling**     | Tailwind CSS v4 (Min)  | CSS Utility-first sin configuraciones pesadas de JS.                |
+| **Animations**  | Motion v12             | Micro-interacción fluida sin penalización de performance.           |
 
-## 📐 Diagrama de Arquitectura de Alto Nivel (Mermaid)
+## 📐 Diagrama de Arquitectura (Mermaid)
 
 ```mermaid
 graph TD
-    A[Usuario Final] -->|Interactúa| B(UI React App - Cliente Puro)
-    B -->|Búsqueda / Clicks| C{Store de Redux}
-    C -->|Thunks / Async Logic| D[GitHub Public API]
-    D -->|Retorna JSON de Perfiles| C
-    C -->|Actualiza 'state.users'| B
-    B -->|Theming/LocalPrefs| E[(Local Storage)]
+    A[Usuario Final] -->|Búsqueda / Navegación| B(UI React App)
+    B -->|useUserSearchFacade| C{TanStack Query}
+    C -->|Query Cache| D[GitHub Public API]
+    D -->|Adapter Normalization| C
+    C -->|Server State| B
 ```
 
-## 🌊 Flujo Principal de la Aplicación
+## 🌊 Flujo Principal (Minimalist v3)
 
-1. **Punto de Entrada (`/`)**: Renderiza el Layout y el Input de Búsqueda de `features/users`.
-2. **Obtención de datos (`fetching`)**: Al tipear, se abortan llamadas redundantes y Redux asume el status de carga.
-3. **Pintado de Pantalla (`rendering`)**: Tailwind re-calcula las proporciones CSS-Grid nativamente y dibuja los `UserCard`.
-4. **Navegación Profunda (`/user/:login`)**: `react-router-dom` intercepta el mount y gatilla el useEffect para detalles atómicos del perfil.
+1. **Input Dinámico**: El usuario escribe; el sistema espera 500ms (debounce) para estabilizar la intención.
+2. **Hit de Caché**: Si el término ya fue buscado en los últimos 5 minutos, los resultados aparecen de inmediato.
+3. **Pintado Geométrico**: Se utiliza un Grid System sincronizado entre Skeletons y Cards para evitar Layout Shifts.
+4. **Navegación Atómica**: El detalle del usuario se carga bajo demanda, manteniendo la fluidez mediante transiciones de opacidad.

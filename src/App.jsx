@@ -30,17 +30,19 @@ const App = () => {
   log.state("App Theme", theme);
 
   return (
-    <main className="relative min-h-dvh flex flex-col items-center p-4 sm:p-6">
+    <main className="relative min-h-screen flex flex-col items-center py-12 pb-24 overflow-x-hidden">
       <ThemeToggle toggleTheme={toggleTheme} theme={theme} />
 
-      <ErrorBoundary>
-        <Suspense fallback={<div className="w-full max-w-screen-2xl mt-20"><SkeletonGrid /></div>}>
-          <Routes>
-            <Route path="/" element={<UserSearch />} />
-            <Route path="/user/:login" element={<UserDetail />} />
-          </Routes>
-        </Suspense>
-      </ErrorBoundary>
+      <div className="w-full max-w-screen-xl px-6 md:px-12">
+        <ErrorBoundary>
+          <Suspense fallback={<SkeletonGrid />}>
+            <Routes>
+              <Route path="/" element={<UserSearch />} />
+              <Route path="/user/:login" element={<UserDetail />} />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
+      </div>
     </main>
   );
 };

@@ -1,72 +1,52 @@
-# 06 - Guía de Operaciones para Desarrolladores (DevGuide)
+# 06 - Guía de Operaciones para Desarrolladores (v3)
 
-## 🏁 Instalación & Contrato Operativo
+## 🏁 Instalación y Modo de Trabajo
 
-Este repositorio está migrado completamente al paradigma **Zero-Config-UI** apoyándose exclusivame en **Tailwind v4** y **Clean Code**.
-
-Para correr este proyecto:
+Este proyecto sigue el paradigma de **Alta Fidelidad y Configuración Mínima**.
 
 ```bash
-# 1. Copiar el repositorio o abrir CWD
-# 2. Instalar el ecosistema puro (FSD y Tailwind)
+# 1. Instalar dependencias
 pnpm install
 
-# 3. Lanzar el compilador HMR de Vite
+# 2. Iniciar servidor de desarrollo
 pnpm dev
 
-# 4. Formatear y auditar la deuda local
+# 3. Auditoría de código (Pre-commit recomendable)
 pnpm run lint
 ```
 
-## 🏗️ Convenciones de Proyecto
+## 🏗️ Convenciones de Ingeniería
 
-### FSD (Feature-Sliced Design) Extremo
+### Data Fetching (Prohibido usar Thunks para API)
 
-Al agregar una funcionalidad (por ejemplo, buscar organizaziones Github), no agregues reducers random en el root ni componentes regados fuera. Debes aislarlo bajo `src/features/`.
+Para mantener la performance y el caché automático, **toda petición de datos debe pasar por TanStack Query**.
 
-- La lógica de negocio (`thunks.js`), la UI atada (`views/`) y su contexto coexisten modularmente.
-- Cualquier componente UI en `src/components/ui/` es puramente agnóstico, nativo (un `<button>`).
+- Definir el servicio en `src/services/`.
+- Aplicar el adaptador en el `queryFn`.
+- Exponer el resultado a través de un facade hook en la feature correspondiente.
 
-### 🎨 Guía de Estilos - Sistema Taildwind CSS (Obligatorio)
+### 🎨 Guía de Diseño Minimalista (v3)
 
-Este proyecto eliminó el Vendor Lock-in (Chakra, `@material-tailwind`, Bootstrap).
+- **Cero Clases Hardcodeadas:** Usa los tokens semánticos del tema (`text-app-text`, `bg-app-surface`).
+- **Espaciado:** No uses márgenes (`m-`, `mt-`) para separar elementos hermanos. Usa `gap` dentro de contenedores `flex` o `grid`.
+- **Tipografía:** Todo es **Inter**. Usa `font-bold` para títulos, `font-medium` para navegación y `font-normal` para contenido.
 
-**Instancia y Composición `cn()`:**
-Nunca construyas clases condicionales a mano (spaghetti strings). Has uso del utilitario `clsx/tailwind-merge` unificado:
+### 🧩 Patrón Facade
 
-```jsx
-// ❌ PROHIBIDO
-<div className={`bg-gray-800 ${isActive ? "text-white" : "text-gray-500"}`} />;
+Ningún componente de UI debe importar `useQuery` o hooks de bajo nivel directamente.
 
-// ✅ OBLIGATORIO Y ESTÁNDAR
-import { cn } from "@/utils/cn.js";
+- Todo debe pasar por un archivo `Facade` que exponga estados limpios (`isLoading`, `isSuccess`, `users`).
 
-<div
-  className={cn(
-    "bg-gray-800 text-gray-500 rounded-lg p-4 transition-all",
-    isActive && "text-white shadow-xl bg-accent-600",
-  )}
-/>;
+---
+
+## 🚀 Despliegue (GitHub Pages)
+
+El proyecto está configurado para despliegue automático en GitHub Pages.
+
+- **Base URL:** `/myprojectapi01/` (configurado en `vite.config.js` y `main.jsx`).
+
+### Scripts de despliegue:
+
+```bash
+pnpm run deploy
 ```
-
-**Prohibiciones Críticas CSS:**
-
-- ❌ **NO APTO**: Estilo en línea (`<div style={{color: 'red'}}>`).
-- ❌ **NO APTO**: BEM o CSS Modules (`<div className="card__header--dark">`). La filosofía de nuestro sistema es `Utility-First` escalable.
-- ❌ **NO APTO**: Reinstalar envoltorios tipo Mui/Chakra en este ambiente purificado.
-
-### Reglas de Configuración de Paths (Alias `@`)
-
-Asegura la legibilidad impoluta.
-
-```jsx
-// ❌ MAL
-import Button from "../../../components/ui/Button";
-
-// ✅ EXCELENTE (Importación Absoluta DX)
-import Button from "@/components/ui/Button";
-```
-
-### Accesibilidad por Defecto (a11y)
-
-Cada pieza añadible debe respetar las métricas de contraste requeridas por WCAG (AAA ideal). Toda mutación del DOM tiene que asegurar Focus Rings (`focus:ring-2 focus:ring-accent-500`).

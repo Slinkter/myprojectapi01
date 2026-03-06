@@ -1,26 +1,19 @@
 /**
- * @file Skeleton Card Component
- * @description Standardized Skeleton Card exact match for UserCard.
+ * @file Skeleton Card Component (Minimalist Refactor)
  */
 
 const SkeletonCard = () => (
-  <div className="h-full w-full max-w-[300px] sm:max-w-none mx-auto">
-    <div className="flex flex-col h-full w-full rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-dark-surface animate-pulse">
-      {/* Card Body Placeholder */}
-      <div className="p-6 md:p-8 flex flex-col items-center flex-grow">
-        {/* Avatar Placeholder */}
-        <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-200 dark:bg-gray-700 border-4 border-white dark:border-dark-surface shadow-md" />
-
-        {/* Title Placeholder */}
-        <div className="mt-5 w-3/4 h-7 rounded-md bg-gray-200 dark:bg-gray-700 mx-auto" />
-
-        {/* Subtitle Placeholder */}
-        <div className="mt-2 w-1/2 h-5 rounded-md bg-gray-200 dark:bg-gray-700 mx-auto" />
+  <div className="h-full w-full max-w-[280px] sm:max-w-none mx-auto min-h-[300px]">
+    <div className="flex flex-col h-full w-full rounded-lg border border-app-border bg-app-surface animate-pulse">
+      <div className="pt-6 pb-4 flex flex-col items-center">
+        <div className="w-20 h-20 rounded-full bg-app-border" />
       </div>
-
-      {/* Card Footer Placeholder */}
-      <div className="p-6 md:p-8 pt-0 mt-auto w-full">
-        <div className="w-full h-[54px] rounded-xl bg-gray-200 dark:bg-gray-700" />
+      <div className="px-6 pb-6 text-center space-y-1">
+        <div className="w-24 h-5 rounded bg-app-border mx-auto" />
+        <div className="w-32 h-3 rounded bg-app-border mx-auto opacity-50" />
+      </div>
+      <div className="px-6 pb-6 pt-2 mt-auto w-full">
+        <div className="w-full h-9 rounded bg-app-border" />
       </div>
     </div>
   </div>

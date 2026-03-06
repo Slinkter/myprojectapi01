@@ -1,41 +1,41 @@
 /**
- * @file User Search Facade Hook
+ * @file User Search Facade Hook (TanStack Query Refactor)
  * @description
  * Implements the Facade Pattern to simplify the UserSearch component.
- * Orchestrates multiple hooks and provides a clean API.
+ * Orchestrates TanStack Query and debouncing logic.
  */
 
-import { useDispatch } from "react-redux";
 import { useDebouncedSearch } from "@/hooks/useDebouncedSearch.js";
-import { useUserFetching } from "./useUserFetching.js";
-import { fetchUsers } from "../usersSlice.js";
+import { useUserQuery } from "./useUserQuery.js";
 import { log } from "@/app/logger";
 
 /**
  * Custom hook that acts as a Facade for the User Search feature.
- * 
+ *
  * @returns {Object} Clean API for the UserSearch component
  */
 export const useUserSearchFacade = () => {
-  // 1. Logic for Debounce
-  const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebouncedSearch("");
+  // 1. Logic for Debounce - Increased to 500ms for stability
+  const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebouncedSearch(
+    "",
+    500,
+  );
 
-  // 2. Logic for Data Fetching
-  const { users, status, error } = useUserFetching(debouncedSearchTerm);
-
-  const dispatch = useDispatch();
+  // 2. Logic for Data Fetching (React Query)
+  const {
+    data: users = [],
+    status,
+    error,
+    refetch,
+    isFetching,
+  } = useUserQuery(debouncedSearchTerm);
 
   /**
    * Encapsulated Retry Logic
    */
   const handleRetry = () => {
-    log.redux("Facade: Triggering Retry Strategy");
-    const currentTerm = debouncedSearchTerm;
-    if (searchTerm === currentTerm) {
-      dispatch(fetchUsers(currentTerm));
-    } else {
-      setSearchTerm(currentTerm);
-    }
+    log.flow("Facade: Triggering Retry via React Query");
+    refetch();
   };
 
   // Exposed API: The component doesn't care HOW this works internally
@@ -47,9 +47,9 @@ export const useUserSearchFacade = () => {
     status,
     error,
     handleRetry,
-    isLoading: status === "loading" || status === "idle",
-    isError: status === "failed",
-    isSuccess: status === "succeeded" && users?.length > 0,
-    isEmpty: status === "succeeded" && users?.length === 0
+    isLoading: status === "pending" || isFetching,
+    isError: status === "error",
+    isSuccess: status === "success" && users?.length > 0,
+    isEmpty: status === "success" && users?.length === 0,
   };
 };

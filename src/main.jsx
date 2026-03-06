@@ -17,9 +17,22 @@
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { store } from "./app/store";
 import App from "./App.jsx";
 import "./index.css";
+
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 10, // 10 minutes
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 console.log("[ENTRY] main.jsx: Application starting...");
 
@@ -32,9 +45,11 @@ console.log("[ENTRY] main.jsx: Application starting...");
  * BrowserRouter enables client-side routing with a basename configured for GitHub Pages deployment.
  */
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <BrowserRouter basename="/myprojectapi01">
-      <App />
-    </BrowserRouter>
-  </Provider>
+  <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
+      <BrowserRouter basename="/myprojectapi01">
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </QueryClientProvider>,
 );

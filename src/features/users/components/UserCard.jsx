@@ -1,35 +1,24 @@
 /**
- * @file User Card Component (v4 Semantic Refactor)
+ * @file User Card Component (Minimalist Refactor)
  */
 
 import { useRef } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
-import { FaArrowRight } from "react-icons/fa";
 import useIntersectionObserver from "@/hooks/useIntersectionObserver";
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: "easeOut" },
-  },
-};
 
 /**
  * Sub-component: Avatar
  */
 const UserAvatar = ({ url, login }) => (
-  <div className="relative p-6 md:p-8 flex flex-col items-center">
-    <div className="absolute top-8 left-1/2 -translate-x-1/2 w-24 h-24 bg-brand-500/20 rounded-full blur-2xl"></div>
+  <div className="pt-6 pb-4 flex flex-col items-center">
     <motion.img
       layoutId={`avatar-${login}`}
       src={url}
       alt={`Avatar de ${login}`}
       loading="lazy"
-      className="relative w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border-4 border-app-surface shadow-md bg-app-surface z-10"
+      className="w-20 h-20 rounded-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-300"
     />
   </div>
 );
@@ -43,12 +32,12 @@ UserAvatar.propTypes = {
  * Sub-component: Info/Header
  */
 const UserHeader = ({ login }) => (
-  <div className="px-6 md:px-8 pb-4 text-center">
-    <h3 className="text-xl font-bold text-app-text truncate w-full tracking-tight">
+  <div className="px-6 pb-6 text-center space-y-0.5">
+    <h3 className="text-lg font-semibold text-app-text truncate tracking-tight">
       {login}
     </h3>
-    <p className="mt-1 text-sm font-semibold text-app-accent tracking-wide">
-      @{login}
+    <p className="text-xs font-medium text-app-muted tracking-normal">
+      github.com/{login}
     </p>
   </div>
 );
@@ -61,14 +50,10 @@ UserHeader.propTypes = {
  * Sub-component: Footer Action
  */
 const UserFooter = ({ login }) => (
-  <div className="p-6 md:p-8 pt-0 mt-auto w-full">
-    <Link to={`/user/${login}`} className="w-full block">
-      <button
-        className="btn-primary w-full gap-x-2"
-        aria-label={`Ver perfil de ${login}`}
-      >
+  <div className="px-6 pb-6 pt-2 mt-auto w-full">
+    <Link to={`/user/${login}`} className="w-full">
+      <button className="btn-action w-full !rounded-md text-sm py-2">
         Ver Perfil
-        <FaArrowRight size={14} className="text-app-accent" />
       </button>
     </Link>
   </div>
@@ -88,19 +73,18 @@ const UserCard = ({ children }) => {
   return (
     <div
       ref={cardRef}
-      className="h-full w-full max-w-[300px] sm:max-w-none mx-auto min-h-[320px]"
+      className="h-full w-full max-w-[280px] sm:max-w-none mx-auto min-h-[300px]"
     >
       {isVisible ? (
         <motion.div
-          variants={cardVariants}
-          initial="hidden"
-          animate="visible"
-          className="glass-card flex flex-col h-full w-full overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="border border-app-border rounded-lg bg-app-surface shadow-sm flex flex-col h-full w-full overflow-hidden hover:border-app-accent/30 transition-colors"
         >
           {children}
         </motion.div>
       ) : (
-        <div className="h-full w-full rounded-2xl bg-app-surface/50 animate-pulse border border-app-border" />
+        <div className="h-full w-full rounded-lg bg-app-surface/50 border border-app-border" />
       )}
     </div>
   );

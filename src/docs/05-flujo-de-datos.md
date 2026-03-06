@@ -1,45 +1,46 @@
-# 🔄 Flujo de Datos y Estado (Senior Protocol)
+# 🔄 Flujo de Datos y Estado (Senior Protocol v3)
 
 ## 1. Single Source of Truth
-El estado de la aplicación reside en el **Redux Store**, organizado mediante **Slices** de Redux Toolkit.
 
-## 2. El Ciclo de Datos (Master's Level Flow)
+La aplicación divide su estado en dos categorías críticas:
 
-1.  **Activación:** El usuario escribe en el buscador. El `useUserSearchFacade` detecta el cambio (con debouncing).
-2.  **Transición:** Se usa `useTransition` de React para mantener el input fluido mientras se procesa la búsqueda.
-3.  **Acción:** Se dispara el Thunk `fetchUsers`.
-4.  **Normalización:** El thunk recibe datos crudos, los pasa por el **Adaptador** y guarda solo el modelo estandarizado en el Store.
-5.  **Derivación (Selectors):** Los componentes no leen el Store directamente; usan `createSelector` para derivar estados como `selectIsUsersEmpty`.
-6.  **Renderizado:** La UI recibe los datos refinados y los anima mediante **Motion v12**.
+- **Server State:** Gestionado por **TanStack Query (React Query)**. Es el único responsable de la sincronización con la API de GitHub.
+- **UI/Global State:** Gestionado por hooks personalizados (`useTheme`) o Redux (para configuraciones globales persistentes).
 
----
+## 2. El Ciclo de Datos (React Query Flow)
 
-## 3. Optimización de Performance (Vercel Standards)
-
-### Selectores Memoizados (`reselect`)
-Hemos implementado selectores que evitan que un componente se re-renderice si la parte del estado que consume no ha cambiado.
-
-```javascript
-// Ejemplo de Selector Senior
-export const selectIsUsersEmpty = createSelector(
-  [selectAllUsers, selectUsersStatus],
-  (users, status) => status === "succeeded" && users.length === 0
-);
-```
-
-### Abort Signals
-Cada petición HTTP está atada a un `AbortController`. Si el usuario cambia la búsqueda antes de que termine la petición anterior, esta se cancela automáticamente para liberar ancho de banda.
+1.  **Activación:** El usuario escribe en el buscador. El `useUserSearchFacade` detecta el cambio.
+2.  **Debouncing:** El hook `useDebouncedSearch` espera 500ms antes de actualizar el `debouncedSearchTerm`.
+3.  **Evaluación de Caché:** React Query verifica si ya existen datos para esa `queryKey: ["users", searchTerm]`.
+4.  **Fetching (si es necesario):** Se dispara la petición a la API de GitHub a través del `userService`.
+5.  **Normalización:** Los datos crudos pasan por el **userAdapter** antes de ser inyectados en la caché de React Query.
+6.  **Sincronización:** Los componentes suscritos (`UserList`) se re-renderizan automáticamente con los nuevos datos.
+7.  **Renderizado:** La UI aplica el diseño minimalista y animaciones suaves de entrada.
 
 ---
 
-## 4. Estructura del Store
+## 3. Optimización de Performance (Senior Standards)
+
+### Caché Persistente (`staleTime`)
+
+Hemos configurado un `staleTime` de 5 minutos. Esto significa que si el usuario busca "octocat", navega al detalle y luego vuelve a buscar "octocat", los datos aparecerán instantáneamente sin peticiones de red.
+
+### Abort Signals Automáticos
+
+React Query provee un `signal` a la función de fetch. Si el usuario sigue escribiendo y cambia el término de búsqueda, la petición anterior de red se **aborta automáticamente**, ahorrando ancho de banda y evitando condiciones de carrera (Race Conditions).
+
+### Minimalismo en el DOM
+
+El uso de `content-visibility: auto` y un número reducido de nodos por tarjeta garantiza que el scroll sea fluido incluso con cientos de resultados.
+
+---
+
+## 4. Estructura del Caché (React Query)
 
 ```javascript
-store: {
-  users: {
-    users: Array<UserProfile>, // Modelos adaptados
-    isLoading: 'idle' | 'loading' | 'succeeded' | 'failed',
-    error: { message: string, status?: number }
-  }
+queryCache: {
+  ["users", ""]: [ ...adaptados ],
+  ["users", "octocat"]: [ ...adaptados ],
+  ["user", "octocat"]: { ...perfil_adaptado }
 }
 ```

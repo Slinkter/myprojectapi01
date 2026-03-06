@@ -1,48 +1,33 @@
 /**
  * @file Error Display Component
- * @description
- * Error state component that displays error messages with retry functionality.
+ * @description Standardized Error state with new Design System.
  */
 
 import PropTypes from "prop-types";
+import { motion } from "motion/react";
 
-/**
- * Error Display Component
- *
- * @component
- * @description
- * Displays error messages in a centered layout with a retry button.
- * Used when API requests fail or other errors occur.
- *
- * @param {Object} props - Component props
- * @param {string} props.message - Error message to display
- * @param {Function} props.onRetry - Callback function to retry the failed operation
- *
- * @returns {JSX.Element} Error message with retry button
- *
- * @example
- * <ErrorDisplay
- *   message="Failed to fetch users"
- *   onRetry={handleRetry}
- * />
- */
 const ErrorDisplay = ({ message, onRetry }) => (
-  <div className="min-h-dvh flex flex-col justify-center items-center text-center p-8 gap-4">
-    <h3 className="text-center text-3xl text-red-500 font-heading">
-      {message}
-    </h3>
+  <motion.div
+    initial={{ opacity: 0, scale: 0.95 }}
+    animate={{ opacity: 1, scale: 1 }}
+    className="flex flex-col justify-center items-center text-center p-12 gap-6 glass-card-pro border-red-500/20 max-w-2xl mx-auto mt-10"
+  >
+    <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 text-3xl font-bold">
+      !
+    </div>
+    <div className="space-y-2">
+      <h3 className="text-3xl font-black text-app-text">Ops! Algo salió mal</h3>
+      <p className="text-red-500 font-medium text-lg">{message}</p>
+    </div>
     <button
       onClick={onRetry}
-      className="mt-4 px-6 py-2 bg-blue-500 hover:bg-blue-600 outline-none text-white rounded-lg transition-colors duration-200 cursor-pointer"
+      className="btn-action !bg-red-500 !shadow-red-500/20"
     >
-      Reintentar
+      Intentar de nuevo
     </button>
-  </div>
+  </motion.div>
 );
 
-/**
- * PropTypes validation
- */
 ErrorDisplay.propTypes = {
   message: PropTypes.string.isRequired,
   onRetry: PropTypes.func.isRequired,

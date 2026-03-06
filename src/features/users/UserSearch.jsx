@@ -21,8 +21,8 @@ import NotFound from "@/components/layout/NotFound";
 
 /**
  * User Search Component (Facade Pattern Refactor)
- * 
- * Now this component only cares about WHAT to display, 
+ *
+ * Now this component only cares about WHAT to display,
  * not HOW the data is debounced or fetched.
  */
 const UserSearch = () => {
@@ -42,7 +42,7 @@ const UserSearch = () => {
     isLoading,
     isError,
     isSuccess,
-    isEmpty
+    isEmpty,
   } = useUserSearchFacade();
 
   log.state("Facade Output", { usersCount: users?.length, status });
@@ -54,14 +54,15 @@ const UserSearch = () => {
    */
   const renderContent = () => {
     if (isLoading) return <SkeletonGrid />;
-    
+
     if (isError) {
-      if (error && error.status === 403) return <NotFound searchTerm={debouncedSearchTerm} />;
+      if (error && error.status === 403)
+        return <NotFound searchTerm={debouncedSearchTerm} />;
       return <ErrorDisplay message={error?.message} onRetry={handleRetry} />;
     }
 
     if (isSuccess) return <UserList users={users} />;
-    
+
     if (isEmpty) return <NotFound searchTerm={debouncedSearchTerm} />;
 
     return null;
@@ -70,7 +71,7 @@ const UserSearch = () => {
   return (
     <>
       <PageHeader
-        isSearching={status === "loading"}
+        isSearching={isLoading}
         searchTerm={searchTerm}
         handleSearch={(e) => setSearchTerm(e.target.value)}
       />

@@ -26,16 +26,16 @@ class ErrorBoundary extends React.Component {
     if (this.state.hasError) {
       // You can render any custom fallback UI
       return (
-        <div className="p-10 text-center bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 rounded-3xl my-10">
-          <h2 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">
+        <div className="p-10 text-center bg-app-surface border border-red-500/20 rounded-xl my-10 max-w-lg mx-auto">
+          <h2 className="text-2xl font-bold text-red-500 mb-2">
             ¡Ops! Algo salió mal.
           </h2>
-          <p className="text-red-500/80 dark:text-red-400/60 mb-6">
+          <p className="text-app-muted mb-6">
             Ha ocurrido un error inesperado en la interfaz.
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="px-6 py-2 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors"
+            className="px-6 py-2.5 bg-red-500 text-white rounded-lg font-medium hover:opacity-90 transition-opacity"
           >
             Recargar aplicación
           </button>

@@ -8,12 +8,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react(), tailwindcss()],
-  base: "https://Slinkter.github.io/myprojectapi01",
+  // Si usas 'pnpm run build' (mode production), usa la ruta de GitHub
+  // Si usas 'pnpm run dev' o cualquier otro, usa "/"
+  // base: mode === "production" ? "/myprojectapi01/" : "/",
+  base: "/myprojectapi01/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-});
+}));
