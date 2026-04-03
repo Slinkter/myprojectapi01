@@ -6,7 +6,7 @@ import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion, animate } from "motion/react";
 import PropTypes from "prop-types";
-import { ArrowLeft, Github, MapPin, Link as LinkIcon } from "lucide-react";
+import { ArrowLeft, Globe, MapPin, Link as LinkIcon } from "lucide-react";
 import UserDetailSkeleton from "@/features/user-detail/components/UserDetailSkeleton";
 import { useUserDetailQuery } from "@/features/user-detail/hooks/useUserDetailQuery";
 import { cn } from "@/lib/utils";
@@ -149,7 +149,7 @@ const UserDetail = () => {
           rel="noopener noreferrer"
           className="flex items-center gap-2 hover:text-app-accent transition-colors"
         >
-          <Github size={16} className="opacity-80" /> GitHub Profile
+          <Globe size={16} className="opacity-80" /> GitHub Profile
         </a>
       </footer>
     </motion.div>
