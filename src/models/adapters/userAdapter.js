@@ -1,9 +1,11 @@
+import { GitHubUserSchema } from "../types/user";
+
 /**
  * @file User Adapter
  * @description
  * Implements the ADAPTER PATTERN (GoF Structural).
- * Transforms raw GitHub API data into a standardized Application Model.
- * This protects the UI from changes in the external API structure.
+ * Transforms validated GitHub API data into a standardized Application Model.
+ * Now uses ZOD for runtime schema validation.
  */
 
 /** @typedef {import('../types/user').UserProfile} UserProfile */
@@ -13,26 +15,28 @@
  *
  * @param {Object} rawUser - The data exactly as it comes from GitHub
  * @returns {UserProfile} Standardized object for our application
- * @example
- * const user = userAdapter(apiResponse);
+ * @throws {import('zod').ZodError} If rawUser does not match the GitHubUserSchema
  */
 export const userAdapter = (rawUser) => {
+  // 1. Validate the input data using Zod
+  const data = GitHubUserSchema.parse(rawUser);
 
+  // 2. Map to internal domain model
   return {
-    id: rawUser.id,
-    username: rawUser.login, // Mapping 'login' -> 'username'
-    name: rawUser.name || rawUser.login,
-    photo: rawUser.avatar_url, // Mapping 'avatar_url' -> 'photo'
-    profileUrl: rawUser.html_url, // Mapping 'html_url' -> 'profileUrl'
-    type: rawUser.type || "User",
-    bio: rawUser.bio || "",
-    repos: rawUser.public_repos || 0,
-    followers: rawUser.followers || 0,
-    following: rawUser.following || 0,
-    gists: rawUser.public_gists || 0,
-    location: rawUser.location || "",
-    website: rawUser.blog || "",
-    origin: "github" // Metadata to know the source
+    id: data.id,
+    username: data.login,
+    name: data.name || data.login,
+    photo: data.avatar_url,
+    profileUrl: data.html_url,
+    type: data.type,
+    bio: data.bio || "",
+    repos: data.public_repos,
+    followers: data.followers,
+    following: data.following,
+    gists: data.public_gists,
+    location: data.location || "",
+    website: data.blog || "",
+    origin: "github",
   };
 };
 
