@@ -11,36 +11,9 @@
 
 import { usersCollectionAdapter, userAdapter } from "@/models/adapters/userAdapter";
 import { API_BASE_URL } from "@/app/config";
+import { ApiError } from "@/models/errors/ApiError";
 
-/**
- * Custom error class for API-related errors
- *
- * @class ApiError
- * @extends Error
- * @description
- * Provides structured error information including HTTP status codes.
- * Used to differentiate API errors from generic JavaScript errors.
- *
- * @property {string} message - Error message
- * @property {number} status - HTTP status code
- * @property {string} name - Error name (always "ApiError")
- *
- * @example
- * throw new ApiError('Not Found', 404);
- */
-class ApiError extends Error {
-  /**
-   * Creates an ApiError instance
-   *
-   * @param {string} message - Error message
-   * @param {number} status - HTTP status code
-   */
-  constructor(message, status = 500) {
-    super(message);
-    this.status = status;
-    this.name = "ApiError";
-  }
-}
+/** @typedef {import('@/models/types/user').UserProfile} UserProfile */
 
 /**
  * Fetches users from the GitHub API
@@ -48,7 +21,19 @@ class ApiError extends Error {
  * @async
  * @function fetchUsersAPI
  * @param {string} [searchTerm=""] - Search term to filter users. If empty, fetches default user list
- * @returns {Promise<Array<Object>>} Array of standardized user objects
+ * @param {AbortSignal} [signal] - AbortSignal for the fetch request
+ * @returns {Promise<UserProfile[]>} Array of standardized user objects
+ * @throws {ApiError} When the API response is not OK
+ * 
+ * @example
+ * try {
+ *   const users = await fetchUsersAPI("octocat");
+ *   console.log(users);
+ * } catch (error) {
+ *   if (error instanceof ApiError) {
+ *     console.error(`API Error ${error.status}: ${error.message}`);
+ *   }
+ * }
  */
 export const fetchUsersAPI = async (searchTerm = "", signal) => {
   const url = searchTerm
@@ -87,7 +72,12 @@ export const fetchUsersAPI = async (searchTerm = "", signal) => {
  * @async
  * @function fetchUserDetailAPI
  * @param {string} login - GitHub username
- * @returns {Promise<Object>} Standardized user object
+ * @param {AbortSignal} [signal] - AbortSignal for the fetch request
+ * @returns {Promise<UserProfile>} Standardized user object
+ * @throws {ApiError} When the user is not found or API fails
+ * 
+ * @example
+ * const user = await fetchUserDetailAPI("octocat");
  */
 export const fetchUserDetailAPI = async (login, signal) => {
   const url = `${API_BASE_URL}/users/${login}`;

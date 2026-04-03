@@ -8,7 +8,6 @@
  * - Retry functionality for failed requests
  */
 
-import { useRef } from "react";
 import { log } from "@/app/logger";
 import { useUserSearchFacade } from "./hooks/useUserSearchFacade";
 
@@ -20,16 +19,45 @@ import UserList from "./components/UserList";
 import NotFound from "@/components/layout/NotFound";
 
 /**
+ * Search Results Component
+ * Handles the conditional rendering of search states.
+ */
+const SearchResults = ({
+  isLoading,
+  isError,
+  error,
+  isSuccess,
+  isEmpty,
+  users,
+  debouncedSearchTerm,
+  handleRetry,
+}) => {
+  // 1. Loading State
+  if (isLoading) return <SkeletonGrid />;
+
+  // 2. Error State (with specific handling for 403 Rate Limit)
+  if (isError) {
+    return error?.status === 403 ? (
+      <NotFound searchTerm={debouncedSearchTerm} />
+    ) : (
+      <ErrorDisplay message={error?.message} onRetry={handleRetry} />
+    );
+  }
+
+  // 3. Success State (Empty vs Data)
+  if (isEmpty) return <NotFound searchTerm={debouncedSearchTerm} />;
+  if (isSuccess) return <UserList users={users} />;
+
+  return null;
+};
+
+/**
  * User Search Component (Facade Pattern Refactor)
  *
  * Now this component only cares about WHAT to display,
  * not HOW the data is debounced or fetched.
  */
 const UserSearch = () => {
-  const renderCount = useRef(1);
-  log.render("UserSearch (Facade)", renderCount.current);
-  renderCount.current++;
-
   // Everything extracted from the Facade
   const {
     searchTerm,
@@ -49,25 +77,6 @@ const UserSearch = () => {
   if (isLoading) log.flow("loading");
   if (isSuccess) log.flow("success");
 
-  /**
-   * Helper function for UI state logic
-   */
-  const renderContent = () => {
-    if (isLoading) return <SkeletonGrid />;
-
-    if (isError) {
-      if (error && error.status === 403)
-        return <NotFound searchTerm={debouncedSearchTerm} />;
-      return <ErrorDisplay message={error?.message} onRetry={handleRetry} />;
-    }
-
-    if (isSuccess) return <UserList users={users} />;
-
-    if (isEmpty) return <NotFound searchTerm={debouncedSearchTerm} />;
-
-    return null;
-  };
-
   return (
     <>
       <PageHeader
@@ -75,7 +84,16 @@ const UserSearch = () => {
         searchTerm={searchTerm}
         handleSearch={(e) => setSearchTerm(e.target.value)}
       />
-      {renderContent()}
+      <SearchResults
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
+        isSuccess={isSuccess}
+        isEmpty={isEmpty}
+        users={users}
+        debouncedSearchTerm={debouncedSearchTerm}
+        handleRetry={handleRetry}
+      />
     </>
   );
 };

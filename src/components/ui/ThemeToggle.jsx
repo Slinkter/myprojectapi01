@@ -10,13 +10,13 @@ export const ThemeToggle = ({ theme, toggleTheme }) => {
     <div className="fixed top-6 right-6 z-[100]">
       <button
         onClick={toggleTheme}
-        className="w-10 h-10 border border-app-border rounded-full flex items-center justify-center bg-app-surface text-app-text hover:bg-app-accent hover:text-white transition-all cursor-pointer"
+        className="w-10 h-10 border border-app-border rounded-full flex items-center justify-center bg-app-surface text-app-text hover:bg-app-text/5 active:scale-90 transition-all duration-200 cursor-pointer shadow-sm"
         aria-label="Alternar tema"
       >
         {theme === "dark" ? (
-          <MdDarkMode className="w-5 h-5" />
+          <MdDarkMode className="w-5 h-5 text-yellow-400" />
         ) : (
-          <MdLightMode className="w-5 h-5" />
+          <MdLightMode className="w-5 h-5 text-orange-500" />
         )}
       </button>
     </div>

@@ -29,8 +29,8 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
         </p>
       </div>
 
-      <div className="w-full max-w-xl relative">
-        <div className="relative border border-app-border rounded-lg flex items-center px-4 py-3 gap-3 bg-app-surface shadow-sm focus-within:border-app-accent transition-colors">
+      <div className="w-full max-w-xl relative group">
+        <div className="relative border border-app-border rounded-lg flex items-center px-4 py-3 gap-3 bg-app-surface shadow-sm focus-within:ring-2 focus-within:ring-app-accent/20 focus-within:border-app-accent/40 transition-all duration-300">
           {isSearching ? (
             <Spinner className="text-app-accent text-lg" />
           ) : (

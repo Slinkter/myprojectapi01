@@ -5,7 +5,7 @@
  * Manages theme state and provides navigation between different views.
  */
 import { Routes, Route } from "react-router-dom";
-import { useRef, Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 import { useTheme } from "@/hooks/useTheme.js";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { log } from "@/app/logger";
@@ -20,10 +20,6 @@ const UserDetail = lazy(() => import("@/features/user-detail/UserDetail.jsx"));
  * Main Application Component (Resilience Refactor)
  */
 const App = () => {
-  const renderCount = useRef(1);
-  log.render("App", renderCount.current);
-  renderCount.current++;
-
   // Hook for managing the theme (light/dark mode) with localStorage persistence
   const [theme, toggleTheme] = useTheme();
 

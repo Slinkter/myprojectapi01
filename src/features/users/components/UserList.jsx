@@ -29,8 +29,7 @@ const UserList = ({ users }) => {
         animate="visible"
         exit="exit"
         layout
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8"
-        style={{ contentVisibility: "auto" }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 pt-2 -mt-2"
       >
         <AnimatePresence mode="popLayout">
           {users.map((user) => (
@@ -41,7 +40,7 @@ const UserList = ({ users }) => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
             >
-              <ResultFactory data={user} />
+              <ResultFactory data={user} variant="glass" />
             </motion.div>
           ))}
         </AnimatePresence>

@@ -12,14 +12,16 @@ import { FaBuilding } from "react-icons/fa";
 /**
  * Specialized component for Organizations
  */
-const OrganizationCard = ({ org }) => (
-  <UserCard>
-    <UserCard.Avatar url={org.photo} login={org.username} />
-    <div className="bg-brand-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full absolute top-4 right-4 z-20 flex items-center gap-1">
-      <FaBuilding /> ORG
-    </div>
-    <UserCard.Header login={`${org.username} (Org)`} />
-    <UserCard.Footer login={org.username} />
+const OrganizationCard = ({ org, variant = "glass" }) => (
+  <UserCard variant={variant}>
+    <UserCard.Avatar url={org.photo} login={org.username} variant={variant} />
+    {variant !== "minimal" && (
+      <div className="bg-app-accent text-app-bg text-[10px] font-bold px-2 py-0.5 rounded-full absolute top-4 right-4 z-20 flex items-center gap-1">
+        <FaBuilding /> ORG
+      </div>
+    )}
+    <UserCard.Header login={`${org.username} (Org)`} variant={variant} />
+    <UserCard.Footer login={org.username} variant={variant} />
   </UserCard>
 );
 
@@ -28,27 +30,29 @@ OrganizationCard.propTypes = {
     photo: PropTypes.string,
     username: PropTypes.string,
   }).isRequired,
+  variant: PropTypes.string,
 };
 
 /**
  * Result Factory
  * 
  * @param {Object} props.data - The standardized data from the Adapter
+ * @param {string} [props.variant="glass"] - Visual variant for the card
  * @returns {JSX.Element} The appropriate component (UserCard or OrganizationCard)
  */
-const ResultFactory = ({ data }) => {
+const ResultFactory = ({ data, variant = "glass" }) => {
   // Logic to decide which "product" to create
   switch (data.type) {
     case "Organization":
-      return <OrganizationCard org={data} />;
+      return <OrganizationCard org={data} variant={variant} />;
     
     case "User":
     default:
       return (
-        <UserCard>
-          <UserCard.Avatar url={data.photo} login={data.username} />
-          <UserCard.Header login={data.username} />
-          <UserCard.Footer login={data.username} />
+        <UserCard variant={variant}>
+          <UserCard.Avatar url={data.photo} login={data.username} variant={variant} />
+          <UserCard.Header login={data.username} variant={variant} />
+          <UserCard.Footer login={data.username} variant={variant} />
         </UserCard>
       );
   }
@@ -60,6 +64,7 @@ ResultFactory.propTypes = {
     photo: PropTypes.string,
     username: PropTypes.string,
   }).isRequired,
+  variant: PropTypes.string,
 };
 
 export default ResultFactory;
