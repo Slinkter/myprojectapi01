@@ -6,7 +6,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { AnimatePresence, motion } from "motion/react";
-import UserCard from "./UserCard";
+import ResultFactory from "@/components/factories/ResultFactory";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -35,22 +35,13 @@ const UserList = ({ users }) => {
         <AnimatePresence mode="popLayout">
           {users.map((user) => (
             <motion.div
-              key={user.id} // Standardized 'id'
+              key={user.id}
               layout
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
             >
-              <UserCard>
-                {/* 
-                  DATA MODEL SYNC:
-                  'photo' instead of 'avatar_url'
-                  'username' instead of 'login'
-                */}
-                <UserCard.Avatar url={user.photo} login={user.username} />
-                <UserCard.Header login={user.username} />
-                <UserCard.Footer login={user.username} />
-              </UserCard>
+              <ResultFactory data={user} />
             </motion.div>
           ))}
         </AnimatePresence>

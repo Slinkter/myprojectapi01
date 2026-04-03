@@ -18,6 +18,9 @@ const UserAvatar = ({ url, login }) => (
       src={url}
       alt={`Avatar de ${login}`}
       loading="lazy"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
       className="w-20 h-20 rounded-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-300"
     />
   </div>

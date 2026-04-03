@@ -8,6 +8,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchUsersAPI } from "@/services/userService";
 import { log } from "@/app/logger";
+import { STALE_TIME, GC_TIME } from "@/app/config";
 
 export const useUserQuery = (searchTerm) => {
   return useQuery({
@@ -16,8 +17,8 @@ export const useUserQuery = (searchTerm) => {
       log.flow(`useUserQuery searching for: "${searchTerm}"`);
       return fetchUsersAPI(searchTerm, signal);
     },
-    staleTime: 1000 * 60 * 5, // 5 minutes (Cache)
-    gcTime: 1000 * 60 * 10, // 10 minutes (Garbage Collection)
+    staleTime: STALE_TIME,
+    gcTime: GC_TIME,
     retry: 1,
     refetchOnWindowFocus: false,
   });

@@ -8,6 +8,7 @@
 import { useDebouncedSearch } from "@/hooks/useDebouncedSearch.js";
 import { useUserQuery } from "./useUserQuery.js";
 import { log } from "@/app/logger";
+import { DEBOUNCE_DELAY } from "@/app/config";
 
 /**
  * Custom hook that acts as a Facade for the User Search feature.
@@ -15,10 +16,10 @@ import { log } from "@/app/logger";
  * @returns {Object} Clean API for the UserSearch component
  */
 export const useUserSearchFacade = () => {
-  // 1. Logic for Debounce - Increased to 500ms for stability
+  // 1. Logic for Debounce - Using centralized config
   const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebouncedSearch(
     "",
-    500,
+    DEBOUNCE_DELAY,
   );
 
   // 2. Logic for Data Fetching (React Query)

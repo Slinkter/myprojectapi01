@@ -8,6 +8,7 @@ import { motion, animate } from "motion/react";
 import PropTypes from "prop-types";
 import { FaArrowLeft, FaGithub, FaMapMarkerAlt, FaLink } from "react-icons/fa";
 import UserDetailSkeleton from "./components/UserDetailSkeleton";
+import { useUserDetailQuery } from "./hooks/useUserDetailQuery";
 
 /**
  * Animated Counter Component
@@ -33,39 +34,30 @@ AnimatedCounter.propTypes = {
 
 const UserDetail = () => {
   const { login } = useParams();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  
+  const { 
+    data: user, 
+    isLoading, 
+    isError, 
+    error 
+  } = useUserDetailQuery(login);
 
-  useEffect(() => {
-    const fetchUserDetail = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`https://api.github.com/users/${login}`);
-        if (!response.ok) throw new Error(`Usuario no encontrado`);
-        const data = await response.json();
-        setUser(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUserDetail();
-  }, [login]);
+  if (isLoading) return <UserDetailSkeleton />;
 
-  if (loading) return <UserDetailSkeleton />;
-
-  if (error) {
+  if (isError) {
     return (
       <div className="flex flex-col items-center py-20 gap-4">
-        <p className="text-red-500 font-medium">{error}</p>
+        <p className="text-red-500 font-medium">
+          {error?.message || "Usuario no encontrado"}
+        </p>
         <Link to="/" className="text-sm underline">
           Volver
         </Link>
       </div>
     );
   }
+
+  if (!user) return null;
 
   return (
     <motion.div
@@ -81,16 +73,16 @@ const UserDetail = () => {
 
       <section className="flex flex-col md:flex-row gap-8 items-start md:items-center">
         <motion.img
-          layoutId={`avatar-${user.login}`}
-          src={user.avatar_url}
-          alt={user.login}
+          layoutId={`avatar-${user.username}`}
+          src={user.photo}
+          alt={user.username}
           className="w-32 h-32 rounded-full border border-app-border grayscale-[0.1]"
         />
         <div className="space-y-2">
           <h2 className="text-3xl font-bold text-app-text tracking-tight">
-            {user.name || user.login}
+            {user.name}
           </h2>
-          <p className="text-lg text-app-accent font-medium">@{user.login}</p>
+          <p className="text-lg text-app-accent font-medium">@{user.username}</p>
           {user.bio && (
             <p className="text-app-muted text-base leading-relaxed max-w-xl">
               {user.bio}
@@ -101,10 +93,10 @@ const UserDetail = () => {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: "Repos", val: user.public_repos },
+          { label: "Repos", val: user.repos },
           { label: "Seguidores", val: user.followers },
           { label: "Siguiendo", val: user.following },
-          { label: "Gists", val: user.public_gists },
+          { label: "Gists", val: user.gists },
         ].map((stat, i) => (
           <div key={i} className="border border-app-border p-4 rounded-lg">
             <p className="text-2xl font-bold text-app-text">
@@ -123,10 +115,10 @@ const UserDetail = () => {
             <FaMapMarkerAlt size={14} className="opacity-50" /> {user.location}
           </div>
         )}
-        {user.blog && (
+        {user.website && (
           <a
             href={
-              user.blog.startsWith("http") ? user.blog : `https://${user.blog}`
+              user.website.startsWith("http") ? user.website : `https://${user.website}`
             }
             target="_blank"
             rel="noopener noreferrer"
@@ -136,7 +128,7 @@ const UserDetail = () => {
           </a>
         )}
         <a
-          href={user.html_url}
+          href={user.profileUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 hover:text-app-text transition-colors"
@@ -147,5 +139,7 @@ const UserDetail = () => {
     </motion.div>
   );
 };
+
+UserDetail.displayName = "UserDetail";
 
 export default UserDetail;
