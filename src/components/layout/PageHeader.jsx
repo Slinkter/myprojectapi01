@@ -5,11 +5,11 @@
 
 import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "motion/react";
-import { MdCancel } from "react-icons/md";
-import { FaSpinner, FaSearch } from "react-icons/fa";
+import { Search, XCircle, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const Spinner = ({ className }) => {
-  return <FaSpinner className={`animate-spin ${className}`} />;
+  return <Loader2 className={cn("animate-spin", className)} />;
 };
 
 Spinner.propTypes = {
@@ -30,11 +30,14 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
       </div>
 
       <div className="w-full max-w-xl relative group">
-        <div className="relative border border-app-border rounded-lg flex items-center px-4 py-3 gap-3 bg-app-surface shadow-sm focus-within:ring-2 focus-within:ring-app-accent/20 focus-within:border-app-accent/40 transition-all duration-300">
+        <div className={cn(
+          "relative border border-app-border rounded-lg flex items-center px-4 py-3 gap-3 bg-app-surface shadow-sm transition-all duration-300",
+          "focus-within:ring-2 focus-within:ring-app-accent/20 focus-within:border-app-accent/40"
+        )}>
           {isSearching ? (
             <Spinner className="text-app-accent text-lg" />
           ) : (
-            <FaSearch className="text-app-muted group-focus-within:text-app-accent transition-colors text-base" />
+            <Search className="text-app-muted group-focus-within:text-app-accent transition-colors text-base" />
           )}
 
           <input
@@ -54,7 +57,7 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
                 onClick={() => handleSearch({ target: { value: "" } })}
                 className="text-app-muted hover:text-app-text transition-colors cursor-pointer"
               >
-                <MdCancel size={20} />
+                <XCircle size={20} />
               </motion.button>
             )}
           </AnimatePresence>

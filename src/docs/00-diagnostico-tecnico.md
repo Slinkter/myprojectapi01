@@ -9,6 +9,7 @@ Este documento, originalmente creado para la fase forense, ha sido **completado 
 | Capa               | Tecnología Implementada              | Estatus                                                                           |
 | :----------------- | :----------------------------------- | :-------------------------------------------------------------------------------- |
 | **Core Framework** | React 18.3 & Vite 5.x                | **Mantenido**. Base sólida para concurrencia.                                     |
+| **Validación**     | Zod (v4)                             | **Novedad v3**. Seguridad en tiempo de ejecución para contratos de API.           |
 | **Server State**   | TanStack Query (React Query)         | **Novedad v3**. Reemplaza Thunks para una gestión de caché premium.               |
 | **UI Engine**      | Tailwind CSS v4 Puro / Minimalist v3 | **Migrado**. Eliminado Vendor Lock-in. Diseño basado en variables CSS semánticas. |
 | **Animaciones**    | Motion (v12)                         | **Optimizado**. Micro-interacciones sutiles aceleradas por hardware.              |
@@ -19,8 +20,13 @@ Este documento, originalmente creado para la fase forense, ha sido **completado 
 Se han eliminado satisfactoriamente:
 
 1. `@material-tailwind/react` (Eliminación completa de la dependencia).
-2. Lógicas de Thunks redundantes para búsqueda.
+2. Lógicas de Thunks redundantes y **código muerto de Redux Toolkit** (eliminación de `react-redux` y `@reduxjs/toolkit`).
 3. Funciones, variables e iconos huerfanos detectados por `pnpm lint`.
+
+## 🩺 Métricas de Salud Técnica
+
+- **React Doctor Score:** **100/100**. Cero violaciones de patrones React, optimización de hooks y limpieza de efectos.
+- **Runtime Safety:** Implementación de esquemas Zod en la capa de adaptadores, mitigando corrupción de datos desde la API externa.
 
 ## 🏛️ Topología del Estado Final (React Query + Facade)
 

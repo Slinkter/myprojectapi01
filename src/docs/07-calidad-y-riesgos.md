@@ -13,9 +13,10 @@ El Master Prompt y la refactorización arquitectónica (Tailwind v4 / Feature-Sl
 | Riesgo                             | Impacto | Estrategia de Mitigación Implementada                                                                                                 |
 | ---------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | **API Limit (403 Github)**         | High    | Consumo directo por IP desprotegida (Sin Serverless proxy). Se aplicó Debounce extremo a `handleSearch` minimizando Renders inútiles. |
+| **Corrupción de Datos (API Externa)**| Medium  | **Mitigado via Zod.** Los adaptadores validan el esquema en tiempo de ejecución, asegurando que la UI solo reciba datos íntegros.      |
 | **Pérdida de Configuración Theme** | Low     | El componente agnóstico `ThemeToggle` ataca directo al LocalStorage y HTML root `class="dark"`.                                       |
-| **Bundle Bloat (Peso Inicial JS)** | Medium  | La purga de librerías extrañas de UI y la filosofía Utility-first bajó drásticamente el Payload de carga.                             |
-| **Complejidad de Mantenimiento**   | Low     | Reflejado en esta alta densidad documental y diagramas ASCII/Mermaid para Onboarding instantáneo al nuevo desarrollador.              |
+| **Bundle Bloat (Peso Inicial JS)** | Medium  | La purga de librerías extrañas de UI (Material Tailwind) y Redux Toolkit bajó drásticamente el Payload de carga.                      |
+| **Complejidad de Mantenimiento**   | Low     | Reflejado en esta alta densidad documental y el **React Doctor Score (100/100)** que garantiza código limpio y eficiente.             |
 
 ## 🧪 Estrategia de Testing (A Nivel Conceptual)
 

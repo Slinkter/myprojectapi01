@@ -9,13 +9,13 @@
  */
 
 import { log } from "@/app/logger";
-import { useUserSearchFacade } from "./hooks/useUserSearchFacade";
+import { useUserSearchFacade } from "@/features/users/hooks/useUserSearchFacade";
 
 // UI Components
 import PageHeader from "@/components/layout/PageHeader";
 import ErrorDisplay from "@/components/layout/ErrorDisplay";
-import SkeletonGrid from "./components/SkeletonGrid";
-import UserList from "./components/UserList";
+import SkeletonGrid from "@/features/users/components/SkeletonGrid";
+import UserList from "@/features/users/components/UserList";
 import NotFound from "@/components/layout/NotFound";
 
 /**

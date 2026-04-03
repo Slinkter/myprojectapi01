@@ -1,73 +1,61 @@
-# 🏗️ Arquitectura de Software: API - GitHub Users
+# 🏗️ Software Architecture: The Senior Core
 
-## 1. Visión General
+## 1. Architectural Strategy (FSD-lite)
 
-Este sistema utiliza una arquitectura **Feature-Sliced Design (FSD)** adaptada, centrada en el desacoplamiento entre la infraestructura (APIs externas) y la lógica de dominio (la Aplicación).
-
-## 2. Patrones de Diseño Aplicados (The Senior Core)
-
-### A. Pattern: Adapter (Modelo de Datos)
-
-El sistema implementa un **Adapter Pattern** en la capa `src/models/adapters/`. Su propósito es proteger la UI de los cambios en los esquemas de la API de GitHub.
-
-- **Input:** Raw Data de la API (ej. `avatar_url`, `login`).
-- **Output:** Standardized Model `UserProfile` (ej. `photo`, `username`).
-- **Beneficio:** Si la API cambia su estructura, solo se modifica el adaptador, no los componentes.
-
-### B. Pattern: Facade (Interfaz de Feature)
-
-Cada módulo en `src/features/` expone un **Hook de Fachada** (`useUserSearchFacade`).
-
-- **Propósito:** Encapsular la complejidad de **TanStack Query (React Query)** y la lógica de debouncing.
-- **Beneficio:** Los componentes de presentación (`UserSearch.jsx`) son "limpios" y solo consumen propiedades booleanas (`isLoading`, `isSuccess`) y handlers simples.
-
-### C. Patrón Smart/Presentational (Container/View)
-
-- **Smart Hooks (Hooks de Capa):** Gestionan el estado asíncrono y la lógica de negocio.
-- **Dumb Components:** Reciben props y renderizan UI minimalista de alta gama.
+The system implements a refined **Feature-Sliced Design (FSD)**, prioritizing strict boundaries between infrastructure and domain. This architecture ensures the application remains resilient to external changes (API shifts) and maintainable over time.
 
 ---
 
-## 3. Flujo Arquitectónico ASCII
+## 2. Structural Patterns (Integrity & Decoupling)
 
-```
-[ API EXTERNA: GitHub ]
-           |
-           v
-[ CAPA SERVICIO: userService.js ] -- (HTTP/Fetch)
-           |
-           v
-[ CAPA ADAPTADOR: userAdapter.js ] -- (Normalización de Datos)
-           |
-           v
-[ SERVER STATE: TanStack Query ] -- (Caché e Invalación)
-           |
-           v
-[ FACADE HOOK: useUserSearchFacade ] -- (Abstracción de Lógica)
-           |
-           v
-[ COMPONENTE UI: UserSearch.jsx ] -- (Renderizado Minimalista)
+### A. Pattern: Adapter + Zod (The Integrity Gate)
+
+The **Adapter Pattern** (`src/models/adapters/`) has been evolved with **Zod Integration**. It acts as a bidirectional protection layer for our internal domain.
+
+- **Data Validation:** Zod schemas (`GitHubUserSchema`) perform runtime type checking, ensuring "Zero-Trust" data intake.
+- **Normalization:** The Adapter transforms validated API payloads into a clean, application-optimized **Internal Model**.
+- **Fail-Fast:** Any API contract violation is caught immediately at the entry point, preventing state corruption in the UI.
+
+### B. Pattern: Facade (Encapsulation Layer)
+
+Features (`src/features/`) expose a **Facade Hook** (`useUserSearchFacade`).
+
+- **Internal Complexity:** Encapsulates TanStack Query state, debounce logic, and side effects.
+- **Public API:** The UI component only consumes semantic props (e.g., `results`, `isSearching`), remaining unaware of the underlying fetching mechanism.
+
+### C. Pattern: Factory (Result Handling)
+
+Centralized `ResultFactory` handles polymorphism in the search results (Loading, Empty, Error, Success), ensuring consistent layout management.
+
+---
+
+## 3. Data Flow Architecture (ASCII)
+
+```text
+[ INFRASTRUCTURE ] -- GitHub Public API (External Contract)
+         |
+         v
+[ SERVICES ] --------- HTTP/Fetch Layer (userService.js)
+         |
+         v
+[ INTEGRITY GATE ] --- ZOD SCHEMA + ADAPTER (The Transformation)
+         |             - Schema Enforcement (.parse())
+         |             - Domain Normalization
+         v
+[ APPLICATION ] ------ TANSTACK QUERY (Server State & Cache)
+         |
+         v
+[ FACADE HOOK ] ------ FEATURE INTERFACE (useUserSearchFacade)
+         |
+         v
+[ PRESENTATION ] ----- REACT UI (Feature Components)
 ```
 
 ---
 
-## 4. Estructura de Directorios
+## 4. Key Architectural Decisions (ADR)
 
-```
-src/
-├── app/          # Core: Configuración de Providers (QueryClient, Store) y Logs.
-├── components/   # UI: Botones, Toggles y Layouts agnósticos al dominio.
-├── features/     # Dominios: Lógica de negocio encapsulada por funcionalidad.
-├── hooks/        # Utilitarios: useDebounce, useTheme, etc.
-├── models/       # Dominio: Adaptadores y esquemas de datos.
-├── services/     # Infraestructura: Definiciones de API externas.
-└── docs/         # Ingeniería: Documentación técnica centralizada.
-```
-
-## 5. Decisiones Técnicas (The Whys)
-
-- **Vite:** Por su motor de desarrollo instantáneo y soporte de Lightning CSS.
-- **TanStack Query:** Reemplaza los Thunks tradicionales para una gestión superior del caché y estado del servidor.
-- **Minimalismo v3:** Reducción de ruido visual para priorizar la experiencia de usuario técnica.
-- **Tailwind v4:** Por su motor de temas nativo y reducción drástica de la configuración JS.
-- **Motion v12:** Por su gestión de animaciones por hardware y soporte de React 19.
+1.  **Zod over TypeScript Interfaces for Validation**: While TS provides build-time safety, Zod ensures **runtime safety** when dealing with untrusted external APIs.
+2.  **TanStack Query as State Manager**: Replaces Redux for server-state to reduce boilerplate and gain native caching/invalidation.
+3.  **High-Fidelity Logging**: A centralized logger (`src/app/logger.js`) provides visibility into the Adapter's transformation and the Query lifecycle.
+4.  **Zero-Configuration Tailwind v4**: Optimized for high-performance rendering and consistent design system enforcement without JS overhead.

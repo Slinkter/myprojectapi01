@@ -13,6 +13,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import useIntersectionObserver from "@/hooks/useIntersectionObserver";
+import { cn } from "@/lib/utils";
 
 /**
  * Variant Styles Mapping
@@ -31,7 +32,7 @@ const UserAvatar = ({ url, login, variant = "default" }) => {
   const isMinimal = variant === "minimal";
   
   return (
-    <div className={`flex flex-col items-center ${isMinimal ? "pt-0 pb-0" : "pt-6 pb-4"}`}>
+    <div className={cn("flex flex-col items-center", isMinimal ? "pt-0 pb-0" : "pt-6 pb-4")}>
       <motion.img
         layoutId={`avatar-${login}`}
         src={url}
@@ -40,9 +41,10 @@ const UserAvatar = ({ url, login, variant = "default" }) => {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className={`${
+        className={cn(
+          "rounded-full object-cover grayscale-[0.2] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500",
           isMinimal ? "w-12 h-12" : "w-20 h-20"
-        } rounded-full object-cover grayscale-[0.2] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500`}
+        )}
       />
     </div>
   );
@@ -61,7 +63,7 @@ const UserHeader = ({ login, variant = "default" }) => {
   const isMinimal = variant === "minimal";
 
   return (
-    <div className={`${isMinimal ? "px-0 pb-0 text-left" : "px-6 pb-6 text-center"} space-y-0.5 flex-1 min-w-0`}>
+    <div className={cn("space-y-0.5 flex-1 min-w-0", isMinimal ? "px-0 pb-0 text-left" : "px-6 pb-6 text-center")}>
       <h3 className="text-lg font-semibold text-app-text truncate tracking-tight group-hover:text-app-accent transition-colors">
         {login}
       </h3>
@@ -102,7 +104,7 @@ UserFooter.propTypes = {
 /**
  * Main UserCard Component
  */
-const UserCard = ({ children, variant = "default" }) => {
+const UserCard = ({ children, variant = "default", className }) => {
   const cardRef = useRef(null);
   const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 });
   const variantClass = VARIANTS[variant] || VARIANTS.default;
@@ -111,18 +113,22 @@ const UserCard = ({ children, variant = "default" }) => {
   return (
     <div
       ref={cardRef}
-      className={`h-full w-full mx-auto group ${
-        isMinimal ? "min-h-[80px]" : "min-h-[300px] max-w-[280px] sm:max-w-none"
-      }`}
+      className={cn(
+        "h-full w-full mx-auto group",
+        isMinimal ? "min-h-[80px]" : "min-h-[300px] max-w-[280px] sm:max-w-none",
+        className
+      )}
     >
       {isVisible ? (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           whileHover={variant === "minimal" ? {} : { y: -5 }}
-          className={`${variantClass} rounded-xl flex ${
+          className={cn(
+            variantClass,
+            "rounded-xl flex h-full w-full overflow-hidden transition-all duration-500",
             isMinimal ? "flex-row items-center gap-4 p-4" : "flex-col"
-          } h-full w-full overflow-hidden transition-all duration-500`}
+          )}
         >
           {isMinimal ? (
             <Link to={`/user/${children.props?.login || ""}`} className="flex items-center gap-4 w-full">
@@ -133,7 +139,7 @@ const UserCard = ({ children, variant = "default" }) => {
           )}
         </motion.div>
       ) : (
-        <div className={`h-full w-full rounded-xl bg-app-surface/30 border border-app-border/50`} />
+        <div className="h-full w-full rounded-xl bg-app-surface/30 border border-app-border/50" />
       )}
     </div>
   );
@@ -142,6 +148,7 @@ const UserCard = ({ children, variant = "default" }) => {
 UserCard.propTypes = {
   children: PropTypes.node.isRequired,
   variant: PropTypes.oneOf(["default", "glass", "minimal", "accent-glow"]),
+  className: PropTypes.string,
 };
 
 UserCard.Avatar = UserAvatar;

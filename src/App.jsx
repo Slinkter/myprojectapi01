@@ -6,6 +6,7 @@
  */
 import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
+import { Toaster } from "sonner";
 import { useTheme } from "@/hooks/useTheme.js";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { log } from "@/app/logger";
@@ -27,6 +28,7 @@ const App = () => {
 
   return (
     <main className="relative min-h-screen flex flex-col items-center py-12 pb-24 overflow-x-hidden">
+      <Toaster position="top-center" theme={theme} expand={false} richColors />
       <ThemeToggle toggleTheme={toggleTheme} theme={theme} />
 
       <div className="w-full max-w-screen-xl px-6 md:px-12">

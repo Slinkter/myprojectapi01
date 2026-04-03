@@ -2,7 +2,7 @@
  * @file Theme Toggle Component (Minimalist v4)
  */
 
-import { MdDarkMode, MdLightMode } from "react-icons/md";
+import { Moon, Sun } from "lucide-react";
 import PropTypes from "prop-types";
 
 export const ThemeToggle = ({ theme, toggleTheme }) => {
@@ -14,9 +14,9 @@ export const ThemeToggle = ({ theme, toggleTheme }) => {
         aria-label="Alternar tema"
       >
         {theme === "dark" ? (
-          <MdDarkMode className="w-5 h-5 text-yellow-400" />
+          <Moon className="w-5 h-5 text-yellow-400" />
         ) : (
-          <MdLightMode className="w-5 h-5 text-orange-500" />
+          <Sun className="w-5 h-5 text-orange-500" />
         )}
       </button>
     </div>

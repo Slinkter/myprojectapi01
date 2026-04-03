@@ -6,9 +6,10 @@ import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion, animate } from "motion/react";
 import PropTypes from "prop-types";
-import { FaArrowLeft, FaGithub, FaMapMarkerAlt, FaLink } from "react-icons/fa";
-import UserDetailSkeleton from "./components/UserDetailSkeleton";
-import { useUserDetailQuery } from "./hooks/useUserDetailQuery";
+import { ArrowLeft, Github, MapPin, Link as LinkIcon } from "lucide-react";
+import UserDetailSkeleton from "@/features/user-detail/components/UserDetailSkeleton";
+import { useUserDetailQuery } from "@/features/user-detail/hooks/useUserDetailQuery";
+import { cn } from "@/lib/utils";
 
 /**
  * Animated Counter Component
@@ -66,17 +67,24 @@ const UserDetail = () => {
       className="max-w-4xl mx-auto space-y-8 md:space-y-12 py-8 md:py-12 px-4"
     >
       <Link to="/" className="inline-block group">
-        <button className="flex items-center gap-2 text-app-muted group-hover:text-app-text transition-colors text-sm font-medium cursor-pointer active:scale-95">
-          <FaArrowLeft size={12} className="group-hover:-translate-x-1 transition-transform" /> Volver
+        <button className={cn(
+          "flex items-center gap-2 text-app-muted group-hover:text-app-text transition-colors text-sm font-medium cursor-pointer active:scale-95"
+        )}>
+          <ArrowLeft size={12} className="group-hover:-translate-x-1 transition-transform" /> Volver
         </button>
       </Link>
 
-      <section className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-center sm:items-start text-center sm:text-left">
+      <section className={cn(
+        "flex flex-col sm:flex-row gap-6 sm:gap-10 items-center sm:items-start text-center sm:text-left"
+      )}>
         <motion.img
           layoutId={`avatar-${user.username}`}
           src={user.photo}
           alt={`Avatar de ${user.username}`}
-          className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-2 border-app-border object-cover shadow-lg grayscale-[0.1] hover:grayscale-0 transition-all duration-500"
+          className={cn(
+            "w-32 h-32 sm:w-40 sm:h-40 rounded-full border-2 border-app-border object-cover shadow-lg transition-all duration-500",
+            "grayscale-[0.1] hover:grayscale-0"
+          )}
         />
         <div className="space-y-3 sm:pt-2">
           <h2 className="text-3xl sm:text-4xl font-bold text-app-text tracking-tight">
@@ -100,7 +108,10 @@ const UserDetail = () => {
         ].map((stat, i) => (
           <div 
             key={i} 
-            className="border border-app-border bg-app-surface p-5 sm:p-6 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col items-center sm:items-start"
+            className={cn(
+              "border border-app-border bg-app-surface p-5 sm:p-6 rounded-xl shadow-sm transition-all duration-300 flex flex-col items-center sm:items-start",
+              "hover:shadow-md hover:-translate-y-1"
+            )}
           >
             <p className="text-3xl font-bold text-app-text tracking-tight">
               <AnimatedCounter value={stat.val} />
@@ -112,10 +123,12 @@ const UserDetail = () => {
         ))}
       </div>
 
-      <footer className="flex flex-col sm:flex-row flex-wrap items-center sm:items-start justify-center sm:justify-start gap-x-10 gap-y-4 pt-8 text-sm font-medium text-app-muted border-t border-app-border">
+      <footer className={cn(
+        "flex flex-col sm:flex-row flex-wrap items-center sm:items-start justify-center sm:justify-start gap-x-10 gap-y-4 pt-8 text-sm font-medium text-app-muted border-t border-app-border"
+      )}>
         {user.location && (
           <div className="flex items-center gap-2">
-            <FaMapMarkerAlt size={16} className="text-app-accent opacity-80" /> {user.location}
+            <MapPin size={16} className="text-app-accent opacity-80" /> {user.location}
           </div>
         )}
         {user.website && (
@@ -127,7 +140,7 @@ const UserDetail = () => {
             rel="noopener noreferrer"
             className="flex items-center gap-2 hover:text-app-accent transition-colors"
           >
-            <FaLink size={16} className="opacity-80" /> Website
+            <LinkIcon size={16} className="opacity-80" /> Website
           </a>
         )}
         <a
@@ -136,7 +149,7 @@ const UserDetail = () => {
           rel="noopener noreferrer"
           className="flex items-center gap-2 hover:text-app-accent transition-colors"
         >
-          <FaGithub size={16} className="opacity-80" /> GitHub Profile
+          <Github size={16} className="opacity-80" /> GitHub Profile
         </a>
       </footer>
     </motion.div>

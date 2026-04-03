@@ -13,6 +13,23 @@ import { usersCollectionAdapter, userAdapter } from "@/models/adapters/userAdapt
 import { API_BASE_URL } from "@/app/config";
 import { ApiError } from "@/models/errors/ApiError";
 import { ZodError } from "zod";
+import { toast } from "sonner";
+
+/**
+ * Helper to show descriptive toasts for specific API errors
+ * @param {ApiError} error 
+ */
+const notifyError = (error) => {
+  if (error.status === 422) {
+    toast.error("Validation Error", {
+      description: "The data received from the API is invalid or malformed.",
+    });
+  } else if (error.status === 403) {
+    toast.error("Rate Limit Exceeded", {
+      description: "GitHub API rate limit reached. Please try again in a few minutes.",
+    });
+  }
+};
 
 /** @typedef {import('@/models/types/user').UserProfile} UserProfile */
 
@@ -45,10 +62,12 @@ export const fetchUsersAPI = async (searchTerm = "", signal) => {
     const response = await fetch(url, { signal });
 
     if (!response.ok) {
-      throw new ApiError(
+      const error = new ApiError(
         `HTTP error! status: ${response.status}`,
         response.status,
       );
+      notifyError(error);
+      throw error;
     }
 
     const data = await response.json();
@@ -62,7 +81,9 @@ export const fetchUsersAPI = async (searchTerm = "", signal) => {
 
     if (error instanceof ApiError) throw error;
     if (error instanceof ZodError) {
-      throw new ApiError(`Data Validation Error: ${error.message}`, 422);
+      const apiError = new ApiError(`Data Validation Error: ${error.message}`, 422);
+      notifyError(apiError);
+      throw apiError;
     }
     if (error.name === "AbortError") throw error;
 
@@ -90,10 +111,12 @@ export const fetchUserDetailAPI = async (login, signal) => {
     const response = await fetch(url, { signal });
 
     if (!response.ok) {
-      throw new ApiError(
+      const error = new ApiError(
         `User not found! status: ${response.status}`,
         response.status,
       );
+      notifyError(error);
+      throw error;
     }
 
     const rawUser = await response.json();
@@ -105,7 +128,9 @@ export const fetchUserDetailAPI = async (login, signal) => {
 
     if (error instanceof ApiError) throw error;
     if (error instanceof ZodError) {
-      throw new ApiError(`Data Validation Error: ${error.message}`, 422);
+      const apiError = new ApiError(`Data Validation Error: ${error.message}`, 422);
+      notifyError(apiError);
+      throw apiError;
     }
     if (error.name === "AbortError") throw error;
 

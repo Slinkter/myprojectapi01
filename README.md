@@ -5,6 +5,8 @@
 ![Tailwind Version](https://img.shields.io/badge/Tailwind-v4_Semantic-38bdf8)
 ![Motion Version](https://img.shields.io/badge/Motion-v12_Fluid-ff0055)
 ![Architecture](https://img.shields.io/badge/Patterns-Facade_|_Adapter_|_FSD-orange)
+![Validation](https://img.shields.io/badge/Validation-Zod_|_TypeSafe-3068b7)
+![Mocking](https://img.shields.io/badge/Mocking-MSW_|_Offline-ff6a00)
 
 > **Una aplicación de ingeniería de alto rendimiento para explorar la API de GitHub, diseñada bajo estándares de Vercel y principios de Arquitectura Limpia.**
 
@@ -18,16 +20,18 @@ Este proyecto no es solo una UI; es un sistema desacoplado siguiendo patrones de
 
 1.  **Adapter Pattern (GoF):** Normalización de datos de la API externa a un modelo de dominio propio (`UserProfile`), protegiendo la UI de cambios en GitHub.
 2.  **Facade Pattern:** Encapsulación de la lógica de Redux, Thunks y Hooks en una interfaz limpia (`useUserSearchFacade`) para los componentes de presentación.
-3.  **Concurrent Rendering:** Uso de `useTransition` de React 19 para priorizar la interactividad del usuario sobre el renderizado pesado de listas.
-4.  **Memoized Data Flow:** Tubería de datos optimizada con `createSelector` para evitar re-renders innecesarios.
+3.  **Validation Layer:** Esquemas de **Zod** para garantizar la integridad de los datos en tiempo de ejecución antes de que lleguen al dominio.
+4.  **Concurrent Rendering:** Uso de `useTransition` de React 19 para priorizar la interactividad del usuario sobre el renderizado pesado de listas.
+5.  **Offline-First Dev:** Integración con **MSW (Mock Service Worker)** para desarrollo sin dependencia de la API real y pruebas deterministas.
 
 ---
 
 ## 🎨 Design System & Motion
 
-- **Tailwind CSS v4:** Migración total a variables CSS semánticas (`--color-app-bg`, `--color-app-surface`).
-- **Motion v12:** Animaciones de grid fluidas y entradas escalonadas (`staggered reveals`) para una experiencia de usuario nativa.
-- **Responsive Artifacts:** Componentes diseñados con **Atomic Design** y **Lite Virtualization** (`content-visibility: auto`).
+- **Tailwind CSS v4 + `cn` utility:** Migración total a variables CSS semánticas con soporte para composición dinámica de clases mediante `tailwind-merge`.
+- **Lucide-React:** Set de iconos premium optimizados para React.
+- **Sonner:** Notificaciones toast minimalistas y accesibles.
+- **Motion v12:** Animaciones de grid fluidas y entradas escalonadas (`staggered reveals`).
 
 ---
 
@@ -35,15 +39,28 @@ Este proyecto no es solo una UI; es un sistema desacoplado siguiendo patrones de
 
 | Categoría      | Tecnologías                                                          |
 | -------------- | -------------------------------------------------------------------- |
-| **Core**       | React 19, Vite 6                                                     |
-| **Estilos**    | Tailwind CSS v4 (Motor Lightning CSS)                                |
-| **Estado**     | Redux Toolkit (Memoized Selectors)                                   |
+| **Core**       | React 19, Vite 6, Zod                                                |
+| **Estilos**    | Tailwind CSS v4, tailwind-merge, clsx                                |
+| **UI Components**| Lucide-React, Sonner (Toasts)                                      |
+| **Estado/Data**| TanStack Query v5, MSW (Mocking)                                     |
 | **Motion**     | Motion v12 (High Fidelity Animations)                                |
-| **Doc Standards**| JSDoc Advanced (Type-Safe IntelliSense)                            |
+
+---
+
+## 🔌 MSW: Offline Development
+
+El proyecto utiliza **Mock Service Worker** para interceptar peticiones de red a nivel de navegador. Esto permite:
+
+- Trabajar sin conexión a la API de GitHub.
+- Simular estados de error, latencia y casos de borde de forma determinista.
+- Acelerar el desarrollo del frontend antes de que el backend esté disponible.
+
+Los handlers se encuentran en `src/mocks/handlers.js`.
 
 ---
 
 ## 📖 Documentación Profunda
+
 
 Consulta la biblia técnica del proyecto en [`src/docs/`](./src/docs/):
 

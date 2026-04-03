@@ -8,14 +8,14 @@
  */
 
 // Main feature component
-export { default as UserSearch } from "./UserSearch";
+export { default as UserSearch } from "@/features/users/UserSearch";
 
 // Components
-export { default as UserCard } from "./components/UserCard";
-export { default as UserList } from "./components/UserList";
-export { default as SkeletonCard } from "./components/SkeletonCard";
-export { default as SkeletonGrid } from "./components/SkeletonGrid";
+export { default as UserCard } from "@/features/users/components/UserCard";
+export { default as UserList } from "@/features/users/components/UserList";
+export { default as SkeletonCard } from "@/features/users/components/SkeletonCard";
+export { default as SkeletonGrid } from "@/features/users/components/SkeletonGrid";
 
 // Hooks
-export { useUserSearchFacade } from "./hooks/useUserSearchFacade";
-export { useUserQuery } from "./hooks/useUserQuery";
+export { useUserSearchFacade } from "@/features/users/hooks/useUserSearchFacade";
+export { useUserQuery } from "@/features/users/hooks/useUserQuery";

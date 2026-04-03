@@ -1,4 +1,4 @@
-import { GitHubUserSchema } from "../types/user";
+import { GitHubUserSchema } from "@/models/types/user";
 
 /**
  * @file User Adapter

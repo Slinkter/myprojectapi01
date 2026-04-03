@@ -6,7 +6,7 @@
  */
 
 import { useDebouncedSearch } from "@/hooks/useDebouncedSearch.js";
-import { useUserQuery } from "./useUserQuery.js";
+import { useUserQuery } from "@/features/users/hooks/useUserQuery.js";
 import { log } from "@/app/logger";
 import { DEBOUNCE_DELAY } from "@/app/config";
 

@@ -7,39 +7,46 @@ This project is a high-performance React engineering artifact designed for explo
 The system is built using an adapted **Feature-Sliced Design (FSD)**, prioritizing decoupling between infrastructure and domain logic.
 
 1.  **Adapter Pattern (GoF):** Data normalization occurs in `src/models/adapters/`. It transforms raw API responses into standardized application models (`UserProfile`), shielding the UI from external schema changes.
-2.  **Facade Pattern:** Features in `src/features/` encapsulate complex logic (TanStack Query, debouncing, state transitions) within **Facade Hooks** (e.g., `useUserSearchFacade`). This keeps UI components "dumb" and focused on presentation.
-3.  **Concurrent UI:** Leverages React concurrent features to ensure an instantaneous and fluid user experience.
-4.  **High-Fidelity Logging:** A custom logging utility (`src/app/logger.js`) provides visual feedback on renders, state changes, and data flows using CSS styling and ASCII art.
+2.  **Validation Layer (Zod):** Every data entry point (API responses, form inputs) MUST be validated using **Zod schemas**. This ensures runtime type safety and fail-fast behavior.
+3.  **Facade Pattern:** Features in `src/features/` encapsulate complex logic (TanStack Query, state transitions) within **Facade Hooks**. This keeps UI components focused on presentation and decoupled from implementation details.
+4.  **Mocking Layer (MSW):** Development and testing rely on **Mock Service Worker**. Handlers in `src/mocks/handlers.js` intercept real network requests to provide consistent and predictable data for offline development.
+5.  **Concurrent UI:** Leverages React concurrent features to ensure an instantaneous and fluid user experience.
+6.  **High-Fidelity Logging:** A custom logging utility (`src/app/logger.js`) provides visual feedback on renders, state changes, and data flows.
 
 ## 🛠️ Tech Stack
 
-- **Core:** React 18/19, Vite 5/6 (Lightning CSS engine).
-- **State Management:** TanStack Query v5 (Server state) and Redux Toolkit.
-- **Styling:** Tailwind CSS v4 (Semantic variables-based theming).
-- **Animations:** Motion v12 (Hardware-accelerated fluid transitions).
-- **Routing:** React Router 7.
-- **Documentation:** Advanced JSDoc for type-safe IntelliSense without heavy TS overhead.
+- **Core:** React 18/19, Vite 6 (Lightning CSS engine), Zod.
+- **State/Data:** TanStack Query v5, MSW (Offline-first dev).
+- **Styling:** Tailwind CSS v4 (Semantic variables), `tailwind-merge` + `clsx`.
+- **UI:** Lucide-React (Icons), Sonner (Toasts).
+- **Animations:** Motion v12.
+- **Documentation:** Advanced JSDoc for IntelliSense.
 
 ## 🚀 Building and Running
 
 | Command | Action |
 | :--- | :--- |
 | `pnpm install` | Install dependencies. |
-| `pnpm dev` | Start development server with Hot Reload. |
-| `pnpm build` | Generate an optimized production build (Lightning CSS). |
+| `pnpm dev` | Start dev server (MSW will be active if `mode` is `development`). |
+| `pnpm build` | Production build (MSW is excluded by default). |
 | `pnpm lint` | Run ESLint with accessibility and React hooks checks. |
-| `pnpm preview` | Preview the production build locally. |
-| `pnpm py` | Build and serve the `dist` folder using a Python server (port 5000). |
-| `pnpm clean` | Wipe `node_modules` and `dist` for a fresh start. |
+| `pnpm preview` | Preview production build. |
+| `pnpm py` | Build and serve via Python server (port 5000). |
+| `pnpm clean` | Wipe `node_modules` and `dist`. |
 
 ## 📐 Development Conventions
 
-1.  **Type Safety:** Always use **JSDoc** for documenting functions, hooks, and data models to ensure IDE IntelliSense and maintainability.
-2.  **Feature Encapsulation:** New business logic should live in `src/features/`. Each feature should expose its logic through a `Facade` hook.
-3.  **Data Normalization:** Never use raw API data directly in components. Always pass it through an **Adapter** in `src/models/adapters/`.
-4.  **Styling:** Prioritize **Tailwind v4 semantic variables** (e.g., `--color-app-bg`) for theming.
-5.  **Logging:** Use `log.flow()`, `log.render()`, and `log.state()` from `src/app/logger.js` to track application execution.
-6.  **Accessibility:** Adhere to WCAG 2.1 AA standards (audited via `eslint-plugin-jsx-a11y`).
+1.  **Validation First:** Define a Zod schema in `src/models/types/` for every new data entity before implementing its adapter.
+2.  **Type Safety:** Use JSDoc alongside Zod for comprehensive documentation and IntelliSense.
+3.  **Utility Composition:** Use the `cn` utility from `src/lib/utils.js` for all conditional Tailwind classes to ensure correct class merging.
+    ```javascript
+    // Example:
+    <div className={cn("base-class", isActive && "active-class", className)} />
+    ```
+4.  **Feature Encapsulation:** New business logic lives in `src/features/`. Each feature must expose its API via a Facade hook.
+5.  **Data Normalization:** Raw API data is strictly forbidden in components. Pass everything through an **Adapter**.
+6.  **Mocking:** If adding a new endpoint, always add a corresponding handler in `src/mocks/handlers.js`.
+7.  **Logging:** Track execution using `log.flow()`, `log.render()`, and `log.state()`.
 
 ## 📂 Directory Structure
 

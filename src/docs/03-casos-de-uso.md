@@ -8,23 +8,32 @@ Este documento aborda las interacciones macro del usuario dentro del ecosistema 
 
 ## 🗂️ Casos de Uso Principales
 
-### 1. Búsqueda Activa de Perfiles
+### 1. Búsqueda Activa de Perfiles (Feedback Instantáneo)
 
-**Descripción:** El usuario ingresa un alias, nombre parcial o cuenta de Github en el _PageHeader_ y en tiempo real recupera las correspondencias.
+**Descripción:** El usuario interactúa con la barra de búsqueda en el *PageHeader* para obtener resultados asíncronos en tiempo real.
 **Flujo Principal:**
-User tipea "LJCR". Redux activa flag `loading: true`. El input se de-bouncea. Frontend ataca a `api.github.com/search/users?q=LJCR`. Redux parsea el Payload. UI hidrata las `UserCard`.
+1. User ingresa "LJCR". Redux activa el flag `loading`.
+2. El input aplica un **debounce** inteligente para reducir el ruido en la red.
+3. El frontend consulta `api.github.com/search/users?q=LJCR`.
+4. **Respuesta Positiva:** Se dispara un **Sonner Toast** sutil confirmando la recuperación de datos. El grid se hidrata aplicando un **staggered entrance** (Motion v12) donde cada `UserCard` aparece secuencialmente.
+5. **Sin Resultados:** Se notifica al usuario vía Toast y se muestra un estado *Empty* minimalista.
 
-### 2. Exploración de Detalles Extensos
+### 2. Navegación Inmersiva (Fluid Transitions)
 
-**Descripción:** De un resultado en la grilla principal, el usuario transita hacia una vista inmersiva completa (/user/LJCR).
+**Descripción:** Transición suave desde un resultado en la grilla hacia la vista detallada del perfil (/user/LJCR).
 **Flujo Principal:**
-User pulsa "Ver Perfil". `<Link>` redirige por react-router evitando recarga de motor. El componente `UserDetail` se monta, dispara Effect para buscar la URI del usuario exacto y pinta Repositorios, Seguidores, y Biografía extra.
+1. User pulsa "Ver Perfil".
+2. **Motion Layout:** El avatar del usuario utiliza un `layoutId` para "viajar" visualmente desde la tarjeta hacia su posición en el header del detalle, manteniendo la continuidad cognitiva.
+3. `<Link>` redirige por `react-router-dom` v7 sin recarga de página.
+4. El componente `UserDetail` monta sus sub-secciones (Repos, Seguidores) con un efecto de fundido (`opacity: 0` -> `opacity: 1`) coordinado para una sensación de fluidez nativa.
 
-### 3. Persistencia de Visualización (Theming)
+### 3. Persistencia de Identidad Visual (Adaptive Theming)
 
-**Descripción:** Modificar el esquema visual general preservándolo al recargar.
+**Descripción:** Personalización del esquema de color (Light/Dark) con persistencia garantizada.
 **Flujo Principal:**
-User pulsa `ThemeToggle`. El Hook altera la var `"dark"` del HTML classlist y sincroniza `localStorage.setItem('theme', 'dark')`.
+1. User pulsa el `ThemeToggle` (animado con Motion para un giro fluido del icono).
+2. El hook `useTheme` inyecta la clase en el `<html>` y actualiza el `localStorage`.
+3. Los **CSS Variables** reaccionan instantáneamente (transición de 300ms aplicada en el `body`) para suavizar el cambio de luminancia.
 
 ## 📐 Diagrama de Casos de Uso (Mermaid)
 

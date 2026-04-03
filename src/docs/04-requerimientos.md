@@ -5,21 +5,21 @@
 | ID         | Área               | Descripción                                                                                                                         | Prioridad |
 | ---------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------- | --------- |
 | **RF-001** | Búsqueda           | El sistema DEBE buscar usuarios en base a un input libre utilizando la API de GitHub (`/search/users`).                             | Alta      |
-| **RF-002** | Filtrado Asíncrono | El _fetching_ DEBE implementarse en tiempo real aplicando un debounce prudente (~300-500ms) para proteger _rate limits_.            | Alta      |
-| **RF-003** | Visualización      | El grid de perfiles DEBE pintar los avatares, usernames y proveer un hipervínculo interno a un view específico.                     | Alta      |
-| **RF-004** | Perfil Específico  | La ruta `/user/:login` DEBE aislar el contexto y pintar Repos, Seguidores de manera ampliada, con _link_ absoluto al GitHub origin. | Crítica   |
-| **RF-005** | Fallback UX        | El sistema DEBE ofrecer _Skeletons_ ante red lenta y pantallas amigables de NotFound.                                               | Media     |
-| **RF-006** | Theming            | El usuario DEBE poder alternar entre Light y Dark Mode sin perder ese estado al recargar la página.                                 | Media     |
+| **RF-002** | Filtrado Asíncrono | El *fetching* DEBE implementarse en tiempo real aplicando un debounce inteligente (~300-500ms) para proteger *rate limits*.          | Alta      |
+| **RF-003** | Visualización      | El grid de perfiles DEBE pintar los avatares y usernames usando variantes de tarjetas (Glass, Minimal, Accent-Glow).                | Alta      |
+| **RF-004** | Perfil Específico  | La ruta `/user/:login` DEBE aislar el contexto y pintar Repos y Seguidores con transiciones fluidas de Motion.                      | Crítica   |
+| **RF-005** | Fallback & Feedback| El sistema DEBE ofrecer *Skeletons* ante red lenta y **Sonner Toasts** para confirmar el éxito o fracaso de las búsquedas.          | Alta      |
+| **RF-006** | Theming            | El usuario DEBE poder alternar entre Light y Dark Mode con persistencia en LocalStorage y transición suave de luminancia.           | Media     |
 
 ## 🏗️ Requerimientos No Funcionales (RNF)
 
 | ID          | Criterio (Atributos de Calidad) | Descripción y Constreñimientos Arquitectónicos (El Refactor v4)                                                                                      |
 | ----------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **RNF-001** | **Performance (Lighthouse)**    | El ecosistema DEBE prescindir de UI Kits macro como `@material-tailwind` y reducirse a un bundle enano, logrando puntuaciones Lighthouse de **>95**. |
-| **RNF-002** | **Accesibilidad (A11y)**        | Todos los botones nativos DEBEN contar con su atributo `aria-label`, contraste AAA entre Light/Dark y tags `<svg>` escondidos para screen readers.   |
-| **RNF-003** | **DRY y Refactoring**           | No DEBEN existir estilos duplicados embebidos o redundancias `className`. DEBE regir la composición por Tailwind `@theme` y el utilitario `cn()`.    |
-| **RNF-004** | **Usabilidad Móvil**            | Obligatoriedad extrema de usar layout táctico: `grid-cols-1 md:grid-cols-2`. Sin scrolls horizontales no deseados.                                   |
-| **RNF-005** | **Arquitectura Cliente Pura**   | Toda persistencia del App State o "negocio" debe ser puramente efímera en Memoria (Redux) o LocalStorage. Serverless prohibido en este scope.        |
+| **RNF-001** | **Performance (Lighthouse)**    | El ecosistema DEBE optimizar el uso de **Motion v12** para lograr animaciones a 60 FPS sin degradar el puntaje Lighthouse (>95).                     |
+| **RNF-002** | **Accesibilidad (A11y)**        | Todos los botones y acciones DEBEN contar con `aria-label`. El uso de **Lucide-React** garantiza una iconografía legible y consistente.              |
+| **RNF-003** | **Coherencia Visual (DRY)**     | No DEBEN existir estilos redundantes. Se rige por la composición de **Tokens Semánticos** y variantes de componentes en CSS v4.                      |
+| **RNF-004** | **Sensación Nativa (Premium)**  | Obligatoriedad de usar layouts tácticos y transiciones de elementos compartidos (Shared Element Transitions) para una UX de alta fidelidad.          |
+| **RNF-005** | **Arquitectura de Estado**      | La persistencia debe ser puramente efímera (Redux/LocalStorage). Toda la lógica de UI debe ser reactiva y libre de side-effects pesados.             |
 
 ## 📐 Relación de Casos vs Requerimientos (ASCII Matrix)
 

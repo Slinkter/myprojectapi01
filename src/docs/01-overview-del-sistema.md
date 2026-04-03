@@ -1,40 +1,50 @@
-# 01 - Overview del Sistema
+# 01 - System Overview: The Senior React Artifact
 
-## 📖 Propósito del Proyecto
+## 🏛️ Core Philosophy
 
-El proyecto `myprojectapi01` es una **Single Page Application (SPA) - Cliente Puro**, diseñada para la exploración de perfiles técnicos a través de la API de GitHub. El objetivo es demostrar un dominio de nivel Senior en el ecosistema React moderno, priorizando la **Simplicidad Arquitectónica**, la **Performance de Carga** y una **UX Minimalista de Alta Gama**.
+`myprojectapi01` is not just a search tool; it is a **Senior React Artifact** designed to showcase high-level architectural patterns in a modern SPA environment. It prioritizes **Structural Integrity**, **Predictable State**, and **Domain Decoupling** over simple feature implementation.
 
-## 🚀 Alcance Funcional
+## 🎯 Engineering Objectives
 
-- **Búsqueda con Caché Inteligente**: Implementación de TanStack Query para evitar re-peticiones de red innecesarias.
-- **UX Minimalista v3**: Interfaz limpia (Essentialism) con enfoque en la legibilidad y el rendimiento percibido.
-- **Normalización de Datos**: Aplicación estricta del Patrón Adapter para desacoplar la API de la UI.
-- **Theming OLED**: Modo oscuro optimizado para pantallas de alta fidelidad y modo claro estilo Apple.
+- **Zero-Trust Data Layer**: Runtime validation via Zod ensures the application never processes malformed external data.
+- **Strict Decoupling (FSD-lite)**: Clear separation between infrastructure (Services), domain (Adapters/Models), and presentation (Features).
+- **High-Fidelity Observability**: Integrated logging system for tracking data transformations and lifecycle events.
+- **Resilient UX**: "Essentialism" design philosophy focused on performance, accessibility, and high-quality feedback loops.
 
-## 🛠️ Tecnologías Principales (Refactor v3)
+## 🛠️ Tech Stack (The Senior Selection)
 
-| Capa            | Herramienta            | Razón de Elección (Senior Level)                                    |
-| --------------- | ---------------------- | ------------------------------------------------------------------- |
-| **Core**        | React 18, Vite         | Estándar de la industria por velocidad y concurrencia.              |
-| **Data/Server** | TanStack (React Query) | El mejor motor de sincronización y caché para estados de servidor.  |
-| **State (UI)**  | RTK / Custom Hooks     | Manejo ligero de preferencias locales y estados de UI persistentes. |
-| **Styling**     | Tailwind CSS v4 (Min)  | CSS Utility-first sin configuraciones pesadas de JS.                |
-| **Animations**  | Motion v12             | Micro-interacción fluida sin penalización de performance.           |
+| Tier            | Technology             | Rationale                                                                 |
+| --------------- | ---------------------- | ------------------------------------------------------------------------- |
+| **Runtime**     | React 18 + Vite        | Concurrent rendering and optimized build pipeline.                         |
+| **Validation**  | Zod                    | Schema-first integrity layer for external API contracts.                  |
+| **Data Flow**   | TanStack Query v5      | Declarative server-state management with robust caching and invalidation. |
+| **Architecture**| Facade + Adapter       | Encapsulation of complexity and protection of the internal domain.        |
+| **Styling**     | Tailwind CSS v4        | Zero-runtime CSS-in-JS alternative with native performance.               |
 
-## 📐 Diagrama de Arquitectura (Mermaid)
+## 🗺️ High-Level Topology
 
 ```mermaid
-graph TD
-    A[Usuario Final] -->|Búsqueda / Navegación| B(UI React App)
-    B -->|useUserSearchFacade| C{TanStack Query}
-    C -->|Query Cache| D[GitHub Public API]
-    D -->|Adapter Normalization| C
-    C -->|Server State| B
+graph LR
+    subgraph Infrastructure
+        API[GitHub API]
+    end
+    subgraph "Domain Layer (Integrity)"
+        ZOD[Zod Schema] --> ADPT[Adapter]
+    end
+    subgraph "Application Layer"
+        TSQ[TanStack Query] --> FAC[Facade Hook]
+    end
+    subgraph Presentation
+        UI[React Components]
+    end
+
+    API --> ZOD
+    ADPT --> TSQ
+    FAC --> UI
 ```
 
-## 🌊 Flujo Principal (Minimalist v3)
+## 🚀 Execution Standards
 
-1. **Input Dinámico**: El usuario escribe; el sistema espera 500ms (debounce) para estabilizar la intención.
-2. **Hit de Caché**: Si el término ya fue buscado en los últimos 5 minutos, los resultados aparecen de inmediato.
-3. **Pintado Geométrico**: Se utiliza un Grid System sincronizado entre Skeletons y Cards para evitar Layout Shifts.
-4. **Navegación Atómica**: El detalle del usuario se carga bajo demanda, manteniendo la fluidez mediante transiciones de opacidad.
+1.  **Validated Fetching**: No data enters the system without passing through the Zod integrity gate.
+2.  **Facade Communication**: UI components only talk to Facades, never directly to services or raw query hooks.
+3.  **Normalized State**: The UI consumes a clean, internal domain model, making it agnostic to API changes.

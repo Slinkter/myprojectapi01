@@ -7,7 +7,7 @@
 
 import PropTypes from "prop-types";
 import UserCard from "@/features/users/components/UserCard";
-import { FaBuilding } from "react-icons/fa";
+import { Building2 } from "lucide-react";
 
 /**
  * Specialized component for Organizations
@@ -17,7 +17,7 @@ const OrganizationCard = ({ org, variant = "glass" }) => (
     <UserCard.Avatar url={org.photo} login={org.username} variant={variant} />
     {variant !== "minimal" && (
       <div className="bg-app-accent text-app-bg text-[10px] font-bold px-2 py-0.5 rounded-full absolute top-4 right-4 z-20 flex items-center gap-1">
-        <FaBuilding /> ORG
+        <Building2 size={12} /> ORG
       </div>
     )}
     <UserCard.Header login={`${org.username} (Org)`} variant={variant} />
