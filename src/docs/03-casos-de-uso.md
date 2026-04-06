@@ -12,9 +12,10 @@ Este documento aborda las interacciones macro del usuario dentro del ecosistema 
 
 **Descripción:** El usuario interactúa con la barra de búsqueda en el *PageHeader* para obtener resultados asíncronos en tiempo real.
 **Flujo Principal:**
-1. User ingresa "LJCR". Redux activa el flag `loading`.
-2. El input aplica un **debounce** inteligente para reducir el ruido en la red.
-3. El frontend consulta `api.github.com/search/users?q=LJCR`.
+1. User ingresa "LJCR" en el input de búsqueda.
+2. El input aplica un **debounce** inteligente para reducir el ruido en la red (~300ms).
+3. TanStack Query activa el estado `loading`.
+4. El frontend consulta `api.github.com/search/users?q=LJCR`.
 4. **Respuesta Positiva:** Se dispara un **Sonner Toast** sutil confirmando la recuperación de datos. El grid se hidrata aplicando un **staggered entrance** (Motion v12) donde cada `UserCard` aparece secuencialmente.
 5. **Sin Resultados:** Se notifica al usuario vía Toast y se muestra un estado *Empty* minimalista.
 

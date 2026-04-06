@@ -4,7 +4,7 @@ This document provides guidelines for agents working in this repository.
 
 ## Project Overview
 
-A React 18 SPA for exploring GitHub user profiles, built with Vite, Redux Toolkit, and Tailwind CSS v4. Uses Feature-Sliced Design (FSD) architecture with path aliases (`@/*` maps to `./src/*`).
+React 18 SPA for exploring GitHub user profiles, built with Vite, TanStack Query, and Tailwind CSS v4. Uses Feature-Sliced Design (FSD) with path aliases (`@/*` maps to `./src/*`). Deploys to GitHub Pages at `/myprojectapi01/`.
 
 ---
 
@@ -13,21 +13,52 @@ A React 18 SPA for exploring GitHub user profiles, built with Vite, Redux Toolki
 ### Build & Development
 
 ```bash
-pnpm dev        # Start development server
-pnpm build      # Build for production
-pnpm preview    # Preview production build
-pnpm deploy     # Build and deploy to GitHub Pages (gh-pages)
+pnpm dev          # Start development server (http://localhost:5173)
+pnpm build        # Build for production (outputs to dist/)
+pnpm preview      # Preview production build
+pnpm deploy       # Build and deploy to GitHub Pages
+pnpm py           # Build and serve on Python HTTP server (port 5000)
 ```
 
 ### Linting
 
 ```bash
-pnpm lint       # Run ESLint with all rules enabled
+pnpm lint         # Run ESLint with all rules enabled
 ```
 
-ESLint config extends: `eslint:recommended`, `react/recommended`, `react/jsx-runtime`, `react-hooks/recommended`, `jsx-a11y/recommended`.
+### Testing
 
-**Note:** There are currently no test commands configured.
+**Note:** Currently no test framework is configured. To add tests, install Vitest:
+
+```bash
+pnpm add -D vitest @vitest/ui jsdom
+```
+
+Then add to package.json:
+```json
+"test": "vitest",
+"test:ui": "vitest --ui",
+"test:run": "vitest run"
+```
+
+To run a single test file when tests are added:
+```bash
+pnpm vitest run src/features/users/usersSlice.test.js
+```
+
+---
+
+## Documentation
+
+The project includes comprehensive documentation in `src/docs/`:
+
+| Document | Description |
+|----------|-------------|
+| `GUIA_ESTUDIO.md` | Complete study guide (book format) - learn React from scratch |
+| `PRUEBA_TECNICA.md` | Technical interview simulation for practice |
+| `00-diagnostico-tecnico.md` | Technical diagnosis and current state |
+| `02-arquitectura.md` | Architecture patterns (FSD, Adapter, Facade) |
+| `06-guia-para-desarrolladores.md` | Developer guide (setup, MSW, Zod) |
 
 ---
 
@@ -51,20 +82,22 @@ import { fetchUsersAPI } from "@/services/userService";
 import { useTheme } from "@/hooks/useTheme.js";
 ```
 
+- Use explicit file extensions in imports (`.jsx`, `.js`)
+- Order imports: React > external libs > internal aliases > relative
+
 ### Naming Conventions
 
-- **Components**: PascalCase (e.g., `UserSearch.jsx`, `ThemeToggle.jsx`)
-- **Hooks**: camelCase starting with `use` (e.g., `useTheme.js`, `useDebouncedSearch.js`)
-- **Services**: camelCase (e.g., `userService.js`)
-- **Slices**: camelCase (e.g., `usersSlice.js`)
-- **Files**: Match the main export name
+| Type | Convention | Example |
+|------|------------|---------|
+| Components | PascalCase | `UserSearch.jsx`, `ThemeToggle.jsx` |
+| Hooks | camelCase, prefix `use` | `useTheme.js`, `useDebouncedSearch.js` |
+| Services | camelCase | `userService.js` |
+| Adapters | camelCase | `userAdapter.js` |
+| Facades | camelCase, suffix `Facade` | `useUserSearchFacade.js` |
+| Schemas | camelCase | `userSchema.js` |
+| Utilities | camelCase | `cn.js`, `formatDate.js` |
 
 ### JSX & React Patterns
-
-- Use functional components with arrow functions or `function` declarations
-- Always use `displayName` for components when helpful for debugging
-- Use PropTypes for component prop validation (project uses `prop-types` package)
-- Use explicit file extensions in imports (`.jsx`, `.js`)
 
 ```javascript
 const App = () => { ... };
@@ -72,64 +105,155 @@ export default App;
 App.displayName = "App";
 ```
 
-### Redux Toolkit
+- Use functional components with arrow functions or `function` declarations
+- Use `displayName` for debugging
+- Use PropTypes for prop validation (project uses `prop-types` package)
 
-- Use `createSlice` for synchronous state
-- Use `createAsyncThunk` for async operations
-- Handle all three states: `pending`, `fulfilled`, `rejected`
-- Use `rejectWithValue` for error handling in thunks
+### PropTypes Example
 
 ```javascript
-export const fetchUsers = createAsyncThunk(
-  "users/fetchUsers",
-  async (searchTerm = "", { rejectWithValue, signal }) => {
-    try {
-      const users = await fetchUsersAPI(searchTerm, signal);
-      return users;
-    } catch (error) {
-      if (error.name === "AbortError") throw error;
-      return rejectWithValue({ message: error.message, status: error.status });
-    }
-  }
-);
+import PropTypes from "prop-types";
+
+const UserCard = ({ name, avatar, onSelect }) => { ... };
+
+UserCard.propTypes = {
+  name: PropTypes.string.isRequired,
+  avatar: PropTypes.string,
+  onSelect: PropTypes.func,
+};
+
+UserCard.defaultProps = {
+  avatar: "",
+  onSelect: () => {},
+};
 ```
 
-### Error Handling
+### TanStack Query (NOT Redux)
 
-- Create custom error classes for API errors (see `ApiError` in `src/services/userService.js`)
-- Handle `AbortError` separately for request cancellation
-- Use try/catch with meaningful error messages
-- Log errors appropriately with `console.error`
+This project uses **TanStack Query** for server state, NOT Redux:
 
-### Tailwind CSS
+```javascript
+import { useQuery } from "@tanstack/react-query";
 
-- Use utility-first classes exclusively (no custom component libraries)
-- Use semantic class names that describe content, not appearance
-- Use `cn()` utility pattern for conditional classes (see docs)
-- Follow Tailwind v4 best practices from project documentation
+export const useUserSearchQuery = (searchTerm) => {
+  return useQuery({
+    queryKey: ['users', searchTerm],
+    queryFn: () => fetchUsersAPI(searchTerm),
+    enabled: searchTerm.length >= 3,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
+```
 
-### File Structure
+**Important:**
+- Never use Redux Thunks for API fetching
+- Use TanStack Query for all server state
+- Create Facade hooks to encapsulate query complexity
+
+### Facade Pattern
+
+Create facade hooks that expose clean API to components:
+
+```javascript
+// src/features/users/hooks/useUserSearchFacade.js
+export const useUserSearchFacade = (searchTerm) => {
+  const query = useUserSearchQuery(searchTerm);
+
+  return {
+    users: query.data || [],
+    isSearching: query.isLoading,
+    isEmpty: !query.isLoading && query.data?.length === 0,
+    error: query.error,
+  };
+};
+```
+
+---
+
+## Architecture Patterns
+
+### FSD Structure
 
 ```
 src/
-├── app/           # Store configuration
-├── components/   # Reusable UI components (layout, ui)
-├── features/      # Domain modules (users, user-detail)
-├── hooks/         # Custom hooks
-├── services/      # API integrations
-└── docs/          # Project documentation
+├── app/                    # Providers, config
+├── components/            # Reusable UI (ui/, layout/)
+├── features/              # Domain modules (FSD)
+│   └── [feature]/
+│       ├── components/   # Feature-specific components
+│       ├── hooks/        # Query + Facade hooks
+│       └── [feature].jsx # Entry point
+├── hooks/                # Global hooks
+├── lib/                  # Utilities (cn, utils)
+├── models/               # Domain layer
+│   ├── adapters/        # Data transformation
+│   └── types/           # Zod schemas
+├── services/            # API infrastructure
+└── docs/                # Documentation
+```
+
+### Data Flow
+
+```
+Presentation → Facade Hook → TanStack Query → Adapter + Zod → Service → API
+```
+
+---
+
+## Tailwind CSS v4
+
+- Use utility-first classes exclusively
+- Use semantic class names (describe content, not appearance)
+- Use `cn()` utility for conditional classes:
+
+```javascript
+import { cn } from "@/lib/utils";
+
+<button className={cn(
+  "px-4 py-2 rounded",
+  isActive && "bg-blue-500"
+)}>
+```
+
+- Follow Tailwind v4 best practices with CSS variables
+
+---
+
+## Zod Validation
+
+Always validate external API data with Zod in the adapter layer:
+
+```javascript
+import { z } from "zod";
+
+const GitHubUserSchema = z.object({
+  login: z.string(),
+  avatar_url: z.string().url(),
+  html_url: z.string().url(),
+  public_repos: z.number(),
+  followers: z.number(),
+  following: z.number(),
+});
+
+export const userAdapter = (rawData) => {
+  const validated = GitHubUserSchema.parse(rawData);
+  return {
+    username: validated.login,
+    photo: validated.avatar_url,
+    // ...
+  };
+};
 ```
 
 ---
 
 ## ESLint Rules
 
-Key rules enforced:
-- `react-refresh/only-export-components`: Warn on non-component exports in component files
+- `react-refresh/only-export-components`: Warn on non-component exports
 - `jsx-a11y/*`: Accessibility rules enabled
 - React hooks rules enabled
 
-To ignore linting for specific lines:
+Ignore linting for specific lines:
 ```javascript
 // eslint-disable-next-line rule-name
 ```
@@ -138,11 +262,7 @@ To ignore linting for specific lines:
 
 ## JSDoc Usage
 
-Use JSDoc for:
-- File-level descriptions
-- Function documentation with `@param`, `@returns`, `@throws`
-- Complex component descriptions
-- Custom types/interfaces
+Use JSDoc for file-level descriptions, functions, and components:
 
 ```javascript
 /**
@@ -162,4 +282,13 @@ Use JSDoc for:
 
 1. Run `pnpm lint` and fix any warnings/errors
 2. Verify build works with `pnpm build`
-3. Ensure no console.log statements in production code (except in slice reducers for debugging)
+3. No `console.log` in production code
+
+---
+
+## Important Notes
+
+- **lucide-react version**: v1.7.0 - not all icons available. Use `Globe` instead of `GitHub`.
+- **Base path**: `/myprojectapi01/` for GitHub Pages deployment
+- **MSW**: Mock Service Worker configured for development API mocking
+- **NO Redux**: This project uses TanStack Query, NOT Redux Toolkit

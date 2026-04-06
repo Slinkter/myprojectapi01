@@ -31,7 +31,7 @@ Se han eliminado satisfactoriamente:
 ## 🏛️ Topología del Estado Final (React Query + Facade)
 
 ```mermaid
-graph TD
+flowchart TD
     A[UI Components] -->|Facade Hook| B{TanStack Query}
     B -->|Fetch + Adapter| C[GitHub API]
     C -->|Normalized Data| B

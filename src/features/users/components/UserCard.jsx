@@ -87,11 +87,14 @@ const UserFooter = ({ login, variant = "default" }) => {
 
   return (
     <div className="px-6 pb-6 pt-2 mt-auto w-full">
-      <Link to={`/user/${login}`} className="w-full">
-        <button className="btn-action w-full !rounded-md text-sm py-2 cursor-pointer active:scale-95 transition-transform">
-          Ver Perfil
-        </button>
-      </Link>
+        <Link to={`/user/${login}`} className="w-full">
+          <button 
+            className="btn-action w-full !rounded-md text-sm py-2 cursor-pointer active:scale-95 transition-transform"
+            aria-label={`Ver perfil de ${login}`}
+          >
+            Ver Perfil
+          </button>
+        </Link>
     </div>
   );
 };
@@ -115,7 +118,9 @@ const UserCard = ({ children, variant = "default", className }) => {
       ref={cardRef}
       className={cn(
         "h-full w-full mx-auto group",
-        isMinimal ? "min-h-[80px]" : "min-h-[300px] max-w-[280px] sm:max-w-none",
+        isMinimal 
+          ? "min-h-[80px]" 
+          : "min-h-[280px] sm:min-h-[300px] max-w-full sm:max-w-[280px]",
         className
       )}
     >

@@ -42,6 +42,9 @@
 }
 
 @theme {
+  /* Custom breakpoints for responsive design */
+  --breakpoint-xs: 480px;
+
   /* Mapping to Tailwind v4 */
   --color-app-bg: var(--app-bg);
   --color-app-surface: var(--app-surface);

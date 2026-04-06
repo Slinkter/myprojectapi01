@@ -66,11 +66,14 @@ const UserDetail = () => {
       animate={{ opacity: 1, y: 0 }}
       className="max-w-4xl mx-auto space-y-8 md:space-y-12 py-8 md:py-12 px-4"
     >
-      <Link to="/" className="inline-block group">
-        <button className={cn(
-          "flex items-center gap-2 text-app-muted group-hover:text-app-text transition-colors text-sm font-medium cursor-pointer active:scale-95"
-        )}>
-          <ArrowLeft size={12} className="group-hover:-translate-x-1 transition-transform" /> Volver
+        <Link to="/" className="inline-block group">
+        <button 
+          className={cn(
+            "flex items-center gap-2 text-app-muted group-hover:text-app-text transition-colors text-sm font-medium cursor-pointer active:scale-95"
+          )}
+          aria-label="Volver a la búsqueda de usuarios"
+        >
+          <ArrowLeft size={12} className="group-hover:-translate-x-1 transition-transform" aria-hidden="true" /> Volver
         </button>
       </Link>
 

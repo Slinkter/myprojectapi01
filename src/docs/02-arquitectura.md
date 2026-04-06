@@ -29,26 +29,41 @@ Centralized `ResultFactory` handles polymorphism in the search results (Loading,
 
 ---
 
-## 3. Data Flow Architecture (ASCII)
+## 3. Data Flow Architecture
 
-```text
-[ INFRASTRUCTURE ] -- GitHub Public API (External Contract)
-         |
-         v
-[ SERVICES ] --------- HTTP/Fetch Layer (userService.js)
-         |
-         v
-[ INTEGRITY GATE ] --- ZOD SCHEMA + ADAPTER (The Transformation)
-         |             - Schema Enforcement (.parse())
-         |             - Domain Normalization
-         v
-[ APPLICATION ] ------ TANSTACK QUERY (Server State & Cache)
-         |
-         v
-[ FACADE HOOK ] ------ FEATURE INTERFACE (useUserSearchFacade)
-         |
-         v
-[ PRESENTATION ] ----- REACT UI (Feature Components)
+```mermaid
+flowchart LR
+    subgraph INFRA["[ INFRASTRUCTURE ]"]
+        GITHUB[GitHub Public API]
+    end
+
+    subgraph SERVICES["[ SERVICES ]"]
+        SVC[userService.js<br/>HTTP/Fetch Layer]
+    end
+
+    subgraph GATE["[ INTEGRITY GATE ]"]
+        ZOD[Zod Schema<br/>Validation]
+        ADAPT[Adapter<br/>Normalization]
+    end
+
+    subgraph APP["[ APPLICATION ]"]
+        QUERY[TanStack Query<br/>Server State & Cache]
+    end
+
+    subgraph FACADE["[ FACADE HOOK ]"]
+        FAC[useUserSearchFacade<br/>Feature Interface]
+    end
+
+    subgraph PRES["[ PRESENTATION ]"]
+        UI[React UI<br/>Feature Components]
+    end
+
+    GITHUB --> SVC
+    SVC --> ZOD
+    ZOD --> ADAPT
+    ADAPT --> QUERY
+    QUERY --> FAC
+    FAC --> UI
 ```
 
 ---

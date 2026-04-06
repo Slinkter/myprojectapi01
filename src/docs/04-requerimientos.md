@@ -19,10 +19,34 @@
 | **RNF-002** | **Accesibilidad (A11y)**        | Todos los botones y acciones DEBEN contar con `aria-label`. El uso de **Lucide-React** garantiza una iconografía legible y consistente.              |
 | **RNF-003** | **Coherencia Visual (DRY)**     | No DEBEN existir estilos redundantes. Se rige por la composición de **Tokens Semánticos** y variantes de componentes en CSS v4.                      |
 | **RNF-004** | **Sensación Nativa (Premium)**  | Obligatoriedad de usar layouts tácticos y transiciones de elementos compartidos (Shared Element Transitions) para una UX de alta fidelidad.          |
-| **RNF-005** | **Arquitectura de Estado**      | La persistencia debe ser puramente efímera (Redux/LocalStorage). Toda la lógica de UI debe ser reactiva y libre de side-effects pesados.             |
+| **RNF-005** | **Arquitectura de Estado**      | La persistencia debe ser puramente efímera (TanStack Query/LocalStorage). Toda la lógica de UI debe ser reactiva y libre de side-effects pesados.             |
 
-## 📐 Relación de Casos vs Requerimientos (ASCII Matrix)
+## 📐 Relación de Casos vs Requerimientos
 
-1. BÚSQUEDA ---> [RF-001] [RF-002] [RNF-004]
-2. PERFIL ---> [RF-004] [RNF-001]
-3. THEME ---> [RF-006] [RNF-002]
+```mermaid
+flowchart LR
+    subgraph CASOS["Casos de Uso"]
+        BUS[BÚSQUEDA]
+        PER[PERFIL]
+        THE[THEME]
+    end
+
+    subgraph REQ["Requerimientos"]
+        direction TB
+        RF1[RF-001: Búsqueda]
+        RF2[RF-002: Filtrado Asíncrono]
+        RF4[RF-004: Perfil Específico]
+        RF6[RF-006: Theming]
+        RNF1[RNF-001: Performance]
+        RNF2[RNF-002: Accesibilidad]
+        RNF4[RNF-004: Sensación Nativa]
+    end
+
+    BUS --> RF1
+    BUS --> RF2
+    BUS --> RNF4
+    PER --> RF4
+    PER --> RNF1
+    THE --> RF6
+    THE --> RNF2
+```

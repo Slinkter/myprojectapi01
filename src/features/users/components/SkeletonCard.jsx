@@ -3,8 +3,8 @@
  */
 
 const SkeletonCard = () => (
-  <div className="h-full w-full max-w-[280px] sm:max-w-none mx-auto min-h-[300px]">
-    <div className="flex flex-col h-full w-full rounded-lg border border-app-border bg-app-surface animate-pulse">
+  <div className="h-full w-full max-w-full sm:max-w-[280px] mx-auto min-h-[280px] sm:min-h-[300px]">
+    <div className="flex flex-col h-full w-full rounded-xl border border-app-border bg-app-surface animate-pulse">
       <div className="pt-6 pb-4 flex flex-col items-center">
         <div className="w-20 h-20 rounded-full bg-app-border" />
       </div>
