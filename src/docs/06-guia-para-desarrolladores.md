@@ -74,6 +74,28 @@ Ningún componente de UI debe importar `useQuery` o hooks de bajo nivel directam
 
 ---
 
+## 🎹 Entrada de la Aplicación (`src/main.jsx`)
+
+El archivo `src/main.jsx` es el **punto de entrada (Entry Point)** crítico. Su función es preparar el entorno antes de que el usuario vea la primera pantalla.
+
+### 1. Configuración de TanStack Query
+Se inicializa el `QueryClient` con una estrategia de caché robusta:
+*   **Stale/GC Time:** Configurados centralizadamente en `app/config.js` para optimizar la memoria.
+*   **Retry Policy:** Un reintento automático para manejar fallos de red momentáneos.
+*   **Performance:** Se desactiva el refetch al enfocar la ventana para ahorrar cuota de la API de GitHub.
+
+### 2. Inicialización de MSW (Mock Service Worker)
+La función `enableMocking` actúa como una capa de simulación:
+*   **Solo en Desarrollo:** Solo se activa si `MODE === 'development'`.
+*   **Intercepción:** Activa un Service Worker que intercepta llamadas a GitHub para devolver datos controlados, permitiendo desarrollo offline y pruebas de errores límite.
+*   **Basename Fix:** Asegura que el worker funcione bajo la ruta `/myprojectapi01/` para compatibilidad total con GitHub Pages.
+
+### 3. Renderizado y Ruteo
+*   **React Contexts:** Inyecta el `QueryClientProvider` y el `BrowserRouter`.
+*   **Basename:** El `basename="/myprojectapi01"` en el router es vital para que las rutas funcionen correctamente en el entorno de despliegue.
+
+---
+
 ## 🚀 Despliegue (GitHub Pages)
 
 El proyecto está configurado para despliegue automático en GitHub Pages.

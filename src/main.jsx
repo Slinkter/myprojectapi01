@@ -17,11 +17,6 @@ const queryClient = new QueryClient({
   },
 });
 
-console.log("[ENTRY] main.jsx: Application starting...");
-
-/**
- * Enable MSW mocking in development mode
- */
 async function enableMocking() {
   if (import.meta.env.MODE !== "development") {
     return;
@@ -47,7 +42,7 @@ async function enableMocking() {
 /**
  * Renders the application root.
  */
-enableMocking().finally(() => {
+/* enableMocking().finally(() => {
   ReactDOM.createRoot(document.getElementById("root")).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter basename="/myprojectapi01">
@@ -56,3 +51,12 @@ enableMocking().finally(() => {
     </QueryClientProvider>,
   );
 });
+ */
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <QueryClientProvider client={queryClient}>
+    <BrowserRouter basename="/myprojectapi01">
+      <App />
+    </BrowserRouter>
+  </QueryClientProvider>,
+);

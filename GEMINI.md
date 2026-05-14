@@ -7,25 +7,30 @@ This project is a high-performance React engineering artifact designed for explo
 The system is built using an adapted **Feature-Sliced Design (FSD)**, prioritizing decoupling between infrastructure and domain logic.
 
 ### 1. Adapter Pattern (GoF Structural)
+
 - **Location:** `src/models/adapters/`
 - **Purpose:** Data normalization. Transforms raw API responses into standardized application models (e.g., `UserProfile`).
 - **Mandate:** Raw API data is strictly forbidden in components. Pass everything through an **Adapter**.
 - **Validation:** Uses **Zod schemas** (`src/models/types/`) for runtime type safety and fail-fast behavior.
 
 ### 2. Facade Pattern
+
 - **Location:** `src/features/[feature]/hooks/` (e.g., `useUserSearchFacade.js`)
 - **Purpose:** Orchestration. Encapsulates complex logic (TanStack Query, debouncing, state transitions) within **Facade Hooks**.
 - **Mandate:** UI components must remain focused on presentation. They interact with business logic ONLY through Facades.
 
 ### 3. Validation Layer (Zod)
+
 - **Mandate:** Every data entry point (API responses, form inputs) MUST be validated using **Zod schemas** before reaching the domain layer.
 
 ### 4. Mocking Layer (MSW)
+
 - **Location:** `src/mocks/`
 - **Purpose:** Offline-first development and testing.
 - **Mandate:** If adding a new endpoint, always add a corresponding handler in `src/mocks/handlers.js`.
 
 ### 5. High-Fidelity Logging
+
 - **Utility:** `src/app/logger.js`
 - **Convention:** Use `log.flow()`, `log.render()`, and `log.state()` to provide visual feedback on execution flows and state transitions.
 
@@ -40,13 +45,13 @@ The system is built using an adapted **Feature-Sliced Design (FSD)**, prioritizi
 
 ## 🚀 Building and Running
 
-| Command | Action |
-| :--- | :--- |
-| `pnpm install` | Install dependencies. |
-| `pnpm dev` | Start dev server (MSW active in `development` mode). |
-| `pnpm build` | Production build (MSW excluded). |
-| `pnpm lint` | Run ESLint (includes a11y and hooks checks). |
-| `pnpm py` | Build and serve via Python server (port 5000) for prod testing. |
+| Command        | Action                                                          |
+| :------------- | :-------------------------------------------------------------- |
+| `pnpm install` | Install dependencies.                                           |
+| `pnpm dev`     | Start dev server (MSW active in `development` mode).            |
+| `pnpm build`   | Production build (MSW excluded).                                |
+| `pnpm lint`    | Run ESLint (includes a11y and hooks checks).                    |
+| `pnpm py`      | Build and serve via Python server (port 5000) for prod testing. |
 
 ## 📐 Development Conventions
 
@@ -73,4 +78,5 @@ The system is built using an adapted **Feature-Sliced Design (FSD)**, prioritizi
 - **Documentation:** Maintain high-quality JSDoc headers for all new functions and components.
 
 ---
-*Last updated: 2026-05-12*
+
+_Last updated: 2026-05-12_
