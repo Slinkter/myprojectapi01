@@ -5,7 +5,7 @@ import { GitHubUserSchema } from "@/models/types/user";
  * @description
  * Implements the ADAPTER PATTERN (GoF Structural).
  * Transforms validated GitHub API data into a standardized Application Model.
- * Now uses ZOD for runtime schema validation.
+ * Leverages Zod for runtime schema validation and data integrity.
  */
 
 /** @typedef {import('../types/user').UserProfile} UserProfile */
@@ -13,15 +13,24 @@ import { GitHubUserSchema } from "@/models/types/user";
 /**
  * Adapter for GitHub User Data
  *
- * @param {Object} rawUser - The data exactly as it comes from GitHub
- * @returns {UserProfile} Standardized object for our application
- * @throws {import('zod').ZodError} If rawUser does not match the GitHubUserSchema
+ * @param {Object} rawUser - The raw data object received from the GitHub API.
+ * @returns {UserProfile} Standardized user profile object for the application.
+ * @throws {import('zod').ZodError} Thrown if the raw data fails to match the GitHubUserSchema.
+ * 
+ * @example
+ * const rawData = { login: 'octocat', id: 1, ... };
+ * try {
+ *   const user = userAdapter(rawData);
+ *   console.log(user.username); // 'octocat'
+ * } catch (error) {
+ *   // Handle validation error
+ * }
  */
 export const userAdapter = (rawUser) => {
   // 1. Validate the input data using Zod
   const data = GitHubUserSchema.parse(rawUser);
 
-  // 2. Map to internal domain model
+  // 2. Map to internal domain model (Domain Object)
   return {
     id: data.id,
     username: data.login,
@@ -42,10 +51,12 @@ export const userAdapter = (rawUser) => {
 
 /**
  * Collection Adapter
+ * Transforms a list of raw API user objects into a list of standardized Application Models.
  * 
- * @param {Array<Object>} rawUsersList - Array of raw API objects
- * @returns {Array<UserProfile>} Array of standardized objects
+ * @param {Array<Object>} rawUsersList - Array of raw API user objects.
+ * @returns {Array<UserProfile>} Array of standardized user profile objects.
  */
 export const usersCollectionAdapter = (rawUsersList = []) => {
   return rawUsersList.map(userAdapter);
 };
+

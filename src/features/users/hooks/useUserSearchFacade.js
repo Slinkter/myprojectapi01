@@ -5,10 +5,12 @@
  * Orchestrates TanStack Query and debouncing logic.
  */
 
+import { useEffect } from "react";
 import { useDebouncedSearch } from "@/hooks/useDebouncedSearch.js";
 import { useUserQuery } from "@/features/users/hooks/useUserQuery.js";
 import { log } from "@/app/logger";
 import { DEBOUNCE_DELAY } from "@/app/config";
+import { toast } from "sonner";
 
 /**
  * Custom hook that acts as a Facade for the User Search feature.
@@ -30,6 +32,24 @@ export const useUserSearchFacade = () => {
     refetch,
     isFetching,
   } = useUserQuery(debouncedSearchTerm);
+
+  /**
+   * Side Effect: Error Notification
+   * Moved from service layer to Application Layer (Facade)
+   */
+  useEffect(() => {
+    if (error) {
+      if (error.status === 422) {
+        toast.error("Validation Error", {
+          description: "The data received from the API is invalid or malformed.",
+        });
+      } else if (error.status === 403) {
+        toast.error("Rate Limit Exceeded", {
+          description: "GitHub API rate limit reached. Please try again later.",
+        });
+      }
+    }
+  }, [error]);
 
   /**
    * Encapsulated Retry Logic
@@ -54,3 +74,4 @@ export const useUserSearchFacade = () => {
     isEmpty: status === "success" && users?.length === 0,
   };
 };
+

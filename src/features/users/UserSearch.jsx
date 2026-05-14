@@ -13,43 +13,7 @@ import { useUserSearchFacade } from "@/features/users/hooks/useUserSearchFacade"
 
 // UI Components
 import PageHeader from "@/components/layout/PageHeader";
-import ErrorDisplay from "@/components/layout/ErrorDisplay";
-import SkeletonGrid from "@/features/users/components/SkeletonGrid";
-import UserList from "@/features/users/components/UserList";
-import NotFound from "@/components/layout/NotFound";
-
-/**
- * Search Results Component
- * Handles the conditional rendering of search states.
- */
-const SearchResults = ({
-  isLoading,
-  isError,
-  error,
-  isSuccess,
-  isEmpty,
-  users,
-  debouncedSearchTerm,
-  handleRetry,
-}) => {
-  // 1. Loading State
-  if (isLoading) return <SkeletonGrid />;
-
-  // 2. Error State (with specific handling for 403 Rate Limit)
-  if (isError) {
-    return error?.status === 403 ? (
-      <NotFound searchTerm={debouncedSearchTerm} />
-    ) : (
-      <ErrorDisplay message={error?.message} onRetry={handleRetry} />
-    );
-  }
-
-  // 3. Success State (Empty vs Data)
-  if (isEmpty) return <NotFound searchTerm={debouncedSearchTerm} />;
-  if (isSuccess) return <UserList users={users} />;
-
-  return null;
-};
+import SearchResults from "@/features/users/components/SearchResults";
 
 /**
  * User Search Component (Facade Pattern Refactor)
@@ -101,3 +65,4 @@ const UserSearch = () => {
 UserSearch.displayName = "UserSearch";
 
 export default UserSearch;
+
