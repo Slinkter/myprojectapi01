@@ -18,50 +18,56 @@ Spinner.propTypes = {
 
 const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
   return (
-    <header className="flex flex-col w-full items-center gap-y-6 sm:gap-y-8 py-8 sm:py-10 mb-4 sm:mb-6 relative">
-      <div className="text-center space-y-4 max-w-2xl mx-auto px-4">
-        {/* Technical System Status Badge */}
+    <header className="flex flex-col w-full items-center gap-y-8 py-10 sm:py-16 mb-4 sm:mb-6 relative">
+      <div className="text-center space-y-4 max-w-3xl mx-auto px-4">
+        {/* Technical Sub-badge resembling Tailwind announcements */}
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-app-border bg-app-surface shadow-sm select-none mx-auto"
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-app-accent/20 bg-app-accent/5 dark:bg-app-accent/10 select-none mx-auto"
         >
-          <Code size={12} className="text-app-accent" />
-          <span className="font-mono text-[10px] tracking-tight text-app-muted font-bold">
-            CLEAN-ARCH-V4 // STATUS: OPERATIONAL
+          <Code size={11} className="text-app-accent" />
+          <span className="font-mono text-[9px] tracking-tight text-app-accent font-bold uppercase">
+            Tailwind UI Integration Operational
           </span>
         </motion.div>
 
+        {/* Tailwind-style high-impact Hero Title */}
         <motion.h1 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
-          className="text-4xl sm:text-5xl font-extrabold tracking-tight text-app-text font-heading"
+          className="text-4xl sm:text-6xl font-extrabold tracking-tight text-app-text font-heading leading-tight"
         >
-          GitHub Explorer
+          Rapidly explore <br className="hidden sm:inline" />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-app-accent via-sky-500 to-indigo-600 dark:from-app-accent dark:via-sky-400 dark:to-indigo-500">
+            GitHub profiles.
+          </span>
         </motion.h1>
         
+        {/* Sleek Subtitle */}
         <motion.p 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-app-muted font-medium text-xs sm:text-sm max-w-md mx-auto leading-relaxed"
+          className="text-app-muted font-medium text-xs sm:text-base max-w-xl mx-auto leading-relaxed"
         >
-          Consola de búsqueda de desarrolladores y organizaciones conectada a la API de GitHub mediante adaptadores de dominio y validación de tipos Zod.
+          A high-performance systems engineering interface built with React 18, TanStack Query, and validated using pure domain Zod schemas.
         </motion.p>
       </div>
 
+      {/* Doc-Search input bar mirroring tailwindcss.com command palette */}
       <motion.div 
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
         className="w-full max-w-xl px-4 sm:px-0 relative group"
       >
-        {/* Border Aura behind input */}
-        <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-app-accent to-indigo-500 opacity-10 blur-xl group-focus-within:opacity-25 transition-all duration-500 pointer-events-none" />
+        {/* Glow border aura on focus */}
+        <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-app-accent to-indigo-500 opacity-5 blur-xl group-focus-within:opacity-20 transition-all duration-500 pointer-events-none" />
         
-        <div className="input-glass-pro">
+        <div className="input-glass-pro !rounded-xl !py-3.5 hover:border-app-accent/30 transition-all duration-300">
           {isSearching ? (
             <Spinner className="text-app-accent text-lg" aria-hidden="true" />
           ) : (
@@ -71,7 +77,7 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
           <input
             type="text"
             className="flex-1 bg-transparent border-none outline-none text-sm sm:text-base text-app-text placeholder:text-app-muted/40 font-medium selection:bg-app-accent selection:text-app-bg"
-            placeholder="Escribe el nombre de un usuario de GitHub..."
+            placeholder="Search profiles, organizations, or logs..."
             value={searchTerm}
             onChange={handleSearch}
             aria-label="Buscar usuarios de GitHub"
@@ -83,7 +89,7 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
           </span>
 
           <AnimatePresence>
-            {searchTerm && (
+            {searchTerm ? (
               <motion.button
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -96,6 +102,11 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
               >
                 <XCircle size={18} aria-hidden="true" />
               </motion.button>
+            ) : (
+              /* Keyboard shortcut tag matching Tailwind docs Search palette */
+              <div className="hidden sm:flex items-center gap-0.5 px-1.5 py-0.5 rounded border border-app-border bg-app-bg text-[9px] font-mono text-app-muted font-bold select-none shadow-sm shrink-0">
+                <span>⌘</span><span>K</span>
+              </div>
             )}
           </AnimatePresence>
         </div>

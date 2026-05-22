@@ -73,11 +73,16 @@ const UserDetailSkeleton = () => (
       </div>
 
       {/* Bento 5 Skeleton: Decortive Tech/Log Card Filler */}
-      <div className="p-8 rounded-xl border border-app-border/40 bg-app-surface/20 flex flex-col justify-between min-h-[140px]">
-        <div className="w-8 h-8 rounded bg-app-border" />
-        <div className="space-y-2">
-          <div className="h-4 w-24 bg-app-border rounded" />
-          <div className="h-3 w-full bg-app-border rounded opacity-50" />
+      <div className="p-6 rounded-xl border border-app-border/40 bg-app-surface/20 flex flex-col justify-between min-h-[160px]">
+        <div className="flex items-center gap-1.5 border-b border-app-border/20 pb-2.5 w-full">
+          <div className="w-2 h-2 rounded-full bg-app-border/40" />
+          <div className="w-2 h-2 rounded-full bg-app-border/40" />
+          <div className="w-2 h-2 rounded-full bg-app-border/40" />
+        </div>
+        <div className="space-y-2 py-1 flex-1 flex flex-col justify-center">
+          <div className="h-3 w-20 bg-app-border rounded opacity-30" />
+          <div className="h-3 w-32 bg-app-border rounded opacity-50" />
+          <div className="h-3 w-40 bg-app-border rounded opacity-50" />
         </div>
       </div>
 

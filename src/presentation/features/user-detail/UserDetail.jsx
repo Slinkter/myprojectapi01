@@ -87,30 +87,34 @@ const UserDetail = () => {
       </Link>
 
       {/* Profile Header Block */}
-      <section className="flex flex-col sm:flex-row gap-6 items-center sm:items-start text-center sm:text-left glass-card-pro p-6 sm:p-8 relative overflow-hidden">
+      <section className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-center sm:items-start text-center sm:text-left glass-card-pro p-6 sm:p-8 relative overflow-hidden">
         <div className="relative">
           <motion.img
             layoutId={`avatar-${user.username}`}
             src={user.photo}
             alt={`Avatar de ${user.username}`}
-            className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full border border-app-border object-cover shadow-sm transition-all duration-300 z-10"
+            className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full border-2 border-app-accent object-cover shadow-md transition-all duration-300 z-10 ring-4 ring-app-accent/10 dark:ring-app-accent/20"
           />
+          {/* Subtle online status indicator in tech teal */}
+          <span className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 w-3.5 h-3.5 bg-emerald-500 border-2 border-app-surface rounded-full z-20 shadow-sm" />
         </div>
 
-        <div className="space-y-3 sm:pt-1 flex-1 min-w-0">
-          <div className="space-y-0.5">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-app-text tracking-tight font-heading leading-tight truncate">
+        <div className="space-y-4 sm:pt-1 flex-1 min-w-0">
+          <div className="space-y-1">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-app-text tracking-tight font-heading leading-none truncate">
               {user.name}
             </h2>
-            <p className="font-mono text-xs sm:text-sm text-app-accent font-bold tracking-tight">
+            <p className="font-mono text-xs sm:text-sm text-app-accent font-semibold tracking-tight">
               github.com/{user.username}
             </p>
           </div>
           
           {user.bio ? (
-            <p className="text-app-muted text-xs sm:text-sm leading-relaxed max-w-xl mx-auto sm:mx-0 font-medium">
-              {user.bio}
-            </p>
+            <div className="relative pl-3 border-l-2 border-app-accent/20">
+              <p className="text-app-muted text-xs sm:text-sm leading-relaxed max-w-xl mx-auto sm:mx-0 font-medium">
+                {user.bio}
+              </p>
+            </div>
           ) : (
             <p className="text-app-muted/50 text-[11px] italic">Este desarrollador aún no ha añadido una biografía en su perfil de GitHub.</p>
           )}
@@ -124,32 +128,35 @@ const UserDetail = () => {
         <motion.div 
           whileHover={{ y: -3 }}
           transition={{ duration: 0.2 }}
-          className="md:col-span-2 p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative"
+          className="md:col-span-2 p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative overflow-hidden"
         >
-          <div className="flex items-center justify-between">
+          {/* Subtle grid accent background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-app-accent/5 via-transparent to-transparent opacity-30 pointer-events-none" />
+          
+          <div className="flex items-center justify-between relative z-10">
             <div className="w-10 h-10 rounded-lg bg-app-bg border border-app-border flex items-center justify-center text-app-accent">
               <GitFork className="w-5 h-5" />
             </div>
-            <span className="font-mono text-[9px] font-bold text-app-muted bg-app-bg px-2.5 py-0.5 rounded border border-app-border">
+            <span className="font-mono text-[9px] font-bold text-app-accent bg-app-accent/5 px-2.5 py-0.5 rounded border border-app-accent/15 tracking-wider uppercase">
               REPOS // CODEBASE
             </span>
           </div>
 
-          <div className="space-y-1.5 mt-2">
-            <p className="font-mono text-4xl sm:text-5xl font-extrabold tracking-tight text-app-text">
+          <div className="space-y-1.5 mt-2 relative z-10">
+            <p className="font-mono text-5xl sm:text-6xl font-black tracking-tight text-app-text">
               <AnimatedCounter value={user.repos} />
             </p>
             <h4 className="text-sm font-bold text-app-text font-heading">Repositorios Públicos</h4>
             <p className="text-[11px] text-app-muted font-medium max-w-sm">Proyectos independientes, bibliotecas publicadas y colaboraciones activas del desarrollador.</p>
           </div>
 
-          {/* Clean solid mini progress bar */}
-          <div className="w-full bg-app-bg h-1 rounded-full overflow-hidden mt-1 border border-app-border">
+          {/* Premium animated gradient progress bar inspired by Tailwind CSS docs */}
+          <div className="w-full bg-app-bg h-1.5 rounded-full overflow-hidden mt-1 border border-app-border relative z-10">
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: "75%" }}
               transition={{ duration: 1, ease: "easeOut" }}
-              className="h-full bg-app-accent"
+              className="h-full bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 rounded-full"
             />
           </div>
         </motion.div>
@@ -158,19 +165,19 @@ const UserDetail = () => {
         <motion.div 
           whileHover={{ y: -3 }}
           transition={{ duration: 0.2 }}
-          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative"
+          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative overflow-hidden"
         >
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-lg bg-app-bg border border-app-border flex items-center justify-center text-app-accent">
               <Users className="w-5 h-5" />
             </div>
-            <span className="font-mono text-[9px] font-bold text-app-muted bg-app-bg px-2.5 py-0.5 rounded border border-app-border">
+            <span className="font-mono text-[9px] font-bold text-app-muted bg-app-bg px-2.5 py-0.5 rounded border border-app-border uppercase tracking-wider">
               FOLLOWERS
             </span>
           </div>
 
           <div className="space-y-1 mt-2">
-            <p className="font-mono text-4xl font-extrabold tracking-tight text-app-text">
+            <p className="font-mono text-4xl sm:text-5xl font-black tracking-tight text-app-text">
               <AnimatedCounter value={user.followers} />
             </p>
             <h4 className="text-xs font-bold text-app-text font-heading">Seguidores</h4>
@@ -182,19 +189,19 @@ const UserDetail = () => {
         <motion.div 
           whileHover={{ y: -3 }}
           transition={{ duration: 0.2 }}
-          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative"
+          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative overflow-hidden"
         >
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-lg bg-app-bg border border-app-border flex items-center justify-center text-app-accent">
               <Heart className="w-5 h-5" />
             </div>
-            <span className="font-mono text-[9px] font-bold text-app-muted bg-app-bg px-2.5 py-0.5 rounded border border-app-border">
+            <span className="font-mono text-[9px] font-bold text-app-muted bg-app-bg px-2.5 py-0.5 rounded border border-app-border uppercase tracking-wider">
               FOLLOWING
             </span>
           </div>
 
           <div className="space-y-1 mt-2">
-            <p className="font-mono text-4xl font-extrabold tracking-tight text-app-text">
+            <p className="font-mono text-4xl sm:text-5xl font-black tracking-tight text-app-text">
               <AnimatedCounter value={user.following} />
             </p>
             <h4 className="text-xs font-bold text-app-text font-heading">Siguiendo</h4>
@@ -206,19 +213,19 @@ const UserDetail = () => {
         <motion.div 
           whileHover={{ y: -3 }}
           transition={{ duration: 0.2 }}
-          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative"
+          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative overflow-hidden"
         >
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-lg bg-app-bg border border-app-border flex items-center justify-center text-app-accent">
               <Code className="w-5 h-5" />
             </div>
-            <span className="font-mono text-[9px] font-bold text-app-muted bg-app-bg px-2.5 py-0.5 rounded border border-app-border">
+            <span className="font-mono text-[9px] font-bold text-app-muted bg-app-bg px-2.5 py-0.5 rounded border border-app-border uppercase tracking-wider">
               GISTS
             </span>
           </div>
 
           <div className="space-y-1 mt-2">
-            <p className="font-mono text-4xl font-extrabold tracking-tight text-app-text">
+            <p className="font-mono text-4xl sm:text-5xl font-black tracking-tight text-app-text">
               <AnimatedCounter value={user.gists} />
             </p>
             <h4 className="text-xs font-bold text-app-text font-heading">Gists Públicos</h4>
@@ -226,23 +233,30 @@ const UserDetail = () => {
           </div>
         </motion.div>
 
-        {/* Bento 5: System Metadata Card (Formal Technical Log) */}
+        {/* Bento 5: System Configuration/Build Log (Tailwind CLI) */}
         <motion.div 
           whileHover={{ y: -3 }}
           transition={{ duration: 0.2 }}
-          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-3 relative bg-app-surface"
+          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between min-h-[160px] relative bg-[#090D16] border-slate-800 text-slate-300"
         >
-          <div className="flex items-center gap-1.5 text-app-accent border-b border-app-border pb-2 w-full">
-            <Code className="w-4 h-4 shrink-0" />
-            <span className="font-mono text-[9px] font-bold tracking-tight uppercase">SYSTEM METADATA</span>
+          <div className="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56] opacity-90" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E] opacity-90" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F] opacity-90" />
+            </div>
+            <span className="font-mono text-[9px] text-slate-500 select-none">bash - tailwindcss</span>
           </div>
           
-          <div className="space-y-1 font-mono text-[9px] text-app-muted leading-relaxed flex-1 mt-1">
-            <div>CORE: REACT-18-SPA</div>
-            <div>STATE: TANSTACK-QUERY</div>
-            <div>SCHEMA: ZOD-RUNTIME</div>
-            <div>STYLING: TAILWIND-V4</div>
-            <div>STATUS: COMPILED-OK</div>
+          <div className="font-mono text-[10px] sm:text-xs space-y-1.5 text-left flex-1 flex flex-col justify-center py-1">
+            <div className="text-slate-500 select-none">$ tailwindcss --build</div>
+            <div className="text-emerald-400 font-semibold flex items-center gap-1.5">
+              <span>🚀</span> tailwindcss v4.0.0
+            </div>
+            <div className="text-sky-400 font-semibold flex items-center gap-1.5">
+              <span>⚡️</span> [rebuild] 145 files changed in 14ms
+            </div>
+            <div className="text-slate-500/60 select-none text-[9px] mt-0.5">... listening for changes</div>
           </div>
         </motion.div>
 
