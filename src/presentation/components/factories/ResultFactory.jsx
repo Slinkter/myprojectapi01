@@ -17,9 +17,9 @@ const OrganizationCard = ({ org, variant = "glass" }) => (
     <UserCard.Avatar url={org.photo} login={org.username} variant={variant} />
     
     {variant !== "minimal" && (
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-1 px-2.5 py-1 rounded-full border border-violet-500/30 bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 backdrop-blur-md text-violet-400 dark:text-violet-300 text-[10px] font-black uppercase tracking-wider select-none shadow-sm shadow-violet-500/10">
-        <Building2 size={11} className="animate-pulse" />
-        <span>Org</span>
+      <div className="absolute top-3 right-3 z-20 flex items-center gap-1 px-2 py-0.5 rounded border border-app-border bg-app-bg text-app-muted text-[9px] font-mono font-bold uppercase tracking-tight select-none shadow-sm">
+        <Building2 size={10} />
+        <span>ORG</span>
       </div>
     )}
 
@@ -27,9 +27,9 @@ const OrganizationCard = ({ org, variant = "glass" }) => (
     
     {/* Specialized visual description for orgs if displayed in list */}
     {variant !== "minimal" && (
-      <div className="px-6 pb-2 -mt-4 text-center">
-        <span className="text-[10px] font-bold text-app-muted/70 uppercase tracking-widest flex items-center justify-center gap-1">
-          <Sparkles size={10} className="text-violet-400" /> Cuenta Corporativa
+      <div className="px-5 pb-1 -mt-3 text-center">
+        <span className="font-mono text-[9px] text-app-muted/80 uppercase tracking-wider flex items-center justify-center gap-1">
+          ORGANIZACIÓN VERIFICADA
         </span>
       </div>
     )}

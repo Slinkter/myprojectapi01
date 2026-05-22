@@ -5,7 +5,7 @@
 
 import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "motion/react";
-import { Search, XCircle, Loader2, Sparkles } from "lucide-react";
+import { Search, XCircle, Loader2, Code } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Spinner = ({ className }) => {
@@ -18,40 +18,37 @@ Spinner.propTypes = {
 
 const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
   return (
-    <header className="flex flex-col w-full items-center gap-y-8 sm:gap-y-12 py-8 sm:py-12 mb-6 sm:mb-10 relative">
-      {/* Decore top blur point */}
-      <div className="absolute top-0 w-72 h-72 bg-gradient-to-r from-app-accent to-purple-500/10 rounded-full blur-3xl pointer-events-none -z-10 opacity-30 dark:opacity-20" />
-
+    <header className="flex flex-col w-full items-center gap-y-6 sm:gap-y-8 py-8 sm:py-10 mb-4 sm:mb-6 relative">
       <div className="text-center space-y-4 max-w-2xl mx-auto px-4">
-        {/* Subtle Cyber Badge */}
+        {/* Technical System Status Badge */}
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-app-accent/20 bg-app-accent/5 backdrop-blur-md text-[10px] sm:text-xs font-bold tracking-widest text-app-accent uppercase select-none mx-auto"
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-app-border bg-app-surface shadow-sm select-none mx-auto"
         >
-          <Sparkles size={12} className="animate-pulse" />
-          Clean Architecture v4
+          <Code size={12} className="text-app-accent" />
+          <span className="font-mono text-[10px] tracking-tight text-app-muted font-bold">
+            CLEAN-ARCH-V4 // STATUS: OPERATIONAL
+          </span>
         </motion.div>
 
         <motion.h1 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, type: "spring", stiffness: 50 }}
-          className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter text-app-text"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
+          className="text-4xl sm:text-5xl font-extrabold tracking-tight text-app-text font-heading"
         >
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-app-text via-app-accent to-indigo-500 dark:from-white dark:via-[#00F2FE] dark:to-indigo-400">
-            GitHub Explorer
-          </span>
+          GitHub Explorer
         </motion.h1>
         
         <motion.p 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-app-muted font-medium text-sm sm:text-base max-w-lg mx-auto leading-relaxed"
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-app-muted font-medium text-xs sm:text-sm max-w-md mx-auto leading-relaxed"
         >
-          Busca perfiles de desarrolladores y organizaciones de forma interactiva con rendimiento y caching avanzado.
+          Consola de búsqueda de desarrolladores y organizaciones conectada a la API de GitHub mediante adaptadores de dominio y validación de tipos Zod.
         </motion.p>
       </div>
 

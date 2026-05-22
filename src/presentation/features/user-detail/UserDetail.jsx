@@ -87,174 +87,172 @@ const UserDetail = () => {
       </Link>
 
       {/* Profile Header Block */}
-      <section className="flex flex-col sm:flex-row gap-8 items-center sm:items-start text-center sm:text-left glass-card-pro p-8 sm:p-10 relative overflow-hidden">
-        {/* Decorative corner visual */}
-        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-app-accent/10 to-transparent blur-xl pointer-events-none" />
-
-        <div className="relative group/avatar">
-          {/* Glowing ring under image */}
-          <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-app-accent to-indigo-500 opacity-60 blur-md group-hover/avatar:opacity-100 group-hover/avatar:scale-105 transition-all duration-700 pointer-events-none" />
-          
+      <section className="flex flex-col sm:flex-row gap-6 items-center sm:items-start text-center sm:text-left glass-card-pro p-6 sm:p-8 relative overflow-hidden">
+        <div className="relative">
           <motion.img
             layoutId={`avatar-${user.username}`}
             src={user.photo}
             alt={`Avatar de ${user.username}`}
-            className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-app-surface object-cover shadow-2xl transition-all duration-500 grayscale-[0.05] group-hover/avatar:grayscale-0 z-10"
+            className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full border border-app-border object-cover shadow-sm transition-all duration-300 z-10"
           />
         </div>
 
-        <div className="space-y-4 sm:pt-2 flex-1 min-w-0">
-          <div className="space-y-1">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-app-text tracking-tight font-heading leading-tight truncate">
+        <div className="space-y-3 sm:pt-1 flex-1 min-w-0">
+          <div className="space-y-0.5">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-app-text tracking-tight font-heading leading-tight truncate">
               {user.name}
             </h2>
-            <p className="text-base sm:text-lg text-app-accent font-bold tracking-wider font-heading">
-              @{user.username}
+            <p className="font-mono text-xs sm:text-sm text-app-accent font-bold tracking-tight">
+              github.com/{user.username}
             </p>
           </div>
           
           {user.bio ? (
-            <p className="text-app-muted text-sm sm:text-base leading-relaxed max-w-xl mx-auto sm:mx-0 font-medium">
+            <p className="text-app-muted text-xs sm:text-sm leading-relaxed max-w-xl mx-auto sm:mx-0 font-medium">
               {user.bio}
             </p>
           ) : (
-            <p className="text-app-muted/50 text-xs italic">Este desarrollador aún no ha añadido una biografía en su perfil de GitHub.</p>
+            <p className="text-app-muted/50 text-[11px] italic">Este desarrollador aún no ha añadido una biografía en su perfil de GitHub.</p>
           )}
         </div>
       </section>
 
       {/* Asymmetric Bento Box Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
         
         {/* Bento 1: Repositories (Double width on large screens) */}
         <motion.div 
-          whileHover={{ y: -5 }}
-          className="md:col-span-2 p-8 rounded-2xl glass-card-pro border-app-accent/20 bg-gradient-to-br from-app-accent/10 via-indigo-500/5 to-transparent flex flex-col justify-between gap-6 relative overflow-hidden"
+          whileHover={{ y: -3 }}
+          transition={{ duration: 0.2 }}
+          className="md:col-span-2 p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative"
         >
-          <div className="absolute top-0 right-0 w-32 h-32 bg-app-accent/10 rounded-full blur-3xl pointer-events-none" />
-          
           <div className="flex items-center justify-between">
-            <div className="w-12 h-12 rounded-xl bg-app-accent/20 flex items-center justify-center text-app-accent shadow-md shadow-app-accent/10">
-              <GitFork className="w-6 h-6 animate-pulse" />
+            <div className="w-10 h-10 rounded-lg bg-app-bg border border-app-border flex items-center justify-center text-app-accent">
+              <GitFork className="w-5 h-5" />
             </div>
-            <span className="text-[10px] font-black tracking-widest text-app-accent uppercase bg-app-accent/10 px-3 py-1 rounded-full border border-app-accent/20">
-              Código Activo
+            <span className="font-mono text-[9px] font-bold text-app-muted bg-app-bg px-2.5 py-0.5 rounded border border-app-border">
+              REPOS // CODEBASE
             </span>
           </div>
 
-          <div className="space-y-2 mt-4">
-            <p className="text-5xl font-black tracking-tighter text-app-text font-heading">
+          <div className="space-y-1.5 mt-2">
+            <p className="font-mono text-4xl sm:text-5xl font-extrabold tracking-tight text-app-text">
               <AnimatedCounter value={user.repos} />
             </p>
-            <h4 className="text-lg font-bold text-app-text font-heading">Repositorios Públicos</h4>
-            <p className="text-xs text-app-muted font-medium max-w-sm">Proyectos independientes, forks y colaboraciones activas registradas en GitHub.</p>
+            <h4 className="text-sm font-bold text-app-text font-heading">Repositorios Públicos</h4>
+            <p className="text-[11px] text-app-muted font-medium max-w-sm">Proyectos independientes, bibliotecas publicadas y colaboraciones activas del desarrollador.</p>
           </div>
 
-          {/* Decorative mini metric bar */}
-          <div className="w-full bg-app-text/5 h-1.5 rounded-full overflow-hidden mt-2 border border-app-border/10">
+          {/* Clean solid mini progress bar */}
+          <div className="w-full bg-app-bg h-1 rounded-full overflow-hidden mt-1 border border-app-border">
             <motion.div 
               initial={{ width: 0 }}
-              animate={{ width: "70%" }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-              className="h-full bg-gradient-to-r from-app-accent to-indigo-500 rounded-full"
+              animate={{ width: "75%" }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="h-full bg-app-accent"
             />
           </div>
         </motion.div>
 
-        {/* Bento 2: Followers (Violet Glow Theme) */}
+        {/* Bento 2: Followers */}
         <motion.div 
-          whileHover={{ y: -5 }}
-          className="p-8 rounded-2xl glass-card-pro border-violet-500/20 bg-gradient-to-br from-violet-500/10 via-fuchsia-500/5 to-transparent flex flex-col justify-between gap-6 relative overflow-hidden"
+          whileHover={{ y: -3 }}
+          transition={{ duration: 0.2 }}
+          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative"
         >
-          <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-violet-500/10 rounded-full blur-2xl pointer-events-none" />
-          
           <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-lg bg-violet-500/20 flex items-center justify-center text-violet-400">
+            <div className="w-10 h-10 rounded-lg bg-app-bg border border-app-border flex items-center justify-center text-app-accent">
               <Users className="w-5 h-5" />
             </div>
-            <span className="text-[9px] font-bold text-violet-400/90 uppercase tracking-widest">Audiencia</span>
+            <span className="font-mono text-[9px] font-bold text-app-muted bg-app-bg px-2.5 py-0.5 rounded border border-app-border">
+              FOLLOWERS
+            </span>
           </div>
 
-          <div className="space-y-1 mt-4">
-            <p className="text-4xl font-extrabold tracking-tighter text-app-text font-heading">
+          <div className="space-y-1 mt-2">
+            <p className="font-mono text-4xl font-extrabold tracking-tight text-app-text">
               <AnimatedCounter value={user.followers} />
             </p>
-            <h4 className="text-sm font-bold text-app-text font-heading">Seguidores</h4>
-            <p className="text-[11px] text-app-muted leading-snug mt-1">Desarrolladores inspirados por su código y contribuciones diarias.</p>
+            <h4 className="text-xs font-bold text-app-text font-heading">Seguidores</h4>
+            <p className="text-[11px] text-app-muted leading-relaxed">Cuentas que siguen sus actividades e integraciones diarias en GitHub.</p>
           </div>
         </motion.div>
 
         {/* Bento 3: Following */}
         <motion.div 
-          whileHover={{ y: -5 }}
-          className="p-8 rounded-2xl glass-card-pro flex flex-col justify-between gap-6 relative overflow-hidden"
+          whileHover={{ y: -3 }}
+          transition={{ duration: 0.2 }}
+          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative"
         >
           <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
-              <Heart className="w-5 h-5 text-indigo-400" />
+            <div className="w-10 h-10 rounded-lg bg-app-bg border border-app-border flex items-center justify-center text-app-accent">
+              <Heart className="w-5 h-5" />
             </div>
-            <span className="text-[9px] font-bold text-indigo-400/90 uppercase tracking-widest">Comunidad</span>
+            <span className="font-mono text-[9px] font-bold text-app-muted bg-app-bg px-2.5 py-0.5 rounded border border-app-border">
+              FOLLOWING
+            </span>
           </div>
 
-          <div className="space-y-1 mt-4">
-            <p className="text-4xl font-extrabold tracking-tighter text-app-text font-heading">
+          <div className="space-y-1 mt-2">
+            <p className="font-mono text-4xl font-extrabold tracking-tight text-app-text">
               <AnimatedCounter value={user.following} />
             </p>
-            <h4 className="text-sm font-bold text-app-text font-heading">Siguiendo</h4>
-            <p className="text-[11px] text-app-muted leading-snug mt-1">Perfiles que este desarrollador sigue de cerca para mantenerse al día.</p>
+            <h4 className="text-xs font-bold text-app-text font-heading">Siguiendo</h4>
+            <p className="text-[11px] text-app-muted leading-relaxed">Cuentas de interés técnico y repositorios bajo observación directa.</p>
           </div>
         </motion.div>
 
-        {/* Bento 4: Gists (Gold Editorial Style) */}
+        {/* Bento 4: Gists */}
         <motion.div 
-          whileHover={{ y: -5 }}
-          className="p-8 rounded-2xl glass-card-pro border-amber-500/20 bg-gradient-to-br from-amber-500/10 via-yellow-500/5 to-transparent flex flex-col justify-between gap-6 relative overflow-hidden"
+          whileHover={{ y: -3 }}
+          transition={{ duration: 0.2 }}
+          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative"
         >
-          <div className="absolute -top-6 -right-6 w-20 h-20 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
-          
           <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-500">
+            <div className="w-10 h-10 rounded-lg bg-app-bg border border-app-border flex items-center justify-center text-app-accent">
               <Code className="w-5 h-5" />
             </div>
-            <span className="text-[9px] font-bold text-amber-500/90 uppercase tracking-widest">Snippets</span>
+            <span className="font-mono text-[9px] font-bold text-app-muted bg-app-bg px-2.5 py-0.5 rounded border border-app-border">
+              GISTS
+            </span>
           </div>
 
-          <div className="space-y-1 mt-4">
-            <p className="text-4xl font-extrabold tracking-tighter text-app-text font-heading">
+          <div className="space-y-1 mt-2">
+            <p className="font-mono text-4xl font-extrabold tracking-tight text-app-text">
               <AnimatedCounter value={user.gists} />
             </p>
-            <h4 className="text-sm font-bold text-app-text font-heading">Gists Creados</h4>
-            <p className="text-[11px] text-app-muted leading-snug mt-1">Fragmentos de código de utilidad y scripts compartidos en GitHub.</p>
+            <h4 className="text-xs font-bold text-app-text font-heading">Gists Públicos</h4>
+            <p className="text-[11px] text-app-muted leading-relaxed">Snippets y fragmentos de código rápido cargados en la nube de GitHub.</p>
           </div>
         </motion.div>
 
-        {/* Bento 5: Sparkle Tech Badge (Decorative Grid-Filler Card) */}
+        {/* Bento 5: System Metadata Card (Formal Technical Log) */}
         <motion.div 
-          whileHover={{ y: -5 }}
-          className="p-8 rounded-2xl glass-card-pro bg-gradient-to-br from-purple-500/5 to-indigo-500/10 flex flex-col justify-between relative overflow-hidden"
+          whileHover={{ y: -3 }}
+          transition={{ duration: 0.2 }}
+          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-3 relative bg-app-surface"
         >
-          <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-full blur-xl pointer-events-none" />
-          
-          <div className="flex items-center gap-2 text-app-accent">
-            <Sparkles size={16} className="animate-spin" style={{ animationDuration: "12s" }} />
-            <span className="text-[9px] font-black uppercase tracking-widest">Tecnología</span>
+          <div className="flex items-center gap-1.5 text-app-accent border-b border-app-border pb-2 w-full">
+            <Code className="w-4 h-4 shrink-0" />
+            <span className="font-mono text-[9px] font-bold tracking-tight uppercase">SYSTEM METADATA</span>
           </div>
           
-          <div className="space-y-2 mt-4">
-            <h4 className="text-base font-black tracking-tight text-app-text font-heading">Dev Hub Profile</h4>
-            <p className="text-[10px] text-app-muted leading-normal">
-              Esta ficha ha sido normalizada e importada con validación Zod en tiempo de ejecución.
-            </p>
+          <div className="space-y-1 font-mono text-[9px] text-app-muted leading-relaxed flex-1 mt-1">
+            <div>CORE: REACT-18-SPA</div>
+            <div>STATE: TANSTACK-QUERY</div>
+            <div>SCHEMA: ZOD-RUNTIME</div>
+            <div>STYLING: TAILWIND-V4</div>
+            <div>STATUS: COMPILED-OK</div>
           </div>
         </motion.div>
 
       </div>
 
       {/* Sub-footer pills section */}
-      <footer className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 pt-8 text-sm font-medium border-t border-app-border/40">
+      <footer className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 pt-6 text-xs font-semibold border-t border-app-border">
         {user.location && (
-          <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-app-border bg-app-surface/60 backdrop-blur-md text-app-muted shadow-sm select-none">
-            <MapPin size={15} className="text-app-accent" /> 
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-app-border bg-app-surface text-app-muted shadow-sm select-none">
+            <MapPin size={14} className="text-app-accent" /> 
             <span>{user.location}</span>
           </div>
         )}
@@ -264,9 +262,9 @@ const UserDetail = () => {
             href={user.website.startsWith("http") ? user.website : `https://${user.website}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-app-border bg-app-surface/60 backdrop-blur-md text-app-muted hover:text-app-accent hover:border-app-accent/20 hover:shadow-sm transition-all duration-300"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg border border-app-border bg-app-surface text-app-muted hover:text-app-accent hover:border-app-accent/30 hover:shadow-sm transition-all duration-200"
           >
-            <LinkIcon size={15} className="text-app-accent" /> 
+            <LinkIcon size={14} className="text-app-accent" /> 
             <span>Website Oficial</span>
           </a>
         )}
@@ -275,9 +273,9 @@ const UserDetail = () => {
           href={user.profileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-app-accent/20 bg-app-accent/5 backdrop-blur-md text-app-accent hover:bg-app-accent hover:text-app-bg hover:shadow-md hover:shadow-app-accent/10 transition-all duration-300 font-bold"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg border border-transparent bg-app-accent text-white hover:bg-blue-600 shadow-sm transition-all duration-200 font-bold"
         >
-          <Globe size={15} /> 
+          <Globe size={14} /> 
           <span>Ver en GitHub</span>
         </a>
       </footer>
