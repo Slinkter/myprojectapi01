@@ -4,18 +4,18 @@
  * Componente raíz de la aplicación que configura la estructura de rutas (routing) y el diseño global.
  * Administra el estado del tema (claro/oscuro) y provee la navegación entre diferentes vistas.
  */
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { Toaster } from "sonner";
-import { useTheme } from "@/hooks/useTheme.js";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { log } from "@/app/logger";
-import ErrorBoundary from "@/components/common/ErrorBoundary";
-import SkeletonGrid from "@/features/users/components/SkeletonGrid";
+import { useTheme } from "@/application/hooks/useTheme.js";
+import { ThemeToggle } from "@/presentation/components/ui/ThemeToggle";
+import { log } from "@/infrastructure/logger/logger";
+import ErrorBoundary from "@/presentation/components/common/ErrorBoundary";
+import SkeletonGrid from "@/presentation/features/users/components/SkeletonGrid";
 
 // Lazy loading components (Suspense Pattern)
-const UserSearch = lazy(() => import("@/features/users/UserSearch.jsx"));
-const UserDetail = lazy(() => import("@/features/user-detail/UserDetail.jsx"));
+const UserSearch = lazy(() => import("@/presentation/features/users/UserSearch.jsx"));
+const UserDetail = lazy(() => import("@/presentation/features/user-detail/UserDetail.jsx"));
 
 /**
  * Main Application Component (Resilience Refactor)
@@ -37,6 +37,8 @@ const App = () => {
             <Routes>
               <Route path="/" element={<UserSearch />} />
               <Route path="/user/:login" element={<UserDetail />} />
+              {/* Bug 3: Ruta fallback comodín (404/Redirect a Home) */}
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>
         </ErrorBoundary>

@@ -1,27 +1,70 @@
-# 02 - Arquitectura y Patrones Explicados
+# 02 - Arquitectura Limpia (Clean Architecture) y Patrones Explicados
 
-Este proyecto utiliza una arquitectura llamada **Feature-Sliced Design (FSD)** adaptada. Suena complicado, pero en realidad significa que organizamos las carpetas por "Funcionalidad" (Features) en lugar de por el "Tipo" de archivo.
+Este proyecto utiliza una **Arquitectura Limpia (Clean Architecture)** adaptada con principios de **Diseño Guiado por el Dominio (DDD)**. Hemos migrado de una estructura Feature-Sliced Design (FSD) a esta arquitectura en capas para lograr un desacoplamiento absoluto de la lógica de negocio frente a la infraestructura técnica (HTTP, React, APIs externas).
 
-En lugar de tener una carpeta gigante de `components` y otra de `hooks`, tenemos una carpeta `features/users` que contiene *todo* lo relacionado con la búsqueda de usuarios (sus componentes, sus hooks, etc.). Esto hace que sea más fácil saber dónde cambiar las cosas.
+---
 
-## Los 3 Conceptos Clave (Explicados simple)
+## 🏗️ Las 4 Capas del Sistema (Clean Architecture)
 
-Para que el proyecto sea "a prueba de balas", usamos 3 conceptos o patrones principales:
+El código está estrictamente dividido en cuatro capas horizontales con una regla inquebrantable: **Las dependencias siempre apuntan hacia adentro (las capas externas conocen a las internas, pero las internas jamás conocen a las externas).**
 
-### 1. El Patrón Adapter (Adaptador) y Zod
-**Problema:** La API de GitHub nos devuelve mucha información, mucha basura que no necesitamos, y a veces los nombres de los campos cambian (por ejemplo, nos da `avatar_url` pero en nuestra app preferiríamos llamarlo `photo`). 
-**Solución:** Creamos una función (el *Adapter*) que funciona como un enchufe adaptador de viaje. Toma los datos crudos de GitHub, verifica que sean correctos usando una librería llamada **Zod** (para asegurarnos de que no nos manden un número donde esperamos texto), y los transforma en un formato limpio y estándar para nuestros componentes. 
+```
+ ┌────────────────────────────────────────────────────────┐
+ │ presentation (Visuals, React Components, CSS)          │
+ └───────────┬────────────────────────────────────────────┘
+             ▼
+ ┌────────────────────────────────────────────────────────┐
+ │ application (Facades, Use Cases, Query Hooks, State)  │
+ └───────────┬────────────────────────────────────────────┘
+             ▼
+ ┌────────────────────────────────────────────────────────┐
+ │ infrastructure (httpClient, Services, Configs, Mocks)  │
+ └───────────┬────────────────────────────────────────────┘
+             ▼
+ ┌────────────────────────────────────────────────────────┐
+ │ domain (Entities, Zod Schemas, Adapters, ApiError)     │
+ └────────────────────────────────────────────────────────┘
+```
 
-*Mira el archivo: `src/models/adapters/userAdapter.js`*
+### 1. 🛡️ Capa de Dominio (`src/domain`)
+La capa más interna y sagrada. Es **código JavaScript puro**, 100% independiente de React, interfaces visuales, o clientes HTTP. Contiene las reglas del negocio del buscador de perfiles.
+*   **`schemas/`**: Esquemas de validación Zod (`user.js`) que aseguran la consistencia de los datos en tiempo de ejecución.
+*   **`adapters/`**: Traductores e integradores de datos crudos (`userAdapter.js`). Normalizan y transforman las respuestas del exterior a entidades tipadas.
+*   **`errors/`**: Errores propios de la aplicación (`ApiError.js`) que encapsulan fallas de negocio o de infraestructura.
 
-### 2. TanStack Query (El jefe de las peticiones)
-**Problema:** Hacer peticiones a la API (fetch) manualmente es difícil porque tienes que manejar el `isLoading`, el `error`, y volver a pedir datos si fallan.
-**Solución:** Usamos TanStack Query (`useQuery`). Le decimos "ve y busca esto" y él se encarga de decirnos si está cargando, si hubo error, o darnos los datos. Además, guarda en caché los resultados para no pedir lo mismo dos veces a internet.
+### 2. 🔌 Capa de Infraestructura (`src/infrastructure`)
+Es la capa encargada de los detalles técnicos del exterior: peticiones HTTP, configuración global del entorno, mocking de servicios y herramientas auxiliares.
+*   **`api/`**: Contiene el cliente HTTP base (`httpClient.js`) y servicios especializados (`userService.js`) que se comunican con APIs externas (como GitHub).
+*   **`config/`**: Parámetros globales y de entorno (`config.js`).
+*   **`logger/`**: Sistema de trazas semántico y visual (`logger.js`).
+*   **`mocks/`**: Entorno offline mediante MSW (`handlers.js`, `browser.js`) para emular el servidor de producción.
 
-*Mira el archivo: `src/features/users/hooks/useUserQuery.js`*
+### 3. ⚙️ Capa de Aplicación (`src/application`)
+Funciona como el director de orquesta. No define qué pintar ni cómo conectar la red directamente; en su lugar, organiza la lógica de los casos de uso del sistema.
+*   **`queries/`**: Hooks reactivos de TanStack Query (`useUserQuery.js`, `useUserDetailQuery.js`) que manejan el ciclo de vida del estado del servidor.
+*   **`facades/`**: Hooks de fachada (`useUserSearchFacade.js`). Este patrón encapsula toda la complejidad del flujo de debouncing, estados de Query, y disparadores, entregando a la UI un objeto limpio.
+*   **`hooks/`**: Hooks reactivos transversales e independientes del dominio (`useTheme.js`, `useIntersectionObserver.js`, `useDebouncedSearch.js`).
 
-### 3. El Patrón Facade (Fachada)
-**Problema:** Si metemos toda la lógica de buscar (el delay/debounce al escribir) y la lógica de pedir datos (TanStack Query) dentro de nuestro componente visual `UserSearch.jsx`, el archivo tendría 200 líneas y sería imposible de leer. 
-**Solución:** Creamos un "Hook Fachada" (`useUserSearchFacade.js`). Este hook se come toda la complejidad (las variables, el debounce, las peticiones) y simplemente le entrega al componente visual un paquete limpio con cosas como `users` (los datos), `isLoading` (si está cargando) y `searchTerm` (lo que se escribió). Así, el componente visual solo se preocupa de *dibujar* la pantalla.
+### 4. 🎨 Capa de Presentación (`src/presentation`)
+La capa visual más externa. Es responsable única y exclusivamente de representar el estado visual al usuario final y de capturar sus interacciones.
+*   **`components/`**: Elementos de UI comunes y desacoplados (`ErrorBoundary.jsx`, `ThemeToggle.jsx`, `PageHeader.jsx`), junto con la factoría visual creacional (`ResultFactory.jsx`).
+*   **`features/`**: Vistas completas de la aplicación (`users/UserSearch.jsx` y `user-detail/UserDetail.jsx`).
+*   **`styles/`**: Estilo general y hoja CSS global (`index.css`) bajo Tailwind v4.
 
-*Mira el archivo: `src/features/users/hooks/useUserSearchFacade.js`*
+---
+
+## 💎 Patrones de Diseño Clave
+
+Para garantizar robustez técnica a nivel de ingeniería avanzada, aplicamos tres patrones de arquitectura clásicos:
+
+### 1. El Patrón Adapter (Gof - Estructural)
+*   **Problema**: La API de GitHub devuelve una estructura caótica con nombres variables (`avatar_url`, `html_url`) y datos que podrían venir corruptos o vacíos.
+*   **Solución**: El adaptador (`userAdapter.js`) recibe estos datos crudos, los valida estrictamente con Zod a nivel de tiempo de ejecución (fallo inmediato ante inconsistencia de datos), y devuelve un modelo unificado `UserProfile` con nombres de propiedades limpios (`photo`, `username`, `repos`).
+
+### 2. El Patrón Facade (GoF - Estructural)
+*   **Problema**: Si `UserSearch.jsx` tuviera que gestionar manualmente el estado de debouncing, llamar a TanStack Query, evaluar si el resultado está vacío, capturar errores de cuotas de API, e inicializar toasts, el código tendría cientos de líneas y sería inmantenible.
+*   **Solución**: Creamos `useUserSearchFacade.js`. Este hook es la "Fachada". Pide la comida a la cocina (servicios y hooks internos) y la entrega limpia a la mesa (el componente visual). El componente visual `UserSearch.jsx` es extremadamente simple y legible.
+
+### 3. El Patrón Factory (GoF - Creacional)
+*   **Problema**: Dependiendo del tipo de entidad que retorne la búsqueda (un usuario individual o una organización), la UI debe renderizar tarjetas con características, badges e interacciones completamente diferentes.
+*   **Solución**: La factoría visual `ResultFactory.jsx` evalúa el campo `.type` estandarizado en la entidad de dominio y decide dinámicamente si crear un `OrganizationCard` (con badge de ORG e interacciones específicas) o un `UserCard` estándar, encapsulando las decisiones de creación.

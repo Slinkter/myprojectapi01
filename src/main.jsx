@@ -2,8 +2,8 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "@/App.jsx";
-import "@/index.css";
-import { STALE_TIME, GC_TIME } from "@/app/config";
+import "@/presentation/styles/index.css";
+import { STALE_TIME, GC_TIME } from "@/infrastructure/config/config";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -23,7 +23,7 @@ async function enableMocking() {
   }
 
   try {
-    const { worker } = await import("@/mocks/browser");
+    const { worker } = await import("@/infrastructure/mocks/browser");
 
     // `worker.start()` returns a Promise that resolves
     // once the Service Worker is up and ready to intercept requests.
