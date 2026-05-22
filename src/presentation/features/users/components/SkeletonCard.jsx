@@ -1,26 +1,20 @@
 /**
- * @file Skeleton Card Component (Minimalist Refactor)
+ * @file SkeletonCard.jsx
+ * @description Card loading skeleton matching the size, padding, and rounding of the new premium cards.
  */
 
-/**
- * Componente visual de carga (Skeleton).
- * Se muestra mientras los datos reales del usuario están siendo descargados de la API.
- * 
- * @component
- * @returns {JSX.Element} Tarjeta con animación de pulso simulando contenido.
- */
 const SkeletonCard = () => (
-  <div className="h-full w-full max-w-full sm:max-w-[280px] mx-auto min-h-[280px] sm:min-h-[300px]">
-    <div className="flex flex-col h-full w-full rounded-xl border border-app-border bg-app-surface animate-pulse">
-      <div className="pt-6 pb-4 flex flex-col items-center">
-        <div className="w-20 h-20 rounded-full bg-app-border" />
+  <div className="h-full w-full max-w-full sm:max-w-[280px] mx-auto min-h-[300px] sm:min-h-[320px]">
+    <div className="flex flex-col h-full w-full rounded-2xl border border-app-border bg-app-surface/40 backdrop-blur-xl animate-pulse">
+      <div className="pt-8 pb-5 flex flex-col items-center">
+        <div className="w-24 h-24 rounded-full bg-app-border" />
       </div>
-      <div className="px-6 pb-6 text-center space-y-1">
-        <div className="w-24 h-5 rounded bg-app-border mx-auto" />
-        <div className="w-32 h-3 rounded bg-app-border mx-auto opacity-50" />
+      <div className="px-6 pb-6 text-center space-y-2">
+        <div className="w-28 h-5 rounded-lg bg-app-border mx-auto" />
+        <div className="w-36 h-3.5 rounded bg-app-border mx-auto opacity-50" />
       </div>
       <div className="px-6 pb-6 pt-2 mt-auto w-full">
-        <div className="w-full h-9 rounded bg-app-border" />
+        <div className="w-full h-10 rounded-xl bg-app-border" />
       </div>
     </div>
   </div>

@@ -1,51 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&display=swap');
 @import "tailwindcss";
 
 /* 
- * 🏗️ MINIMALIST SYSTEM DESIGN V3 - ESSENTIALISM
- * Neutral tones, subtle glass, and focused typography.
+ * 🎨 LUXURY CYBER-REFINED DESIGN SYSTEM V4
+ * Pairing Syne (highly geometric, avant-garde display font) 
+ * with Plus Jakarta Sans (ultra-clean, high-legibility sans font).
  */
 
 :root {
-  /* --- Primitive Colors (Neutral Palette) --- */
-  --color-slate-50: #fcfcfc;
-  --color-slate-100: #f5f5f7;
-  --color-slate-200: #e5e5e5;
-  --color-slate-800: #1d1d1f;
-  --color-slate-900: #111111;
-  --color-slate-950: #050505;
+  /* --- Semantic Tokens - Elegant Editorial Light Mode --- */
+  --app-bg: #FAF9F6; /* Premium Alabaster / Cream background */
+  --app-surface: #FFFFFF;
+  --app-card: rgba(255, 255, 255, 0.6);
+  --app-border: rgba(26, 26, 30, 0.06);
+  --app-text-main: #1D1D1F; /* Editorial charcoal text */
+  --app-text-muted: #6E6E73;
+  --app-accent: #008080; /* Teal/Celadon accent */
+  --app-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+  --app-glass-border: rgba(26, 26, 30, 0.04);
 
-  --color-primary: #0071e3; /* Industrial Blue */
-
-  /* --- Semantic Tokens - Light Mode --- */
-  --app-bg: #ffffff;
-  --app-surface: #ffffff;
-  --app-card: rgba(255, 255, 255, 0.5);
-  --app-border: rgba(0, 0, 0, 0.05);
-  --app-text-main: var(--color-slate-900);
-  --app-text-muted: #86868b;
-  --app-accent: var(--color-primary);
-  --app-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  --app-glass-border: rgba(0, 0, 0, 0.04);
+  /* Background Glow Blobs for Light Mode */
+  --glow-1: rgba(0, 128, 128, 0.03);
+  --glow-2: rgba(147, 51, 234, 0.03);
 }
 
 .dark {
-  /* --- Semantic Tokens - Dark Mode --- */
-  --app-bg: #000000;
-  --app-surface: #121212;
-  --app-card: rgba(18, 18, 18, 0.4);
-  --app-border: rgba(255, 255, 255, 0.08);
-  --app-text-main: #f5f5f7;
-  --app-text-muted: #86868b;
-  --app-accent: #ffffff;
-  --app-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
-  --app-glass-border: rgba(255, 255, 255, 0.08);
+  /* --- Semantic Tokens - Galactic Cyber-Refined Dark Mode --- */
+  --app-bg: #030303; /* Ultimate pitch black */
+  --app-surface: #0B0C10; /* Deep Obsidian */
+  --app-card: rgba(11, 12, 16, 0.45);
+  --app-border: rgba(255, 255, 255, 0.05);
+  --app-text-main: #F5F5F7; /* Apple-like off-white */
+  --app-text-muted: #86868B;
+  --app-accent: #00F2FE; /* Cyber Teal */
+  --app-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.9);
+  --app-glass-border: rgba(255, 255, 255, 0.04);
+
+  /* Background Glow Blobs for Dark Mode */
+  --glow-1: rgba(0, 242, 254, 0.05);
+  --glow-2: rgba(155, 81, 224, 0.05);
 }
 
 @theme {
-  /* Custom breakpoints for responsive design */
   --breakpoint-xs: 480px;
 
-  /* Mapping to Tailwind v4 */
   --color-app-bg: var(--app-bg);
   --color-app-surface: var(--app-surface);
   --color-app-card: var(--app-card);
@@ -57,8 +55,8 @@
   --shadow-premium: var(--app-shadow);
   --color-app-glass-border: var(--app-glass-border);
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Inter", sans-serif; /* Minimalist: same as sans but bolder */
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Syne", sans-serif;
 }
 
 @layer base {
@@ -67,39 +65,96 @@
   }
 
   body {
-    @apply bg-app-bg text-app-text font-sans antialiased m-0 min-h-screen transition-colors duration-300;
+    @apply bg-app-bg text-app-text font-sans antialiased m-0 min-h-screen transition-colors duration-500 relative;
   }
 
-  h1,
-  h2,
-  h3,
-  h4 {
+  /* 🌌 FLOATING AMBIENT NEON GLOW DECORATIONS */
+  body::before {
+    content: "";
+    position: fixed;
+    top: -10%;
+    left: -10%;
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle, var(--glow-1) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+    filter: blur(80px);
+    animation: pulse-glow 12s ease-in-out infinite alternate;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    bottom: -10%;
+    right: -10%;
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle, var(--glow-2) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+    filter: blur(80px);
+    animation: pulse-glow 16s ease-in-out infinite alternate-reverse;
+  }
+
+  h1, h2, h3, h4 {
     @apply font-heading tracking-tight;
   }
 }
 
+@keyframes pulse-glow {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(4%, 4%) scale(1.05);
+    opacity: 1;
+  }
+}
+
 @layer components {
-  /* MINIMALIST GLASS CARD */
+  /* 🪟 ULTRA GLOSS CARD (BENTO GLASSMORPHISM) */
   .glass-card-pro {
-    @apply bg-app-card backdrop-blur-sm border border-app-glass-border rounded-xl shadow-premium
-           hover:bg-app-card hover:border-app-border transition-all duration-300;
+    @apply bg-app-card backdrop-blur-xl border border-app-glass-border rounded-2xl shadow-premium
+           transition-all duration-500 hover:bg-app-surface/80 dark:hover:bg-app-surface/50;
   }
 
+  /* 🎖️ PREMIUM GRADIENT BUTTONS */
   .btn-action {
-    @apply flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg font-medium
-           bg-app-text text-app-bg
-           hover:opacity-90 active:scale-95 transition-all;
+    @apply flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl font-heading font-bold text-xs uppercase tracking-widest
+           bg-app-text text-app-bg cursor-pointer
+           shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.15)]
+           hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300;
+  }
+
+  .btn-action-gradient {
+    @apply flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl font-heading font-bold text-xs uppercase tracking-widest
+           bg-gradient-to-r from-app-accent to-indigo-500 text-white border-none cursor-pointer
+           shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.15)]
+           hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300;
   }
 
   .layout-stack {
     @apply flex flex-col gap-12 w-full max-w-screen-xl mx-auto;
   }
+
+  /* 🔍 MODERN GLASS FORM CONTROL */
+  .input-glass-pro {
+    @apply relative border border-app-glass-border rounded-2xl flex items-center px-5 py-4 gap-4 
+           bg-app-card backdrop-blur-xl shadow-premium transition-all duration-500
+           focus-within:border-app-accent focus-within:shadow-[0_0_40px_rgba(0,242,254,0.15)] dark:focus-within:shadow-[0_0_40px_rgba(0,242,254,0.1)];
+  }
 }
 
-/* Slim scrollbar */
+/* Custom fine-scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-app-text/10 rounded-full;
+  @apply bg-app-text/10 hover:bg-app-text/20 rounded-full transition-colors;
 }

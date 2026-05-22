@@ -1,12 +1,11 @@
-
 /**
  * @file PageHeader.jsx
- * @description Encabezado minimalista - Enfocado en una tipografía limpia y elementos esenciales.
+ * @description Encabezado ultra-premium con tipografía Syne editorial, gradientes y campo de búsqueda bento-glass.
  */
 
 import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "motion/react";
-import { Search, XCircle, Loader2 } from "lucide-react";
+import { Search, XCircle, Loader2, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Spinner = ({ className }) => {
@@ -19,22 +18,53 @@ Spinner.propTypes = {
 
 const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
   return (
-    <header className="flex flex-col w-full items-center gap-y-6 sm:gap-y-10 py-4 sm:py-6 mb-4 sm:mb-8">
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-app-text">
-          GitHub Explorer
-        </h1>
-        <p className="text-app-muted font-normal text-base sm:text-lg max-w-lg mx-auto">
-          Encuentra desarrolladores y explora sus perfiles de GitHub de forma
-          sencilla.
-        </p>
+    <header className="flex flex-col w-full items-center gap-y-8 sm:gap-y-12 py-8 sm:py-12 mb-6 sm:mb-10 relative">
+      {/* Decore top blur point */}
+      <div className="absolute top-0 w-72 h-72 bg-gradient-to-r from-app-accent to-purple-500/10 rounded-full blur-3xl pointer-events-none -z-10 opacity-30 dark:opacity-20" />
+
+      <div className="text-center space-y-4 max-w-2xl mx-auto px-4">
+        {/* Subtle Cyber Badge */}
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-app-accent/20 bg-app-accent/5 backdrop-blur-md text-[10px] sm:text-xs font-bold tracking-widest text-app-accent uppercase select-none mx-auto"
+        >
+          <Sparkles size={12} className="animate-pulse" />
+          Clean Architecture v4
+        </motion.div>
+
+        <motion.h1 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, type: "spring", stiffness: 50 }}
+          className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter text-app-text"
+        >
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-app-text via-app-accent to-indigo-500 dark:from-white dark:via-[#00F2FE] dark:to-indigo-400">
+            GitHub Explorer
+          </span>
+        </motion.h1>
+        
+        <motion.p 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="text-app-muted font-medium text-sm sm:text-base max-w-lg mx-auto leading-relaxed"
+        >
+          Busca perfiles de desarrolladores y organizaciones de forma interactiva con rendimiento y caching avanzado.
+        </motion.p>
       </div>
 
-      <div className="w-full max-w-full sm:max-w-xl px-4 sm:px-6 md:px-8 relative group">
-        <div className={cn(
-          "relative border border-app-border rounded-lg flex items-center px-4 py-3 gap-3 bg-app-surface shadow-sm transition-all duration-300",
-          "focus-within:ring-2 focus-within:ring-app-accent/20 focus-within:border-app-accent/40"
-        )}>
+      <motion.div 
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+        className="w-full max-w-xl px-4 sm:px-0 relative group"
+      >
+        {/* Border Aura behind input */}
+        <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-app-accent to-indigo-500 opacity-10 blur-xl group-focus-within:opacity-25 transition-all duration-500 pointer-events-none" />
+        
+        <div className="input-glass-pro">
           {isSearching ? (
             <Spinner className="text-app-accent text-lg" aria-hidden="true" />
           ) : (
@@ -43,8 +73,8 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
 
           <input
             type="text"
-            className="flex-1 bg-transparent border-none outline-none text-base text-app-text placeholder:text-app-muted/50"
-            placeholder="Buscar usuario o perfil..."
+            className="flex-1 bg-transparent border-none outline-none text-sm sm:text-base text-app-text placeholder:text-app-muted/40 font-medium selection:bg-app-accent selection:text-app-bg"
+            placeholder="Escribe el nombre de un usuario de GitHub..."
             value={searchTerm}
             onChange={handleSearch}
             aria-label="Buscar usuarios de GitHub"
@@ -58,19 +88,21 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
           <AnimatePresence>
             {searchTerm && (
               <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={() => handleSearch({ target: { value: "" } })}
                 className="text-app-muted hover:text-app-text transition-colors cursor-pointer"
                 aria-label="Limpiar búsqueda"
               >
-                <XCircle size={20} aria-hidden="true" />
+                <XCircle size={18} aria-hidden="true" />
               </motion.button>
             )}
           </AnimatePresence>
         </div>
-      </div>
+      </motion.div>
     </header>
   );
 };
