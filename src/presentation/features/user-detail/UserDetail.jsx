@@ -138,7 +138,7 @@ const UserDetail = () => {
               <GitFork className="w-5 h-5" />
             </div>
             <span className="font-mono text-[9px] font-bold text-app-accent bg-app-accent/5 px-2.5 py-0.5 rounded border border-app-accent/15 tracking-wider uppercase">
-              REPOS // CODEBASE
+              REPOSITORIOS // CÓDIGO
             </span>
           </div>
 
@@ -172,7 +172,7 @@ const UserDetail = () => {
               <Users className="w-5 h-5" />
             </div>
             <span className="font-mono text-[9px] font-bold text-app-muted bg-app-bg px-2.5 py-0.5 rounded border border-app-border uppercase tracking-wider">
-              FOLLOWERS
+              SEGUIDORES
             </span>
           </div>
 
@@ -196,7 +196,7 @@ const UserDetail = () => {
               <Heart className="w-5 h-5" />
             </div>
             <span className="font-mono text-[9px] font-bold text-app-muted bg-app-bg px-2.5 py-0.5 rounded border border-app-border uppercase tracking-wider">
-              FOLLOWING
+              SIGUIENDO
             </span>
           </div>
 
@@ -254,9 +254,9 @@ const UserDetail = () => {
               <span>🚀</span> tailwindcss v4.0.0
             </div>
             <div className="text-sky-400 font-semibold flex items-center gap-1.5">
-              <span>⚡️</span> [rebuild] 145 files changed in 14ms
+              <span>⚡️</span> [rebuild] 145 archivos cambiados en 14ms
             </div>
-            <div className="text-slate-500/60 select-none text-[9px] mt-0.5">... listening for changes</div>
+            <div className="text-slate-500/60 select-none text-[9px] mt-0.5">... escuchando cambios</div>
           </div>
         </motion.div>
 

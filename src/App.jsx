@@ -51,9 +51,9 @@ const App = () => {
               href="https://github.com/Slinkter/myprojectapi01/blob/main/src/docs/02-Arquitectura-y-Patrones.md" 
               target="_blank" 
               rel="noreferrer" 
-              className="text-xs font-semibold text-app-muted hover:text-app-text transition-colors hidden sm:inline-block"
+              className="text-xs font-semibold text-app-muted hover:text-app-text transition-colors"
             >
-              Docs
+              Documentación
             </a>
             <a 
               href="https://github.com/Slinkter/myprojectapi01" 
@@ -61,20 +61,8 @@ const App = () => {
               rel="noreferrer" 
               className="text-xs font-semibold text-app-muted hover:text-app-text transition-colors"
             >
-              Architecture
+              Arquitectura
             </a>
-            <div className="w-[1px] h-4 bg-app-border" />
-            
-            <a 
-              href="https://github.com/Slinkter/myprojectapi01" 
-              target="_blank" 
-              rel="noreferrer" 
-              className="text-app-muted hover:text-app-text transition-colors p-1"
-              aria-label="GitHub Repository"
-            >
-              <Globe size={18} />
-            </a>
-
             <ThemeToggle toggleTheme={toggleTheme} theme={theme} />
           </div>
         </div>

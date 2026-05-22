@@ -29,7 +29,7 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
         >
           <Code size={11} className="text-app-accent" />
           <span className="font-mono text-[9px] tracking-tight text-app-accent font-bold uppercase">
-            Tailwind UI Integration Operational
+            Integración de Tailwind UI Operativa
           </span>
         </motion.div>
 
@@ -40,9 +40,9 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
           transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
           className="text-4xl sm:text-6xl font-extrabold tracking-tight text-app-text font-heading leading-tight"
         >
-          Rapidly explore <br className="hidden sm:inline" />
+          Explora perfiles <br className="hidden sm:inline" />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-app-accent via-sky-500 to-indigo-600 dark:from-app-accent dark:via-sky-400 dark:to-indigo-500">
-            GitHub profiles.
+            de GitHub al instante.
           </span>
         </motion.h1>
         
@@ -53,7 +53,7 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-app-muted font-medium text-xs sm:text-base max-w-xl mx-auto leading-relaxed"
         >
-          A high-performance systems engineering interface built with React 18, TanStack Query, and validated using pure domain Zod schemas.
+          Una interfaz de ingeniería de sistemas de alto rendimiento construida con React 18, TanStack Query y validada con esquemas Zod en el dominio.
         </motion.p>
       </div>
 
@@ -77,7 +77,7 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
           <input
             type="text"
             className="flex-1 bg-transparent border-none outline-none text-sm sm:text-base text-app-text placeholder:text-app-muted/40 font-medium selection:bg-app-accent selection:text-app-bg"
-            placeholder="Search profiles, organizations, or logs..."
+            placeholder="Buscar perfiles, organizaciones o registros..."
             value={searchTerm}
             onChange={handleSearch}
             aria-label="Buscar usuarios de GitHub"
