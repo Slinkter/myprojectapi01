@@ -9,10 +9,10 @@ import UserList from "@/features/users/components/UserList";
 import NotFound from "@/components/layout/NotFound";
 
 /**
- * @file Search Results Component
+ * @file SearchResults.jsx
  * @description
- * Handles the conditional rendering of search states for the Users feature.
- * Isolated from UserSearch to comply with Single Responsibility Principle.
+ * Maneja el renderizado condicional de los estados de búsqueda para la función de Usuarios.
+ * Aislado de UserSearch para cumplir con el Principio de Responsabilidad Única.
  */
 
 /**

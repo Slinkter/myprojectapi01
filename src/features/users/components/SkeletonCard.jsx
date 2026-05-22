@@ -2,6 +2,13 @@
  * @file Skeleton Card Component (Minimalist Refactor)
  */
 
+/**
+ * Componente visual de carga (Skeleton).
+ * Se muestra mientras los datos reales del usuario están siendo descargados de la API.
+ * 
+ * @component
+ * @returns {JSX.Element} Tarjeta con animación de pulso simulando contenido.
+ */
 const SkeletonCard = () => (
   <div className="h-full w-full max-w-full sm:max-w-[280px] mx-auto min-h-[280px] sm:min-h-[300px]">
     <div className="flex flex-col h-full w-full rounded-xl border border-app-border bg-app-surface animate-pulse">

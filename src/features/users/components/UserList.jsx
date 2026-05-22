@@ -1,6 +1,6 @@
 /**
- * @file User List Component (Data Model Sincronized)
- * @description Uses the standardized UserProfile model from the adapter.
+ * @file UserList.jsx
+ * @description Utiliza el modelo estandarizado UserProfile proveniente del adaptador.
  */
 
 import React from "react";

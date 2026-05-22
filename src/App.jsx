@@ -1,8 +1,8 @@
 /**
- * @file Main Application Component
+ * @file App.jsx
  * @description
- * Root component that sets up the application's routing structure and global layout.
- * Manages theme state and provides navigation between different views.
+ * Componente raíz de la aplicación que configura la estructura de rutas (routing) y el diseño global.
+ * Administra el estado del tema (claro/oscuro) y provee la navegación entre diferentes vistas.
  */
 import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";

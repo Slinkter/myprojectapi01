@@ -1,10 +1,10 @@
 /**
- * @file HTTP Client Utility
+ * @file httpClient.js
  * @description
- * Generic wrapper around the Fetch API to centralize common logic like:
- * - Response status verification
- * - JSON parsing
- * - Generic error handling
+ * Envoltorio (wrapper) genérico alrededor de la API Fetch para centralizar lógica común como:
+ * - Verificación de estados de respuesta
+ * - Parseo de JSON
+ * - Manejo genérico de errores
  */
 
 import { ApiError } from "@/models/errors/ApiError";

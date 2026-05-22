@@ -1,11 +1,11 @@
 /**
- * @file User Card Component (Multi-Variant Refactor)
+ * @file UserCard.jsx
  * @description 
- * High-fidelity card component supporting multiple visual styles:
- * - 'default': Standard clean border
- * - 'glass': Bento-style glassmorphism with backdrop blur
- * - 'minimal': Vercel-inspired clean monochrome
- * - 'accent-glow': Dynamic glow on hover
+ * Componente de tarjeta de alta fidelidad que soporta múltiples estilos visuales:
+ * - 'default': Borde limpio estándar
+ * - 'glass': Estilo Bento (glassmorphism) con desenfoque de fondo
+ * - 'minimal': Monocromático limpio inspirado en Vercel
+ * - 'accent-glow': Resplandor dinámico al pasar el cursor (hover)
  */
 
 import { useRef } from "react";

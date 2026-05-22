@@ -1,6 +1,6 @@
 /**
- * @file Not Found Component
- * @description Standardized Empty state with new Design System.
+ * @file NotFound.jsx
+ * @description Estado de 'Sin resultados' estandarizado utilizando el nuevo Sistema de Diseño.
  */
 
 import PropTypes from "prop-types";

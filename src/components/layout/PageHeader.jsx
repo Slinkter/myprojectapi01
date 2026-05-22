@@ -1,6 +1,7 @@
+
 /**
- * @file Page Header Component
- * @description Minimalist Header - Focus on clean typography and essential elements.
+ * @file PageHeader.jsx
+ * @description Encabezado minimalista - Enfocado en una tipografía limpia y elementos esenciales.
  */
 
 import PropTypes from "prop-types";

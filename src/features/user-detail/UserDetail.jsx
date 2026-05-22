@@ -1,5 +1,6 @@
 /**
- * @file User Detail Component (Minimalist Refactor)
+ * @file UserDetail.jsx
+ * @description Vista detallada del perfil de usuario (Refactorización minimalista).
  */
 
 import { useParams, Link } from "react-router-dom";

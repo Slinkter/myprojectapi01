@@ -1,8 +1,8 @@
 /**
- * @file Theme Management Hook
+ * @file useTheme.js
  * @description
- * Custom hook for managing application theme (light/dark mode).
- * Provides theme state and toggle functionality with localStorage persistence.
+ * Hook personalizado para manejar el tema de la aplicación (modo claro/oscuro).
+ * Provee el estado del tema y funcionalidad para alternarlo, persistiendo en localStorage.
  */
 
 import { useState, useEffect } from "react";

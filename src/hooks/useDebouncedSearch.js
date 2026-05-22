@@ -1,8 +1,8 @@
 /**
- * @file Debounced Search Hook
+ * @file useDebouncedSearch.js
  * @description
- * Custom hook for debouncing input values to optimize expensive operations
- * like API calls. Delays value updates until user stops typing.
+ * Hook personalizado para retrasar (debounce) valores de entrada y así optimizar
+ * operaciones costosas como llamadas a APIs.
  */
 
 import { useState, useEffect } from "react";

@@ -1,6 +1,6 @@
 /**
- * @file Error Display Component
- * @description Standardized Error state with new Design System.
+ * @file ErrorDisplay.jsx
+ * @description Estado de Error estandarizado utilizando el nuevo Sistema de Diseño.
  */
 
 import PropTypes from "prop-types";

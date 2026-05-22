@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 /**
- * @file User Schema & Types
+ * @file user.js (Tipos y Esquemas)
  * @description
- * Schema definitions for validation and type inference using Zod.
+ * Definiciones de esquemas para validación e inferencia de tipos utilizando Zod.
  */
 
 /**

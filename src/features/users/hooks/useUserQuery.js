@@ -1,8 +1,8 @@
 /**
- * @file User Query Hook (TanStack Query)
+ * @file useUserQuery.js
  * @description
- * High-performance data fetching with React Query.
- * Integrates with the existing Service Layer and Adapters.
+ * Obtención de datos de alto rendimiento con React Query.
+ * Se integra con la capa de Servicios y Adaptadores existente.
  */
 
 import { useQuery } from "@tanstack/react-query";

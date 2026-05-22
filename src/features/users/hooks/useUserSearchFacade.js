@@ -1,8 +1,14 @@
 /**
- * @file User Search Facade Hook (TanStack Query Refactor)
+ * @file useUserSearchFacade.js
  * @description
- * Implements the Facade Pattern to simplify the UserSearch component.
- * Orchestrates TanStack Query and debouncing logic.
+ * 📚 EXPLICACIÓN PARA JUNIORS: EL PATRÓN FACADE (FACHADA)
+ * Imagina que vas a un restaurante. Tú (el componente visual) le pides comida al
+ * mesero (la fachada). A ti no te importa cómo el chef prepara la comida en la
+ * cocina (la lógica compleja de debouncing y React Query). Solo te importa
+ * recibir la comida lista.
+ * 
+ * Este Hook hace exactamente eso: oculta toda la lógica compleja de buscar usuarios
+ * y le entrega al componente "UserSearch" solo lo que necesita para pintar la pantalla.
  */
 
 import { useEffect } from "react";
@@ -12,19 +18,16 @@ import { log } from "@/app/logger";
 import { DEBOUNCE_DELAY } from "@/app/config";
 import { toast } from "sonner";
 
-/**
- * Custom hook that acts as a Facade for the User Search feature.
- *
- * @returns {Object} Clean API for the UserSearch component
- */
 export const useUserSearchFacade = () => {
-  // 1. Logic for Debounce - Using centralized config
+  // 1. DEBOUNCE: Esperamos a que el usuario deje de escribir antes de buscar.
+  // Esto evita hacer 100 peticiones a la API si el usuario teclea rápido.
   const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebouncedSearch(
     "",
     DEBOUNCE_DELAY,
   );
 
-  // 2. Logic for Data Fetching (React Query)
+  // 2. FETCHING: Usamos TanStack Query para pedir los datos a GitHub.
+  // Solo buscará cuando 'debouncedSearchTerm' cambie.
   const {
     data: users = [],
     status,
@@ -33,45 +36,48 @@ export const useUserSearchFacade = () => {
     isFetching,
   } = useUserQuery(debouncedSearchTerm);
 
-  /**
-   * Side Effect: Error Notification
-   * Moved from service layer to Application Layer (Facade)
-   */
+  // 3. NOTIFICACIONES: Si algo falla, le avisamos al usuario.
+  // Movemos esta lógica aquí para que el componente visual no tenga que lidiar con errores.
   useEffect(() => {
     if (error) {
       if (error.status === 422) {
-        toast.error("Validation Error", {
-          description: "The data received from the API is invalid or malformed.",
+        toast.error("Error de Validación", {
+          description: "Los datos de la API no tienen el formato esperado.",
         });
       } else if (error.status === 403) {
-        toast.error("Rate Limit Exceeded", {
-          description: "GitHub API rate limit reached. Please try again later.",
+        toast.error("Límite excedido", {
+          description: "Has hecho demasiadas peticiones a GitHub. Intenta luego.",
         });
       }
     }
   }, [error]);
 
-  /**
-   * Encapsulated Retry Logic
-   */
+  // 4. RETRY: Función para intentar cargar de nuevo si hubo un error.
   const handleRetry = () => {
-    log.flow("Facade: Triggering Retry via React Query");
+    log.flow("Reintentando petición...");
     refetch();
   };
 
-  // Exposed API: The component doesn't care HOW this works internally
+  // 5. VARIABLES DE ESTADO SIMPLIFICADAS
+  // Aquí traducimos los estados confusos de React Query a variables booleanas
+  // fáciles de leer para nuestro componente (true o false).
+  const isLoading = status === "pending" || isFetching;
+  const isError = status === "error";
+  const isSuccess = status === "success" && users?.length > 0;
+  const isEmpty = status === "success" && users?.length === 0;
+
+  // ¡Esto es la Fachada! Le entregamos al componente un paquete limpio.
   return {
     searchTerm,
     setSearchTerm,
     debouncedSearchTerm,
     users,
-    status,
     error,
     handleRetry,
-    isLoading: status === "pending" || isFetching,
-    isError: status === "error",
-    isSuccess: status === "success" && users?.length > 0,
-    isEmpty: status === "success" && users?.length === 0,
+    isLoading,
+    isError,
+    isSuccess,
+    isEmpty,
   };
 };
 

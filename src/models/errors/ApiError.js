@@ -1,18 +1,18 @@
 /**
- * Custom error class for API-related errors
+ * Clase de error personalizada para errores relacionados con la API
  *
  * @class ApiError
  * @extends Error
  * @description
- * Provides structured error information including HTTP status codes.
- * Used to differentiate API errors from generic JavaScript errors.
+ * Provee información estructurada del error, incluyendo códigos de estado HTTP.
+ * Se utiliza para diferenciar errores de API de los errores genéricos de JavaScript.
  *
- * @property {string} message - Error message
- * @property {number} status - HTTP status code
- * @property {string} name - Error name (always "ApiError")
+ * @property {string} message - Mensaje de error
+ * @property {number} status - Código de estado HTTP
+ * @property {string} name - Nombre del error (siempre "ApiError")
  *
  * @example
- * throw new ApiError('Not Found', 404);
+ * throw new ApiError('No encontrado', 404);
  */
 export class ApiError extends Error {
   /**
