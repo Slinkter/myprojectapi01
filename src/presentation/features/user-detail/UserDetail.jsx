@@ -34,6 +34,54 @@ AnimatedCounter.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.06,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 120,
+      damping: 16,
+    },
+  },
+};
+
+const terminalContainerVariants = {
+  hidden: { opacity: 1 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.18,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const terminalLineVariants = {
+  hidden: { opacity: 0, x: -4 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      type: "spring",
+      stiffness: 140,
+      damping: 14,
+    },
+  },
+};
+
 const UserDetail = () => {
   const { login } = useParams();
   
@@ -43,6 +91,15 @@ const UserDetail = () => {
     isError, 
     error 
   } = useUserDetailQuery(login);
+
+  const [blink, setBlink] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBlink((b) => !b);
+    }, 530);
+    return () => clearInterval(interval);
+  }, []);
 
   if (isLoading) return <UserDetailSkeleton />;
 
@@ -69,25 +126,31 @@ const UserDetail = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
       className="max-w-4xl mx-auto space-y-8 md:space-y-12 py-8 md:py-12 px-4 relative"
     >
       {/* Background visual glow for detail */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-tr from-app-accent/5 to-purple-500/5 rounded-full blur-3xl pointer-events-none -z-10" />
 
-      <Link to="/" className="inline-block group">
-        <button 
-          className="flex items-center gap-2 px-4 py-2 rounded-full border border-app-border bg-app-surface/50 backdrop-blur-md text-app-muted hover:text-app-text hover:border-app-text/20 transition-all text-xs font-semibold cursor-pointer active:scale-95 shadow-sm"
-          aria-label="Volver a la búsqueda de usuarios"
-        >
-          <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" aria-hidden="true" />
-          <span>Volver a buscar</span>
-        </button>
-      </Link>
+      <motion.div variants={itemVariants} className="inline-block group">
+        <Link to="/" className="cursor-pointer">
+          <button 
+            className="flex items-center gap-2 px-4 py-2 rounded-full border border-app-border bg-app-surface/50 backdrop-blur-md text-app-muted hover:text-app-text hover:border-app-text/20 transition-all text-xs font-semibold cursor-pointer active:scale-95 shadow-sm"
+            aria-label="Volver a la búsqueda de usuarios"
+          >
+            <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" aria-hidden="true" />
+            <span>Volver a buscar</span>
+          </button>
+        </Link>
+      </motion.div>
 
       {/* Profile Header Block */}
-      <section className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-center sm:items-start text-center sm:text-left glass-card-pro p-6 sm:p-8 relative overflow-hidden">
+      <motion.section 
+        variants={itemVariants}
+        className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-center sm:items-start text-center sm:text-left glass-card-pro p-6 sm:p-8 relative overflow-hidden"
+      >
         <div className="relative">
           <motion.img
             layoutId={`avatar-${user.username}`}
@@ -119,16 +182,17 @@ const UserDetail = () => {
             <p className="text-app-muted/50 text-[11px] italic">Este desarrollador aún no ha añadido una biografía en su perfil de GitHub.</p>
           )}
         </div>
-      </section>
+      </motion.section>
 
       {/* Asymmetric Bento Box Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
         
         {/* Bento 1: Repositories (Double width on large screens) */}
         <motion.div 
-          whileHover={{ y: -3 }}
-          transition={{ duration: 0.2 }}
-          className="md:col-span-2 p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative overflow-hidden"
+          variants={itemVariants}
+          whileHover={{ y: -6, scale: 1.008 }}
+          transition={{ type: "spring", stiffness: 260, damping: 15 }}
+          className="md:col-span-2 p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative overflow-hidden group/bento"
         >
           {/* Subtle grid accent background */}
           <div className="absolute inset-0 bg-gradient-to-br from-app-accent/5 via-transparent to-transparent opacity-30 pointer-events-none" />
@@ -163,9 +227,10 @@ const UserDetail = () => {
 
         {/* Bento 2: Followers */}
         <motion.div 
-          whileHover={{ y: -3 }}
-          transition={{ duration: 0.2 }}
-          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative overflow-hidden"
+          variants={itemVariants}
+          whileHover={{ y: -6, scale: 1.008 }}
+          transition={{ type: "spring", stiffness: 260, damping: 15 }}
+          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative overflow-hidden group/bento"
         >
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-lg bg-app-bg border border-app-border flex items-center justify-center text-app-accent">
@@ -187,9 +252,10 @@ const UserDetail = () => {
 
         {/* Bento 3: Following */}
         <motion.div 
-          whileHover={{ y: -3 }}
-          transition={{ duration: 0.2 }}
-          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative overflow-hidden"
+          variants={itemVariants}
+          whileHover={{ y: -6, scale: 1.008 }}
+          transition={{ type: "spring", stiffness: 260, damping: 15 }}
+          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative overflow-hidden group/bento"
         >
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-lg bg-app-bg border border-app-border flex items-center justify-center text-app-accent">
@@ -211,9 +277,10 @@ const UserDetail = () => {
 
         {/* Bento 4: Gists */}
         <motion.div 
-          whileHover={{ y: -3 }}
-          transition={{ duration: 0.2 }}
-          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative overflow-hidden"
+          variants={itemVariants}
+          whileHover={{ y: -6, scale: 1.008 }}
+          transition={{ type: "spring", stiffness: 260, damping: 15 }}
+          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between gap-5 relative overflow-hidden group/bento"
         >
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-lg bg-app-bg border border-app-border flex items-center justify-center text-app-accent">
@@ -235,35 +302,48 @@ const UserDetail = () => {
 
         {/* Bento 5: System Configuration/Build Log (Tailwind CLI) */}
         <motion.div 
-          whileHover={{ y: -3 }}
-          transition={{ duration: 0.2 }}
-          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between min-h-[160px] relative bg-[#090D16] border-slate-800 text-slate-300"
+          variants={itemVariants}
+          whileHover={{ y: -6, scale: 1.008 }}
+          transition={{ type: "spring", stiffness: 260, damping: 15 }}
+          className="p-6 rounded-xl glass-card-pro flex flex-col justify-between min-h-[160px] relative bg-[#090D16] border-slate-800 text-slate-300 group/bento"
         >
           <div className="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56] opacity-90" />
-              <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E] opacity-90" />
-              <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F] opacity-90" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56] opacity-90 transition-transform group-hover/bento:scale-110" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E] opacity-90 transition-transform group-hover/bento:scale-110 delay-75" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F] opacity-90 transition-transform group-hover/bento:scale-110 delay-150" />
             </div>
             <span className="font-mono text-[9px] text-slate-500 select-none">bash - tailwindcss</span>
           </div>
           
-          <div className="font-mono text-[10px] sm:text-xs space-y-1.5 text-left flex-1 flex flex-col justify-center py-1">
-            <div className="text-slate-500 select-none">$ tailwindcss --build</div>
-            <div className="text-emerald-400 font-semibold flex items-center gap-1.5">
+          <motion.div 
+            variants={terminalContainerVariants}
+            initial="hidden"
+            animate="visible"
+            className="font-mono text-[10px] sm:text-xs space-y-1.5 text-left flex-1 flex flex-col justify-center py-1"
+          >
+            <motion.div variants={terminalLineVariants} className="text-slate-500 select-none">
+              $ tailwindcss --build
+            </motion.div>
+            <motion.div variants={terminalLineVariants} className="text-emerald-400 font-semibold flex items-center gap-1.5">
               <span>🚀</span> tailwindcss v4.0.0
-            </div>
-            <div className="text-sky-400 font-semibold flex items-center gap-1.5">
+            </motion.div>
+            <motion.div variants={terminalLineVariants} className="text-sky-400 font-semibold flex items-center gap-1.5">
               <span>⚡️</span> [rebuild] 145 archivos cambiados en 14ms
-            </div>
-            <div className="text-slate-500/60 select-none text-[9px] mt-0.5">... escuchando cambios</div>
-          </div>
+            </motion.div>
+            <motion.div variants={terminalLineVariants} className="text-slate-500/60 select-none text-[9px] mt-0.5">
+              ... escuchando cambios{blink ? "_" : " "}
+            </motion.div>
+          </motion.div>
         </motion.div>
 
       </div>
 
       {/* Sub-footer pills section */}
-      <footer className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 pt-6 text-xs font-semibold border-t border-app-border">
+      <motion.footer 
+        variants={itemVariants}
+        className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 pt-6 text-xs font-semibold border-t border-app-border"
+      >
         {user.location && (
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-app-border bg-app-surface text-app-muted shadow-sm select-none">
             <MapPin size={14} className="text-app-accent" /> 
@@ -287,12 +367,12 @@ const UserDetail = () => {
           href={user.profileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 px-3 py-2 rounded-lg border border-transparent bg-app-accent text-white hover:bg-blue-600 shadow-sm transition-all duration-200 font-bold"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg border border-transparent bg-app-accent text-white hover:bg-blue-600 shadow-sm transition-all duration-200 font-bold cursor-pointer"
         >
           <Globe size={14} /> 
           <span>Ver en GitHub</span>
         </a>
-      </footer>
+      </motion.footer>
     </motion.div>
   );
 };

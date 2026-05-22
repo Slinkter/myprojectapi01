@@ -18,3 +18,6 @@ Aunque la funcionalidad (buscar usuarios) parece sencilla, el objetivo real de e
 *   **Rendimiento:** Usa `TanStack Query` para cachear (guardar en memoria) los resultados. Si buscas el mismo usuario dos veces, la segunda vez será instantáneo.
 *   **Seguridad de Datos:** Usa `Zod` para validar que la API de GitHub nos devuelve exactamente lo que esperamos antes de usar los datos en nuestros componentes.
 *   **Escalabilidad:** Usa patrones como `Adapter` y `Facade` (explicados en el documento 02) para que el código sea fácil de cambiar en el futuro sin romper otras partes.
+*   **Estética Glassmorphism + Minimalismo Técnico**: Diseñado con glassmorphism puro (`backdrop-filter: blur(20px)`, fondos semi-transparentes, bordes sutiles). Sin decoraciones pesadas, sin scanlines, sin glitch. La interfaz prioriza claridad y profundidad visual con un enfoque minimalista funcional.
+*   **Sistema de Doble Tema**: Light mode "Holographic Terminal" con fondo cálido papel y acentos teal. Dark mode "Cyberpunk" con fondo oscuro y acentos neón cyan. Ambos mantienen coherencia glass pero con personalidades visuales distintas.
+*   **Animaciones de Alta Fidelidad**: Entrada en cascada organizada mediante resortes físicos de Motion v12, micro-pulsos reactivos al enfocar la búsqueda, y transiciones glass suaves en hover.

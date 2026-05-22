@@ -1,8 +1,3 @@
-/**
- * @file UserList.jsx
- * @description Utiliza el modelo estandarizado UserProfile proveniente del adaptador.
- */
-
 import React from "react";
 import PropTypes from "prop-types";
 import { AnimatePresence, motion } from "motion/react";
@@ -22,25 +17,31 @@ const containerVariants = {
 
 const UserList = ({ users }) => {
   return (
-    <div className="layout-stack py-12">
+    <div className="w-full py-12">
+      <div className="divider mb-10" />
+      <div className="flex items-center gap-3 mb-6">
+        <span className="font-mono text-[10px] tracking-wider text-text-mute font-medium">
+          {users.length} resultado{users.length !== 1 ? "s" : ""}
+        </span>
+      </div>
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         exit="exit"
         layout
-        className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8 pt-2 -mt-2"
+        className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5 md:gap-6"
       >
         <AnimatePresence mode="popLayout">
           {users.map((user) => (
             <motion.div
               key={user.id}
               layout
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.92 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
+              exit={{ opacity: 0, scale: 0.92 }}
             >
-              <ResultFactory data={user} variant="glass" />
+              <ResultFactory data={user} variant="accent-glow" />
             </motion.div>
           ))}
         </AnimatePresence>
@@ -50,7 +51,6 @@ const UserList = ({ users }) => {
 };
 
 UserList.propTypes = {
-  // Array of standardized UserProfile objects
   users: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,

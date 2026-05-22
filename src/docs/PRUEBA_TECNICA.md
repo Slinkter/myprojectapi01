@@ -133,26 +133,24 @@ RSC son componentes que se renderizan en el servidor (Next.js 13+). Característ
 ## A2. Patrones de Arquitectura (10 puntos)
 
 ### Pregunta A2.1 (3 puntos)
-**Explica el patrón Feature-Sliced Design (FSD). ¿Cuándo lo usarías?**
+**Explica el concepto de Arquitectura Limpia (Clean Architecture) en capas y cómo estructurarías un proyecto frontend.**
 
 **Respuesta esperada:**
-FSD es una metodología de arquitectura que organiza código por funcionalidad de negocio:
+La Arquitectura Limpia divide el código en capas concéntricas o jerárquicas independientes con una regla de dependencia estricta: **las capas internas no conocen nada de las externas**.
 
+Estructura típica de capas:
 ```
 src/
-├── app/           # Config global
-├── components/    # UI reutilizable
-├── features/     # ★ Módulos de negocio
-│   ├── users/
-│   └── cart/
-├── hooks/        # Hooks globales
-└── services/     # APIs
+├── domain/            # Capa 1: Lógica y reglas de negocio pura (schemas, adapters, errors)
+├── infrastructure/    # Capa 2: Peticiones HTTP, logs, mocks, config
+├── application/       # Capa 3: Casos de uso, query hooks de estado, fachadas
+└── presentation/      # Capa 4: Capa visual, componentes React, hojas de estilo css
 ```
 
 **Beneficios:**
-- Aislamiento entre features
-- Escalabilidad
-- Cada feature es independiente y testeable
+- Desacoplamiento absoluto de la lógica de negocio frente a frameworks e infraestructura.
+- Excelente mantenibilidad y facilidad para cambiar de proveedores externos.
+- Código altamente testeable y robusto.
 
 ---
 

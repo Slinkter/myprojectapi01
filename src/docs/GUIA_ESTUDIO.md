@@ -58,7 +58,7 @@
 
 - **Facade (Patrón Fachada):** Interfaz simplificada que oculta complejidad interna. En nuestro proyecto, los hooks `useUserSearchFacade` ocultan la complejidad de TanStack Query.
 
-- **Feature-Sliced Design (FSD):** Metodología de arquitectura que organiza código por funcionalidad de negocio en lugar de por tipo de archivo.
+- **Clean Architecture (Arquitectura Limpia):** Filosofía de diseño de software que organiza el código en capas concéntricas o jerárquicas con dependencias unidireccionales apuntando siempre hacia el interior (Dominio), desacoplando las reglas de negocio de la infraestructura técnica y del framework visual.
 
 - **Framework:** Marco de trabajo que proporciona estructura y herramientas para desarrollar apps.
 
@@ -673,46 +673,27 @@ const Header = () => {
 
 # 🎓 CAPÍTULO 3: ARQUITECTURA Y PATRONES
 
-## 3.1 Feature-Sliced Design (FSD)
+## 3.1 Arquitectura Limpia (Clean Architecture) y DDD
 
-FSD es una metodología de arquitectura que organiza código por funcionalidad de negocio. Es como organizar una cocina por platos (italiana, mexicana, japonesa) en lugar de por utensilios (cuchillos, sartenes, ollas).
+La Arquitectura Limpia es una metodología de diseño que organiza el código en capas bien definidas con una regla fundamental: **las capas internas no conocen nada del exterior**. Esto asegura que las reglas de negocio (Dominio) sean 100% independientes de bases de datos, APIs de terceros (como GitHub API) y frameworks de interfaz visual (como React).
 
-### Estructura FSD del Proyecto
+### Las 4 Capas de la Aplicación
 
 ```
-src/
-├── app/                    # Configuración global
-│   ├── providers.jsx       # Providers de React
-│   └── logger.js          # Sistema de logging
-├── components/            # Componentes reutilizables
-│   ├── ui/                # UI atómica (Button, Input, Card)
-│   └── layout/            # Layout (Header, Footer)
-├── features/             # Módulos de negocio ★★★
-│   ├── users/            # Feature: búsqueda de usuarios
-│   │   ├── components/  # Componentes específicos
-│   │   ├── hooks/       # Hooks específicos
-│   │   └── users.jsx    # Entry point
-│   └── user-detail/     # Feature: detalle de usuario
-├── services/            # Capa de infraestructura
-├── models/             # Capa de dominio
-└── hooks/             # Hooks globales
+Presentation (Visuals) ➔ Application (Use Cases) ➔ Infrastructure (API/HTTP) ➔ Domain (Entities/Rules)
 ```
 
-### ¿Por qué FSD?
+1. **🛡️ Capa de Dominio (`src/domain`):** El corazón de la aplicación. Contiene los esquemas de validación de datos de negocio (`schemas/` usando Zod), transformadores normalizadores (`adapters/`) y clases de error (`errors/`). Es JavaScript puro sin dependencias de React o red.
+2. **🔌 Capa de Infraestructura (`src/infrastructure`):** Los detalles tecnológicos de soporte. Contiene el cliente HTTP (`httpClient.js`), el servicio para comunicarse con GitHub (`userService.js`), el sistema de logs semánticos (`logger/`) y los mocks locales del servidor (`mocks/` con MSW).
+3. **⚙️ Capa de Aplicación (`src/application`):** Los orquestadores de flujos y casos de uso. Contiene los hooks de TanStack Query para el manejo de estado en memoria y caché (`queries/`), hooks globales de propósito general (`hooks/`) y las **Fachadas (`facades/`)** que exponen APIs limpias a la vista.
+4. **🎨 Capa de Presentación (`src/presentation`):** La interfaz de usuario visible. Contiene las hojas de estilo de Tailwind CSS v4 (`styles/`), componentes comunes y layout (`components/`), y vistas con lógica interactiva organizadas en módulos funcionales (`features/`).
 
-| Organización por tipo | Organización por feature |
-|-----------------------|-------------------------|
-| /components | /features/users |
-| /hooks | /features/user-detail |
-| /utils | /features/settings |
-| Difícil de escalar | Cada feature es independiente |
+### Beneficios de la Arquitectura Limpia
 
-### Beneficios de FSD
-
-1. **Aislamiento:** Cada feature es independiente
-2. **Escalabilidad:** Agregar features sin romper existentes
-3. **Mantenimiento:** Código relacionado en un lugar
-4. **Testabilidad:** Cada feature testeable independientemente
+1. **Desacoplamiento Absoluto:** Podemos cambiar la API de GitHub por otra, o incluso reemplazar React por Svelte o Vue, sin reescribir ni una sola línea de lógica de negocio del Dominio.
+2. **Fácil Mantenimiento:** Cada parte de la app tiene una responsabilidad única y explícita.
+3. **Validación Preventiva en Frontera:** Los datos crudos que ingresan de APIs externas se validan con Zod en la frontera del dominio, impidiendo que datos corruptos lleguen a los componentes React.
+4. **Testabilidad de Élite:** El dominio y las fachadas se pueden probar con tests unitarios sin levantar servidores de bases de datos o navegadores.
 
 ---
 
@@ -1498,48 +1479,45 @@ sequenceDiagram
 
 ```
 src/
-├── app/
-│   ├── providers.jsx      # Config global de React Query
-│   └── logger.js          # Sistema de logging
-│
-├── features/              # ★ FEATURES FSD ★
-│   ├── users/
-│   │   ├── components/
-│   │   │   ├── UserSearch.jsx    # Componente principal de búsqueda
-│   │   │   ├── UserCard.jsx      # Tarjeta individual de usuario
-│   │   │   └── UserGrid.jsx      # Grid de tarjetas
-│   │   ├── hooks/
-│   │   │   ├── useUserSearchQuery.js    # Query hook interno
-│   │   │   └── useUserSearchFacade.js   # Fachada pública
-│   │   └── users.jsx           # Entry point del feature
-│   │
-│   └── user-detail/
-│       ├── components/
-│       │   ├── UserDetail.jsx   # Vista de detalle
-│       │   └── StatsCard.jsx    # Tarjeta de estadísticas
-│       ├── hooks/
-│       │   ├── useUserDetailQuery.js
-│       │   └── useUserDetailFacade.js
-│       └── user-detail.jsx
-│
-├── services/              # Capa de infraestructura
-│   └── userService.js     # Funciones que llaman a GitHub API
-│
-├── models/                # Capa de dominio
+├── domain/                    # Capa 1: Lógica de negocio (Core)
+│   ├── schemas/
+│   │   └── user.js            # Esquemas de validación Zod
 │   ├── adapters/
-│   │   └── userAdapter.js # Transformador de datos
-│   └── types/
-│       └── schemas.js     # Esquemas Zod
+│   │   └── userAdapter.js     # Adaptadores de normalización de datos
+│   └── errors/
+│       └── ApiError.js        # Errores propios de la aplicación
 │
-├── components/            # Componentes reutilizables globales
-│   ├── ui/
-│   │   └── ThemeToggle.jsx
-│   └── layout/
-│       └── Header.jsx
+├── infrastructure/            # Capa 2: Soporte tecnológico externo
+│   ├── api/
+│   │   ├── httpClient.js      # Cliente Axios configurado
+│   │   └── userService.js     # Servicios de llamadas a GitHub API
+│   ├── logger/
+│   │   └── logger.js          # Sistema de logging semántico
+│   └── mocks/
+│       ├── handlers.js        # Handlers mock para MSW (offline)
+│       └── browser.js         # Setup de service worker para navegador
 │
-└── hooks/                 # Hooks globales
-    ├── useDebouncedSearch.js
-    └── useTheme.js
+├── application/               # Capa 3: Casos de uso e interacción de flujo
+│   ├── queries/
+│   │   ├── useUserQuery.js    # Query para buscar usuarios
+│   │   └── useUserDetailQuery.js # Query para detalle de perfil
+│   ├── facades/
+│   │   ├── useUserSearchFacade.js # Fachada para simplificar la búsqueda
+│   │   └── useUserDetailFacade.js # Fachada para simplificar el detalle
+│   └── hooks/
+│       ├── useTheme.js        # Manejador de tema Light/Dark
+│       └── useDebouncedSearch.js # Manejador de debouncing
+│
+└── presentation/              # Capa 4: Renderizado de interfaz React
+    ├── components/
+    │   ├── common/            # ErrorBoundary y componentes transversales
+    │   ├── layout/            # PageHeader y estructuras de diseño
+    │   └── ui/                # ThemeToggle y componentes atómicos
+    ├── features/
+    │   ├── users/             # Buscador de usuarios (UserSearch, UserCard, etc.)
+    │   └── user-detail/       # Detalle de perfil (UserDetail, BentoGrid, etc.)
+    └── styles/
+        └── index.css          # Archivo global de Tailwind CSS v4
 ```
 
 ---

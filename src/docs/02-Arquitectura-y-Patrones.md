@@ -68,3 +68,30 @@ Para garantizar robustez técnica a nivel de ingeniería avanzada, aplicamos tre
 ### 3. El Patrón Factory (GoF - Creacional)
 *   **Problema**: Dependiendo del tipo de entidad que retorne la búsqueda (un usuario individual o una organización), la UI debe renderizar tarjetas con características, badges e interacciones completamente diferentes.
 *   **Solución**: La factoría visual `ResultFactory.jsx` evalúa el campo `.type` estandarizado en la entidad de dominio y decide dinámicamente si crear un `OrganizationCard` (con badge de ORG e interacciones específicas) o un `UserCard` estándar, encapsulando las decisiones de creación.
+
+---
+
+## 🎨 Arquitectura del Diseño Visual: Glassmorphism + Sistema de Temas
+
+En la capa de presentación, la arquitectura de diseño se rige por un sistema **glassmorphism con doble tema** (light/dark), minimalismo funcional y animaciones físicas:
+
+### 1. Sistema Glassmorphism (CSS Variables)
+*   **Variables glass globales**: Declaramos en `:root` y `.dark` las variables `--glass-bg` (fondo semi-transparente), `--glass-border` (borde sutil), `--glass-shadow` (sombra suave) y `--glass-blur` (20px de desenfoque).
+*   **Clases utilitarias glass**: `.glass`, `.glass-card`, `.glass-card-hover`, `.glass-input`, `.btn-glass`, `.badge`. Cada una aplica el efecto frosted glass con `backdrop-filter: blur(20px)`, bordes de 1px y sombras.
+*   **Integración con Tailwind CSS v4**: Mediante `@theme`, mapeamos las variables CSS a utilidades de Tailwind (`bg-bg`, `text-text`, `border-border`, `text-accent`, `bg-surface`), posibilitando un cambio de tema instantáneo sin clases condicionales en el JSX.
+
+### 2. Doble Tema (Light / Dark)
+*   **Light "Holographic Terminal"**: Fondo cálido `#F0EDE8`, superficies blancas, acentos teal `#0D9488`, bordes `#E5E2DC`, texto oscuro `#1A1A2E`.
+*   **Dark "Cyberpunk"**: Fondo profundo `#0A0A0F`, acentos neón cyan `#00F0FF`, bordes `#1E1E2A`, texto claro `#E8E8F0`.
+*   El toggle de tema (`ThemeToggle`) alterna la clase `.dark` en `<html>`, y todas las variables CSS se actualizan instantáneamente.
+
+### 3. Micro-Interacciones y Física de Resortes (Spring Physics)
+*   **Comportamiento Orgánico**: Se emplea el modelo físico de resortes en `motion/react` (`stiffness` y `damping`) para evitar animaciones lineales.
+*   **Variantes y Propagación**: Los componentes padre definen el ciclo de estados (`initial`, `animate`, `hover`). Motion propaga estas directrices a sub-componentes para coordinar animaciones.
+*   **Orquestación en Cascada (Staggered Animation)**: La cuadrícula de resultados y el Bento Grid en `UserDetail` implementan variantes con `staggerChildren` y `delayChildren`.
+
+### 4. Principios de Minimalismo Funcional
+*   **Sin ruido visual**: Eliminamos scanlines, efectos glitch, círculos decorativos y tramas de fondo pesadas. La interfaz respira con espacio generoso y bordes `rounded-xl`.
+*   **UX sin Navbar**: Se eliminó la barra de navegación superior para una experiencia inmersiva que arranca directo en el hero de búsqueda.
+*   **Tarjetas de Alta Densidad**: Altura compacta `190px` con padding equilibrado, maximizando legibilidad sin espacios vacíos.
+*   **Jerarquía visual limpia**: Tipografía Orbitron para headings, Inter para cuerpo, JetBrains Mono para datos técnicos.

@@ -1,156 +1,135 @@
-/**
- * @file ErrorDisplay.jsx
- * @description Estado de Error estandarizado y premium utilizando el Sistema de Diseño.
- * Ofrece un diseño tipo Bento Grid con Glassmorphic visual espectacular para errores 403.
- */
-
 import PropTypes from "prop-types";
 import { motion } from "motion/react";
 import { AlertTriangle, Clock, Key, RefreshCw } from "lucide-react";
 
-/**
- * Componente para renderizar la tarjeta bento del límite de API
- */
-const RateLimitBento = ({ message, onRetry }) => {
+const RateLimitPane = ({ message, onRetry }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-10"
+      className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-3xl mx-auto mt-10"
       role="alert"
       aria-live="assertive"
     >
-      {/* Main Card: Status and Diagnostic Details (Col-span 2) */}
-      <motion.div
-        className="md:col-span-2 p-8 rounded-lg border border-amber-500/20 bg-app-surface shadow-sm flex flex-col justify-between gap-6"
-      >
+      <div className="md:col-span-2 p-7 glass-card flex flex-col justify-between gap-5">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded bg-amber-500/10 flex items-center justify-center text-amber-500">
-              <AlertTriangle className="w-5 h-5" aria-hidden="true" />
+            <div className="w-10 h-10 rounded-xl bg-accent-soft flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-accent" aria-hidden="true" />
             </div>
-            <span className="tech-badge border-amber-500/30 text-amber-500! dark:text-amber-400!">
-              STATUS: 403 / API_LIMIT_EXCEEDED
+            <span className="badge text-accent text-[9px]">
+              STATUS: 403
             </span>
           </div>
 
-          <h3 className="text-2xl font-bold text-app-text tracking-tight leading-tight mt-2">
-            GitHub API Threshold Reached
-          </h3>
+          <div>
+            <h3 className="text-lg font-heading font-bold text-text mb-1">
+              Límite de API alcanzado
+            </h3>
+            <p className="text-sm text-text-mute leading-relaxed">
+              {message || "Se alcanzó el límite de 60 requests/hora de la API de GitHub."}
+            </p>
+          </div>
 
-          <p className="text-app-muted text-sm leading-relaxed">
-            {message || "The standard unauthenticated API rate limit of 60 requests per hour has been reached. System requests have been paused to prevent connection dropouts."}
-          </p>
-
-          {/* Diagnostic Console Printout */}
-          <div className="font-mono text-[11px] text-left bg-app-bg/60 border border-app-border p-4 rounded-lg space-y-1 my-2 text-app-muted select-text leading-normal">
-            <div className="flex justify-between border-b border-app-border/40 pb-1 mb-1.5 font-semibold text-app-text">
-              <span>SYSTEM DIAGNOSTICS REPORT</span>
-              <span className="text-amber-500 animate-pulse">● PAUSED</span>
+          <div className="font-mono text-[11px] text-left p-4 rounded-xl glass space-y-1.5 text-text-mute select-text leading-normal">
+            <div className="flex justify-between pb-1 mb-1 font-medium text-text">
+              <span>DIAGNÓSTICO</span>
+              <span className="text-[10px]">● PAUSADO</span>
             </div>
-            <div className="grid grid-cols-[100px_1fr] gap-x-2">
-              <span className="font-semibold text-app-text/70">[SUBSYSTEM]</span>
-              <span>GITHUB_EXPLORER_GATEWAY</span>
+            <div className="grid grid-cols-[90px_1fr] gap-x-2">
+              <span className="opacity-60">ERROR</span>
+              <span>RATE_LIMIT_403</span>
             </div>
-            <div className="grid grid-cols-[100px_1fr] gap-x-2">
-              <span className="font-semibold text-app-text/70">[ERROR_TYPE]</span>
-              <span>RATE_LIMIT_FORBIDDEN_403</span>
+            <div className="grid grid-cols-[90px_1fr] gap-x-2">
+              <span className="opacity-60">LÍMITE</span>
+              <span>60/hora</span>
             </div>
-            <div className="grid grid-cols-[100px_1fr] gap-x-2">
-              <span className="font-semibold text-app-text/70">[LIMIT_MAX]</span>
-              <span>60_REQUESTS_PER_HOUR</span>
-            </div>
-            <div className="grid grid-cols-[100px_1fr] gap-x-2">
-              <span className="font-semibold text-app-text/70">[RECOMMEND]</span>
-              <span>WAIT_FOR_RESET_OR_RETRY_LATER</span>
+            <div className="grid grid-cols-[90px_1fr] gap-x-2">
+              <span className="opacity-60">ACCIÓN</span>
+              <span className="text-accent">ESPERAR O REINTENTAR</span>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <motion.button
-            whileTap={{ scale: 0.98 }}
-            onClick={onRetry}
-            className="btn-action-gradient !bg-amber-600 dark:!bg-amber-600 hover:!bg-amber-700 font-semibold rounded-lg flex items-center gap-2 px-5 py-2.5"
-            aria-label="Retry connection diagnostics"
-          >
-            <RefreshCw className="w-4 h-4" />
-            Retry Connection
-          </motion.button>
-        </div>
-      </motion.div>
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          onClick={onRetry}
+          className="btn-glass border-accent/20 text-accent hover:bg-accent/10 hover:border-accent self-start"
+          aria-label="Reintentar conexión"
+        >
+          <RefreshCw className="w-3.5 h-3.5" />
+          Reintentar
+        </motion.button>
+      </div>
 
-      {/* Secondary Card: Rate Limit Info Panel (Col-span 1) */}
-      <motion.div
-        className="p-8 rounded-lg border border-app-border bg-app-surface shadow-sm flex flex-col justify-between gap-6"
-      >
-        <div className="flex flex-col gap-3">
-          <div className="w-10 h-10 rounded bg-app-bg border border-app-border flex items-center justify-center text-app-muted">
+      <div className="p-7 glass-card flex flex-col justify-between gap-5">
+        <div className="space-y-3">
+          <div className="w-10 h-10 rounded-xl glass flex items-center justify-center text-text-mute">
             <Clock className="w-5 h-5" aria-hidden="true" />
           </div>
-          <h4 className="text-lg font-bold text-app-text mt-2">Cooldown Period</h4>
-          <p className="text-sm text-app-muted leading-relaxed">
-            GitHub automatically resets unauthenticated API quotas every <strong>60 minutes</strong>. The system will restore standard operations immediately once the timer expires.
-          </p>
+          <div>
+            <h4 className="text-sm font-heading font-bold text-text mb-1">
+              En espera
+            </h4>
+            <p className="text-xs text-text-mute leading-relaxed">
+              Las cuotas se reinician cada <span className="text-accent font-medium">60 minutos</span>.
+            </p>
+          </div>
         </div>
 
-        <div className="border-t border-app-border pt-4 flex items-start gap-2.5">
-          <Key className="w-4 h-4 text-app-muted shrink-0 mt-0.5" aria-hidden="true" />
-          <p className="text-[11px] text-app-muted leading-normal">
-            IP-based anonymous rate limits are enforced upstream by the GitHub REST API architecture.
+        <div className="flex items-start gap-2 pt-3 border-t border-border">
+          <Key className="w-3.5 h-3.5 text-text-mute shrink-0 mt-0.5" aria-hidden="true" />
+          <p className="text-[11px] text-text-mute leading-relaxed">
+            Límites anónimos por IP aplicados por GitHub.
           </p>
         </div>
-      </motion.div>
+      </div>
     </motion.div>
   );
 };
 
-RateLimitBento.propTypes = {
+RateLimitPane.propTypes = {
   message: PropTypes.string,
   onRetry: PropTypes.func.isRequired,
 };
 
-/**
- * Main ErrorDisplay Component
- */
 const ErrorDisplay = ({ message, status, onRetry }) => {
-  // If the error is 403 (Rate Limit), show the bento system diagnostics layout
   if (status === 403) {
-    return <RateLimitBento message={message} onRetry={onRetry} />;
+    return <RateLimitPane message={message} onRetry={onRetry} />;
   }
 
-  // Standard polished error state
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className="flex flex-col justify-center items-center text-center p-12 gap-6 border border-red-500/20 bg-app-surface shadow-sm rounded-lg max-w-2xl mx-auto mt-10 relative overflow-hidden"
+      className="flex flex-col justify-center items-center text-center p-12 gap-6 glass-card max-w-lg mx-auto mt-10"
       role="alert"
       aria-live="assertive"
     >
-      <div className="absolute top-0 left-0 w-full h-1 bg-red-600" />
-      
-      <div className="w-14 h-14 rounded bg-red-500/10 flex items-center justify-center text-red-500">
-        <AlertTriangle className="w-7 h-7" />
+      <div className="w-12 h-12 rounded-xl flex items-center justify-center text-text-mute">
+        <AlertTriangle className="w-6 h-6" />
       </div>
 
-      <div className="space-y-3">
-        <span className="tech-badge border-red-500/30 text-red-500!">
-          STATUS: {status || "500"} / CRITICAL_ERROR
+      <div className="space-y-2">
+        <span className="badge text-text-mute text-[9px]">
+          STATUS: {status || "ERROR"}
         </span>
-        <h3 className="text-xl font-bold text-app-text tracking-tight mt-1">Application Exception Detected</h3>
-        <p className="text-app-muted text-sm max-w-md mx-auto leading-relaxed">{message}</p>
+        <h3 className="text-lg font-heading font-bold text-text mt-1">
+          Error inesperado
+        </h3>
+        <p className="text-sm text-text-mute leading-relaxed">{message}</p>
       </div>
 
       <motion.button
         whileTap={{ scale: 0.98 }}
         onClick={onRetry}
-        className="btn-action hover:!border-red-500/30 hover:!bg-red-500/5 px-6 py-2.5 font-semibold rounded-lg"
-        aria-label="Reattempt task execution"
+        className="btn-glass"
+        aria-label="Reintentar"
       >
-        Reattempt Execution
+        <RefreshCw className="w-3.5 h-3.5" />
+        Reintentar
       </motion.button>
     </motion.div>
   );

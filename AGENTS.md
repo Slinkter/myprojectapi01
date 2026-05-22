@@ -4,7 +4,7 @@ This document provides guidelines for agents working in this repository.
 
 ## Project Overview
 
-React 18 SPA for exploring GitHub user profiles, built with Vite, TanStack Query, and Tailwind CSS v4. Uses Feature-Sliced Design (FSD) with path aliases (`@/*` maps to `./src/*`). Deploys to GitHub Pages at `/myprojectapi01/`.
+React 18 SPA for exploring GitHub user profiles, built with Vite, TanStack Query, and Tailwind CSS v4. Uses Layered Clean Architecture with path aliases (`@/*` maps to `./src/*`). Deploys to GitHub Pages at `/myprojectapi01/`.
 
 ---
 
@@ -43,7 +43,7 @@ Then add to package.json:
 
 To run a single test file when tests are added:
 ```bash
-pnpm vitest run src/features/users/usersSlice.test.js
+pnpm vitest run src/application/queries/userQuery.test.js
 ```
 
 ---
@@ -54,11 +54,12 @@ The project includes comprehensive documentation in `src/docs/`:
 
 | Document | Description |
 |----------|-------------|
+| `01-Guia-del-Proyecto.md` | Visión general, casos de uso y requerimientos del sistema |
+| `02-Arquitectura-y-Patrones.md` | Capas de la arquitectura limpia y patrones GoF aplicados (Adapter, Facade, Factory) |
+| `03-Guia-de-Desarrollo.md` | Guía de setup rápido, pnpm, comandos básicos y flujos de trabajo |
 | `GUIA_ESTUDIO.md` | Complete study guide (book format) - learn React from scratch |
 | `PRUEBA_TECNICA.md` | Technical interview simulation for practice |
-| `00-diagnostico-tecnico.md` | Technical diagnosis and current state |
-| `02-arquitectura.md` | Architecture patterns (FSD, Adapter, Facade) |
-| `06-guia-para-desarrolladores.md` | Developer guide (setup, MSW, Zod) |
+| `SIMULACRO_SCRUM.md` | Simulación completa de proyecto Scrum (roles, sprints, user stories, retrospectivas, daily scrums, velocity, burndown) |
 
 ---
 
@@ -66,7 +67,7 @@ The project includes comprehensive documentation in `src/docs/`:
 
 ### General Principles
 
-- Use Feature-Sliced Design (FSD) architecture
+- Use Layered Clean Architecture (domain, infrastructure, application, presentation)
 - Prefer functional components with hooks over class components
 - Keep components small and focused on single responsibility
 - Use utility-first Tailwind CSS (no custom CSS frameworks like MUI)
@@ -77,9 +78,9 @@ The project includes comprehensive documentation in `src/docs/`:
 Use `@/*` for absolute imports from `src/`:
 
 ```javascript
-import UserSearch from "@/features/users/UserSearch.jsx";
-import { fetchUsersAPI } from "@/services/userService";
-import { useTheme } from "@/hooks/useTheme.js";
+import UserSearch from "@/presentation/features/users/UserSearch.jsx";
+import { fetchUsersAPI } from "@/infrastructure/api/userService.js";
+import { useTheme } from "@/application/hooks/useTheme.js";
 ```
 
 - Use explicit file extensions in imports (`.jsx`, `.js`)
@@ -155,7 +156,7 @@ export const useUserSearchQuery = (searchTerm) => {
 Create facade hooks that expose clean API to components:
 
 ```javascript
-// src/features/users/hooks/useUserSearchFacade.js
+// src/application/facades/useUserSearchFacade.js
 export const useUserSearchFacade = (searchTerm) => {
   const query = useUserSearchQuery(searchTerm);
 
@@ -172,33 +173,43 @@ export const useUserSearchFacade = (searchTerm) => {
 
 ## Architecture Patterns
 
-### FSD Structure
+### Clean Architecture Structure
 
 ```
 src/
-├── app/                    # Providers, config
-├── components/            # Reusable UI (ui/, layout/)
-├── features/              # Domain modules (FSD)
-│   └── [feature]/
-│       ├── components/   # Feature-specific components
-│       ├── hooks/        # Query + Facade hooks
-│       └── [feature].jsx # Entry point
-├── hooks/                # Global hooks
-├── lib/                  # Utilities (cn, utils)
-├── models/               # Domain layer
-│   ├── adapters/        # Data transformation
-│   └── types/           # Zod schemas
-├── services/            # API infrastructure
-└── docs/                # Documentation
+├── domain/                 # Layer 1: Core business logic
+│   ├── schemas/            # Zod schemas (domain rules)
+│   ├── adapters/           # Data normalization
+│   └── errors/             # Custom application errors
+├── infrastructure/         # Layer 2: External frameworks & tech details
+│   ├── api/                # HTTP clients & API services
+│   ├── logger/             # Semantic logging
+│   └── mocks/              # Mock Service Worker (MSW)
+├── application/            # Layer 3: Use case coordinators
+│   ├── queries/            # TanStack Query hooks
+│   ├── facades/            # UI Facades encapsulating logic
+│   └── hooks/              # Global React hooks
+└── presentation/           # Layer 4: View & visuals
+    ├── components/         # Reusable UI (ui/, layout/, common/)
+    ├── features/           # Specific modules (users, user-detail)
+    └── styles/             # Tailwind CSS global styling
 ```
 
 ### Data Flow
 
 ```
-Presentation → Facade Hook → TanStack Query → Adapter + Zod → Service → API
+Presentation (UI) → Facade Hook → TanStack Query → Adapter + Zod → Service → API
 ```
 
 ---
+
+## Design System — Glassmorphism + Minimalismo
+
+- Use glass utility classes from `index.css`: `glass`, `glass-card`, `glass-card-hover`, `glass-input`, `btn-glass`, `badge`, `divider`
+- Theme variables: `bg-bg`, `bg-surface`, `text-text`, `text-text-mute`, `text-accent`, `border-border`, `bg-accent-soft`
+- Two themes via CSS variables in `:root` (light) and `.dark`. No conditional classes in JSX.
+- Use `rounded-xl` for all glass containers/buttons
+- Using Orbitron (headings), Inter (body), JetBrains Mono (technical)
 
 ## Tailwind CSS v4
 
@@ -211,11 +222,12 @@ import { cn } from "@/lib/utils";
 
 <button className={cn(
   "px-4 py-2 rounded",
-  isActive && "bg-blue-500"
+  isActive && "bg-accent"
 )}>
 ```
 
 - Follow Tailwind v4 best practices with CSS variables
+- **Never use `@apply` with custom classes** (Tailwind v4 limitation)
 
 ---
 
@@ -292,3 +304,4 @@ Use JSDoc for file-level descriptions, functions, and components:
 - **Base path**: `/myprojectapi01/` for GitHub Pages deployment
 - **MSW**: Mock Service Worker configured for development API mocking
 - **NO Redux**: This project uses TanStack Query, NOT Redux Toolkit
+- **Design**: Glassmorphism (`glass-card`, `glass-input`, `btn-glass`) with dual theme (light "Holographic Terminal" / dark "Cyberpunk"). No navbar — UX starts at hero.

@@ -1,13 +1,3 @@
-/**
- * @file UserCard.jsx
- * @description 
- * Componente de tarjeta ultra-premium que soporta múltiples estilos visuales avanzados:
- * - 'default': Borde limpio estándar con elevación suave
- * - 'glass': Estilo Bento (glassmorphism) con resplandor neon y bordes ultra-finos
- * - 'minimal': Monocromático de estilo Vercel / Linear
- * - 'accent-glow': Resplandor dinámico con gradiente trasero al pasar el cursor
- */
-
 import { useRef } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -16,42 +6,35 @@ import useIntersectionObserver from "@/application/hooks/useIntersectionObserver
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 
-/**
- * Variant Styles Mapping
- */
 const VARIANTS = {
-  default: "border border-app-border bg-app-surface shadow-sm hover:border-app-accent/50 hover:shadow-md",
-  glass: "bg-app-surface border border-app-border shadow-sm hover:border-app-accent/50 hover:shadow-md",
-  minimal: "border border-app-border/60 hover:border-app-accent hover:bg-app-bg bg-transparent shadow-sm",
-  "accent-glow": "bg-app-surface border border-app-border hover:shadow-sm hover:border-app-accent"
+  default: "glass-card",
+  glass: "glass-card-hover",
+  minimal: "border border-border/40 rounded-xl hover:border-accent transition-all duration-200",
+  "accent-glow": "glass-card-hover",
 };
 
-/**
- * Sub-component: Avatar
- */
 const UserAvatar = ({ url, login, variant = "default" }) => {
   const isMinimal = variant === "minimal";
-  
+
   return (
-    <div className={cn("flex flex-col items-center relative", isMinimal ? "pt-0 pb-0" : "pt-5 pb-2.5")}>
+    <div className={cn("flex flex-col items-center relative", isMinimal ? "pt-0 pb-0" : "pt-6 pb-2")}>
       <div className="relative">
         <motion.img
           layoutId={`avatar-${login}`}
           src={url}
           alt={`Avatar de ${login}`}
           loading="lazy"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
+          variants={{
+            initial: { opacity: 0, scale: 0.95 },
+            animate: { opacity: 1, scale: 1 },
+            hover: { scale: 1.04 },
+          }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
           className={cn(
-            "rounded-lg object-cover border border-app-border group-hover:border-app-accent group-hover:scale-102 transition-all duration-300 z-10 relative",
+            "rounded-xl object-cover z-10 relative",
             isMinimal ? "w-10 h-10" : "w-16 h-16"
           )}
         />
-        {/* Decorative active indicator */}
-        {!isMinimal && (
-          <div className="absolute bottom-0.5 right-0.5 w-2.5 h-2.5 bg-emerald-500 border border-app-surface rounded-full z-20" />
-        )}
       </div>
     </div>
   );
@@ -63,18 +46,18 @@ UserAvatar.propTypes = {
   variant: PropTypes.string,
 };
 
-/**
- * Sub-component: Info/Header
- */
 const UserHeader = ({ login, variant = "default" }) => {
   const isMinimal = variant === "minimal";
 
   return (
-    <div className={cn("space-y-1 flex-1 min-w-0", isMinimal ? "px-0 pb-0 text-left" : "px-4 pb-2 text-center")}>
-      <h3 className="text-sm font-bold text-app-text truncate tracking-tight group-hover:text-app-accent transition-colors font-heading">
+    <div className={cn("space-y-1 flex-1 min-w-0", isMinimal ? "px-0 pb-0 text-left" : "px-5 pb-1 text-center")}>
+      <h3 className={cn(
+        "font-heading font-bold truncate text-text",
+        isMinimal ? "text-sm" : "text-xs tracking-wider uppercase"
+      )}>
         {login}
       </h3>
-      <p className="font-mono text-[9px] text-app-muted tracking-tight truncate opacity-90 select-all">
+      <p className="font-mono text-[10px] text-text-mute truncate select-all">
         github.com/{login}
       </p>
     </div>
@@ -86,22 +69,24 @@ UserHeader.propTypes = {
   variant: PropTypes.string,
 };
 
-/**
- * Sub-component: Footer Action
- */
 const UserFooter = ({ login, variant = "default" }) => {
   if (variant === "minimal") return null;
 
   return (
-    <div className="px-4 pb-4 pt-1 mt-auto w-full z-10">
+    <div className="px-5 pb-5 pt-1 mt-auto w-full z-10 overflow-hidden">
       <Link to={`/user/${login}`} className="w-full block">
-        <button 
-          className="btn-action-gradient w-full text-[11px] font-semibold py-2 rounded-lg cursor-pointer group/btn flex items-center justify-center gap-1"
+        <motion.button
+          className="btn-glass w-full text-[10px] py-2.5 rounded-xl flex items-center justify-center gap-1.5"
           aria-label={`Ver perfil de ${login}`}
+          variants={{
+            initial: { opacity: 0.6, y: 5 },
+            hover: { opacity: 1, y: 0 },
+          }}
+          transition={{ type: "spring", stiffness: 200, damping: 15 }}
         >
-          <span>Ver Perfil</span>
-          <ChevronRight size={12} className="group-hover/btn:translate-x-0.5 transition-transform" />
-        </button>
+          <span>Ver perfil</span>
+          <ChevronRight size={12} />
+        </motion.button>
       </Link>
     </div>
   );
@@ -112,9 +97,6 @@ UserFooter.propTypes = {
   variant: PropTypes.string,
 };
 
-/**
- * Main UserCard Component
- */
 const UserCard = ({ children, variant = "default", className, login }) => {
   const cardRef = useRef(null);
   const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 });
@@ -124,37 +106,40 @@ const UserCard = ({ children, variant = "default", className, login }) => {
   return (
     <div
       ref={cardRef}
-    className={cn(
-      "h-full w-full mx-auto group relative",
-      isMinimal 
-        ? "min-h-[70px]" 
-        : "min-h-[210px] sm:min-h-[220px] max-w-full sm:max-w-[280px]",
-      className
-    )}
-  >
-    {isVisible ? (
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        whileHover={variant === "minimal" ? { scale: 1.015 } : { y: -4 }}
-        transition={{ type: "spring", stiffness: 150, damping: 18 }}
-        className={cn(
-          variantClass,
-          "rounded-lg flex h-full w-full overflow-hidden transition-all duration-500 relative z-10",
-          isMinimal ? "flex-row items-center gap-4 p-4" : "flex-col"
-        )}
-      >
-        {isMinimal ? (
-          <Link to={`/user/${login || ""}`} className="flex items-center gap-4 w-full">
-             {children}
-          </Link>
-        ) : (
-          children
-        )}
-      </motion.div>
-    ) : (
-      <div className="h-full w-full rounded-lg bg-app-surface/20 border border-app-border/40" />
-    )}
+      className={cn(
+        "h-full w-full mx-auto group",
+        isMinimal ? "min-h-[70px]" : "min-h-[190px] max-w-full sm:max-w-[280px]",
+        className
+      )}
+    >
+      {isVisible ? (
+        <motion.div
+          initial="initial"
+          whileHover="hover"
+          animate="animate"
+          variants={{
+            initial: { opacity: 0, y: 12 },
+            animate: { opacity: 1, y: 0 },
+            hover: { y: -4 },
+          }}
+          transition={{ type: "spring", stiffness: 180, damping: 15 }}
+          className={cn(
+            variantClass,
+            "flex h-full w-full overflow-hidden",
+            isMinimal ? "flex-row items-center gap-4 p-4" : "flex-col"
+          )}
+        >
+          {isMinimal ? (
+            <Link to={`/user/${login || ""}`} className="flex items-center gap-4 w-full">
+              {children}
+            </Link>
+          ) : (
+            children
+          )}
+        </motion.div>
+      ) : (
+        <div className="h-full w-full rounded-xl bg-border/20" />
+      )}
     </div>
   );
 };
