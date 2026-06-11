@@ -1,13 +1,13 @@
 # GitExplorer — Guía de Estudio para Programadores Junior
 
-> **React SPA para explorar perfiles de GitHub.** Construida con Clean Architecture, TanStack Query, Tailwind CSS v4, Zod y Motion v12. Cada decisión técnica está pensada para enseñar buenas prácticas de ingeniería de software.
+> **React SPA para explorar perfiles de GitHub.** Construida con Feature-Sliced Design (FSD), TanStack Query, Tailwind CSS v4, Zod y Motion v12. Cada decisión técnica está pensada para enseñar buenas prácticas de ingeniería de software.
 
 ```txt
 Estado:       Producción
 React:        v18.3
 Vite:         v5.4
 Tailwind:     v4
-Arquitectura: Clean Architecture (4 capas)
+Arquitectura: Feature-Sliced Design (FSD)
 Estilo:       Glassmorphism + Minimalismo técnico
 ```
 
@@ -16,7 +16,7 @@ Estilo:       Glassmorphism + Minimalismo técnico
 ## 📦 Índice
 
 1. [Stack Tecnológico — Cada librería explicada](#-stack-tecnológico--cada-librería-explicada)
-2. [Clean Architecture — Las 4 capas](#-clean-architecture--las-4-capas)
+2. [Feature-Sliced Design (FSD) — Las 6 capas](#-feature-sliced-design-fsd--las-6-capas)
 3. [TanStack Query a profundidad](#-tanstack-query-a-profundidad)
 4. [Zod — Validación en Runtime](#-zod--validación-en-runtime)
 5. [Patrones de Diseño (GoF)](#-patrones-de-diseño-gof)
@@ -621,7 +621,7 @@ pnpm py           # Build + sirve con Python (puerto 5000)
 | Documento | Descripción |
 |-----------|-------------|
 | [`src/docs/01-Guia-del-Proyecto.md`](./src/docs/01-Guia-del-Proyecto.md) | Visión general, casos de uso y requerimientos |
-| [`src/docs/02-Arquitectura-y-Patrones.md`](./src/docs/02-Arquitectura-y-Patrones.md) | Clean Architecture y patrones GoF a detalle |
+| [`src/docs/02-Arquitectura-y-Patrones.md`](./src/docs/02-Arquitectura-y-Patrones.md) | Feature-Sliced Design (FSD) y patrones GoF a detalle |
 | [`src/docs/03-Guia-de-Desarrollo.md`](./src/docs/03-Guia-de-Desarrollo.md) | Setup, comandos y flujo de trabajo |
 | [`src/docs/GUIA_ESTUDIO.md`](./src/docs/GUIA_ESTUDIO.md) | 📚 Manual completo de React desde cero |
 | [`src/docs/PRUEBA_TECNICA.md`](./src/docs/PRUEBA_TECNICA.md) | 📝 Simulación de entrevista técnica frontend |

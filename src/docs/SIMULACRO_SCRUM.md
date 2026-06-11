@@ -47,7 +47,7 @@ _Nota: En un equipo Scrum real todos los developers son multifuncionales. Esta d
 
 | Epic                             | Descripción                                                                                          | Sprint   | Estado        |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------- | -------- | ------------- |
-| **E-1: Fundación**               | Setup del proyecto Vite + React, Clean Architecture, Tailwind v4, ESLint, path aliases               | Sprint 0 | ✅ Completado |
+| **E-1: Fundación**               | Setup del proyecto Vite + React, Feature-Sliced Design (FSD), Tailwind v4, ESLint, path aliases               | Sprint 0 | ✅ Completado |
 | **E-2: Búsqueda de Usuarios**    | Integración con GitHub API, TanStack Query, debounce, adaptador con Zod, estados loading/error/empty | Sprint 1 | ✅ Completado |
 | **E-3: Detalle de Perfil**       | Página de detalle con bento grid, repositorios, datos completos                                      | Sprint 2 | ✅ Completado |
 | **E-4: Diseño y Experiencia**    | Glassmorphism, tema claro/oscuro, animaciones, micro-interacciones                                   | Sprint 2 | ✅ Completado |
@@ -63,7 +63,7 @@ _Nota: En un equipo Scrum real todos los developers son multifuncionales. Esta d
 | ID    | User Story                                                                                                                                                                                                     | Prioridad | Story Points |
 | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | :----------: |
 | US-01 | **Como** desarrollador, **quiero** tener un proyecto Vite + React con ESLint y configuración estándar **para** empezar a codificar con herramientas modernas listas para usar                                  | 🔥 Alta   |      3       |
-| US-02 | **Como** desarrollador, **quiero** tener la estructura de Clean Architecture de 4 capas (domain, infrastructure, application, presentation) **para** separar responsabilidades y mantener el código mantenible | 🔥 Alta   |      5       |
+| US-02 | **Como** desarrollador, **quiero** tener la estructura de Feature-Sliced Design (FSD) de 4 capas (domain, infrastructure, application, presentation) **para** separar responsabilidades y mantener el código mantenible | 🔥 Alta   |      5       |
 | US-03 | **Como** desarrollador, **quiero** tener Tailwind CSS v4 configurado con diseño atómico **para** estilizar componentes rápidamente sin escribir CSS manual                                                     | 🔥 Alta   |      2       |
 | US-04 | **Como** desarrollador, **quiero** tener path aliases (`@/*`) configurados **para** importar archivos con rutas absolutas limpias en vez de `../../../`                                                        | 🔥 Alta   |      1       |
 
@@ -139,7 +139,7 @@ US-01 (3 pts) — Setup Vite + React + ESLint
   ├── Task-03: Configurar pnpm como package manager
   └── Task-04: Verificar que `pnpm dev` y `pnpm build` funcionan
 
-US-02 (5 pts) — Clean Architecture de 4 capas
+US-02 (5 pts) — Feature-Sliced Design (FSD) de 4 capas
   ├── Task-05: Crear carpetas: domain/, infrastructure/, application/, presentation/
   ├── Task-06: Implementar layer structure con archivos placeholder
   ├── Task-07: Configurar path alias @/* en vite.config.js
@@ -193,7 +193,7 @@ Sofía: Ayer hice Task-01 (scaffold Vite) y Task-03 (pnpm).
 + ✅ Vite + React 18 funcionando con HMR
 + ✅ ESLint con reglas de accesibilidad y hooks
 + ✅ Tailwind CSS v4 configurado y probado
-+ ✅ Clean Architecture con 4 capas y path aliases
++ ✅ Feature-Sliced Design (FSD) con 4 capas y path aliases
 + ✅ ApiError personalizado creado
 + ✅ pnpm dev, build, lint funcionan sin errores
 ```
@@ -207,7 +207,7 @@ Sofía: Ayer hice Task-01 (scaffold Vite) y Task-03 (pnpm).
 | Buena coordinación inicial               | Subestimamos la configuración de ESLint                   | Investigar plugins ESLint antes del Sprint Planning      |
 | Path aliases funcionaron a la primera    | Nos faltó definir la convención de nombres desde el día 1 | Escribir AGENTS.md con code style guidelines en Sprint 1 |
 | Tailwind v4 se integró fácil             |                                                           |                                                          |
-| Clean Architecture clara desde el inicio |                                                           |                                                          |
+| Feature-Sliced Design (FSD) clara desde el inicio |                                                           |                                                          |
 
 ---
 
@@ -293,7 +293,7 @@ Sofía: Ayer avancé PageHeader (Task-15) con el glass-input.
 + ✅ NotFound: "No se encontraron usuarios para 'xyz'"
 + ✅ ErrorDisplay: panel de diagnóstico con SYS_DIAGNOSTICS y botón retry
 + ✅ Zod valida cada usuario: si un campo falta, se rechaza con 422
-+ ✅ Todo el flujo pasa por Clean Architecture: UI → Facade → Query → Adapter → Zod → Service
++ ✅ Todo el flujo pasa por Feature-Sliced Design (FSD): Page → Widget → Feature (Facade) → Entity (Query/Adapter) → Shared (HTTP Client)
 ```
 
 **Demo**: Se abre la app, se escribe "mojombo" en el input, aparecen tarjetas glass con datos reales. Se escribe un string sin resultados, aparece NotFound. Se desconecta internet, aparece ErrorDisplay.
@@ -536,7 +536,7 @@ Cada User Story debe cumplir TODOS estos criterios para considerarse "Done":
 
 ### Código
 
-- [ ] El código sigue Clean Architecture (capa correcta, sin fugas de dependencias)
+- [ ] El código sigue Feature-Sliced Design (FSD) (capa correcta, sin fugas de dependencias)
 - [ ] El código sigue las convenciones de nombres (PascalCase componentes, camelCase hooks, etc.)
 - [ ] El código pasa `pnpm lint` sin warnings ni errors
 - [ ] No hay `console.log` en producción
@@ -883,7 +883,7 @@ Este documento simuló un proyecto Scrum real con:
 ### Lo que aprenderías haciendo este proyecto real:
 
 1. **Cómo configurar un proyecto React moderno** con Vite, ESLint y path aliases
-2. **Clean Architecture en el mundo real** — no teoría, código funcionando
+2. **Feature-Sliced Design (FSD) en el mundo real** — no teoría, código funcionando
 3. **TanStack Query a profundidad** — caché, staleTime, signal, query keys
 4. **Zod para validación en runtime** — protegiendo la app de datos corruptos
 5. **Glassmorphism + CSS variables** — sistema de diseño profesional

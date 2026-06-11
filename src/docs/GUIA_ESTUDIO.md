@@ -58,7 +58,7 @@
 
 - **Facade (Patrón Fachada):** Interfaz simplificada que oculta complejidad interna. En nuestro proyecto, los hooks `useUserSearchFacade` ocultan la complejidad de TanStack Query.
 
-- **Clean Architecture (Arquitectura Limpia):** Filosofía de diseño de software que organiza el código en capas concéntricas o jerárquicas con dependencias unidireccionales apuntando siempre hacia el interior (Dominio), desacoplando las reglas de negocio de la infraestructura técnica y del framework visual.
+- **Feature-Sliced Design (FSD):** Metodología de diseño arquitectónico para aplicaciones frontend que divide el código en capas (layers), rebanadas (slices) y segmentos (segments) con dependencias estrictas de arriba hacia abajo para mantener la modularidad y desacoplamiento.
 
 - **Framework:** Marco de trabajo que proporciona estructura y herramientas para desarrollar apps.
 
@@ -673,20 +673,22 @@ const Header = () => {
 
 # 🎓 CAPÍTULO 3: ARQUITECTURA Y PATRONES
 
-## 3.1 Arquitectura Limpia (Clean Architecture) y DDD
+## 3.1 Feature-Sliced Design (FSD)
 
-La Arquitectura Limpia es una metodología de diseño que organiza el código en capas bien definidas con una regla fundamental: **las capas internas no conocen nada del exterior**. Esto asegura que las reglas de negocio (Dominio) sean 100% independientes de bases de datos, APIs de terceros (como GitHub API) y frameworks de interfaz visual (como React).
+Feature-Sliced Design (FSD) es una arquitectura para aplicaciones web modernas que organiza el código en capas (Layers), rebanadas (Slices) y segmentos (Segments) bajo una regla estricta: **las capas superiores pueden importar de las capas inferiores, pero nunca al revés**. Esto asegura modularidad, aislamiento y escalabilidad.
 
-### Las 4 Capas de la Aplicación
+### Las 6 Capas de FSD
 
 ```
-Presentation (Visuals) ➔ Application (Use Cases) ➔ Infrastructure (API/HTTP) ➔ Domain (Entities/Rules)
+app ➔ pages ➔ widgets ➔ features ➔ entities ➔ shared
 ```
 
-1. **🛡️ Capa de Dominio (`src/domain`):** El corazón de la aplicación. Contiene los esquemas de validación de datos de negocio (`schemas/` usando Zod), transformadores normalizadores (`adapters/`) y clases de error (`errors/`). Es JavaScript puro sin dependencias de React o red.
-2. **🔌 Capa de Infraestructura (`src/infrastructure`):** Los detalles tecnológicos de soporte. Contiene el cliente HTTP (`httpClient.js`), el servicio para comunicarse con GitHub (`userService.js`), el sistema de logs semánticos (`logger/`) y los mocks locales del servidor (`mocks/` con MSW).
-3. **⚙️ Capa de Aplicación (`src/application`):** Los orquestadores de flujos y casos de uso. Contiene los hooks de TanStack Query para el manejo de estado en memoria y caché (`queries/`), hooks globales de propósito general (`hooks/`) y las **Fachadas (`facades/`)** que exponen APIs limpias a la vista.
-4. **🎨 Capa de Presentación (`src/presentation`):** La interfaz de usuario visible. Contiene las hojas de estilo de Tailwind CSS v4 (`styles/`), componentes comunes y layout (`components/`), y vistas con lógica interactiva organizadas en módulos funcionales (`features/`).
+1. **🚀 Capa App (`src/app`):** Inicialización global, enrutamiento (React Router v7) y estilos base.
+2. **📄 Capa Pages (`src/pages`):** Vistas o pantallas completas formadas por la composición de widgets.
+3. **🧱 Capa Widgets (`src/widgets`):** Componentes auto-contenidos complejos (ej. `SearchResults`, `UserProfileBento`).
+4. **⚙️ Capa Features (`src/features`):** Interacciones con valor de negocio y facades (ej. `search-user` con `useUserSearchFacade`).
+5. **🛡️ Capa Entities (`src/entities`):** Lógica del dominio, llamadas de API, Zod schemas, adaptadores y componentes base de la entidad (ej. `user`).
+6. **🔌 Capa Shared (`src/shared`):** Utilidades genéricas, cliente HTTP (`httpClient.js`), hooks comunes y componentes visuales reutilizables.
 
 ### Beneficios de la Arquitectura Limpia
 

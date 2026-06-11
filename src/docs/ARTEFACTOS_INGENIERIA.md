@@ -29,13 +29,13 @@ La interfaz nativa de GitHub (github.com) está diseñada para la gestión de re
 | **Sin modo oscuro nativo** (hasta fechas recientes) y sin personalización visual | Fatiga visual en sesiones prolongadas |
 | **Sin una arquitectura que sirva como caso de estudio**: GitHub.com es un monolito Ruby on Rails | Los desarrolladores junior no pueden inspeccionar el código para aprender buenas prácticas |
 
-**GitExplorer resuelve esto** ofreciendo una SPA React liviana con búsqueda con debounce, caché inteligente (TanStack Query), validación de datos en runtime (Zod), diseño glassmorphism con tema dual (claro/oscuro) y una arquitectura de 4 capas que sirve como modelo de referencia para ingeniería de software frontend.
+**GitExplorer resuelve esto** ofreciendo una SPA React liviana con búsqueda con debounce, caché inteligente (TanStack Query), validación de datos en runtime (Zod), diseño glassmorphism con tema dual (claro/oscuro) y una arquitectura Feature-Sliced Design (FSD) que sirve como modelo de referencia para ingeniería de software frontend.
 
 ### 1.2 Objetivos
 
 #### Objetivo General
 
-Construir una aplicación web SPA (Single Page Application) en React 18 que permita a desarrolladores explorar perfiles de GitHub con una experiencia de usuario rápida, visualmente moderna y técnicamente ejemplar, aplicando Clean Architecture, TanStack Query, Zod y patrones de diseño GoF (Adapter, Facade, Factory) bajo metodología Scrum.
+Construir una aplicación web SPA (Single Page Application) en React 18 que permita a desarrolladores explorar perfiles de GitHub con una experiencia de usuario rápida, visualmente moderna y técnicamente ejemplar, aplicando la arquitectura Feature-Sliced Design (FSD), TanStack Query, Zod y patrones de diseño GoF (Adapter, Facade, Factory) bajo metodología Scrum.
 
 #### Objetivos Específicos
 
@@ -44,16 +44,16 @@ Construir una aplicación web SPA (Single Page Application) en React 18 que perm
 | OE-1 | Implementar un sistema de búsqueda con debounce de 500ms y TanStack Query que reduzca las llamadas a la API de GitHub y cachee resultados con staleTime de 5 minutos | Las búsquedas repetidas del mismo término son instantáneas (0ms de red), el rate-limit de GitHub no se excede |
 | OE-2 | Aplicar los patrones estructurales Adapter (para transformación de datos), Facade (para simplificación de lógica de UI) y Factory (para creación condicionada de componentes), documentándolos como caso de estudio para desarrolladores junior | Cada patrón está identificado con su archivo fuente, diagrama y explicación didáctica en la documentación |
 | OE-3 | Diseñar un sistema de doble tema (claro "Holographic Terminal" / oscuro "Cyberpunk") con efecto glassmorphism basado en `backdrop-filter: blur(20px)` y variables CSS que se alternan mediante una clase `.dark` en `<html>`, sin condicionales en JSX | El toggle de tema persiste en localStorage, respeta `prefers-color-scheme` del sistema, y todos los componentes se repintan automáticamente sin props de tema |
-| OE-4 | Documentar cada decisión técnica como material de estudio para programadores junior, incluyendo Clean Architecture, closures, hoisting, scope, inmutabilidad, DRY, SOLID y el ciclo Scrum completo con 4 sprints simulados | El proyecto contiene 7+ documentos técnicos en `src/docs/` y un README que funciona como guía de estudio integral |
+| OE-4 | Documentar cada decisión técnica como material de estudio para programadores junior, incluyendo la arquitectura Feature-Sliced Design (FSD), closures, hoisting, scope, inmutabilidad, DRY, SOLID y el ciclo Scrum completo con 4 sprints simulados | El proyecto contiene 7+ documentos técnicos en `src/docs/` y un README que funciona como guía de estudio integral |
 
 ### 1.3 Justificación y Alcance
 
 #### Justificación
 
-**Valor educativo**: El proyecto no resuelve un problema de negocio nuevo (explorar perfiles de GitHub), sino que **re-resuelve un problema conocido aplicando las mejores prácticas de la industria frontend**. Esto lo convierte en un recurso didáctico donde un desarrollador junior puede ver Clean Architecture, TanStack Query, Zod, patrones GoF, inmutabilidad, closures y Scrum aplicados en un código real y funcional.
+**Valor educativo**: El proyecto no resuelve un problema de negocio nuevo (explorar perfiles de GitHub), sino que **re-resuelve un problema conocido aplicando las mejores prácticas de la industria frontend**. Esto lo convierte en un recurso didáctico donde un desarrollador junior puede ver Feature-Sliced Design (FSD), TanStack Query, Zod, patrones GoF, inmutabilidad, closures y Scrum aplicados en un código real y funcional.
 
 **Valor técnico**:
-- La arquitectura de 4 capas es _over-engineered_ para una app de búsqueda simple, pero deliberadamente así para demostrar escalabilidad
+- La arquitectura FSD es _over-engineered_ para una app de búsqueda simple, pero deliberadamente así para demostrar escalabilidad y orden
 - TanStack Query con cache policy configurable muestra cómo manejar estado de servidor sin Redux
 - Zod en runtime protege contra cambios silenciosos en la API de GitHub
 - El sistema de temas basado 100% en CSS variables (sin JSX condicional) es un patrón reusable en cualquier proyecto React
@@ -80,7 +80,7 @@ Construir una aplicación web SPA (Single Page Application) en React 18 que perm
 
 | Bloque CANVAS | Descripción |
 |---------------|-------------|
-| **Segmento de Clientes** | Desarrolladores de software juniors y trainees (1-2 años de experiencia) que quieren aprender React, Clean Architecture y buenas prácticas frontend con un proyecto real. Reclutadores técnicos que usan la app como entrevista práctica. Autodidactas que consumen documentación técnica |
+| **Segmento de Clientes** | Desarrolladores de software juniors y trainees (1-2 años de experiencia) que quieren aprender React, Feature-Sliced Design (FSD) y buenas prácticas frontend con un proyecto real. Reclutadores técnicos que usan la app como entrevista práctica. Autodidactas que consumen documentación técnica |
 | **Propuesta de Valor** | "Aprende React con buenas prácticas en un proyecto real documentado como estudio de caso" — cada línea de código, decisión arquitectónica y patrón de diseño está explicado en la documentación para que un junior lo entienda y lo replique |
 | **Canales** | GitHub Pages (app desplegada), repositorio GitHub con 7+ documentos técnicos, README como guía de estudio integral, comunidad dev.to/Medium (artículos derivados) |
 | **Relación con Clientes** | Open-source con issues y pull requests, documentación detallada en español, simulación Scrum completa para que el usuario entienda el proceso ágil |
@@ -190,7 +190,7 @@ Construir una aplicación web SPA (Single Page Application) en React 18 que perm
 | RNF-09 | La aplicación debe cumplir con criterios de accesibilidad WCAG 2.1 nivel AA | Accesibilidad | ESLint plugin jsx-a11y, atributos aria |
 | RNF-10 | La aplicación debe validar todos los datos externos con Zod antes de usarlos | Seguridad | Ningún dato sin validar llega a un componente |
 | RNF-11 | La aplicación debe usar TanStack Query para toda la comunicación con el servidor, no Redux | Arquitectura | Sin dependencia de Redux en package.json |
-| RNF-12 | La aplicación debe seguir Clean Architecture de 4 capas: domain → infrastructure → application → presentation | Arquitectura | Las capas internas no importan de las externas |
+| RNF-12 | La aplicación debe seguir la arquitectura Feature-Sliced Design (FSD) en 6 capas: app → pages → widgets → features → entities → shared | Arquitectura | Las capas superiores no importan de las inferiores |
 | RNF-13 | La aplicación debe usar el patrón Facade para ocultar la complejidad de TanStack Query de los componentes | Arquitectura | Los componentes solo llaman a facades, no a queries directamente |
 | RNF-14 | La aplicación debe usar el patrón Adapter para transformar datos de la API al modelo interno | Arquitectura | Ninguna propiedad de la API cruda llega a presentation |
 | RNF-15 | La aplicación debe usar el patrón Factory para renderizar diferentes tipos de resultados (User vs Organization) | Arquitectura | `ResultFactory` decide qué componente renderizar según `data.type` |
@@ -623,84 +623,48 @@ GitExplorer es una **Single Page Application (SPA)** construida sobre un stack m
 
 ### 3.2 Diagrama de Subsistemas
 
-La arquitectura sigue el patrón **Layered Architecture** (Clean Architecture) con 4 capas jerárquicas donde cada capa solo conoce a la inmediatamente inferior:
+La arquitectura sigue el patrón **Feature-Sliced Design (FSD)** con 6 capas jerárquicas donde la regla de oro inquebrantable dicta que las dependencias fluyen estrictamente de arriba hacia abajo (las capas superiores pueden importar de las inferiores, pero no al revés):
 
 ```
  ┌────────────────────────────────────────────────────────────────────────────┐
- │                                                                              │
- │  CAPA 4: PRESENTATION                                                        │
- │  ┌──────────────────────────────────────────────────────────────────────┐   │
- │  │  components/       │  features/          │  styles/                  │   │
- │  │  ┌──────────────┐  │  ┌───────────────┐  │  ┌────────────────────┐   │   │
- │  │  │ layout/      │  │  │ users/        │  │  │ index.css          │   │   │
- │  │  │ PageHeader   │  │  │ UserSearch    │  │  │ :root / .dark vars │   │   │
- │  │  │ NotFound     │  │  │ SearchResults │  │  │ .glass-card        │   │   │
- │  │  │ ErrorDisplay │  │  │ UserList      │  │  │ .glass-input       │   │   │
- │  │  ├──────────────┤  │  │ UserCard      │  │  │ .btn-glass         │   │   │
- │  │  │ ui/          │  │  │ SkeletonCard  │  │  └────────────────────┘   │   │
- │  │  │ ThemeToggle  │  │  │ SkeletonGrid  │  │                           │   │
- │  │  ├──────────────┤  │  ├───────────────┤  │                           │   │
- │  │  │ common/      │  │  │ user-detail/  │  │                           │   │
- │  │  │ ErrorBoundary│  │  │ UserDetail    │  │                           │   │
- │  │  ├──────────────┤  │  │ UserDetail    │  │                           │   │
- │  │  │ factories/   │  │  │ Skeleton      │  │                           │   │
- │  │  │ ResultFactory│  │  └───────────────┘  │                           │   │
- │  │  └──────────────┘  │                     │                           │   │
- │  └──────────────────────────────────────────────────────────────────────┘   │
- │                              │                                               │
- │                              │  Dependencia: import from @/application/*     │
- │                              ▼                                               │
- │  CAPA 3: APPLICATION                                                         │
- │  ┌──────────────────────────────────────────────────────────────────────┐   │
- │  │  queries/            │  facades/             │  hooks/               │   │
- │  │  ┌────────────────┐  │  ┌─────────────────┐  │  ┌─────────────────┐  │   │
- │  │  │ useUserQuery   │  │  │ useUserSearch   │  │  │ useTheme        │  │   │
- │  │  │ useUserDetail  │  │  │ Facade          │  │  │ useDebounced    │  │   │
- │  │  │ Query          │  │  │                 │  │  │ Search          │  │   │
- │  │  └────────────────┘  │  └─────────────────┘  │  │ useIntersection │  │   │
- │  │                       │                       │  │ Observer        │  │   │
- │  │                       │                       │  └─────────────────┘  │   │
- │  └──────────────────────────────────────────────────────────────────────┘   │
- │                              │                                               │
- │                              │  Dependencia: import from @/infrastructure/*  │
- │                              ▼                                               │
- │  CAPA 2: INFRASTRUCTURE                                                      │
- │  ┌──────────────────────────────────────────────────────────────────────┐   │
- │  │  api/                │  mocks/              │  config/               │   │
- │  │  ┌────────────────┐  │  ┌─────────────────┐  │  ┌─────────────────┐  │   │
- │  │  │ httpClient     │  │  │ browser.js      │  │  │ config.js       │  │   │
- │  │  │ userService    │  │  │ handlers.js     │  │  │ API_BASE_URL    │  │   │
- │  │  └────────────────┘  │  └─────────────────┘  │  │ DEBOUNCE_DELAY  │  │   │
- │  │                       │                       │  │ STALE_TIME      │  │   │
- │  │  ┌────────────────┐  │                       │  └─────────────────┘  │   │
- │  │  │ logger/        │  │                       │                        │   │
- │  │  │ logger.js      │  │                       │                        │   │
- │  │  └────────────────┘  │                       │                        │   │
- │  └──────────────────────────────────────────────────────────────────────┘   │
- │                              │                                               │
- │  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ │
- │                              │                                               │
- │  CAPA 1: DOMAIN                                                              │
- │  ┌──────────────────────────────────────────────────────────────────────┐   │
- │  │  schemas/          │  adapters/            │  errors/                │   │
- │  │  ┌────────────────┐  │  ┌─────────────────┐  │  ┌─────────────────┐  │   │
- │  │  │ user.js        │  │  │ userAdapter     │  │  │ ApiError.js     │  │   │
- │  │  │ GitHubUser     │  │  │ userAdapter()   │  │  │ ApiError class  │  │   │
- │  │  │ Schema         │  │  │ usersCollection │  │  │ extends Error   │  │   │
- │  │  └────────────────┘  │  │ Adapter()       │  │  └─────────────────┘  │   │
- │  │                       │  └─────────────────┘  │                        │   │
- │  └──────────────────────────────────────────────────────────────────────┘   │
- │                              │                                               │
- │                              │  SIN DEPENDENCIAS EXTERNAS                    │
- │                              │  (JavaScript puro, sin React, sin HTTP)       │
- │                              ▼                                               │
- │                      MUNDO EXTERIOR                                           │
- │              ┌─────────────────────────────┐                                 │
- │              │  GitHub API (api.github.com) │                                 │
- │              │  GitHub Pages (CDN)          │                                 │
- │              │  Navegador (DOM, fetch)      │                                 │
- │              └─────────────────────────────┘                                 │
- │                                                                              │
+ │                                                                            │
+ │  CAPA 6: APP (src/app/)                                                    │
+ │  ┌──────────────────────────────────────────────────────────────────────┐  │
+ │  │  App.jsx (rutas / enrutador)   │   main.jsx (punto de montaje / MSW) │  │
+ │  └──────────────────────────────────────────────────────────────────────┘  │
+ │                              │                                             │
+ │                              ▼                                             │
+ │  CAPA 5: PAGES (src/pages/)                                                │
+ │  ┌──────────────────────────────────────────────────────────────────────┐  │
+ │  │  search-page/ (Búsqueda)       │   detail-page/ (Perfil Bento)       │  │
+ │  │  not-found/ (Error 404)        │                                     │  │
+ │  └──────────────────────────────────────────────────────────────────────┘  │
+ │                              │                                             │
+ │                              ▼                                             │
+ │  CAPA 4: WIDGETS (src/widgets/)                                            │
+ │  ┌──────────────────────────────────────────────────────────────────────┐  │
+ │  │  search-results/               │   user-profile-bento/               │  │
+ │  └──────────────────────────────────────────────────────────────────────┘  │
+ │                              │                                             │
+ │                              ▼                                             │
+ │  CAPA 3: FEATURES (src/features/)                                          │
+ │  ┌──────────────────────────────────────────────────────────────────────┐  │
+ │  │  search-user/                  │   useUserSearchFacade.js            │  │
+ │  └──────────────────────────────────────────────────────────────────────┘  │
+ │                              │                                             │
+ │                              ▼                                             │
+ │  CAPA 2: ENTITIES (src/entities/)                                          │
+ │  ┌──────────────────────────────────────────────────────────────────────┐  │
+ │  │  user/api/ (userService, query)│   user/model/ (schema, adapter)     │  │
+ │  │  user/ui/ (UserCard, Factory)  │                                     │  │
+ │  └──────────────────────────────────────────────────────────────────────┘  │
+ │                              │                                             │
+ │                              ▼                                             │
+ │  CAPA 1: SHARED (src/shared/)                                              │
+ │  ┌──────────────────────────────────────────────────────────────────────┐  │
+ │  │  api/ (httpClient, ApiError)   │   lib/hooks/ (useTheme, observer)   │  │
+ │  │  ui/ (ErrorBoundary, toggle)   │   mocks/ (MSW / handlers)           │  │
+ │  └──────────────────────────────────────────────────────────────────────┘  │
  └────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -708,11 +672,9 @@ La arquitectura sigue el patrón **Layered Architecture** (Clean Architecture) c
 
 | Regla | Descripción | Violación detectada por |
 |-------|-------------|------------------------|
-| La capa N solo puede importar de la capa N-1 | Presentation → Application, Application → Infrastructure, Infrastructure → Domain | ESLint (import/no-restricted-paths) — pendiente de configurar |
-| Domain NO puede importar de ninguna otra capa | Domain es JavaScript puro. No sabe que React, fetch, ni el navegador existen | `domain/schemas/user.js` importa solo `zod` (librería externa de validación, permitida) |
-| Infrastructure NO puede importar de Application o Presentation | httpClient no sabe qué es un hook o un componente | Revisión manual en code review |
-| Application NO puede importar de Presentation | Los hooks y facades no saben que existen UserCard o ThemeToggle | Revisión manual en code review |
-| Presentation puede importar de Application pero NO de Infrastructure directamente | UserSearch no llama a httpClient ni a fetchUsersAPI directamente — usa la facade | Revisión manual: ningún `.jsx` importa de `@/infrastructure/` |
+| Dependencias en una sola dirección | Las capas superiores solo pueden importar de capas inferiores (ej. widget importa de feature, feature de entity, etc.) | ESLint (import/no-restricted-paths) |
+| Encapsulación vía Public APIs | Se accede a los elementos de un slice únicamente a través de su archivo `index.js` (Public API). Se prohíben las importaciones internas cruzadas | Revisión estática / Manual en code review |
+| Aislamiento de Shared | La capa Shared contiene utilidades puramente técnicas y reutilizables, libre de conceptos de negocio de otras capas | Ningún archivo en `src/shared/` importa de capas superiores |
 
 ### 3.3 Arquitectura de la Solución (Despliegue)
 
@@ -1397,17 +1359,17 @@ Cada escenario Gherkin se mapea a archivos de código específicos. Esta tabla s
 | Modelo CANVAS | Este documento (sección 1.4) |
 | Requerimientos funcionales | Este documento (sección 2.1) |
 | Casos de Uso + ECUS | Este documento (sección 2.3) |
-| Modelo de clases del dominio | `domain/schemas/user.js`, `domain/adapters/userAdapter.js`, `domain/errors/ApiError.js` |
+| Modelo de las entidades | `src/entities/user/model/schema.js`, `src/entities/user/model/adapter.js`, `src/shared/api/ApiError.js` |
 | Diagrama de Subsistemas | `02-Arquitectura-y-Patrones.md`, este documento (sección 3.2) |
 | Arquitectura de despliegue | `vite.config.js`, `package.json` (scripts), este documento (sección 3.3) |
 | Diagrama de secuencia | Este documento (sección 4.1) |
 | Diagrama E/R conceptual | Este documento (sección 4.2) |
 | Diagrama de transición de estados | Este documento (sección 4.3) |
 | Historias de Usuario + ATDD | Este documento (sección 5), `SIMULACRO_SCRUM.md` |
-| TanStack Query | `application/queries/useUserQuery.js`, `application/queries/useUserDetailQuery.js`, `application/facades/useUserSearchFacade.js` |
-| Zod + Adapter | `domain/schemas/user.js`, `domain/adapters/userAdapter.js` |
-| Glassmorphism + tema dual | `presentation/styles/index.css`, `application/hooks/useTheme.js` |
-| Clean Architecture (4 capas) | `02-Arquitectura-y-Patrones.md`, estructura de carpetas `src/` |
+| TanStack Query | `src/entities/user/api/useUserQuery.js`, `src/entities/user/api/useUserDetailQuery.js`, `src/features/search-user/model/useUserSearchFacade.js` |
+| Zod + Adapter | `src/entities/user/model/schema.js`, `src/entities/user/model/adapter.js` |
+| Glassmorphism + tema dual | `src/shared/styles/index.css`, `src/shared/lib/hooks/useTheme.js` |
+| FSD (6 capas) | `src/docs/02-Arquitectura-y-Patrones.md`, estructura de carpetas `src/` |
 
 ---
 

@@ -146,19 +146,21 @@ RSC son componentes que se renderizan en el servidor (Next.js 13+). Característ
 
 ### Pregunta A2.1 (3 puntos)
 
-**Explica el concepto de Arquitectura Limpia (Clean Architecture) en capas y cómo estructurarías un proyecto frontend.**
+**Explica el concepto de Feature-Sliced Design (FSD) y cómo estructurarías un proyecto frontend.**
 
 **Respuesta esperada:**
-La Arquitectura Limpia divide el código en capas concéntricas o jerárquicas independientes con una regla de dependencia estricta: **las capas internas no conocen nada de las externas**.
+Feature-Sliced Design (FSD) es una arquitectura moderna para frontend que divide el código en 6 capas jerárquicas con una regla de dependencia estricta: **las capas superiores pueden importar de las inferiores, pero nunca al revés**.
 
-Estructura típica de capas:
+Estructura típica de capas en FSD:
 
 ```
 src/
-├── domain/            # Capa 1: Lógica y reglas de negocio pura (schemas, adapters, errors)
-├── infrastructure/    # Capa 2: Peticiones HTTP, logs, mocks, config
-├── application/       # Capa 3: Casos de uso, query hooks de estado, fachadas
-└── presentation/      # Capa 4: Capa visual, componentes React, hojas de estilo css
+├── app/       # Configuración global, enrutamiento, estilos de entrada
+├── pages/     # Vistas completas de la aplicación
+├── widgets/   # Bloques de UI autónomos y auto-contenidos
+├── features/  # Interacciones de usuario y casos de uso de negocio (ej. facades)
+├── entities/  # Conceptos y datos del negocio (schemas, adaptadores, query hooks)
+└── shared/    # Utilidades comunes, estilos base, cliente HTTP reutilizable
 ```
 
 **Beneficios:**
