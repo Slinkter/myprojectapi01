@@ -152,6 +152,68 @@ export const useUserDetailQuery = (login) => {
 };
 ```
 
+### 🔄 TanStack Query en Desarrollo (MSW) vs Producción (API Real)
+
+La interacción entre los componentes React, TanStack Query y la red difiere significativamente entre desarrollo y producción para optimizar la velocidad y evitar el bloqueo por límites de uso (Rate Limit) de la API de GitHub:
+
+#### 💻 Modo Desarrollo (MSW Interceptor)
+En desarrollo, se activa **Mock Service Worker (MSW)**. MSW levanta un Service Worker en el navegador que intercepta todas las peticiones salientes antes de que toquen internet, respondiendo con datos de prueba guardados localmente.
+
+```text
+┌───────────────┐
+│ Componente UI │
+└───────┬───────┘
+        │ 1. Invoca hook (ej: useUserQuery)
+        ▼
+┌───────────────┐      ¿Datos en caché y frescos?
+│ TanStack Query├─────────────────────────────────────────┐
+└───────┬───────┘                                         │ SÍ
+        │ NO (Cache Miss / Datos Expirados)               │ (Caché caliente, staleTime)
+        ▼                                                 ▼
+┌───────────────┐                                 ┌───────────────┐
+│ fetch() API   │                                 │ Retorna datos │
+└───────┬───────┘                                 │ instantáneos  │
+        │ Petición HTTP saliente                  └───────────────┘
+        ▼
+========================================================== LÍMITE DEL NAVEGADOR
+        │ (MSW intercepta la llamada de red en segundo plano)
+        ▼
+┌───────────────────────────────┐
+│ MSW (Mock Service Worker)     │
+│ - Retorna mock de handlers.js │ ◄── Evita el bloqueo del Rate Limit de GitHub (60 req/h)
+└───────────────────────────────┘
+```
+
+#### 🌐 Modo Producción (Conexión Real)
+En producción (cuando compilas con `pnpm build`), MSW se remueve por completo del bundle final. Las peticiones viajan directamente por internet para consultar los datos actualizados en vivo de la API de GitHub.
+
+```text
+┌───────────────┐
+│ Componente UI │
+└───────┬───────┘
+        │ 1. Invoca hook (ej: useUserQuery)
+        ▼
+┌───────────────┐      ¿Datos en caché y frescos?
+│ TanStack Query├─────────────────────────────────────────┐
+└───────┬───────┘                                         │ SÍ
+        │ NO (Cache Miss / Datos Expirados)               │ (Caché caliente, staleTime)
+        ▼                                                 ▼
+┌───────────────┐                                 ┌───────────────┐
+│ fetch() API   │                                 │ Retorna datos │
+└───────┬───────┘                                 │ instantáneos  │
+        │ Petición HTTP real                      └───────────────┘
+        ▼
+========================================================== INTERNET / RED
+        │ (Conexión de red normal a servidores públicos)
+        ▼
+┌───────────────────────────────┐
+│ API Real de GitHub            │
+│ - api.github.com              │ ◄── Sujeto a Rate Limits reales de la API
+└───────────────────────────────┘
+```
+
+---
+
 ### queryKey — La clave del caché
 
 TanStack Query usa el `queryKey` para identificar cada petición. Si el key cambia, la anterior se **aborta automáticamente** (gracias al `signal`) y se inicia la nueva:
