@@ -25,15 +25,15 @@
 
 ## 👥 El Equipo
 
-| Rol | Nombre | Responsabilidad |
-|-----|--------|-----------------|
-| **Product Owner** | Ana García | Define el qué y el porqué. Prioriza el backlog, valida los incrementos, habla con los stakeholders |
-| **Scrum Master** | Carlos López | Facilita las ceremonias, elimina impedimentos, protege al equipo, asegura que se siga Scrum |
-| **Developer** | Lucía Martínez | React, componentes, hooks, TanStack Query, diseño UI/UX |
-| **Developer** | David Rodríguez | API integration, Zod, MSW, testing, performance |
-| **Developer** | Sofía Ramírez | Estilos, animaciones, Tailwind, tema claro/oscuro, documentación |
+| Rol               | Nombre          | Responsabilidad                                                                                    |
+| ----------------- | --------------- | -------------------------------------------------------------------------------------------------- |
+| **Product Owner** | Ana García      | Define el qué y el porqué. Prioriza el backlog, valida los incrementos, habla con los stakeholders |
+| **Scrum Master**  | Carlos López    | Facilita las ceremonias, elimina impedimentos, protege al equipo, asegura que se siga Scrum        |
+| **Developer**     | Lucía Martínez  | React, componentes, hooks, TanStack Query, diseño UI/UX                                            |
+| **Developer**     | David Rodríguez | API integration, Zod, MSW, testing, performance                                                    |
+| **Developer**     | Sofía Ramírez   | Estilos, animaciones, Tailwind, tema claro/oscuro, documentación                                   |
 
-*Nota: En un equipo Scrum real todos los developers son multifuncionales. Esta división es solo para visualizar responsabilidades.*
+_Nota: En un equipo Scrum real todos los developers son multifuncionales. Esta división es solo para visualizar responsabilidades._
 
 ---
 
@@ -45,14 +45,14 @@
 
 ## 🗺️ Roadmap de Epics
 
-| Epic | Descripción | Sprint | Estado |
-|------|-------------|--------|--------|
-| **E-1: Fundación** | Setup del proyecto Vite + React, Clean Architecture, Tailwind v4, ESLint, path aliases | Sprint 0 | ✅ Completado |
-| **E-2: Búsqueda de Usuarios** | Integración con GitHub API, TanStack Query, debounce, adaptador con Zod, estados loading/error/empty | Sprint 1 | ✅ Completado |
-| **E-3: Detalle de Perfil** | Página de detalle con bento grid, repositorios, datos completos | Sprint 2 | ✅ Completado |
-| **E-4: Diseño y Experiencia** | Glassmorphism, tema claro/oscuro, animaciones, micro-interacciones | Sprint 2 | ✅ Completado |
-| **E-5: Calidad y Documentación** | Guías de estudio, documentación Scrum, testing setup, MSW para mocks | Sprint 3 | ✅ Completado |
-| **E-6: Despliegue** | GitHub Pages, build optimizado, base path /myprojectapi01/ | Sprint 3 | ✅ Completado |
+| Epic                             | Descripción                                                                                          | Sprint   | Estado        |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------- | -------- | ------------- |
+| **E-1: Fundación**               | Setup del proyecto Vite + React, Clean Architecture, Tailwind v4, ESLint, path aliases               | Sprint 0 | ✅ Completado |
+| **E-2: Búsqueda de Usuarios**    | Integración con GitHub API, TanStack Query, debounce, adaptador con Zod, estados loading/error/empty | Sprint 1 | ✅ Completado |
+| **E-3: Detalle de Perfil**       | Página de detalle con bento grid, repositorios, datos completos                                      | Sprint 2 | ✅ Completado |
+| **E-4: Diseño y Experiencia**    | Glassmorphism, tema claro/oscuro, animaciones, micro-interacciones                                   | Sprint 2 | ✅ Completado |
+| **E-5: Calidad y Documentación** | Guías de estudio, documentación Scrum, testing setup, MSW para mocks                                 | Sprint 3 | ✅ Completado |
+| **E-6: Despliegue**              | GitHub Pages, build optimizado, base path /myprojectapi01/                                           | Sprint 3 | ✅ Completado |
 
 ---
 
@@ -60,61 +60,61 @@
 
 ### E-1: Fundación
 
-| ID | User Story | Prioridad | Story Points |
-|----|-----------|-----------|:------------:|
-| US-01 | **Como** desarrollador, **quiero** tener un proyecto Vite + React con ESLint y configuración estándar **para** empezar a codificar con herramientas modernas listas para usar | 🔥 Alta | 3 |
-| US-02 | **Como** desarrollador, **quiero** tener la estructura de Clean Architecture de 4 capas (domain, infrastructure, application, presentation) **para** separar responsabilidades y mantener el código mantenible | 🔥 Alta | 5 |
-| US-03 | **Como** desarrollador, **quiero** tener Tailwind CSS v4 configurado con diseño atómico **para** estilizar componentes rápidamente sin escribir CSS manual | 🔥 Alta | 2 |
-| US-04 | **Como** desarrollador, **quiero** tener path aliases (`@/*`) configurados **para** importar archivos con rutas absolutas limpias en vez de `../../../` | 🔥 Alta | 1 |
+| ID    | User Story                                                                                                                                                                                                     | Prioridad | Story Points |
+| ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | :----------: |
+| US-01 | **Como** desarrollador, **quiero** tener un proyecto Vite + React con ESLint y configuración estándar **para** empezar a codificar con herramientas modernas listas para usar                                  | 🔥 Alta   |      3       |
+| US-02 | **Como** desarrollador, **quiero** tener la estructura de Clean Architecture de 4 capas (domain, infrastructure, application, presentation) **para** separar responsabilidades y mantener el código mantenible | 🔥 Alta   |      5       |
+| US-03 | **Como** desarrollador, **quiero** tener Tailwind CSS v4 configurado con diseño atómico **para** estilizar componentes rápidamente sin escribir CSS manual                                                     | 🔥 Alta   |      2       |
+| US-04 | **Como** desarrollador, **quiero** tener path aliases (`@/*`) configurados **para** importar archivos con rutas absolutas limpias en vez de `../../../`                                                        | 🔥 Alta   |      1       |
 
 ### E-2: Búsqueda de Usuarios
 
-| ID | User Story | Prioridad | Story Points |
-|----|-----------|-----------|:------------:|
-| US-05 | **Como** usuario, **quiero** escribir en un campo de búsqueda **para** encontrar usuarios de GitHub por nombre de usuario | 🔥 Alta | 5 |
-| US-06 | **Como** usuario, **quiero** ver resultados con debounce de 500ms **para** no saturar la API mientras escribo | 🔥 Alta | 3 |
-| US-07 | **Como** usuario, **quiero** ver una tarjeta con foto, nombre, bio y estadísticas de cada usuario **para** identificar rápidamente el perfil correcto | 🔥 Alta | 5 |
-| US-08 | **Como** usuario, **quiero** ver un estado de carga (skeleton) mientras se buscan resultados **para** saber que la app está trabajando | 🔥 Alta | 3 |
-| US-09 | **Como** usuario, **quiero** ver un mensaje amigable cuando no hay resultados **para** entender que no existe ese usuario | 🔥 Alta | 2 |
-| US-10 | **Como** usuario, **quiero** ver un mensaje de error cuando la API falla **para** saber qué pasó y poder reintentar | 🔥 Alta | 3 |
-| US-11 | **Como** desarrollador, **quiero** validar los datos de la API con Zod **para** garantizar que la app nunca reciba datos corruptos o inesperados | 🔥 Alta | 3 |
+| ID    | User Story                                                                                                                                            | Prioridad | Story Points |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | :----------: |
+| US-05 | **Como** usuario, **quiero** escribir en un campo de búsqueda **para** encontrar usuarios de GitHub por nombre de usuario                             | 🔥 Alta   |      5       |
+| US-06 | **Como** usuario, **quiero** ver resultados con debounce de 500ms **para** no saturar la API mientras escribo                                         | 🔥 Alta   |      3       |
+| US-07 | **Como** usuario, **quiero** ver una tarjeta con foto, nombre, bio y estadísticas de cada usuario **para** identificar rápidamente el perfil correcto | 🔥 Alta   |      5       |
+| US-08 | **Como** usuario, **quiero** ver un estado de carga (skeleton) mientras se buscan resultados **para** saber que la app está trabajando                | 🔥 Alta   |      3       |
+| US-09 | **Como** usuario, **quiero** ver un mensaje amigable cuando no hay resultados **para** entender que no existe ese usuario                             | 🔥 Alta   |      2       |
+| US-10 | **Como** usuario, **quiero** ver un mensaje de error cuando la API falla **para** saber qué pasó y poder reintentar                                   | 🔥 Alta   |      3       |
+| US-11 | **Como** desarrollador, **quiero** validar los datos de la API con Zod **para** garantizar que la app nunca reciba datos corruptos o inesperados      | 🔥 Alta   |      3       |
 
 ### E-3: Detalle de Perfil
 
-| ID | User Story | Prioridad | Story Points |
-|----|-----------|-----------|:------------:|
-| US-12 | **Como** usuario, **quiero** hacer clic en una tarjeta de usuario **para** ver su perfil completo con toda su información | 🔥 Alta | 8 |
-| US-13 | **Como** usuario, **quiero** ver el perfil en un layout tipo bento grid **para** tener una vista moderna y organizada de la información | 🔥 Alta | 5 |
-| US-14 | **Como** usuario, **quiero** ver un skeleton del detalle mientras carga **para** no ver una pantalla en blanco | 🔥 Alta | 2 |
+| ID    | User Story                                                                                                                              | Prioridad | Story Points |
+| ----- | --------------------------------------------------------------------------------------------------------------------------------------- | --------- | :----------: |
+| US-12 | **Como** usuario, **quiero** hacer clic en una tarjeta de usuario **para** ver su perfil completo con toda su información               | 🔥 Alta   |      8       |
+| US-13 | **Como** usuario, **quiero** ver el perfil en un layout tipo bento grid **para** tener una vista moderna y organizada de la información | 🔥 Alta   |      5       |
+| US-14 | **Como** usuario, **quiero** ver un skeleton del detalle mientras carga **para** no ver una pantalla en blanco                          | 🔥 Alta   |      2       |
 
 ### E-4: Diseño y Experiencia
 
-| ID | User Story | Prioridad | Story Points |
-|----|-----------|-----------|:------------:|
-| US-15 | **Como** usuario, **quiero** una interfaz con efecto glassmorphism **para** una experiencia visual moderna y atractiva | 🔥 Alta | 5 |
-| US-16 | **Como** usuario, **quiero** poder cambiar entre tema claro ("Holographic Terminal") y oscuro ("Cyberpunk") **para** adaptar la app a mi entorno | 🔥 Alta | 3 |
-| US-17 | **Como** usuario, **quiero** que la experiencia sea inmersiva sin navbar **para** concentrarme en la búsqueda desde el primer momento | 🔥 Alta | 1 |
-| US-18 | **Como** usuario, **quiero** animaciones suaves al navegar entre páginas **para** una experiencia fluida y agradable | 🔥 Media | 3 |
-| US-19 | **Como** usuario, **quiero** ver una tarjeta con glow accent al hacer hover **para** sentir que los elementos son interactivos | 🔥 Media | 2 |
-| US-20 | **Como** usuario, **quiero** que el diseño sea responsive **para** usar la app desde el celular | 🔥 Media | 3 |
+| ID    | User Story                                                                                                                                       | Prioridad | Story Points |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | :----------: |
+| US-15 | **Como** usuario, **quiero** una interfaz con efecto glassmorphism **para** una experiencia visual moderna y atractiva                           | 🔥 Alta   |      5       |
+| US-16 | **Como** usuario, **quiero** poder cambiar entre tema claro ("Holographic Terminal") y oscuro ("Cyberpunk") **para** adaptar la app a mi entorno | 🔥 Alta   |      3       |
+| US-17 | **Como** usuario, **quiero** que la experiencia sea inmersiva sin navbar **para** concentrarme en la búsqueda desde el primer momento            | 🔥 Alta   |      1       |
+| US-18 | **Como** usuario, **quiero** animaciones suaves al navegar entre páginas **para** una experiencia fluida y agradable                             | 🔥 Media  |      3       |
+| US-19 | **Como** usuario, **quiero** ver una tarjeta con glow accent al hacer hover **para** sentir que los elementos son interactivos                   | 🔥 Media  |      2       |
+| US-20 | **Como** usuario, **quiero** que el diseño sea responsive **para** usar la app desde el celular                                                  | 🔥 Media  |      3       |
 
 ### E-5: Calidad y Documentación
 
-| ID | User Story | Prioridad | Story Points |
-|----|-----------|-----------|:------------:|
-| US-21 | **Como** desarrollador, **quiero** tener mocks con MSW **para** desarrollar y testear sin conexión a internet | 🔥 Media | 5 |
-| US-22 | **Como** desarrollador, **quiero** tener una guía de estudio completa **para** aprender React y las buenas prácticas desde cero | 🔥 Media | 5 |
-| US-23 | **Como** desarrollador, **quiero** tener documentación de la arquitectura **para** entender cómo está organizado el proyecto | 🔥 Media | 3 |
-| US-24 | **Como** desarrollador, **quiero** TODO el proyecto pase ESLint sin warnings **para** mantener calidad de código constante | 🔥 Alta | 2 |
-| US-25 | **Como** desarrollador, **quiero** tener configurado Vitest **para** poder escribir tests unitarios y de integración | 🔥 Baja | 3 |
+| ID    | User Story                                                                                                                      | Prioridad | Story Points |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------- | --------- | :----------: |
+| US-21 | **Como** desarrollador, **quiero** tener mocks con MSW **para** desarrollar y testear sin conexión a internet                   | 🔥 Media  |      5       |
+| US-22 | **Como** desarrollador, **quiero** tener una guía de estudio completa **para** aprender React y las buenas prácticas desde cero | 🔥 Media  |      5       |
+| US-23 | **Como** desarrollador, **quiero** tener documentación de la arquitectura **para** entender cómo está organizado el proyecto    | 🔥 Media  |      3       |
+| US-24 | **Como** desarrollador, **quiero** TODO el proyecto pase ESLint sin warnings **para** mantener calidad de código constante      | 🔥 Alta   |      2       |
+| US-25 | **Como** desarrollador, **quiero** tener configurado Vitest **para** poder escribir tests unitarios y de integración            | 🔥 Baja   |      3       |
 
 ### E-6: Despliegue
 
-| ID | User Story | Prioridad | Story Points |
-|----|-----------|-----------|:------------:|
-| US-26 | **Como** usuario, **quiero** que la app esté disponible en GitHub Pages **para** acceder desde cualquier navegador sin instalar nada | 🔥 Alta | 3 |
-| US-27 | **Como** usuario, **quiero** que la app cargue rápido con lazy loading **para** no esperar mucho en la primera visita | 🔥 Media | 3 |
-| US-28 | **Como** usuario, **quiero** que la caché de TanStack Query evite llamadas innecesarias a la API **para** una experiencia más rápida | 🔥 Alta | 2 |
+| ID    | User Story                                                                                                                           | Prioridad | Story Points |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------ | --------- | :----------: |
+| US-26 | **Como** usuario, **quiero** que la app esté disponible en GitHub Pages **para** acceder desde cualquier navegador sin instalar nada | 🔥 Alta   |      3       |
+| US-27 | **Como** usuario, **quiero** que la app cargue rápido con lazy loading **para** no esperar mucho en la primera visita                | 🔥 Media  |      3       |
+| US-28 | **Como** usuario, **quiero** que la caché de TanStack Query evite llamadas innecesarias a la API **para** una experiencia más rápida | 🔥 Alta   |      2       |
 
 ---
 
@@ -122,13 +122,13 @@
 
 ### Sprint Planning
 
-| Aspecto | Detalle |
-|---------|---------|
-| **Sprint Goal** | Establecer la base técnica del proyecto: tooling, arquitectura y diseño visual |
-| **Duración** | 1 semana |
-| **Sprint Backlog** | US-01, US-02, US-03, US-04 |
-| **Total Story Points** | 11 |
-| **Capacity** | 3 developers × 5 días = 15 días-hombre |
+| Aspecto                | Detalle                                                                        |
+| ---------------------- | ------------------------------------------------------------------------------ |
+| **Sprint Goal**        | Establecer la base técnica del proyecto: tooling, arquitectura y diseño visual |
+| **Duración**           | 1 semana                                                                       |
+| **Sprint Backlog**     | US-01, US-02, US-03, US-04                                                     |
+| **Total Story Points** | 11                                                                             |
+| **Capacity**           | 3 developers × 5 días = 15 días-hombre                                         |
 
 ### Tareas Técnicas
 
@@ -156,20 +156,20 @@ US-04 (1 pt) — Path Aliases
 
 ### Sprint Backlog Board
 
-| To Do | In Progress | Done |
-|-------|-------------|------|
-| Task-01 | | ✅ Task-01 — Setup Vite |
-| Task-02 | | ✅ Task-02 — ESLint |
-| Task-03 | | ✅ Task-03 — pnpm |
-| Task-04 | | ✅ Task-04 — build check |
-| Task-05 | | ✅ Task-05 — carpetas |
-| Task-06 | | ✅ Task-06 — placeholders |
-| Task-07 | | ✅ Task-07 — path aliases |
-| Task-08 | | ✅ Task-08 — ApiError |
-| Task-09 | | ✅ Task-09 — Tailwind install |
-| Task-10 | | ✅ Task-10 — CSS config |
-| Task-11 | | ✅ Task-11 — verify classes |
-| | | ✅ Task-12 — alias check |
+| To Do   | In Progress | Done                          |
+| ------- | ----------- | ----------------------------- |
+| Task-01 |             | ✅ Task-01 — Setup Vite       |
+| Task-02 |             | ✅ Task-02 — ESLint           |
+| Task-03 |             | ✅ Task-03 — pnpm             |
+| Task-04 |             | ✅ Task-04 — build check      |
+| Task-05 |             | ✅ Task-05 — carpetas         |
+| Task-06 |             | ✅ Task-06 — placeholders     |
+| Task-07 |             | ✅ Task-07 — path aliases     |
+| Task-08 |             | ✅ Task-08 — ApiError         |
+| Task-09 |             | ✅ Task-09 — Tailwind install |
+| Task-10 |             | ✅ Task-10 — CSS config       |
+| Task-11 |             | ✅ Task-11 — verify classes   |
+|         |             | ✅ Task-12 — alias check      |
 
 ### Daily Scrum — Ejemplo Día 3
 
@@ -202,12 +202,12 @@ Sofía: Ayer hice Task-01 (scaffold Vite) y Task-03 (pnpm).
 
 ### Sprint Retrospective
 
-| 👍 What went well | 👎 What to improve | 🔧 Action items |
-|------------------|-------------------|-----------------|
-| Buena coordinación inicial | Subestimamos la configuración de ESLint | Investigar plugins ESLint antes del Sprint Planning |
-| Path aliases funcionaron a la primera | Nos faltó definir la convención de nombres desde el día 1 | Escribir AGENTS.md con code style guidelines en Sprint 1 |
-| Tailwind v4 se integró fácil | | |
-| Clean Architecture clara desde el inicio | | |
+| 👍 What went well                        | 👎 What to improve                                        | 🔧 Action items                                          |
+| ---------------------------------------- | --------------------------------------------------------- | -------------------------------------------------------- |
+| Buena coordinación inicial               | Subestimamos la configuración de ESLint                   | Investigar plugins ESLint antes del Sprint Planning      |
+| Path aliases funcionaron a la primera    | Nos faltó definir la convención de nombres desde el día 1 | Escribir AGENTS.md con code style guidelines en Sprint 1 |
+| Tailwind v4 se integró fácil             |                                                           |                                                          |
+| Clean Architecture clara desde el inicio |                                                           |                                                          |
 
 ---
 
@@ -215,13 +215,13 @@ Sofía: Ayer hice Task-01 (scaffold Vite) y Task-03 (pnpm).
 
 ### Sprint Planning
 
-| Aspecto | Detalle |
-|---------|---------|
-| **Sprint Goal** | Implementar la funcionalidad principal de búsqueda de usuarios de GitHub con validación de datos y manejo de estados |
-| **Duración** | 2 semanas |
-| **Sprint Backlog** | US-05, US-06, US-07, US-08, US-09, US-10, US-11 |
-| **Total Story Points** | 24 |
-| **Capacity** | 3 developers × 10 días = 30 días-hombre |
+| Aspecto                | Detalle                                                                                                              |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| **Sprint Goal**        | Implementar la funcionalidad principal de búsqueda de usuarios de GitHub con validación de datos y manejo de estados |
+| **Duración**           | 2 semanas                                                                                                            |
+| **Sprint Backlog**     | US-05, US-06, US-07, US-08, US-09, US-10, US-11                                                                      |
+| **Total Story Points** | 24                                                                                                                   |
+| **Capacity**           | 3 developers × 10 días = 30 días-hombre                                                                              |
 
 ### Tareas Técnicas
 
@@ -300,12 +300,12 @@ Sofía: Ayer avancé PageHeader (Task-15) con el glass-input.
 
 ### Sprint Retrospective
 
-| 👍 What went well | 👎 What to improve | 🔧 Action items |
-|------------------|-------------------|-----------------|
-| TanStack Query funcionó como esperábamos | El adapter de colecciones (usersCollectionAdapter) lo hicimos dos veces | Revisar si realmente necesitamos adapter de colección aparte |
-| Zod atrapó datos inválidos de la API real | No documentamos los query keys de TanStack Query | Agregar sección de TanStack Query en README |
-| El debounce se integró muy limpio | | |
-| Los estados de carga/error/empty cubren todos los casos | | |
+| 👍 What went well                                       | 👎 What to improve                                                      | 🔧 Action items                                              |
+| ------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------ |
+| TanStack Query funcionó como esperábamos                | El adapter de colecciones (usersCollectionAdapter) lo hicimos dos veces | Revisar si realmente necesitamos adapter de colección aparte |
+| Zod atrapó datos inválidos de la API real               | No documentamos los query keys de TanStack Query                        | Agregar sección de TanStack Query en README                  |
+| El debounce se integró muy limpio                       |                                                                         |                                                              |
+| Los estados de carga/error/empty cubren todos los casos |                                                                         |                                                              |
 
 ---
 
@@ -313,13 +313,13 @@ Sofía: Ayer avancé PageHeader (Task-15) con el glass-input.
 
 ### Sprint Planning
 
-| Aspecto | Detalle |
-|---------|---------|
-| **Sprint Goal** | Implementar la página de detalle de usuario con bento grid y rediseñar toda la UI con glassmorphism + tema dual |
-| **Duración** | 2 semanas |
-| **Sprint Backlog** | US-12, US-13, US-14, US-15, US-16, US-17, US-18, US-19, US-20 |
-| **Total Story Points** | 32 |
-| **Capacity** | 3 developers × 10 días = 30 días-hombre |
+| Aspecto                | Detalle                                                                                                         |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Sprint Goal**        | Implementar la página de detalle de usuario con bento grid y rediseñar toda la UI con glassmorphism + tema dual |
+| **Duración**           | 2 semanas                                                                                                       |
+| **Sprint Backlog**     | US-12, US-13, US-14, US-15, US-16, US-17, US-18, US-19, US-20                                                   |
+| **Total Story Points** | 32                                                                                                              |
+| **Capacity**           | 3 developers × 10 días = 30 días-hombre                                                                         |
 
 ### Tareas Técnicas
 
@@ -415,12 +415,12 @@ Lucía: Ayer Task-36: diseño del bento grid. Hoy Task-37: poblar celdas.
 
 ### Sprint Retrospective
 
-| 👍 What went well | 👎 What to improve | 🔧 Action items |
-|------------------|-------------------|-----------------|
-| El rediseño glassmorphism quedó muy profesional | No anticipamos la limitación de @apply en Tailwind v4 | Documentar en AGENTS.md: "Never use @apply with custom classes" |
-| Los dos temas son visualmente muy distintos | El bento grid en mobile necesitó ajustes extra | Probar responsive desde el principio del diseño |
-| Motion v12 se integró sin problemas | | |
-| El equipo se coordinó bien a pesar de las dependencias cruzadas | | |
+| 👍 What went well                                               | 👎 What to improve                                    | 🔧 Action items                                                 |
+| --------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------------------------------- |
+| El rediseño glassmorphism quedó muy profesional                 | No anticipamos la limitación de @apply en Tailwind v4 | Documentar en AGENTS.md: "Never use @apply with custom classes" |
+| Los dos temas son visualmente muy distintos                     | El bento grid en mobile necesitó ajustes extra        | Probar responsive desde el principio del diseño                 |
+| Motion v12 se integró sin problemas                             |                                                       |                                                                 |
+| El equipo se coordinó bien a pesar de las dependencias cruzadas |                                                       |                                                                 |
 
 ---
 
@@ -428,13 +428,13 @@ Lucía: Ayer Task-36: diseño del bento grid. Hoy Task-37: poblar celdas.
 
 ### Sprint Planning
 
-| Aspecto | Detalle |
-|---------|---------|
-| **Sprint Goal** | Completar la documentación, agregar MSW para mocks, configurar testing, asegurar calidad y desplegar a GitHub Pages |
-| **Duración** | 1 semana |
-| **Sprint Backlog** | US-21, US-22, US-23, US-24, US-25, US-26, US-27, US-28 |
-| **Total Story Points** | 26 |
-| **Capacity** | 3 developers × 5 días = 15 días-hombre |
+| Aspecto                | Detalle                                                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **Sprint Goal**        | Completar la documentación, agregar MSW para mocks, configurar testing, asegurar calidad y desplegar a GitHub Pages |
+| **Duración**           | 1 semana                                                                                                            |
+| **Sprint Backlog**     | US-21, US-22, US-23, US-24, US-25, US-26, US-27, US-28                                                              |
+| **Total Story Points** | 26                                                                                                                  |
+| **Capacity**           | 3 developers × 5 días = 15 días-hombre                                                                              |
 
 ### Tareas Técnicas
 
@@ -521,12 +521,12 @@ Lucía: Ayer Task-62 y Task-63 (base path y gh-pages).
 
 ### Sprint Retrospective
 
-| 👍 What went well | 👎 What to improve | 🔧 Action items |
-|------------------|-------------------|-----------------|
-| Documentación completa y en español | No escribimos tests reales | Para el próximo proyecto, escribir tests desde el Sprint 1 |
-| MSW funcionó perfecto | La config de gh-pages nos tomó más tiempo del estimado | Documentar el paso a paso del deploy |
-| ESLint 0 warnings se logró | | |
-| Lazy loading fue trivial de implementar | | |
+| 👍 What went well                       | 👎 What to improve                                     | 🔧 Action items                                            |
+| --------------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------- |
+| Documentación completa y en español     | No escribimos tests reales                             | Para el próximo proyecto, escribir tests desde el Sprint 1 |
+| MSW funcionó perfecto                   | La config de gh-pages nos tomó más tiempo del estimado | Documentar el paso a paso del deploy                       |
+| ESLint 0 warnings se logró              |                                                        |                                                            |
+| Lazy loading fue trivial de implementar |                                                        |                                                            |
 
 ---
 
@@ -535,6 +535,7 @@ Lucía: Ayer Task-62 y Task-63 (base path y gh-pages).
 Cada User Story debe cumplir TODOS estos criterios para considerarse "Done":
 
 ### Código
+
 - [ ] El código sigue Clean Architecture (capa correcta, sin fugas de dependencias)
 - [ ] El código sigue las convenciones de nombres (PascalCase componentes, camelCase hooks, etc.)
 - [ ] El código pasa `pnpm lint` sin warnings ni errors
@@ -543,17 +544,20 @@ Cada User Story debe cumplir TODOS estos criterios para considerarse "Done":
 - [ ] JSDoc en funciones y componentes públicos
 
 ### Funcionalidad
+
 - [ ] La feature funciona según los criterios de aceptación
 - [ ] Todos los estados están cubiertos: loading, success, error, empty
 - [ ] Funciona en modo responsive (mobile y desktop)
 - [ ] Funciona en tema claro y oscuro
 
 ### Integración
+
 - [ ] `pnpm build` compila sin errores
 - [ ] No rompe ninguna otra funcionalidad existente
 - [ ] Los imports usan path alias `@/*`
 
 ### Documentación
+
 - [ ] Si la feature agrega una nueva librería, se documenta en README
 - [ ] Si la feature cambia la arquitectura, se actualiza la documentación
 
@@ -573,6 +577,7 @@ Cada User Story debe cumplir TODOS estos criterios para considerarse "Done":
 4. `import { cn } from "@/lib/utils"` funciona
 
 **Feedback**:
+
 - Stakeholder: "Me gusta la estructura limpia. ¿Podemos ver algo visual la próxima semana?"
 - PO: "Prioridad máxima: tener la búsqueda funcionando en Sprint 1"
 
@@ -588,6 +593,7 @@ Cada User Story debe cumplir TODOS estos criterios para considerarse "Done":
 4. Mostrar skeleton cards mientras carga
 
 **Feedback**:
+
 - Stakeholder: "¡Increíble! La velocidad del debounce se siente muy natural"
 - Stakeholder: "¿Se puede hacer clic en una tarjeta y ver más detalles?"
 - PO: "Anotado para Sprint 2 — User Detail page"
@@ -605,6 +611,7 @@ Cada User Story debe cumplir TODOS estos criterios para considerarse "Done":
 5. Sin navbar — UX inmersiva
 
 **Feedback**:
+
 - Stakeholder: "El glassmorphism quedó espectacular. Los dos temas son muy distintos y ambos se ven premium"
 - Stakeholder: "El bento grid es muy atractivo visualmente"
 - PO: "¿Podemos agregar la guía de estudio que mencionamos?"
@@ -623,6 +630,7 @@ Cada User Story debe cumplir TODOS estos criterios para considerarse "Done":
 6. Documentación completa: 5 archivos en src/docs/
 
 **Feedback**:
+
 - Stakeholder: "Excelente. La app está lista para producción"
 - Stakeholder: "La documentación es muy completa, especialmente la guía de estudio"
 - PO: "Producto finalizado. Pasamos a mantenimiento"
@@ -633,81 +641,85 @@ Cada User Story debe cumplir TODOS estos criterios para considerarse "Done":
 
 ### Sprint 0 Retro
 
-| Fecha | Participantes |
-|-------|---------------|
+| Fecha    | Participantes                    |
+| -------- | -------------------------------- |
 | Semana 1 | Lucía, David, Sofía, Carlos (SM) |
 
 **Grabación**: Reunión presencial, 30 minutos.
 
 **Método**: Start / Stop / Continue
 
-| Start | Stop | Continue |
-|-------|------|----------|
-| Documentar convenciones desde el día 1 | Asumir configuraciones sin verificar docs | Buena comunicación inicial |
-| Definir DoD antes del Sprint 1 | | Pair programming en tareas complejas |
-| | | Código limpio desde el inicio |
+| Start                                  | Stop                                      | Continue                             |
+| -------------------------------------- | ----------------------------------------- | ------------------------------------ |
+| Documentar convenciones desde el día 1 | Asumir configuraciones sin verificar docs | Buena comunicación inicial           |
+| Definir DoD antes del Sprint 1         |                                           | Pair programming en tareas complejas |
+|                                        |                                           | Código limpio desde el inicio        |
 
 **Action Items**:
+
 1. 🔧 Escribir AGENTS.md con code style guidelines (Sofía)
 2. 🔧 Investigar plugins ESLint antes del próximo Sprint Planning (David)
 
 ### Sprint 1 Retro
 
-| Fecha | Participantes |
-|-------|---------------|
+| Fecha    | Participantes                    |
+| -------- | -------------------------------- |
 | Semana 3 | Lucía, David, Sofía, Carlos (SM) |
 
 **Grabación**: Reunión virtual, 45 minutos.
 
 **Método**: Glad, Sad, Mad
 
-| Glad | Sad | Mad |
-|------|-----|-----|
-| TanStack Query funcionó perfecto | No documentamos query keys | La API de GitHub rate-limit nos frenó un día |
-| Zod atrapó datos inválidos | El adapter de colecciones se hizo dos veces | |
-| Debounce muy limpio | | |
+| Glad                             | Sad                                         | Mad                                          |
+| -------------------------------- | ------------------------------------------- | -------------------------------------------- |
+| TanStack Query funcionó perfecto | No documentamos query keys                  | La API de GitHub rate-limit nos frenó un día |
+| Zod atrapó datos inválidos       | El adapter de colecciones se hizo dos veces |                                              |
+| Debounce muy limpio              |                                             |                                              |
 
 **Action Items**:
+
 1. 🔧 Documentar query keys en README (Lucía)
 2. 🔧 Evaluar si realmente necesitamos usersCollectionAdapter (David)
 
 ### Sprint 2 Retro
 
-| Fecha | Participantes |
-|-------|---------------|
+| Fecha    | Participantes                    |
+| -------- | -------------------------------- |
 | Semana 5 | Lucía, David, Sofía, Carlos (SM) |
 
 **Grabación**: Reunión presencial, 40 minutos.
 
 **Método**: 4 L's (Liked, Learned, Lacked, Longed For)
 
-| Liked | Learned | Lacked | Longed For |
-|-------|---------|--------|------------|
-| Glassmorphism espectacular | Tailwind v4 no soporta @apply | Pruebas responsive desde el principio | Tests automatizados |
-| Dos temas muy distintos | | Documentación del diseño system | |
-| Motion v12 fácil integración | | | |
+| Liked                        | Learned                       | Lacked                                | Longed For          |
+| ---------------------------- | ----------------------------- | ------------------------------------- | ------------------- |
+| Glassmorphism espectacular   | Tailwind v4 no soporta @apply | Pruebas responsive desde el principio | Tests automatizados |
+| Dos temas muy distintos      |                               | Documentación del diseño system       |                     |
+| Motion v12 fácil integración |                               |                                       |                     |
 
 **Action Items**:
+
 1. 🔧 Agregar a AGENTS.md: "Never use @apply with custom classes" (Sofía)
 2. 🔧 Probar responsive desde el principio del diseño (todo el equipo)
 
 ### Sprint 3 Retro
 
-| Fecha | Participantes |
-|-------|---------------|
+| Fecha    | Participantes                    |
+| -------- | -------------------------------- |
 | Semana 6 | Lucía, David, Sofía, Carlos (SM) |
 
 **Grabación**: Reunión presencial, 30 minutos.
 
 **Método**: Ship / Anchor / Iceberg / Lighthouse
 
-| Ship (continuar) | Anchor (dejar de hacer) | Iceberg (riesgo) | Lighthouse (aspirar) |
-|------------------|------------------------|------------------|---------------------|
-| Documentación exhaustiva | Esperar al final para testing | Deuda técnica por falta de tests | Tests desde Sprint 1 |
-| MSW desde desarrollo | | | TypeScript en el próximo proyecto |
-| Code reviews | | | |
+| Ship (continuar)         | Anchor (dejar de hacer)       | Iceberg (riesgo)                 | Lighthouse (aspirar)              |
+| ------------------------ | ----------------------------- | -------------------------------- | --------------------------------- |
+| Documentación exhaustiva | Esperar al final para testing | Deuda técnica por falta de tests | Tests desde Sprint 1              |
+| MSW desde desarrollo     |                               |                                  | TypeScript en el próximo proyecto |
+| Code reviews             |                               |                                  |                                   |
 
 **Action Items**:
+
 1. 🔧 Para el próximo proyecto: escribir tests desde el Sprint 1 (todo el equipo)
 2. 🔧 Documentar paso a paso del deploy a GitHub Pages (Lucía)
 
@@ -776,15 +788,15 @@ David: Ayer MSW handlers funcionando.
 
 ### Velocity por Sprint
 
-| Sprint | Story Points Planificados | Story Points Completados | Velocidad |
-|:------:|:-------------------------:|:------------------------:|:---------:|
-| 0 | 11 | 11 | 11 |
-| 1 | 24 | 24 | 24 |
-| 2 | 32 | 32 | 32 |
-| 3 | 26 | 26 | 26 |
-| **Promedio** | | | **23.25** |
+|    Sprint    | Story Points Planificados | Story Points Completados | Velocidad |
+| :----------: | :-----------------------: | :----------------------: | :-------: |
+|      0       |            11             |            11            |    11     |
+|      1       |            24             |            24            |    24     |
+|      2       |            32             |            32            |    32     |
+|      3       |            26             |            26            |    26     |
+| **Promedio** |                           |                          | **23.25** |
 
-*La velocidad se usa para estimar cuántos Story Points el equipo puede completar en futuros sprints.*
+_La velocidad se usa para estimar cuántos Story Points el equipo puede completar en futuros sprints._
 
 ### Burndown Chart Conceptual
 
@@ -815,41 +827,41 @@ En un burndown real, la línea ideal baja en diagonal desde el total de puntos h
 ### Capacidad del Equipo
 
 | Sprint | Días | Developers | Días-Hombre | SP Completados | SP / Día-Hombre |
-|:------:|:----:|:----------:|:-----------:|:--------------:|:---------------:|
-| 0 | 5 | 3 | 15 | 11 | 0.73 |
-| 1 | 10 | 3 | 30 | 24 | 0.80 |
-| 2 | 10 | 3 | 30 | 32 | 1.07 |
-| 3 | 5 | 3 | 15 | 26 | 1.73 |
+| :----: | :--: | :--------: | :---------: | :------------: | :-------------: |
+|   0    |  5   |     3      |     15      |       11       |      0.73       |
+|   1    |  10  |     3      |     30      |       24       |      0.80       |
+|   2    |  10  |     3      |     30      |       32       |      1.07       |
+|   3    |  5   |     3      |     15      |       26       |      1.73       |
 
-*La mejora en eficiencia se debe a que el equipo se fue familiarizando con el código y las herramientas.*
+_La mejora en eficiencia se debe a que el equipo se fue familiarizando con el código y las herramientas._
 
 ---
 
 ## 📚 Glosario Scrum
 
-| Término | Definición |
-|---------|------------|
-| **Sprint** | Período de tiempo fijo (1-4 semanas) en el que el equipo crea un incremento de producto potencialmente entregable |
-| **Sprint Goal** | Objetivo único que el equipo se compromete a lograr durante el Sprint |
-| **Product Backlog** | Lista priorizada de todo lo que podría necesitarse en el producto. Viva, dinámica, nunca completa |
-| **Sprint Backlog** | Subconjunto del Product Backlog que el equipo selecciona para un Sprint específico, más el plan para entregarlo |
-| **Increment** | Suma de todos los Product Backlog Items completados durante un Sprint, más los incrementos de Sprints anteriores |
-| **User Story** | Descripción corta de una funcionalidad desde la perspectiva del usuario final. Formato: "Como [rol], quiero [acción], para [beneficio]" |
-| **Story Points** | Unidad de medida relativa para estimar el esfuerzo de una User Story. Considera complejidad, riesgo y esfuerzo, NO horas |
-| **Definition of Done (DoD)** | Lista de criterios que cada User Story debe cumplir para considerarse "terminada" |
-| **Epic** | User Story muy grande que se descompone en historias más pequeñas |
-| **Velocity** | Cantidad de Story Points que el equipo completa en promedio por Sprint. Se usa para pronosticar |
-| **Burndown Chart** | Gráfico que muestra el trabajo restante a lo largo del tiempo del Sprint |
-| **Product Owner** | Rol responsable de maximizar el valor del producto. Prioriza el backlog, define las historias, valida los incrementos |
-| **Scrum Master** | Rol responsable de asegurar que Scrum se entienda y se aplique. Elimina impedimentos, facilita ceremonias |
-| **Developer** | Rol multifuncional responsable de crear el incremento. Diseña, codifica, testea y documenta |
-| **Sprint Planning** | Ceremonia donde el equipo selecciona las historias del Sprint y define cómo las va a completar |
-| **Daily Scrum** | Reunión diaria de 15 minutos donde los developers sincronizan su trabajo y ajustan planes |
-| **Sprint Review** | Ceremonia al final del Sprint donde el equipo muestra el incremento a los stakeholders y recibe feedback |
-| **Sprint Retrospective** | Ceremonia donde el equipo inspecciona cómo fue el Sprint y crea un plan de mejora para el siguiente |
-| **Impediment** | Cualquier cosa que bloquea al equipo y el Scrum Master debe eliminar |
-| **Time-box** | Duración máxima fija para una ceremonia o Sprint. No se extiende, se recorta el alcance |
-| **INVEST** | Acrónimo para buenas User Stories: Independent, Negotiable, Valuable, Estimable, Small, Testable |
+| Término                      | Definición                                                                                                                              |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **Sprint**                   | Período de tiempo fijo (1-4 semanas) en el que el equipo crea un incremento de producto potencialmente entregable                       |
+| **Sprint Goal**              | Objetivo único que el equipo se compromete a lograr durante el Sprint                                                                   |
+| **Product Backlog**          | Lista priorizada de todo lo que podría necesitarse en el producto. Viva, dinámica, nunca completa                                       |
+| **Sprint Backlog**           | Subconjunto del Product Backlog que el equipo selecciona para un Sprint específico, más el plan para entregarlo                         |
+| **Increment**                | Suma de todos los Product Backlog Items completados durante un Sprint, más los incrementos de Sprints anteriores                        |
+| **User Story**               | Descripción corta de una funcionalidad desde la perspectiva del usuario final. Formato: "Como [rol], quiero [acción], para [beneficio]" |
+| **Story Points**             | Unidad de medida relativa para estimar el esfuerzo de una User Story. Considera complejidad, riesgo y esfuerzo, NO horas                |
+| **Definition of Done (DoD)** | Lista de criterios que cada User Story debe cumplir para considerarse "terminada"                                                       |
+| **Epic**                     | User Story muy grande que se descompone en historias más pequeñas                                                                       |
+| **Velocity**                 | Cantidad de Story Points que el equipo completa en promedio por Sprint. Se usa para pronosticar                                         |
+| **Burndown Chart**           | Gráfico que muestra el trabajo restante a lo largo del tiempo del Sprint                                                                |
+| **Product Owner**            | Rol responsable de maximizar el valor del producto. Prioriza el backlog, define las historias, valida los incrementos                   |
+| **Scrum Master**             | Rol responsable de asegurar que Scrum se entienda y se aplique. Elimina impedimentos, facilita ceremonias                               |
+| **Developer**                | Rol multifuncional responsable de crear el incremento. Diseña, codifica, testea y documenta                                             |
+| **Sprint Planning**          | Ceremonia donde el equipo selecciona las historias del Sprint y define cómo las va a completar                                          |
+| **Daily Scrum**              | Reunión diaria de 15 minutos donde los developers sincronizan su trabajo y ajustan planes                                               |
+| **Sprint Review**            | Ceremonia al final del Sprint donde el equipo muestra el incremento a los stakeholders y recibe feedback                                |
+| **Sprint Retrospective**     | Ceremonia donde el equipo inspecciona cómo fue el Sprint y crea un plan de mejora para el siguiente                                     |
+| **Impediment**               | Cualquier cosa que bloquea al equipo y el Scrum Master debe eliminar                                                                    |
+| **Time-box**                 | Duración máxima fija para una ceremonia o Sprint. No se extiende, se recorta el alcance                                                 |
+| **INVEST**                   | Acrónimo para buenas User Stories: Independent, Negotiable, Valuable, Estimable, Small, Testable                                        |
 
 ---
 
@@ -857,16 +869,16 @@ En un burndown real, la línea ideal baja en diagonal desde el total de puntos h
 
 Este documento simuló un proyecto Scrum real con:
 
-| Aspecto | Detalle |
-|---------|---------|
-| **Duración total** | 6 semanas (4 Sprints) |
-| **Total Story Points** | 93 |
-| **User Stories** | 28 |
-| **Tareas técnicas** | 66 |
-| **Equipo** | 3 Developers + PO + SM |
-| **Ceremonias** | 4 Sprint Plannings, 4 Sprint Reviews, 4 Retrospectives, 18 Daily Scrums |
-| **Incrementos** | 4 (uno por Sprint) |
-| **Despliegue** | GitHub Pages (en producción) |
+| Aspecto                | Detalle                                                                 |
+| ---------------------- | ----------------------------------------------------------------------- |
+| **Duración total**     | 6 semanas (4 Sprints)                                                   |
+| **Total Story Points** | 93                                                                      |
+| **User Stories**       | 28                                                                      |
+| **Tareas técnicas**    | 66                                                                      |
+| **Equipo**             | 3 Developers + PO + SM                                                  |
+| **Ceremonias**         | 4 Sprint Plannings, 4 Sprint Reviews, 4 Retrospectives, 18 Daily Scrums |
+| **Incrementos**        | 4 (uno por Sprint)                                                      |
+| **Despliegue**         | GitHub Pages (en producción)                                            |
 
 ### Lo que aprenderías haciendo este proyecto real:
 

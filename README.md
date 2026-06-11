@@ -63,64 +63,33 @@ Estilo:       Glassmorphism + Minimalismo técnico
 
 ---
 
-## 🧱 Clean Architecture — Las 4 capas
+## 🧱 Feature-Sliced Design (FSD) — Las 6 capas
 
-Este proyecto sigue **Clean Architecture** (Arquitectura Limpia). El código está dividido en 4 capas con una regla de oro:
+Este proyecto sigue **Feature-Sliced Design (FSD)** (Diseño Orientado a Características). El código está dividido en 6 capas con una regla de oro:
 
-> **Las capas externas conocen a las internas, pero las internas jamás conocen a las externas.**
+> **Las capas externas/superiores pueden importar de las internas/inferiores, pero no al revés.**
 
 ```
- ┌─────────────────────────────────────────────┐
- │  presentation/  (React, CSS, componentes)   │  Capa 4 (la más externa)
- └───────────┬─────────────────────────────────┘
-             │  👈  depende de
- ┌───────────▼─────────────────────────────────┐
- │  application/  (hooks, facades, queries)    │  Capa 3
- └───────────┬─────────────────────────────────┘
-             │  👈  depende de
- ┌───────────▼─────────────────────────────────┐
- │  infrastructure/  (HTTP, mocks, config)     │  Capa 2
- └───────────┬─────────────────────────────────┘
-             │  👈  depende de
- ┌───────────▼─────────────────────────────────┐
- │  domain/  (schemas, adapters, errores)      │  Capa 1 (la más interna)
- └─────────────────────────────────────────────┘
+app ➔ pages ➔ widgets ➔ features ➔ entities ➔ shared
 ```
 
-### Capa 1: Dominio (`src/domain/`) — El núcleo puro
+### Capa 1: Shared (`src/shared/`) — Elementos reutilizables comunes
+- Contiene utilidades (`lib/utils/`), hooks reutilizables (`lib/hooks/`), componentes atómicos (`ui/`), config (`config/`), estilos generales (`styles/`), mocks (`mocks/`) y el cliente HTTP (`api/httpClient.js`).
 
-Es **código JavaScript 100% puro**. No sabe que React existe, no sabe qué es HTTP, no sabe qué es un navegador. Contiene las reglas de negocio:
+### Capa 2: Entities (`src/entities/`) — Conceptos de negocio
+- Define el modelo de negocio y UI básica de la entidad `user` (schemas, adaptadores, hooks de consulta `useUserQuery`/`useUserDetailQuery` y componentes básicos como `UserCard`).
 
-- **`schemas/`** — Esquemas Zod que definen cómo deben lucir los datos válidos
-- **`adapters/`** — Funciones que transforman datos crudos externos a objetos internos limpios
-- **`errors/`** — Errores personalizados de la aplicación (`ApiError`)
+### Capa 3: Features (`src/features/`) — Acciones de usuario
+- Implementa interacciones que aportan valor directo (como la barra de búsqueda `PageHeader` y el coordinamiento del buscador en la fachada `useUserSearchFacade`).
 
-**Ejemplo**: `userAdapter.js` recibe el JSON de GitHub y lo convierte en un objeto `UserProfile` con nombres legibles (`photo` en vez de `avatar_url`).
+### Capa 4: Widgets (`src/widgets/`) — Bloques autónomos
+- Composición compleja de features y entities en unidades de UI independientes (por ejemplo, el orquestador de resultados `SearchResults` y el bento grid de detalles `UserDetail`).
 
-### Capa 2: Infraestructura (`src/infrastructure/`) — El "mundo exterior"
+### Capa 5: Pages (`src/pages/`) — Vistas de pantalla
+- Páginas que combinan widgets para armar las distintas pantallas de la aplicación (`SearchPage`, `DetailPage`, `NotFoundPage`).
 
-Habla con APIs, configura variables de entorno, hace logging y simula datos para desarrollo:
-
-- **`api/`** — `httpClient.js` (wrapper de fetch) y `userService.js` (llamadas a GitHub)
-- **`mocks/`** — MSW para simular la API de GitHub sin conexión real
-- **`config/`** — Constantes globales (URL de API, tiempos de caché)
-- **`logger/`** — Logger visual con ASCII art para la consola del navegador
-
-### Capa 3: Aplicación (`src/application/`) — El orquestador
-
-Coordina los casos de uso. No sabe cómo se ve la UI ni cómo se hace la petición HTTP exacta:
-
-- **`queries/`** — Hooks de TanStack Query (`useUserQuery`, `useUserDetailQuery`)
-- **`facades/`** — Fachadas que encapsulan lógica compleja (`useUserSearchFacade`)
-- **`hooks/`** — Hooks globales (`useTheme`, `useDebouncedSearch`, `useIntersectionObserver`)
-
-### Capa 4: Presentación (`src/presentation/`) — Lo que ve el usuario
-
-Solo React y CSS. Recibe datos ya procesados y los pinta:
-
-- **`components/`** — Botones, inputs, tarjetas, layouts
-- **`features/`** — Páginas completas (`UserSearch`, `UserDetail`)
-- **`styles/`** — CSS global con el sistema de diseño glassmorphism
+### Capa 6: App (`src/app/`) — Inicialización general
+- Configuración global y punto de montaje (`App.jsx` para rutas, `main.jsx` para iniciar React y QueryClient).
 
 ---
 
@@ -511,63 +480,40 @@ Las **importaciones** también son hoisted — por eso el orden no importa.
 
 ---
 
-## 📁 Estructura del Proyecto
+## 📁 Estructura del Proyecto (Feature-Sliced Design)
 
 ```
 src/
-├── domain/                    # Capa 1: Lógica de negocio pura
-│   ├── schemas/user.js        #   Esquema Zod de validación
-│   ├── adapters/userAdapter.js #   Transforma datos crudos → UserProfile
-│   └── errors/ApiError.js     #   Error personalizado con status HTTP
+├── app/                       # Configuración general y de enrutado
+│   ├── App.jsx
+│   └── main.jsx
 │
-├── infrastructure/            # Capa 2: Frameworks, HTTP, herramientas
-│   ├── api/
-│   │   ├── httpClient.js      #   Wrapper de fetch con errores
-│   │   └── userService.js     #   Llamadas a la API de GitHub
-│   ├── config/config.js       #   Constantes (URLs, timings)
-│   ├── logger/logger.js       #   Logger con ASCII art
-│   └── mocks/
-│       ├── browser.js         #   MSW worker setup
-│       └── handlers.js        #   Mocks de la API de GitHub
+├── pages/                     # Composiciones completas de páginas
+│   ├── search-page/
+│   ├── detail-page/
+│   └── not-found/
 │
-├── application/               # Capa 3: Casos de uso
-│   ├── queries/
-│   │   ├── useUserQuery.js    #   TanStack Query para búsqueda
-│   │   └── useUserDetailQuery.js # TanStack Query para detalle
-│   ├── facades/
-│   │   └── useUserSearchFacade.js # Fachada que simplifica la UI
-│   └── hooks/
-│       ├── useDebouncedSearch.js  #   Debounce para el input
-│       ├── useTheme.js            #   Toggle light/dark
-│       └── useIntersectionObserver.js # Lazy loading de tarjetas
+├── widgets/                   # Componentes de UI auto-contenidos complejos
+│   ├── search-results/        # Orquestación y grids de resultados
+│   └── user-profile-bento/    # Layout detallado en Bento Grid
 │
-├── presentation/              # Capa 4: UI y estilos
-│   ├── styles/index.css       #   Tailwind v4 + variables glassmorphism
-│   ├── components/
-│   │   ├── ui/ThemeToggle.jsx #   Botón de tema
-│   │   ├── layout/
-│   │   │   ├── PageHeader.jsx #   Hero con buscador
-│   │   │   ├── NotFound.jsx   #   Estado vacío
-│   │   │   └── ErrorDisplay.jsx # Estado de error
-│   │   ├── common/ErrorBoundary.jsx # Captura errores de React
-│   │   └── factories/ResultFactory.jsx # Factory de tarjetas
-│   └── features/
-│       ├── users/
-│       │   ├── UserSearch.jsx #   Página principal
-│       │   └── components/
-│       │       ├── SearchResults.jsx # Renderiza según estado
-│       │       ├── UserList.jsx      # Grid de tarjetas
-│       │       ├── UserCard.jsx      # Tarjeta glass individual
-│       │       ├── SkeletonCard.jsx  # Skeleton de carga
-│       │       └── SkeletonGrid.jsx  # Grid de skeletons
-│       └── user-detail/
-│           ├── UserDetail.jsx  #   Perfil detallado (bento grid)
-│           └── components/
-│               └── UserDetailSkeleton.jsx # Skeleton de detalle
+├── features/                  # Acciones interactivas con valor de negocio
+│   └── search-user/           # Lógica y barra del buscador (facade)
 │
-├── lib/utils.js               # cn() — clases condicionales
-├── main.jsx                   # Entry point (QueryClient, Router)
-└── App.jsx                    # Componente raíz (rutas)
+├── entities/                  # Conceptos de negocio (user)
+│   └── user/
+│       ├── api/               # Servicios HTTP y query hooks
+│       ├── model/             # Schemas Zod y adaptadores
+│       └── ui/                # Tarjetas, fábricas y skeletons
+│
+└── shared/                    # Infraestructura y elementos reutilizables
+    ├── api/                   # Cliente HTTP y clase ApiError
+    ├── config/                # Constantes globales
+    ├── lib/                   # Hooks generales y utils (cn)
+    ├── logger/                # Logging con ASCII art
+    ├── mocks/                 # MSW en desarrollo local
+    ├── styles/                # index.css de Tailwind v4 y theme
+    └── ui/                    # ErrorBoundary, ErrorDisplay, ThemeToggle
 ```
 
 ---

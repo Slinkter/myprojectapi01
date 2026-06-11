@@ -9,6 +9,7 @@
 ## 📋 INSTRUCCIONES
 
 Esta prueba evalúa conocimientos en:
+
 1. Fundamentos React
 2. Patrones de Arquitectura
 3. Gestión de Estado
@@ -16,17 +17,20 @@ Esta prueba evalúa conocimientos en:
 5. Optimización y Performance
 6. Testing
 
-**Formato:** 
+**Formato:**
+
 - Sección A: Preguntas teóricas (múltiple choice + respuesta corta)
 - Sección B: Ejercicios prácticos
 - Sección C: Code Review
 
 **No puedes:**
+
 - Usar IA generativa (pero sí buscar documentación)
 - Copiar código de internet
 - Usar frameworks de UI externos (MUI, Chakra, etc.)
 
 **Puedes:**
+
 - Usar React Docs oficial
 - Usar documentación de librerías del proyecto
 - Buscar en MDN
@@ -38,6 +42,7 @@ Esta prueba evalúa conocimientos en:
 ## A1. Fundamentos React (10 puntos)
 
 ### Pregunta A1.1 (2 puntos)
+
 **¿Cuál es la diferencia entre `useState` y `useEffect`?**
 
 ```javascript
@@ -51,16 +56,19 @@ useEffect(() => {
 ```
 
 **Respuesta esperada:**
+
 - `useState`: Hook para gestionar estado local mutable en componentes funcionales
 - `useEffect`: Hook para ejecutar efectos secundarios (side effects) como fetch, suscripciones, manipulación del DOM
 
 ---
 
 ### Pregunta A1.2 (2 puntos)
+
 **¿Por qué React usa Virtual DOM?**
 
 **Respuesta esperada:**
 El Virtual DOM es una representación lightweight del DOM real. Cuando cambia el estado:
+
 1. React crea un nuevo Virtual DOM
 2. Compara con el anterior (diffing)
 3. Calcula los cambios mínimos necesarios
@@ -71,6 +79,7 @@ Esto es mucho más eficiente que modificar todo el DOM directamente.
 ---
 
 ### Pregunta A1.3 (2 puntos)
+
 **¿Qué es el prop drilling y cómo se soluciona?**
 
 **Respuesta esperada:**
@@ -81,14 +90,14 @@ Prop drilling ocurre cuando necesitas pasar props a través de múltiples nivele
 <App>
   <Header user={user}>
     <Nav user={user}>
-      <Menu user={user}>  // ¡Finalmente lo usa aquí!
-      </Menu>
+      <Menu user={user}> // ¡Finalmente lo usa aquí!</Menu>
     </Nav>
   </Header>
 </App>
 ```
 
 **Soluciones:**
+
 - Context API
 - Composición de componentes
 - State management (Redux, Zustand, etc.)
@@ -96,6 +105,7 @@ Prop drilling ocurre cuando necesitas pasar props a través de múltiples nivele
 ---
 
 ### Pregunta A1.4 (2 puntos)
+
 **¿Cuál es la diferencia entre `useMemo` y `useCallback`?**
 
 **Respuesta esperada:**
@@ -119,10 +129,12 @@ const handleClick = useCallback((id) => {
 ---
 
 ### Pregunta A1.5 (2 puntos)
+
 **¿Qué son los React Server Components (RSC)?**
 
 **Respuesta esperada:**
 RSC son componentes que se renderizan en el servidor (Next.js 13+). Características:
+
 - No requieren JavaScript en el cliente
 - Pueden acceder directamente a bases de datos
 - No tienen estado ni lifecycle methods
@@ -133,12 +145,14 @@ RSC son componentes que se renderizan en el servidor (Next.js 13+). Característ
 ## A2. Patrones de Arquitectura (10 puntos)
 
 ### Pregunta A2.1 (3 puntos)
+
 **Explica el concepto de Arquitectura Limpia (Clean Architecture) en capas y cómo estructurarías un proyecto frontend.**
 
 **Respuesta esperada:**
 La Arquitectura Limpia divide el código en capas concéntricas o jerárquicas independientes con una regla de dependencia estricta: **las capas internas no conocen nada de las externas**.
 
 Estructura típica de capas:
+
 ```
 src/
 ├── domain/            # Capa 1: Lógica y reglas de negocio pura (schemas, adapters, errors)
@@ -148,6 +162,7 @@ src/
 ```
 
 **Beneficios:**
+
 - Desacoplamiento absoluto de la lógica de negocio frente a frameworks e infraestructura.
 - Excelente mantenibilidad y facilidad para cambiar de proveedores externos.
 - Código altamente testeable y robusto.
@@ -155,6 +170,7 @@ src/
 ---
 
 ### Pregunta A2.2 (3 puntos)
+
 **¿Qué es el Patrón Adapter? Implementa un ejemplo.**
 
 **Respuesta esperada:**
@@ -162,10 +178,10 @@ El Patrón Adapter convierte datos de un formato a otro:
 
 ```javascript
 // API externa
-const githubUser = { 
-  login: "octocat", 
+const githubUser = {
+  login: "octocat",
   avatar_url: "...",
-  public_repos: 158 
+  public_repos: 158,
 };
 
 // Adapter al modelo interno
@@ -181,21 +197,22 @@ const userAdapter = (githubUser) => ({
 ---
 
 ### Pregunta A2.3 (4 puntos)
+
 **¿Cuál es la diferencia entre Control y Uncontrolled components?**
 
 **Respuesta esperada:**
 
-| Característica | Controlado | No Controlado |
-|----------------|------------|---------------|
-| Estado | En React (useState) | En el DOM (ref) |
-| Valor | Actualizado por setState | Actualizado por el usuario directamente |
-| Validación | Fácil (onChange) | Difícil (defaultValue) |
+| Característica | Controlado               | No Controlado                           |
+| -------------- | ------------------------ | --------------------------------------- |
+| Estado         | En React (useState)      | En el DOM (ref)                         |
+| Valor          | Actualizado por setState | Actualizado por el usuario directamente |
+| Validación     | Fácil (onChange)         | Difícil (defaultValue)                  |
 
 ```javascript
 // Componente Controlado
 const Controlled = () => {
   const [value, setValue] = useState("");
-  return <input value={value} onChange={e => setValue(e.target.value)} />;
+  return <input value={value} onChange={(e) => setValue(e.target.value)} />;
 };
 
 // Componente No Controlado
@@ -211,33 +228,36 @@ const Uncontrolled = () => {
 ## A3. Gestión de Estado (10 puntos)
 
 ### Pregunta A3.1 (3 puntos)
+
 **¿Cuándo usarías TanStack Query vs Redux vs Context?**
 
 **Respuesta esperada:**
 
-| Herramienta | Cuándo usarla | Ejemplo |
-|-------------|---------------|---------|
-| **TanStack Query** | Datos de servidor (APIs) | Usuarios, posts, productos |
-| **Redux/Zustand** | Estado global complejo | Carrito de compras, auth |
-| **Context** | Datos pequeños que no cambian mucho | Tema, idioma, usuario actual |
-| **useState** | Estado local de un componente | Formularios, modales |
+| Herramienta        | Cuándo usarla                       | Ejemplo                      |
+| ------------------ | ----------------------------------- | ---------------------------- |
+| **TanStack Query** | Datos de servidor (APIs)            | Usuarios, posts, productos   |
+| **Redux/Zustand**  | Estado global complejo              | Carrito de compras, auth     |
+| **Context**        | Datos pequeños que no cambian mucho | Tema, idioma, usuario actual |
+| **useState**       | Estado local de un componente       | Formularios, modales         |
 
 ---
 
 ### Pregunta A3.2 (3 puntos)
+
 **¿Qué es el patrón Stale-While-Revalidate?**
 
 **Respuesta esperada:**
 Estrategia de caché que:
-1. Sirve datos stale (antiguos) inmediatamente al usuario
-2.后台 obtiene datos frescos del servidor
-3. Actualiza el caché con los nuevos datos
+
+1. Sirve datos stale (antiguos) inmediatamente al usuario 2.后台 obtiene datos frescos del servidor
+2. Actualiza el caché con los nuevos datos
 
 **Beneficio:** Percepción de velocidad instantánea.
 
 ---
 
 ### Pregunta A3.3 (4 puntos)
+
 **¿Cómo manejarías un estado complejo con múltiples entidades relacionadas?**
 
 **Respuesta esperada:**
@@ -249,20 +269,21 @@ const state = {
   entities: {
     products: {
       byId: {
-        "1": { id: "1", name: " Laptop", price: 999 },
-        "2": { id: "2", name: "Mouse", price: 29 },
+        1: { id: "1", name: " Laptop", price: 999 },
+        2: { id: "2", name: "Mouse", price: 29 },
       },
-      allIds: ["1", "2"]
+      allIds: ["1", "2"],
     },
     cart: {
-      items: ["1", "2"],  // IDs de productos
-      quantity: { "1": 1, "2": 2 }
-    }
-  }
+      items: ["1", "2"], // IDs de productos
+      quantity: { 1: 1, 2: 2 },
+    },
+  },
 };
 ```
 
 **Beneficios:**
+
 - Sin duplicación de datos
 - Actualizaciones O(1)
 - Fácil normalización/denormalización
@@ -272,19 +293,21 @@ const state = {
 ## A4. Estilos y UI (10 puntos)
 
 ### Pregunta A4.1 (3 puntos)
+
 **¿Cuál es la diferencia entre CSS Modules, Styled Components y Tailwind CSS?**
 
 **Respuesta esperada:**
 
-| Metodología | Enfoque | Pros | Contras |
-|-------------|---------|------|---------|
-| **CSS Modules** | CSS con scoping | Simple, CSS nativo | Limitado |
-| **Styled Components** | CSS-in-JS | Dynamic props | Bundle size |
-| **Tailwind** | Utility classes | Rápido, consistente | Classes feas |
+| Metodología           | Enfoque         | Pros                | Contras      |
+| --------------------- | --------------- | ------------------- | ------------ |
+| **CSS Modules**       | CSS con scoping | Simple, CSS nativo  | Limitado     |
+| **Styled Components** | CSS-in-JS       | Dynamic props       | Bundle size  |
+| **Tailwind**          | Utility classes | Rápido, consistente | Classes feas |
 
 ---
 
 ### Pregunta A4.2 (3 puntos)
+
 **¿Cómo implementarías un Theme Switcher (light/dark)?**
 
 **Respuesta esperada:**
@@ -303,7 +326,7 @@ const state = {
 
 // 2. Hook
 const useTheme = () => {
-  const [theme, setTheme] = useState(() => 
+  const [theme, setTheme] = useState(() =>
     localStorage.getItem("theme") || "light"
   );
 
@@ -319,6 +342,7 @@ const useTheme = () => {
 ---
 
 ### Pregunta A4.3 (4 puntos)
+
 **¿Cómo harías un componente Accordion accesible?**
 
 **Respuesta esperada:**
@@ -354,6 +378,7 @@ const Accordion = ({ items }) => {
 ```
 
 **Puntos clave:**
+
 - `aria-expanded`: Indica estado
 - `aria-controls`: Relaciona botón con panel
 - `role="region"`: Define región
@@ -364,6 +389,7 @@ const Accordion = ({ items }) => {
 ## A5. Performance (10 puntos)
 
 ### Pregunta A5.1 (3 puntos)
+
 **¿Cómo medirías el rendimiento de tu aplicación React?**
 
 **Respuesta esperada:**
@@ -385,6 +411,7 @@ const Accordion = ({ items }) => {
 ---
 
 ### Pregunta A5.2 (3 puntos)
+
 **¿Qué es React.memo y cuándo lo usarías?**
 
 **Respuesta esperada:**
@@ -398,12 +425,14 @@ const UserCard = ({ user }) => <div>{user.name}</div>;
 const UserCard = React.memo(({ user }) => <div>{user.name}</div>);
 
 // ✅ Con comparación custom
-const UserCard = React.memo(({ user }) => (
-  <div>{user.name}</div>
-), (prevProps, nextProps) => prevProps.user.id === nextProps.user.id);
+const UserCard = React.memo(
+  ({ user }) => <div>{user.name}</div>,
+  (prevProps, nextProps) => prevProps.user.id === nextProps.user.id,
+);
 ```
 
 **Usa cuando:**
+
 - Componente renderiza frecuentemente
 - Props cambian pocas veces
 - Renderizado es costoso
@@ -411,6 +440,7 @@ const UserCard = React.memo(({ user }) => (
 ---
 
 ### Pregunta A5.3 (4 puntos)
+
 **Lista 5 técnicas de optimización en React**
 
 **Respuesta esperada:**
@@ -442,6 +472,7 @@ const UserCard = React.memo(({ user }) => (
 ## B1. Ejericio: Construir un Buscador de Usuarios (30 puntos)
 
 ### Requisitos:
+
 - Input de búsqueda con debounce (300ms)
 - Mostrar resultados en grid
 - Loading skeleton mientras carga
@@ -475,7 +506,7 @@ const UserSearch = () => {
 
   return (
     <div>
-      <input value={query} onChange={e => setQuery(e.target.value)} />
+      <input value={query} onChange={(e) => setQuery(e.target.value)} />
       {/* Render users or loading or error */}
     </div>
   );
@@ -497,7 +528,7 @@ const UserList = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("/api/users").then(res => {
+    axios.get("/api/users").then((res) => {
       setUsers(res.data);
       setLoading(false);
     });
@@ -507,7 +538,7 @@ const UserList = () => {
 
   return (
     <ul>
-      {users.map(user => (
+      {users.map((user) => (
         <li key={user.id}>{user.name}</li>
       ))}
     </ul>
@@ -537,15 +568,15 @@ const UserList = () => {
 const ProductList = ({ products }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filtered = products.filter(p => 
-    p.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filtered = products.filter((p) =>
+    p.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
     <div>
-      <input onChange={e => setSearchTerm(e.target.value)} />
+      <input onChange={(e) => setSearchTerm(e.target.value)} />
       <table>
-        {filtered.map(p => (
+        {filtered.map((p) => (
           <ProductRow key={p.id} product={p} />
         ))}
       </table>
@@ -582,8 +613,8 @@ const ProductRow = React.memo(({ product }) => (
 const ProductList = ({ products }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filtered = useMemo(() => 
-    products.filter(p => 
+  const filtered = useMemo(() =>
+    products.filter(p =>
       p.name.toLowerCase().includes(searchTerm.toLowerCase())
     ), [products, searchTerm]
   );
@@ -607,82 +638,99 @@ const ProductList = ({ products }) => {
 
 ## Puntuación Total: 100 puntos
 
-| Sección | Puntos | Peso |
-|---------|--------|------|
-| A: Teoría | 50 | 50% |
-| B: Práctica | 50 | 50% |
+| Sección     | Puntos | Peso |
+| ----------- | ------ | ---- |
+| A: Teoría   | 50     | 50%  |
+| B: Práctica | 50     | 50%  |
 
 ### Grading Scale:
 
-| Puntuación | Nivel |
-|------------|-------|
-| 90-100 | Senior 🔥 |
-| 75-89 | Mid-High 💪 |
-| 60-74 | Mid ⚠️ |
-| 40-59 | Junior 📚 |
-| 0-39 | Necesita estudio 📖 |
+| Puntuación | Nivel               |
+| ---------- | ------------------- |
+| 90-100     | Senior 🔥           |
+| 75-89      | Mid-High 💪         |
+| 60-74      | Mid ⚠️              |
+| 40-59      | Junior 📚           |
+| 0-39       | Necesita estudio 📖 |
 
 ---
 
 ## ✅ RESPUESTAS SECCIÓN A
 
 ### A1.1
+
 - useState: gestión de estado local mutable
 - useEffect: ejecución de side effects
 
 ### A1.2
+
 Virtual DOM permite diffing eficiente, evitando re-renders completos del DOM real.
 
 ### A1.3
+
 Pasar props a través de múltiples niveles. Solución: Context, composición, state management.
 
 ### A1.4
+
 - useMemo: memoriza valores
 - useCallback: memoriza funciones
 
 ### A1.5
+
 Componentes que renderizan en servidor, sin JS del lado del cliente.
 
 ### A2.1
+
 Arquitectura por features/funcionalidades de negocio, no por tipo de archivo.
 
 ### A2.2
+
 Patrón que traduce datos de formato externo a formato interno.
 
 ### A2.3
+
 - Controlado: estado en React
 - No-controlado: estado en DOM
 
 ### A3.1
+
 - TanStack Query: datos de servidor
 - Redux: estado global complejo
 - Context: datos pequeños globales
 - useState: estado local
 
 ### A3.2
+
 Estrategia de caché que sirve datos stale mientras refetch en background.
 
 ### A3.3
+
 Normalización: almacenar entidades por ID, no objetos anidados.
 
 ### A4.1
+
 - CSS Modules: CSS con scoping
 - Styled Components: CSS-in-JS
 - Tailwind: utility classes
 
 ### A4.2
+
 CSS variables + useEffect para togglear clase en HTML root.
 
 ### A4.3
+
 ARIA attributes: aria-expanded, aria-controls, role="region", aria-hidden.
 
 ### A5.1
+
 React DevTools Profiler, Lighthouse, console timing, bundle analyzer.
 
 ### A5.2
+
 React.memo memoiza componentes evitando re-renders si props no cambian.
 
 ### A5.3
+
 1. Memoización, 2. Code splitting, 3. Virtualización, 4. Debounce, 5. Optimización imágenes.
 
 ---
@@ -690,16 +738,19 @@ React.memo memoiza componentes evitando re-renders si props no cambian.
 ## 📚 RECURSOS DE ESTUDIO
 
 ### Documentación Oficial
+
 - [React Docs](https://react.dev)
 - [TanStack Query](https://tanstack.com/query)
 - [Tailwind CSS](https://tailwindcss.com)
 
 ### Libros Recomendados
+
 - "Learning React" por Alex Banks
 - "Effective JavaScript" por David Herman
 - "You Don't Know JS" por Kyle Simpson
 
 ### Proyectos para Practicar
+
 1. Clone de Twitter (timeline, tweets, likes)
 2. Dashboard de analytics (gráficos, filtros)
 3. Chat real-time (WebSockets)
