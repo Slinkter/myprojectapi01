@@ -18,6 +18,31 @@ import { log } from "@/shared/logger/logger";
 import { DEBOUNCE_DELAY } from "@/shared/config/config";
 import { toast } from "sonner";
 
+/**
+ * @typedef {import('@/entities/user/model/schema').UserProfile} UserProfile
+ */
+
+/**
+ * @typedef {Object} UserSearchFacadeResult
+ * @property {string} searchTerm - El término actual en el input
+ * @property {function(string): void} setSearchTerm - Setter para el término de búsqueda
+ * @property {string} debouncedSearchTerm - El término debouceado usado por TanStack Query
+ * @property {UserProfile[]} users - Colección de usuarios normalizados
+ * @property {Error|null} error - Objeto de error si la consulta falló
+ * @property {function(): void} handleRetry - Función para reintentar la búsqueda
+ * @property {boolean} isLoading - True si está cargando por primera vez
+ * @property {boolean} isError - True si hubo un error en la red/API
+ * @property {boolean} isSuccess - True si se cargaron datos correctamente
+ * @property {boolean} isEmpty - True si la búsqueda terminó sin resultados
+ */
+
+/**
+ * Hook de fachada que orquesta el estado de búsqueda de usuarios de GitHub.
+ *
+ * @hook
+ * @function useUserSearchFacade
+ * @returns {UserSearchFacadeResult} Los datos y disparadores simplificados para el componente visual.
+ */
 export const useUserSearchFacade = () => {
   // 1. DEBOUNCE: Esperamos a que el usuario deje de escribir antes de buscar.
   // Esto evita hacer 100 peticiones a la API si el usuario teclea rápido.
