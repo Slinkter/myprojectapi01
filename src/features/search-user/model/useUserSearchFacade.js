@@ -33,7 +33,6 @@ export const useUserSearchFacade = () => {
     status,
     error,
     refetch,
-    isFetching,
     isLoading: isQueryLoading,
   } = useUserQuery(debouncedSearchTerm);
 

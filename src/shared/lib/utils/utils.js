@@ -5,6 +5,10 @@ import { twMerge } from "tailwind-merge";
  * Utility for merging Tailwind classes with CLSX
  * Resolves conflicts and handles conditional classes cleanly.
  * 
+ * @complexity
+ * - Time: O(M) - Linear time relative to the number of characters in the inputs.
+ * - Space: O(M) - Linear space to hold the merged class names.
+ * 
  * @param {...string} inputs - Class names or conditional objects
  * @returns {string} Merged class names
  */

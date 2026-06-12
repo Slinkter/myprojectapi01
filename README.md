@@ -36,30 +36,30 @@ Estilo:       Glassmorphism + Minimalismo técnico
 
 ### Producción
 
-| Librería | Versión | ¿Qué hace? | ¿Por qué la usamos? |
-|----------|---------|------------|---------------------|
-| **React** | 18.3 | Biblioteca para construir interfaces de usuario con componentes reutilizables | Estándar de la industria. JSX, hooks, y el ecosistema más grande del frontend |
-| **Vite** | 5.4 | Bundler (empaquetador) para desarrollo y producción | HMR (Hot Module Replacement) instantáneo. No empaqueta todo en dev, solo los archivos que cambian |
-| **TanStack Query** | ^5.100 | Librería para manejar estado del servidor (fetch, caché, sincronización) | Reemplaza a Redux para datos de API. Sin boilerplate, con stale-while-revalidate, retry automático, y cancelación de peticiones |
-| **Tailwind CSS** | v4 | Framework CSS utilitario | Escribes estilos directamente en el HTML con clases atómicas. Sin nombres de clases inventados, sin CSS separado |
-| **Motion** | ^12.38 | Animaciones con resortes físicos (antes se llamaba Framer Motion) | Anima con físicas reales (stiffness + damping). Las transiciones se sienten orgánicas, no lineales |
-| **React Router** | ^7.15 | Enrutador para SPA (Single Page Application) | Cambia de página sin recargar el navegador. Permite lazy loading con `React.lazy()` |
-| **Zod** | ^4.4 | Validador de esquemas en tiempo de ejecución | Garantiza que los datos que llegan de la API sean exactamente lo que esperamos. Si no, lanza error antes de que llegue a la UI |
-| **Lucide React** | ^1.16 | Paquete de iconos en SVG | Iconos limpios, consistentes y personalizables por CSS (color, tamaño, stroke) |
-| **Sonner** | ^2.0 | Notificaciones toast | Liviano, accesible, con richColors y animaciones suaves |
-| **clsx + tailwind-merge** | — | Utilidades para manejar clases condicionales | `clsx` une clases, `tailwind-merge` resuelve conflictos. Juntos forman `cn()` — la función que usamos en todo el proyecto |
-| **PropTypes** | ^15.8 | Validación de propiedades (props) en desarrollo | Ayuda a detectar errores de tipo: si un componente espera un string y recibe un número, PropTypes avisa en consola |
+| Librería                  | Versión | ¿Qué hace?                                                                    | ¿Por qué la usamos?                                                                                                             |
+| ------------------------- | ------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| **React**                 | 18.3    | Biblioteca para construir interfaces de usuario con componentes reutilizables | Estándar de la industria. JSX, hooks, y el ecosistema más grande del frontend                                                   |
+| **Vite**                  | 5.4     | Bundler (empaquetador) para desarrollo y producción                           | HMR (Hot Module Replacement) instantáneo. No empaqueta todo en dev, solo los archivos que cambian                               |
+| **TanStack Query**        | ^5.100  | Librería para manejar estado del servidor (fetch, caché, sincronización)      | Reemplaza a Redux para datos de API. Sin boilerplate, con stale-while-revalidate, retry automático, y cancelación de peticiones |
+| **Tailwind CSS**          | v4      | Framework CSS utilitario                                                      | Escribes estilos directamente en el HTML con clases atómicas. Sin nombres de clases inventados, sin CSS separado                |
+| **Motion**                | ^12.38  | Animaciones con resortes físicos (antes se llamaba Framer Motion)             | Anima con físicas reales (stiffness + damping). Las transiciones se sienten orgánicas, no lineales                              |
+| **React Router**          | ^7.15   | Enrutador para SPA (Single Page Application)                                  | Cambia de página sin recargar el navegador. Permite lazy loading con `React.lazy()`                                             |
+| **Zod**                   | ^4.4    | Validador de esquemas en tiempo de ejecución                                  | Garantiza que los datos que llegan de la API sean exactamente lo que esperamos. Si no, lanza error antes de que llegue a la UI  |
+| **Lucide React**          | ^1.16   | Paquete de iconos en SVG                                                      | Iconos limpios, consistentes y personalizables por CSS (color, tamaño, stroke)                                                  |
+| **Sonner**                | ^2.0    | Notificaciones toast                                                          | Liviano, accesible, con richColors y animaciones suaves                                                                         |
+| **clsx + tailwind-merge** | —       | Utilidades para manejar clases condicionales                                  | `clsx` une clases, `tailwind-merge` resuelve conflictos. Juntos forman `cn()` — la función que usamos en todo el proyecto       |
+| **PropTypes**             | ^15.8   | Validación de propiedades (props) en desarrollo                               | Ayuda a detectar errores de tipo: si un componente espera un string y recibe un número, PropTypes avisa en consola              |
 
 ### Desarrollo
 
-| Librería | ¿Qué hace? |
-|----------|------------|
-| **ESLint** | Analiza el código en busca de errores, malas prácticas y problemas de accesibilidad (jsx-a11y) |
+| Librería                      | ¿Qué hace?                                                                                              |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------- |
+| **ESLint**                    | Analiza el código en busca de errores, malas prácticas y problemas de accesibilidad (jsx-a11y)          |
 | **MSW (Mock Service Worker)** | Intercepta peticiones HTTP en el navegador durante desarrollo. Permite trabajar sin conexión a internet |
-| **gh-pages** | Sube el build de producción a GitHub Pages con un solo comando |
-| **@tailwindcss/vite** | Plugin que integra Tailwind v4 con Vite |
-| **PostCSS** | Procesador de CSS que Tailwind usa internamente |
-| **Autoprefixer** | Agrega prefijos de navegador (-webkit-, -moz-) automáticamente |
+| **gh-pages**                  | Sube el build de producción a GitHub Pages con un solo comando                                          |
+| **@tailwindcss/vite**         | Plugin que integra Tailwind v4 con Vite                                                                 |
+| **PostCSS**                   | Procesador de CSS que Tailwind usa internamente                                                         |
+| **Autoprefixer**              | Agrega prefijos de navegador (-webkit-, -moz-) automáticamente                                          |
 
 ---
 
@@ -74,21 +74,27 @@ app ➔ pages ➔ widgets ➔ features ➔ entities ➔ shared
 ```
 
 ### Capa 1: Shared (`src/shared/`) — Elementos reutilizables comunes
+
 - Contiene utilidades (`lib/utils/`), hooks reutilizables (`lib/hooks/`), componentes atómicos (`ui/`), config (`config/`), estilos generales (`styles/`), mocks (`mocks/`) y el cliente HTTP (`api/httpClient.js`).
 
 ### Capa 2: Entities (`src/entities/`) — Conceptos de negocio
+
 - Define el modelo de negocio y UI básica de la entidad `user` (schemas, adaptadores, hooks de consulta `useUserQuery`/`useUserDetailQuery` y componentes básicos como `UserCard`).
 
 ### Capa 3: Features (`src/features/`) — Acciones de usuario
+
 - Implementa interacciones que aportan valor directo (como la barra de búsqueda `PageHeader` y el coordinamiento del buscador en la fachada `useUserSearchFacade`).
 
 ### Capa 4: Widgets (`src/widgets/`) — Bloques autónomos
+
 - Composición compleja de features y entities en unidades de UI independientes (por ejemplo, el orquestador de resultados `SearchResults` y el bento grid de detalles `UserDetail`).
 
 ### Capa 5: Pages (`src/pages/`) — Vistas de pantalla
+
 - Páginas que combinan widgets para armar las distintas pantallas de la aplicación (`SearchPage`, `DetailPage`, `NotFoundPage`).
 
 ### Capa 6: App (`src/app/`) — Inicialización general
+
 - Configuración global y punto de montaje (`App.jsx` para rutas, `main.jsx` para iniciar React y QueryClient).
 
 ---
@@ -100,6 +106,7 @@ app ➔ pages ➔ widgets ➔ features ➔ entities ➔ shared
 **Redux** es para estado global de la aplicación (tema, usuario logueado, carrito de compras). **TanStack Query** es para estado del servidor (datos que vienen de una API). Mezclarlos es un error común.
 
 TanStack Query nos da **gratis**:
+
 - Caché automática con tiempo de expiración (`staleTime`)
 - Re-fetch cuando el usuario regresa a la pestaña
 - Retry automático si la petición falla
@@ -112,9 +119,9 @@ TanStack Query nos da **gratis**:
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000,  // 5 minutos: los datos se consideran frescos
-      gcTime: 10 * 60 * 1000,    // 10 minutos: se mantienen en caché después de desuscribirse
-      retry: 1,                   // reintenta 1 vez si falla
+      staleTime: 5 * 60 * 1000, // 5 minutos: los datos se consideran frescos
+      gcTime: 10 * 60 * 1000, // 10 minutos: se mantienen en caché después de desuscribirse
+      retry: 1, // reintenta 1 vez si falla
       refetchOnWindowFocus: false, // no recarga al cambiar de pestaña
     },
   },
@@ -124,6 +131,7 @@ const queryClient = new QueryClient({
 ### Las dos queries del proyecto
 
 **`useUserQuery.js`** — Búsqueda de usuarios:
+
 ```js
 export const useUserQuery = (searchTerm) => {
   return useQuery({
@@ -138,6 +146,7 @@ export const useUserQuery = (searchTerm) => {
 ```
 
 **`useUserDetailQuery.js`** — Detalle de un usuario:
+
 ```js
 export const useUserDetailQuery = (login) => {
   return useQuery({
@@ -147,7 +156,7 @@ export const useUserDetailQuery = (login) => {
     gcTime: GC_TIME,
     retry: 1,
     refetchOnWindowFocus: false,
-    enabled: !!login,   // 👈 solo se ejecuta si login tiene valor
+    enabled: !!login, // 👈 solo se ejecuta si login tiene valor
   });
 };
 ```
@@ -157,6 +166,7 @@ export const useUserDetailQuery = (login) => {
 La interacción entre los componentes React, TanStack Query y la red difiere significativamente entre desarrollo y producción para optimizar la velocidad y evitar el bloqueo por límites de uso (Rate Limit) de la API de GitHub:
 
 #### 💻 Modo Desarrollo (MSW Interceptor)
+
 En desarrollo, se activa **Mock Service Worker (MSW)**. MSW levanta un Service Worker en el navegador que intercepta todas las peticiones salientes antes de que toquen internet, respondiendo con datos de prueba guardados localmente.
 
 ```text
@@ -185,6 +195,7 @@ En desarrollo, se activa **Mock Service Worker (MSW)**. MSW levanta un Service W
 ```
 
 #### 🌐 Modo Producción (Conexión Real)
+
 En producción (cuando compilas con `pnpm build`), MSW se remueve por completo del bundle final. Las peticiones viajan directamente por internet para consultar los datos actualizados en vivo de la API de GitHub.
 
 ```text
@@ -219,8 +230,8 @@ En producción (cuando compilas con `pnpm build`), MSW se remueve por completo d
 TanStack Query usa el `queryKey` para identificar cada petición. Si el key cambia, la anterior se **aborta automáticamente** (gracias al `signal`) y se inicia la nueva:
 
 ```js
-queryKey: ["users", "mojombo"]  // busca "mojombo"
-queryKey: ["users", "defunkt"]  // 👈 cambió, aborta la anterior, busca "defunkt"
+queryKey: ["users", "mojombo"]; // busca "mojombo"
+queryKey: ["users", "defunkt"]; // 👈 cambió, aborta la anterior, busca "defunkt"
 ```
 
 El `signal` es un `AbortSignal` que TanStack Query inyecta en `queryFn`. Se lo pasamos a `fetch`:
@@ -288,7 +299,7 @@ useUserQuery(["users", "mojombo"]) ← queryKey cambió
 
 TypeScript valida en **tiempo de compilación**. Pero la API de GitHub devuelve datos en **tiempo de ejecución**. Si GitHub cambia su API o viene un campo `null` donde esperamos un string, TypeScript no lo detecta. Zod sí.
 
-### Esquema (`src/domain/schemas/user.js`)
+### Esquema (`src/entities/user/model/schema.js`)
 
 ```js
 export const GitHubUserSchema = z.object({
@@ -298,19 +309,19 @@ export const GitHubUserSchema = z.object({
   html_url: z.string().url(),
   name: z.string().nullable().optional(),
   bio: z.string().nullable().optional(),
-  public_repos: z.number().optional().default(0),  // si falta, usa 0
+  public_repos: z.number().optional().default(0), // si falta, usa 0
   followers: z.number().optional().default(0),
   // ...
 });
 ```
 
-### Adapter + Zod (`src/domain/adapters/userAdapter.js`)
+### Adapter + Zod (`src/entities/user/model/adapter.js`)
 
 ```js
 export const userAdapter = (rawUser) => {
-  const data = GitHubUserSchema.parse(rawUser);  // ← valida O lanza ZodError
+  const data = GitHubUserSchema.parse(rawUser); // ← valida O lanza ZodError
   return {
-    username: data.login,        // renombramos propiedades
+    username: data.login, // renombramos propiedades
     photo: data.avatar_url,
     repos: data.public_repos,
     // ...
@@ -324,23 +335,24 @@ Si la API devuelve algo inesperado (ej. `login` viene `undefined`), `GitHubUserS
 
 ## 🏗️ Patrones de Diseño (GoF)
 
-### Adapter (Estructural) — `src/domain/adapters/userAdapter.js`
+### Adapter (Estructural) — `src/entities/user/model/adapter.js`
 
 **Problema**: La API de GitHub devuelve objetos con propiedades como `avatar_url`, `html_url`, `public_repos`. Nuestra app quiere `photo`, `profileUrl`, `repos`.
 
 **Solución**: Un adaptador que recibe los datos crudos, los valida con Zod, y devuelve un objeto con la estructura que nuestra app entiende. Si mañana cambiamos la API, solo tocamos el adaptador.
 
-### Facade (Estructural) — `src/application/facades/useUserSearchFacade.js`
+### Facade (Estructural) — `src/features/search-user/model/useUserSearchFacade.js`
 
 **Problema**: El componente `UserSearch` tendría que manejar debounce, TanStack Query, estados de carga/error/vacío, toasts de error y retry. Cientos de líneas.
 
 **Solución**: Una fachada que oculta toda esa complejidad y expone solo lo que la UI necesita:
 
 ```js
-const { users, isLoading, isError, isEmpty, handleRetry } = useUserSearchFacade();
+const { users, isLoading, isError, isEmpty, handleRetry } =
+  useUserSearchFacade();
 ```
 
-### Factory (Creacional) — `src/presentation/components/factories/ResultFactory.jsx`
+### Factory (Creacional) — `src/entities/user/ui/ResultFactory.jsx`
 
 **Problema**: La búsqueda puede devolver usuarios individuales u organizaciones. Cada tipo tiene una tarjeta diferente.
 
@@ -348,8 +360,10 @@ const { users, isLoading, isError, isEmpty, handleRetry } = useUserSearchFacade(
 
 ```js
 switch (data.type) {
-  case "Organization": return <OrganizationCard />;
-  case "User":         return <UserCard />;
+  case "Organization":
+    return <OrganizationCard />;
+  case "User":
+    return <UserCard />;
 }
 ```
 
@@ -363,11 +377,11 @@ Cada tarjeta o contenedor usa la clase `.glass` o `.glass-card`, que aplica:
 
 ```css
 .glass-card {
-  background: var(--glass-bg);            /* semi-transparente */
-  backdrop-filter: blur(20px);            /* desenfoque del fondo */
-  border: 1px solid var(--glass-border);  /* borde sutil */
-  box-shadow: var(--glass-shadow);        /* sombra suave */
-  border-radius: 0.75rem;                 /* rounded-xl */
+  background: var(--glass-bg); /* semi-transparente */
+  backdrop-filter: blur(20px); /* desenfoque del fondo */
+  border: 1px solid var(--glass-border); /* borde sutil */
+  box-shadow: var(--glass-shadow); /* sombra suave */
+  border-radius: 0.75rem; /* rounded-xl */
 }
 ```
 
@@ -375,13 +389,13 @@ Esto crea el efecto "frosted glass" (vidrio esmerilado): ves el fondo a través 
 
 ### Dos temas
 
-| | Light "Holographic Terminal" | Dark "Cyberpunk" |
-|---|---|---|
-| Fondo | `#F0EDE8` (cálido papel) | `#0A0A0F` (oscuro profundo) |
-| Superficie | `#FFFFFF` | `#12121A` |
-| Acento | `#0D9488` (teal) | `#00F0FF` (neón cyan) |
-| Texto | `#1A1A2E` | `#E8E8F0` |
-| Borde | `#E5E2DC` | `#1E1E2A` |
+|            | Light "Holographic Terminal" | Dark "Cyberpunk"            |
+| ---------- | ---------------------------- | --------------------------- |
+| Fondo      | `#F0EDE8` (cálido papel)     | `#0A0A0F` (oscuro profundo) |
+| Superficie | `#FFFFFF`                    | `#12121A`                   |
+| Acento     | `#0D9488` (teal)             | `#00F0FF` (neón cyan)       |
+| Texto      | `#1A1A2E`                    | `#E8E8F0`                   |
+| Borde      | `#E5E2DC`                    | `#1E1E2A`                   |
 
 El toggle de tema (`ThemeToggle`) agrega o quita la clase `.dark` en `<html>`. Las variables CSS cambian automáticamente gracias a:
 
@@ -392,15 +406,15 @@ El toggle de tema (`ThemeToggle`) agrega o quita la clase `.dark` en `<html>`. L
 
 ### Clases utilitarias disponibles
 
-| Clase | Uso |
-|-------|-----|
-| `.glass` | Efecto vidrio base |
-| `.glass-card` | Tarjeta glass con bordes redondeados |
+| Clase               | Uso                                                |
+| ------------------- | -------------------------------------------------- |
+| `.glass`            | Efecto vidrio base                                 |
+| `.glass-card`       | Tarjeta glass con bordes redondeados               |
 | `.glass-card-hover` | Igual que glass-card pero con glow accent al hover |
-| `.glass-input` | Input con efecto glass, glow al focus |
-| `.btn-glass` | Botón glass con hover accent |
-| `.badge` | Etiqueta glass pequeña |
-| `.divider` | Línea divisoria sutil |
+| `.glass-input`      | Input con efecto glass, glow al focus              |
+| `.btn-glass`        | Botón glass con hover accent                       |
+| `.badge`            | Etiqueta glass pequeña                             |
+| `.divider`          | Línea divisoria sutil                              |
 
 ### Tipografía
 
@@ -423,22 +437,22 @@ Crea copias superficiales (shallow copy) sin mutar el original:
 ```js
 // httpClient.js — merge inmutable de objetos
 const response = await fetch(url, {
-  ...options,              // copia todas las propiedades de options
+  ...options, // copia todas las propiedades de options
   headers: {
     "Content-Type": "application/json",
-    ...options.headers,   // si options ya traía headers, los mezcla sin pisar
+    ...options.headers, // si options ya traía headers, los mezcla sin pisar
   },
 });
 ```
 
 ### Métodos de array inmutables (los que usamos)
 
-| Método | ¿Muta? | ¿Qué devuelve? |
-|--------|--------|----------------|
-| `.map()` | ❌ No | Nuevo array transformado |
-| `.filter()` | ❌ No | Nuevo array filtrado |
-| `.find()` | ❌ No | El elemento encontrado (o undefined) |
-| `.slice()` | ❌ No | Nuevo array con una porción |
+| Método      | ¿Muta? | ¿Qué devuelve?                       |
+| ----------- | ------ | ------------------------------------ |
+| `.map()`    | ❌ No  | Nuevo array transformado             |
+| `.filter()` | ❌ No  | Nuevo array filtrado                 |
+| `.find()`   | ❌ No  | El elemento encontrado (o undefined) |
+| `.slice()`  | ❌ No  | Nuevo array con una porción          |
 
 Los que **NUNCA** usamos (porque mutan): `.push()`, `.pop()`, `.splice()`, `.sort()`, `.reverse()`.
 
@@ -459,11 +473,11 @@ Una función que "recuerda" las variables del lugar donde fue creada, incluso de
 ```js
 useEffect(() => {
   const handler = setTimeout(() => {
-    setDebouncedValue(inputValue);  // ← captura inputValue del scope del effect
+    setDebouncedValue(inputValue); // ← captura inputValue del scope del effect
   }, delay);
 
   return () => {
-    clearTimeout(handler);  // ← captura handler del scope del effect
+    clearTimeout(handler); // ← captura handler del scope del effect
   };
 }, [inputValue, delay]);
 ```
@@ -488,21 +502,21 @@ Cada vez que escribes `() => { ... }` dentro de otra función y accedes a una va
 
 ### DRY (Don't Repeat Yourself)
 
-| Archivo | Evita repetir |
-|---------|---------------|
-| `src/lib/utils.js` — `cn()` | La lógica de unir clases condicionales con `clsx` + resolver conflictos con `tailwind-merge` |
-| `src/infrastructure/api/httpClient.js` | El manejo de `fetch`, headers, errores HTTP y `ApiError` en un solo lugar |
-| `src/domain/adapters/userAdapter.js` | La transformación y validación de datos de GitHub → `UserProfile` |
+| Archivo                                  | Evita repetir                                                                                |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `src/shared/lib/utils/utils.js` — `cn()` | La lógica de unir clases condicionales con `clsx` + resolver conflictos con `tailwind-merge` |
+| `src/shared/api/httpClient.js`           | El manejo de `fetch`, headers, errores HTTP y `ApiError` en un solo lugar                    |
+| `src/entities/user/model/adapter.js`     | La transformación y validación de datos de GitHub → `UserProfile`                            |
 
 ### SOLID
 
-| Principio | ¿Dónde se aplica? |
-|-----------|-------------------|
+| Principio                 | ¿Dónde se aplica?                                                                                                                                |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **S**ingle Responsibility | `PageHeader` solo renderiza el hero. `SearchResults` solo decide qué estado mostrar. `UserSearch` solo orquesta. Cada uno hace **una sola cosa** |
-| **O**pen/Closed | `ResultFactory` — puedes agregar un nuevo tipo de tarjeta (ej. `TeamCard`) sin modificar el código existente, solo agregas un `case` |
-| **L**iskov | `ApiError` extiende `Error` sin romper su interfaz. Puede usarse donde se espere un `Error` |
-| **I**nterface Segregation | Los componentes reciben solo las props que necesitan (`isLoading`, `users`), no objetos gigantes con datos que no usan |
-| **D**ependency Inversion | La capa de dominio (`userAdapter`) **no sabe** que React, HTTP, ni la UI existen. Las capas externas dependen de la interna |
+| **O**pen/Closed           | `ResultFactory` — puedes agregar un nuevo tipo de tarjeta (ej. `TeamCard`) sin modificar el código existente, solo agregas un `case`             |
+| **L**iskov                | `ApiError` extiende `Error` sin romper su interfaz. Puede usarse donde se espere un `Error`                                                      |
+| **I**nterface Segregation | Los componentes reciben solo las props que necesitan (`isLoading`, `users`), no objetos gigantes con datos que no usan                           |
+| **D**ependency Inversion  | La capa de dominio (`userAdapter`) **no sabe** que React, HTTP, ni la UI existen. Las capas externas dependen de la interna                      |
 
 ---
 
@@ -530,11 +544,13 @@ JavaScript "eleva" las declaraciones al principio de su scope antes de ejecutar 
 
 ```js
 // Esto funciona aunque la función esté definida después
-saludar();  // "Hola!"
-function saludar() { console.log("Hola!"); }
+saludar(); // "Hola!"
+function saludar() {
+  console.log("Hola!");
+}
 
 // Esto NO funciona con const/let
-despedir();  // ReferenceError
+despedir(); // ReferenceError
 const despedir = () => console.log("Chau!");
 ```
 
@@ -680,13 +696,15 @@ pnpm py           # Build + sirve con Python (puerto 5000)
 
 ## 📖 Documentación Adicional
 
-| Documento | Descripción |
-|-----------|-------------|
-| [`src/docs/01-Guia-del-Proyecto.md`](./src/docs/01-Guia-del-Proyecto.md) | Visión general, casos de uso y requerimientos |
-| [`src/docs/02-Arquitectura-y-Patrones.md`](./src/docs/02-Arquitectura-y-Patrones.md) | Feature-Sliced Design (FSD) y patrones GoF a detalle |
-| [`src/docs/03-Guia-de-Desarrollo.md`](./src/docs/03-Guia-de-Desarrollo.md) | Setup, comandos y flujo de trabajo |
-| [`src/docs/GUIA_ESTUDIO.md`](./src/docs/GUIA_ESTUDIO.md) | 📚 Manual completo de React desde cero |
-| [`src/docs/PRUEBA_TECNICA.md`](./src/docs/PRUEBA_TECNICA.md) | 📝 Simulación de entrevista técnica frontend |
+| Documento                                                                            | Descripción                                                       |
+| ------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| [`src/docs/01-Guia-del-Proyecto.md`](./src/docs/01-Guia-del-Proyecto.md)             | Visión general, casos de uso y requerimientos                     |
+| [`src/docs/02-Arquitectura-y-Patrones.md`](./src/docs/02-Arquitectura-y-Patrones.md) | Feature-Sliced Design (FSD) y patrones GoF a detalle              |
+| [`src/docs/03-Guia-de-Desarrollo.md`](./src/docs/03-Guia-de-Desarrollo.md)           | Setup, comandos y flujo de trabajo                                |
+| [`src/docs/GUIA_ESTUDIO.md`](./src/docs/GUIA_ESTUDIO.md)                             | 📚 Manual completo de React desde cero                            |
+| [`src/docs/FSD_NIVEL_POLLITO.md`](./src/docs/FSD_NIVEL_POLLITO.md)                   | 🐥 Guía FSD visual explicada nivel pollito con diagramas          |
+| [`src/docs/BIG_O_POLLITO.md`](./src/docs/BIG_O_POLLITO.md)                           | 🚀 Guía de Notación Big O y complejidad logarítmica nivel pollito |
+| [`src/docs/PRUEBA_TECNICA.md`](./src/docs/PRUEBA_TECNICA.md)                         | 📝 Simulación de entrevista técnica frontend                      |
 
 ---
 

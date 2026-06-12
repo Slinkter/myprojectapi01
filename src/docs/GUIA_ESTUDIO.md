@@ -1452,27 +1452,27 @@ sequenceDiagram
     participant Service
     participant API
     
-    User->>UI: Escribe "juan"
-    UI->>Query: Debounced "juan"
-    Query->>Cache: Check ['users', 'juan']
+    User->>UI: "Escribe 'juan'"
+    UI->>Query: "Debounced 'juan'"
+    Query->>Cache: "Check ['users', 'juan']"
     
     alt Data in cache (stale)
-        Cache->>Query: Return stale data
-        Query->>Query: Background refetch
+        Cache->>Query: "Return stale data"
+        Query->>Query: "Background refetch"
     else No data
-        Query->>Service: fetchUsers("juan")
+        Query->>Service: "fetchUsers('juan')"
     end
     
-    Service->>API: GET /search/users?q=juan
-    API->>Service: { items: [...] }
+    Service->>API: "GET /search/users?q=juan"
+    API->>Service: "items list"
     
-    Service->>Adapter: raw data
-    Adapter->>Adapter: Validate with Zod
-    Adapter->>Query: Validated data
+    Service->>Adapter: "raw data"
+    Adapter->>Adapter: "Validate with Zod"
+    Adapter->>Query: "Validated data"
     
-    Query->>Cache: Store/refresh
-    Query->>UI: Users array
-    UI->>User: Render cards
+    Query->>Cache: "Store/refresh"
+    Query->>UI: "Users array"
+    UI->>User: "Render cards"
 ```
 
 ---
@@ -1481,120 +1481,123 @@ sequenceDiagram
 
 ```
 src/
-├── domain/                    # Capa 1: Lógica de negocio (Core)
-│   ├── schemas/
-│   │   └── user.js            # Esquemas de validación Zod
-│   ├── adapters/
-│   │   └── userAdapter.js     # Adaptadores de normalización de datos
-│   └── errors/
-│       └── ApiError.js        # Errores propios de la aplicación
+├── app/                       # Configuración general y de enrutado
+│   ├── App.jsx                # Enrutado principal
+│   └── main.jsx               # Punto de entrada y configuración de TanStack Query
 │
-├── infrastructure/            # Capa 2: Soporte tecnológico externo
-│   ├── api/
-│   │   ├── httpClient.js      # Cliente Axios configurado
-│   │   └── userService.js     # Servicios de llamadas a GitHub API
-│   ├── logger/
-│   │   └── logger.js          # Sistema de logging semántico
-│   └── mocks/
-│       ├── handlers.js        # Handlers mock para MSW (offline)
-│       └── browser.js         # Setup de service worker para navegador
+├── pages/                     # Composiciones completas de páginas
+│   ├── search-page/           # Página de búsqueda principal
+│   ├── detail-page/           # Página de detalles del perfil
+│   └── not-found/             # Página 404
 │
-├── application/               # Capa 3: Casos de uso e interacción de flujo
-│   ├── queries/
-│   │   ├── useUserQuery.js    # Query para buscar usuarios
-│   │   └── useUserDetailQuery.js # Query para detalle de perfil
-│   ├── facades/
-│   │   ├── useUserSearchFacade.js # Fachada para simplificar la búsqueda
-│   │   └── useUserDetailFacade.js # Fachada para simplificar el detalle
-│   └── hooks/
-│       ├── useTheme.js        # Manejador de tema Light/Dark
-│       └── useDebouncedSearch.js # Manejador de debouncing
+├── widgets/                   # Componentes de UI auto-contenidos complejos
+│   ├── search-results/        # Orquestación y grids de resultados de búsqueda
+│   └── user-profile-bento/    # Layout detallado en Bento Grid (UserDetail)
 │
-└── presentation/              # Capa 4: Renderizado de interfaz React
-    ├── components/
-    │   ├── common/            # ErrorBoundary y componentes transversales
-    │   ├── layout/            # PageHeader y estructuras de diseño
-    │   └── ui/                # ThemeToggle y componentes atómicos
-    ├── features/
-    │   ├── users/             # Buscador de usuarios (UserSearch, UserCard, etc.)
-    │   └── user-detail/       # Detalle de perfil (UserDetail, BentoGrid, etc.)
-    └── styles/
-        └── index.css          # Archivo global de Tailwind CSS v4
+├── features/                  # Acciones interactivas con valor de negocio
+│   └── search-user/           # Lógica y barra del buscador (facade, PageHeader)
+│
+├── entities/                  # Conceptos de negocio (user)
+│   └── user/
+│       ├── api/               # Servicios de API y custom query hooks
+│       ├── model/             # Schemas Zod y adaptadores de normalización
+│       └── ui/                # Tarjetas (UserCard), fábricas y skeletons
+│
+└── shared/                    # Infraestructura y elementos reutilizables
+    ├── api/                   # Cliente HTTP y clase ApiError
+    ├── config/                # Constantes globales (tiempos de caché, debounce)
+    ├── lib/                   # Hooks generales (useTheme, useDebouncedSearch) y utils (cn)
+    ├── logger/                # Logging semántico con formato ASCII art
+    ├── mocks/                 # Interceptores Mock Service Worker (MSW) para desarrollo offline
+    ├── styles/                # index.css de Tailwind v4 y variables de temas
+    └── ui/                    # ErrorBoundary, ErrorDisplay y ThemeToggle
 ```
 
 ---
 
 ## 7.3 Cada Archivo Explicado
 
-### services/userService.js
+### entities/user/api/userService.js
 ```javascript
-// Responsable: Llamar a APIs externas
-// No conoce la UI, solo retorna datos crudos
+// Responsable: Comunicarse directamente con el servidor externo
+// No tiene dependencias de React ni de la interfaz visual
 
 export const fetchUsersAPI = async (term, signal) => {
   const res = await fetch(`https://api.github.com/search/users?q=${term}`, {
     headers: { Accept: "application/vnd.github.v3+json" },
     signal,
   });
-  if (!res.ok) throw new Error("API Error");
+  if (!res.ok) throw new ApiError(res.statusText, res.status);
   return res.json();
 };
 ```
 
-### models/adapters/userAdapter.js
+### entities/user/model/adapter.js
 ```javascript
-// Responsable: Transformar datos crudos a modelo interno
-// Protege la UI de cambios en la API externa
+// Responsable: Validar datos y convertirlos al modelo que la app espera
+// Zod garantiza seguridad y tipado en tiempo de ejecución
 
-export const userAdapter = (raw) => ({
-  username: raw.login,
-  photo: raw.avatar_url,
-  // ...
-});
-```
-
-### features/users/hooks/useUserSearchQuery.js
-```javascript
-// Responsable: Lógica de TanStack Query
-// Configura caching, retries, etc.
-
-export const useUserSearchQuery = (term) => {
-  return useQuery({
-    queryKey: ['users', term],
-    queryFn: () => searchUsers(term),
-    enabled: term.length >= 3,
-  });
-};
-```
-
-### features/users/hooks/useUserSearchFacade.js
-```javascript
-// Responsable: Interfaz simple para componentes
-// Oculta complejidad de TanStack Query
-
-export const useUserSearchFacade = (term) => {
-  const query = useUserSearchQuery(term);
-  
+export const userAdapter = (rawUser) => {
+  const data = GitHubUserSchema.parse(rawUser); // Valida contrato
   return {
-    users: query.data || [],
-    isSearching: query.isLoading,
-    error: query.error,
+    id: data.id,
+    username: data.login,
+    photo: data.avatar_url,
+    profileUrl: data.html_url,
+    repos: data.public_repos,
+    // ...
   };
 };
 ```
 
-### features/users/components/UserSearch.jsx
+### entities/user/api/useUserQuery.js
 ```javascript
-// Responsable: Solo renderizado
-// No sabe cómo se obtienen los datos
+// Responsable: Manejo del estado del servidor con TanStack Query
+// Caching automático, reintentos y control de frescura de datos
 
-const UserSearch = () => {
-  const { users, isSearching } = useUserSearchFacade(searchTerm);
+export const useUserQuery = (searchTerm) => {
+  return useQuery({
+    queryKey: ["users", searchTerm],
+    queryFn: () => fetchUsersAPI(searchTerm),
+    staleTime: 5 * 60 * 1000,
+  });
+};
+```
+
+### features/search-user/model/useUserSearchFacade.js
+```javascript
+// Responsable: Patrón Fachada para la búsqueda de usuarios
+// Oculta los detalles de debouncing y estados de TanStack Query a los componentes
+
+export const useUserSearchFacade = () => {
+  const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebouncedSearch("", 500);
+  const { data: users = [], status, error } = useUserQuery(debouncedSearchTerm);
+  
+  return {
+    searchTerm,
+    setSearchTerm,
+    users,
+    isLoading: status === "pending",
+    isError: status === "error",
+    isEmpty: status === "success" && users.length === 0,
+  };
+};
+```
+
+### features/search-user/ui/PageHeader.jsx
+```javascript
+// Responsable: Componente de UI puro enfocado en la presentación
+// Recibe los datos y disparadores de la fachada de manera limpia
+
+const PageHeader = () => {
+  const { searchTerm, setSearchTerm } = useUserSearchFacade();
   
   return (
-    <div>
-      {isSearching ? <Spinner /> : <UserGrid users={users} />}
-    </div>
+    <input 
+      value={searchTerm} 
+      onChange={(e) => setSearchTerm(e.target.value)} 
+      className="glass-input" 
+    />
   );
 };
 ```
@@ -1615,38 +1618,42 @@ const UserSearch = () => {
 
 # 🎓 CAPÍTULO 8: EJERCICIOS PRÁCTICOS
 
-## Ejercicio 1: Crear un Feature Completo
+## Ejercicio 1: Crear un Slice de Entidad (Repository)
 
-Crea un feature para mostrar repositorios de un usuario.
+Crea una entidad `repository` para manejar los repositorios de un usuario de GitHub.
 
 ### Pasos:
-1. Crear `src/features/repos/`
-2. Crear `src/services/repoService.js`
-3. Crear schema Zod en `src/models/types/`
-4. Crear adapter en `src/models/adapters/`
-5. Crear hooks en `src/features/repos/hooks/`
-6. Crear componentes en `src/features/repos/components/`
-7. Crear entry point `src/features/repos/repos.jsx`
+1. Crear carpeta `src/entities/repository/`
+2. Crear servicio en `src/entities/repository/api/repoService.js`
+3. Crear schema Zod en `src/entities/repository/model/schema.js`
+4. Crear adaptador en `src/entities/repository/model/adapter.js`
+5. Crear hook de TanStack Query en `src/entities/repository/api/useReposQuery.js`
+6. Crear componente de presentación `src/entities/repository/ui/RepoCard.jsx`
+7. Exponer la API pública del slice en `src/entities/repository/index.js`
 
 ### repoService.js
 ```javascript
-export const fetchUserRepos = async (username, signal) => {
+export const fetchUserReposAPI = async (username, signal) => {
   const res = await fetch(`https://api.github.com/users/${username}/repos`, {
     signal,
   });
+  if (!res.ok) throw new ApiError("Error fetching repos", res.status);
   return res.json();
 };
 ```
 
-### repoAdapter.js
+### adapter.js
 ```javascript
-export const repoAdapter = (repo) => ({
-  name: repo.name,
-  description: repo.description,
-  stars: repo.stargazers_count,
-  language: repo.language,
-  url: repo.html_url,
-});
+export const repoAdapter = (repo) => {
+  const data = GitHubRepoSchema.parse(repo);
+  return {
+    name: data.name,
+    description: data.description || "",
+    stars: data.stargazers_count,
+    language: data.language || "Unknown",
+    url: data.html_url,
+  };
+};
 ```
 
 ---

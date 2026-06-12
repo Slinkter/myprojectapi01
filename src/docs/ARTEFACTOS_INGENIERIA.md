@@ -20,14 +20,14 @@
 
 La interfaz nativa de GitHub (github.com) está diseñada para la gestión de repositorios, issues, pull requests y colaboración en equipo. Como consecuencia, **no está optimizada para la exploración rápida de perfiles de usuario**. Sus limitaciones específicas son:
 
-| Problema | Impacto |
-|----------|---------|
-| **Sin búsqueda predictiva**: no hay sugerencias ni autocompletado al escribir un username | El usuario debe navegar manualmente a `github.com/{username}` o usar el search global, que mezcla repos, issues, código y usuarios |
-| **Latencia de carga**: cada página de perfil requiere una navegación completa sin SPA | Tiempos de carga de 2-5 segundos incluso con conexión rápida |
-| **Sin caché local**: cada visita a un mismo perfil descarga los mismos datos de la API | Consumo innecesario de ancho de banda y límite de rate-limit de GitHub (60 req/h sin autenticación) |
-| **Interfaz densa**: el perfil de GitHub muestra múltiples secciones (repos, contribuciones, activity, organizaciones) | El usuario tarda en encontrar la información que busca (bio, followers, repos totales) |
-| **Sin modo oscuro nativo** (hasta fechas recientes) y sin personalización visual | Fatiga visual en sesiones prolongadas |
-| **Sin una arquitectura que sirva como caso de estudio**: GitHub.com es un monolito Ruby on Rails | Los desarrolladores junior no pueden inspeccionar el código para aprender buenas prácticas |
+| Problema                                                                                                              | Impacto                                                                                                                            |
+| --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| **Sin búsqueda predictiva**: no hay sugerencias ni autocompletado al escribir un username                             | El usuario debe navegar manualmente a `github.com/{username}` o usar el search global, que mezcla repos, issues, código y usuarios |
+| **Latencia de carga**: cada página de perfil requiere una navegación completa sin SPA                                 | Tiempos de carga de 2-5 segundos incluso con conexión rápida                                                                       |
+| **Sin caché local**: cada visita a un mismo perfil descarga los mismos datos de la API                                | Consumo innecesario de ancho de banda y límite de rate-limit de GitHub (60 req/h sin autenticación)                                |
+| **Interfaz densa**: el perfil de GitHub muestra múltiples secciones (repos, contribuciones, activity, organizaciones) | El usuario tarda en encontrar la información que busca (bio, followers, repos totales)                                             |
+| **Sin modo oscuro nativo** (hasta fechas recientes) y sin personalización visual                                      | Fatiga visual en sesiones prolongadas                                                                                              |
+| **Sin una arquitectura que sirva como caso de estudio**: GitHub.com es un monolito Ruby on Rails                      | Los desarrolladores junior no pueden inspeccionar el código para aprender buenas prácticas                                         |
 
 **GitExplorer resuelve esto** ofreciendo una SPA React liviana con búsqueda con debounce, caché inteligente (TanStack Query), validación de datos en runtime (Zod), diseño glassmorphism con tema dual (claro/oscuro) y una arquitectura Feature-Sliced Design (FSD) que sirve como modelo de referencia para ingeniería de software frontend.
 
@@ -39,12 +39,12 @@ Construir una aplicación web SPA (Single Page Application) en React 18 que perm
 
 #### Objetivos Específicos
 
-| # | Objetivo | Indicador de Éxito |
-|---|----------|-------------------|
-| OE-1 | Implementar un sistema de búsqueda con debounce de 500ms y TanStack Query que reduzca las llamadas a la API de GitHub y cachee resultados con staleTime de 5 minutos | Las búsquedas repetidas del mismo término son instantáneas (0ms de red), el rate-limit de GitHub no se excede |
-| OE-2 | Aplicar los patrones estructurales Adapter (para transformación de datos), Facade (para simplificación de lógica de UI) y Factory (para creación condicionada de componentes), documentándolos como caso de estudio para desarrolladores junior | Cada patrón está identificado con su archivo fuente, diagrama y explicación didáctica en la documentación |
+| #    | Objetivo                                                                                                                                                                                                                                               | Indicador de Éxito                                                                                                                                            |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| OE-1 | Implementar un sistema de búsqueda con debounce de 500ms y TanStack Query que reduzca las llamadas a la API de GitHub y cachee resultados con staleTime de 5 minutos                                                                                   | Las búsquedas repetidas del mismo término son instantáneas (0ms de red), el rate-limit de GitHub no se excede                                                 |
+| OE-2 | Aplicar los patrones estructurales Adapter (para transformación de datos), Facade (para simplificación de lógica de UI) y Factory (para creación condicionada de componentes), documentándolos como caso de estudio para desarrolladores junior        | Cada patrón está identificado con su archivo fuente, diagrama y explicación didáctica en la documentación                                                     |
 | OE-3 | Diseñar un sistema de doble tema (claro "Holographic Terminal" / oscuro "Cyberpunk") con efecto glassmorphism basado en `backdrop-filter: blur(20px)` y variables CSS que se alternan mediante una clase `.dark` en `<html>`, sin condicionales en JSX | El toggle de tema persiste en localStorage, respeta `prefers-color-scheme` del sistema, y todos los componentes se repintan automáticamente sin props de tema |
-| OE-4 | Documentar cada decisión técnica como material de estudio para programadores junior, incluyendo la arquitectura Feature-Sliced Design (FSD), closures, hoisting, scope, inmutabilidad, DRY, SOLID y el ciclo Scrum completo con 4 sprints simulados | El proyecto contiene 7+ documentos técnicos en `src/docs/` y un README que funciona como guía de estudio integral |
+| OE-4 | Documentar cada decisión técnica como material de estudio para programadores junior, incluyendo la arquitectura Feature-Sliced Design (FSD), closures, hoisting, scope, inmutabilidad, DRY, SOLID y el ciclo Scrum completo con 4 sprints simulados    | El proyecto contiene 7+ documentos técnicos en `src/docs/` y un README que funciona como guía de estudio integral                                             |
 
 ### 1.3 Justificación y Alcance
 
@@ -53,6 +53,7 @@ Construir una aplicación web SPA (Single Page Application) en React 18 que perm
 **Valor educativo**: El proyecto no resuelve un problema de negocio nuevo (explorar perfiles de GitHub), sino que **re-resuelve un problema conocido aplicando las mejores prácticas de la industria frontend**. Esto lo convierte en un recurso didáctico donde un desarrollador junior puede ver Feature-Sliced Design (FSD), TanStack Query, Zod, patrones GoF, inmutabilidad, closures y Scrum aplicados en un código real y funcional.
 
 **Valor técnico**:
+
 - La arquitectura FSD es _over-engineered_ para una app de búsqueda simple, pero deliberadamente así para demostrar escalabilidad y orden
 - TanStack Query con cache policy configurable muestra cómo manejar estado de servidor sin Redux
 - Zod en runtime protege contra cambios silenciosos en la API de GitHub
@@ -62,33 +63,33 @@ Construir una aplicación web SPA (Single Page Application) en React 18 que perm
 
 #### Alcance
 
-| Incluye | No incluye |
-|---------|------------|
-| Búsqueda de usuarios de GitHub por username | Autenticación OAuth con GitHub |
+| Incluye                                                                                            | No incluye                                                  |
+| -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Búsqueda de usuarios de GitHub por username                                                        | Autenticación OAuth con GitHub                              |
 | Visualización de resultados en tarjetas glass con foto, username, bio, repos, followers, following | Modificación de datos en GitHub (crear repos, issues, etc.) |
-| Detalle de perfil con bento grid asimétrico | Base de datos propia (toda la data viene de GitHub API) |
-| Tema claro "Holographic Terminal" y oscuro "Cyberpunk" | Soporte offline total (solo mocks en desarrollo con MSW) |
-| MSW para mock de API en desarrollo | Server-Side Rendering (CSR puro) |
-| Lazy loading de rutas con `React.lazy()` + `Suspense` | PWA con Service Workers |
-| Caché con TanStack Query (staleTime 5min, gcTime 10min) | Testing automatizado (Vitest instalado pero sin tests) |
-| Documentación completa como guía de estudio | Internacionalización (i18n) |
-| Despliegue en GitHub Pages | Accesibilidad completa WCAG AAA (solo AA) |
+| Detalle de perfil con bento grid asimétrico                                                        | Base de datos propia (toda la data viene de GitHub API)     |
+| Tema claro "Holographic Terminal" y oscuro "Cyberpunk"                                             | Soporte offline total (solo mocks en desarrollo con MSW)    |
+| MSW para mock de API en desarrollo                                                                 | Server-Side Rendering (CSR puro)                            |
+| Lazy loading de rutas con `React.lazy()` + `Suspense`                                              | PWA con Service Workers                                     |
+| Caché con TanStack Query (staleTime 5min, gcTime 10min)                                            | Testing automatizado (Vitest instalado pero sin tests)      |
+| Documentación completa como guía de estudio                                                        | Internacionalización (i18n)                                 |
+| Despliegue en GitHub Pages                                                                         | Accesibilidad completa WCAG AAA (solo AA)                   |
 
 ### 1.4 Modelo de Negocio — CANVAS
 
 > **Nota**: GitExplorer es un **proyecto educativo open-source sin fines de lucro**. El modelo CANVAS describe su propuesta de valor y segmento de usuarios, no un flujo de ingresos.
 
-| Bloque CANVAS | Descripción |
-|---------------|-------------|
-| **Segmento de Clientes** | Desarrolladores de software juniors y trainees (1-2 años de experiencia) que quieren aprender React, Feature-Sliced Design (FSD) y buenas prácticas frontend con un proyecto real. Reclutadores técnicos que usan la app como entrevista práctica. Autodidactas que consumen documentación técnica |
-| **Propuesta de Valor** | "Aprende React con buenas prácticas en un proyecto real documentado como estudio de caso" — cada línea de código, decisión arquitectónica y patrón de diseño está explicado en la documentación para que un junior lo entienda y lo replique |
-| **Canales** | GitHub Pages (app desplegada), repositorio GitHub con 7+ documentos técnicos, README como guía de estudio integral, comunidad dev.to/Medium (artículos derivados) |
-| **Relación con Clientes** | Open-source con issues y pull requests, documentación detallada en español, simulación Scrum completa para que el usuario entienda el proceso ágil |
-| **Fuentes de Ingresos** | No aplica (proyecto educativo sin fines de lucro). El "retorno" es la mejora del portafolio técnico del autor y el aprendizaje de la comunidad |
-| **Recursos Clave** | Código fuente documentado, 7 documentos técnicos en `src/docs/`, skills de opencode para IA, diseño glassmorphism con tema dual, API pública de GitHub (gratuita) |
-| **Actividades Clave** | Desarrollo iterativo con Scrum (4 sprints), refactorización continua, documentación de cada patrón y decisión, publicación de artefactos de ingeniería |
-| **Socios Clave** | GitHub (API pública gratuita), Vercel (Vite como bundler), Tailwind Labs (Tailwind CSS v4), TanStack (Query), la comunidad open-source |
-| **Estructura de Costos** | Horas de desarrollo (proyecto personal), dominio GitHub Pages (gratuito), API de GitHub (gratuita hasta 60 req/h sin token) |
+| Bloque CANVAS             | Descripción                                                                                                                                                                                                                                                                                        |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Segmento de Clientes**  | Desarrolladores de software juniors y trainees (1-2 años de experiencia) que quieren aprender React, Feature-Sliced Design (FSD) y buenas prácticas frontend con un proyecto real. Reclutadores técnicos que usan la app como entrevista práctica. Autodidactas que consumen documentación técnica |
+| **Propuesta de Valor**    | "Aprende React con buenas prácticas en un proyecto real documentado como estudio de caso" — cada línea de código, decisión arquitectónica y patrón de diseño está explicado en la documentación para que un junior lo entienda y lo replique                                                       |
+| **Canales**               | GitHub Pages (app desplegada), repositorio GitHub con 7+ documentos técnicos, README como guía de estudio integral, comunidad dev.to/Medium (artículos derivados)                                                                                                                                  |
+| **Relación con Clientes** | Open-source con issues y pull requests, documentación detallada en español, simulación Scrum completa para que el usuario entienda el proceso ágil                                                                                                                                                 |
+| **Fuentes de Ingresos**   | No aplica (proyecto educativo sin fines de lucro). El "retorno" es la mejora del portafolio técnico del autor y el aprendizaje de la comunidad                                                                                                                                                     |
+| **Recursos Clave**        | Código fuente documentado, 7 documentos técnicos en `src/docs/`, skills de opencode para IA, diseño glassmorphism con tema dual, API pública de GitHub (gratuita)                                                                                                                                  |
+| **Actividades Clave**     | Desarrollo iterativo con Scrum (4 sprints), refactorización continua, documentación de cada patrón y decisión, publicación de artefactos de ingeniería                                                                                                                                             |
+| **Socios Clave**          | GitHub (API pública gratuita), Vercel (Vite como bundler), Tailwind Labs (Tailwind CSS v4), TanStack (Query), la comunidad open-source                                                                                                                                                             |
+| **Estructura de Costos**  | Horas de desarrollo (proyecto personal), dominio GitHub Pages (gratuito), API de GitHub (gratuita hasta 60 req/h sin token)                                                                                                                                                                        |
 
 #### Flujo de Proceso de Negocio Clave
 
@@ -144,95 +145,95 @@ Construir una aplicación web SPA (Single Page Application) en React 18 que perm
 
 ### 2.1 Requerimientos Funcionales (RF)
 
-| ID | Descripción | Prioridad | Dependencia |
-|----|-------------|-----------|:-----------:|
-| RF-01 | El sistema debe mostrar un campo de texto donde el usuario pueda escribir el nombre de un usuario de GitHub | Alta | — |
-| RF-02 | El sistema debe implementar debounce de 500ms antes de ejecutar la búsqueda | Alta | RF-01 |
-| RF-03 | El sistema debe consultar la API de GitHub (`/search/users`) con el término de búsqueda | Alta | RF-02 |
-| RF-04 | El sistema debe cancelar la petición anterior si el usuario escribe un nuevo término antes de que se complete (AbortSignal) | Alta | RF-03 |
-| RF-05 | El sistema debe mostrar un skeleton grid animado mientras se cargan los resultados | Alta | RF-03 |
-| RF-06 | El sistema debe mostrar una tarjeta por cada usuario encontrado con: foto, username, nombre real, bio, repos, followers y following | Alta | RF-03 |
-| RF-07 | El sistema debe mostrar un mensaje "No se encontraron usuarios" si la búsqueda no produce resultados | Alta | RF-03 |
-| RF-08 | El sistema debe mostrar un panel de error con botón de reintento si la API falla o se excede el rate-limit | Alta | RF-03 |
-| RF-09 | El sistema debe cachear los resultados usando TanStack Query con staleTime de 5 minutos y gcTime de 10 minutos | Alta | RF-03 |
-| RF-10 | El sistema debe mostrar una notificación toast (Sonner) cuando ocurre un error de validación (422) o rate-limit (403) | Alta | RF-03 |
-| RF-11 | El sistema debe permitir navegar al detalle de un usuario haciendo clic en su tarjeta | Alta | RF-06 |
-| RF-12 | El sistema debe mostrar la página de detalle en un layout bento grid asimétrico con: avatar, nombre, bio, repos, followers, following, gists, ubicación, website, y enlace a GitHub | Alta | RF-11 |
-| RF-13 | El sistema debe mostrar un skeleton de carga mientras se obtienen los datos del detalle | Alta | RF-12 |
-| RF-14 | El sistema debe validar todos los datos entrantes de la API con Zod antes de renderizarlos | Alta | RF-03, RF-12 |
-| RF-15 | El sistema debe tener un botón de cambio de tema (claro/oscuro) con animación de transición | Alta | — |
-| RF-16 | El sistema debe persistir la preferencia de tema en localStorage | Alta | RF-15 |
-| RF-17 | El sistema debe detectar la preferencia de tema del sistema (`prefers-color-scheme`) en la primera visita | Alta | RF-15 |
-| RF-18 | El sistema debe aplicar el efecto glassmorphism (`backdrop-filter: blur(20px)`) en tarjetas, inputs y botones | Alta | — |
-| RF-19 | El sistema debe cargar las rutas de forma diferida con `React.lazy()` + `Suspense` | Alta | — |
-| RF-20 | El sistema debe usar path alias `@/*` para todas las importaciones internas | Alta | — |
-| RF-21 | El sistema debe funcionar en modo desarrollo sin conexión a internet usando MSW (Mock Service Worker) | Media | RF-03 |
-| RF-22 | El sistema debe desplegarse en GitHub Pages con base path `/myprojectapi01/` | Alta | — |
-| RF-23 | El sistema no debe incluir navbar (UX inmersiva desde el hero) | Alta | — |
-| RF-24 | El sistema debe animar la entrada de componentes con Motion v12 (spring physics: stiffness 120, damping 16) | Media | — |
-| RF-25 | El sistema debe mostrar un contador animado (AnimatedCounter) para las estadísticas numéricas en el detalle | Media | RF-12 |
-| RF-26 | El sistema debe ser responsive: layout adaptativo para mobile (stack), tablet y desktop (grid) | Alta | — |
-| RF-27 | El sistema debe tener un logger visual en consola con ASCII art que muestre el flujo de datos | Baja | — |
-| RF-28 | El sistema debe incluir PropTypes en todos los componentes para validación de props en desarrollo | Alta | — |
+| ID    | Descripción                                                                                                                                                                         | Prioridad | Dependencia  |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | :----------: |
+| RF-01 | El sistema debe mostrar un campo de texto donde el usuario pueda escribir el nombre de un usuario de GitHub                                                                         | Alta      |      —       |
+| RF-02 | El sistema debe implementar debounce de 500ms antes de ejecutar la búsqueda                                                                                                         | Alta      |    RF-01     |
+| RF-03 | El sistema debe consultar la API de GitHub (`/search/users`) con el término de búsqueda                                                                                             | Alta      |    RF-02     |
+| RF-04 | El sistema debe cancelar la petición anterior si el usuario escribe un nuevo término antes de que se complete (AbortSignal)                                                         | Alta      |    RF-03     |
+| RF-05 | El sistema debe mostrar un skeleton grid animado mientras se cargan los resultados                                                                                                  | Alta      |    RF-03     |
+| RF-06 | El sistema debe mostrar una tarjeta por cada usuario encontrado con: foto, username, nombre real, bio, repos, followers y following                                                 | Alta      |    RF-03     |
+| RF-07 | El sistema debe mostrar un mensaje "No se encontraron usuarios" si la búsqueda no produce resultados                                                                                | Alta      |    RF-03     |
+| RF-08 | El sistema debe mostrar un panel de error con botón de reintento si la API falla o se excede el rate-limit                                                                          | Alta      |    RF-03     |
+| RF-09 | El sistema debe cachear los resultados usando TanStack Query con staleTime de 5 minutos y gcTime de 10 minutos                                                                      | Alta      |    RF-03     |
+| RF-10 | El sistema debe mostrar una notificación toast (Sonner) cuando ocurre un error de validación (422) o rate-limit (403)                                                               | Alta      |    RF-03     |
+| RF-11 | El sistema debe permitir navegar al detalle de un usuario haciendo clic en su tarjeta                                                                                               | Alta      |    RF-06     |
+| RF-12 | El sistema debe mostrar la página de detalle en un layout bento grid asimétrico con: avatar, nombre, bio, repos, followers, following, gists, ubicación, website, y enlace a GitHub | Alta      |    RF-11     |
+| RF-13 | El sistema debe mostrar un skeleton de carga mientras se obtienen los datos del detalle                                                                                             | Alta      |    RF-12     |
+| RF-14 | El sistema debe validar todos los datos entrantes de la API con Zod antes de renderizarlos                                                                                          | Alta      | RF-03, RF-12 |
+| RF-15 | El sistema debe tener un botón de cambio de tema (claro/oscuro) con animación de transición                                                                                         | Alta      |      —       |
+| RF-16 | El sistema debe persistir la preferencia de tema en localStorage                                                                                                                    | Alta      |    RF-15     |
+| RF-17 | El sistema debe detectar la preferencia de tema del sistema (`prefers-color-scheme`) en la primera visita                                                                           | Alta      |    RF-15     |
+| RF-18 | El sistema debe aplicar el efecto glassmorphism (`backdrop-filter: blur(20px)`) en tarjetas, inputs y botones                                                                       | Alta      |      —       |
+| RF-19 | El sistema debe cargar las rutas de forma diferida con `React.lazy()` + `Suspense`                                                                                                  | Alta      |      —       |
+| RF-20 | El sistema debe usar path alias `@/*` para todas las importaciones internas                                                                                                         | Alta      |      —       |
+| RF-21 | El sistema debe funcionar en modo desarrollo sin conexión a internet usando MSW (Mock Service Worker)                                                                               | Media     |    RF-03     |
+| RF-22 | El sistema debe desplegarse en GitHub Pages con base path `/myprojectapi01/`                                                                                                        | Alta      |      —       |
+| RF-23 | El sistema no debe incluir navbar (UX inmersiva desde el hero)                                                                                                                      | Alta      |      —       |
+| RF-24 | El sistema debe animar la entrada de componentes con Motion v12 (spring physics: stiffness 120, damping 16)                                                                         | Media     |      —       |
+| RF-25 | El sistema debe mostrar un contador animado (AnimatedCounter) para las estadísticas numéricas en el detalle                                                                         | Media     |    RF-12     |
+| RF-26 | El sistema debe ser responsive: layout adaptativo para mobile (stack), tablet y desktop (grid)                                                                                      | Alta      |      —       |
+| RF-27 | El sistema debe tener un logger visual en consola con ASCII art que muestre el flujo de datos                                                                                       | Baja      |      —       |
+| RF-28 | El sistema debe incluir PropTypes en todos los componentes para validación de props en desarrollo                                                                                   | Alta      |      —       |
 
 ### 2.2 Requerimientos No Funcionales (RNF)
 
-| ID | Descripción | Categoría | Métrica |
-|----|-------------|-----------|---------|
-| RNF-01 | La aplicación debe ser 100% web (SPA), funcionando exclusivamente en el navegador sin necesidad de instalación | Operativo | Sin binarios, sin plugins |
-| RNF-02 | La aplicación debe funcionar correctamente en las últimas 2 versiones de Chrome, Firefox, Edge y Safari | Portabilidad | Cross-browser testing |
-| RNF-03 | La aplicación debe ser responsive: mobile (< 480px), tablet (481-768px), desktop (> 768px) | Usabilidad | Layout no se rompe en ningún viewport |
-| RNF-04 | El tiempo de carga inicial (First Contentful Paint) debe ser menor a 2 segundos en conexión 4G | Rendimiento | Lighthouse FCP < 2s |
-| RNF-05 | El tiempo de búsqueda con caché caliente debe ser menor a 100ms (sin llamada de red) | Rendimiento | Network tab 0 requests |
-| RNF-06 | El tamaño del bundle JS principal debe ser menor a 300 KB (gzipped) | Rendimiento | Build report |
-| RNF-07 | La aplicación debe pasar ESLint con 0 warnings y 0 errores | Calidad | `pnpm lint --max-warnings 0` |
-| RNF-08 | La aplicación no debe contener `console.log` en producción (solo logger con fines educativos desactivado en build) | Calidad | ESLint rule `no-console` |
-| RNF-09 | La aplicación debe cumplir con criterios de accesibilidad WCAG 2.1 nivel AA | Accesibilidad | ESLint plugin jsx-a11y, atributos aria |
-| RNF-10 | La aplicación debe validar todos los datos externos con Zod antes de usarlos | Seguridad | Ningún dato sin validar llega a un componente |
-| RNF-11 | La aplicación debe usar TanStack Query para toda la comunicación con el servidor, no Redux | Arquitectura | Sin dependencia de Redux en package.json |
-| RNF-12 | La aplicación debe seguir la arquitectura Feature-Sliced Design (FSD) en 6 capas: app → pages → widgets → features → entities → shared | Arquitectura | Las capas superiores no importan de las inferiores |
-| RNF-13 | La aplicación debe usar el patrón Facade para ocultar la complejidad de TanStack Query de los componentes | Arquitectura | Los componentes solo llaman a facades, no a queries directamente |
-| RNF-14 | La aplicación debe usar el patrón Adapter para transformar datos de la API al modelo interno | Arquitectura | Ninguna propiedad de la API cruda llega a presentation |
-| RNF-15 | La aplicación debe usar el patrón Factory para renderizar diferentes tipos de resultados (User vs Organization) | Arquitectura | `ResultFactory` decide qué componente renderizar según `data.type` |
+| ID     | Descripción                                                                                                                            | Categoría     | Métrica                                                            |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------------------ |
+| RNF-01 | La aplicación debe ser 100% web (SPA), funcionando exclusivamente en el navegador sin necesidad de instalación                         | Operativo     | Sin binarios, sin plugins                                          |
+| RNF-02 | La aplicación debe funcionar correctamente en las últimas 2 versiones de Chrome, Firefox, Edge y Safari                                | Portabilidad  | Cross-browser testing                                              |
+| RNF-03 | La aplicación debe ser responsive: mobile (< 480px), tablet (481-768px), desktop (> 768px)                                             | Usabilidad    | Layout no se rompe en ningún viewport                              |
+| RNF-04 | El tiempo de carga inicial (First Contentful Paint) debe ser menor a 2 segundos en conexión 4G                                         | Rendimiento   | Lighthouse FCP < 2s                                                |
+| RNF-05 | El tiempo de búsqueda con caché caliente debe ser menor a 100ms (sin llamada de red)                                                   | Rendimiento   | Network tab 0 requests                                             |
+| RNF-06 | El tamaño del bundle JS principal debe ser menor a 300 KB (gzipped)                                                                    | Rendimiento   | Build report                                                       |
+| RNF-07 | La aplicación debe pasar ESLint con 0 warnings y 0 errores                                                                             | Calidad       | `pnpm lint --max-warnings 0`                                       |
+| RNF-08 | La aplicación no debe contener `console.log` en producción (solo logger con fines educativos desactivado en build)                     | Calidad       | ESLint rule `no-console`                                           |
+| RNF-09 | La aplicación debe cumplir con criterios de accesibilidad WCAG 2.1 nivel AA                                                            | Accesibilidad | ESLint plugin jsx-a11y, atributos aria                             |
+| RNF-10 | La aplicación debe validar todos los datos externos con Zod antes de usarlos                                                           | Seguridad     | Ningún dato sin validar llega a un componente                      |
+| RNF-11 | La aplicación debe usar TanStack Query para toda la comunicación con el servidor, no Redux                                             | Arquitectura  | Sin dependencia de Redux en package.json                           |
+| RNF-12 | La aplicación debe seguir la arquitectura Feature-Sliced Design (FSD) en 6 capas: app → pages → widgets → features → entities → shared | Arquitectura  | Las capas superiores no importan de las inferiores                 |
+| RNF-13 | La aplicación debe usar el patrón Facade para ocultar la complejidad de TanStack Query de los componentes                              | Arquitectura  | Los componentes solo llaman a facades, no a queries directamente   |
+| RNF-14 | La aplicación debe usar el patrón Adapter para transformar datos de la API al modelo interno                                           | Arquitectura  | Ninguna propiedad de la API cruda llega a presentation             |
+| RNF-15 | La aplicación debe usar el patrón Factory para renderizar diferentes tipos de resultados (User vs Organization)                        | Arquitectura  | `ResultFactory` decide qué componente renderizar según `data.type` |
 
 #### Requerimientos de Hardware y Software
 
-| Entorno | Componente | Especificación |
-|---------|-----------|----------------|
+| Entorno                 | Componente        | Especificación                                                    |
+| ----------------------- | ----------------- | ----------------------------------------------------------------- |
 | **Cliente (navegador)** | Sistema operativo | Windows 10+, macOS 11+, Linux (kernel 5.x+), Android 10+, iOS 14+ |
-| **Cliente (navegador)** | Navegador | Chrome 100+, Firefox 100+, Edge 100+, Safari 15+ |
-| **Cliente (navegador)** | Memoria RAM | 512 MB mínimo (navegador moderno con 1 pestaña) |
-| **Cliente (navegador)** | Conexión | 1 Mbps mínimo (funciona offline con MSW en desarrollo) |
-| **Servidor (hosting)** | Plataforma | GitHub Pages (CDN estático, sin servidor de aplicaciones) |
-| **Servidor (hosting)** | Almacenamiento | < 5 MB (build de estáticos: HTML, JS, CSS) |
-| **Servidor (API)** | Plataforma | API pública de GitHub (https://api.github.com) |
-| **Servidor (API)** | Rate limit | 60 requests/hora sin autenticación, 5000 req/h con token |
-| **Desarrollo** | Node.js | v18+ (LTS) |
-| **Desarrollo** | Package manager | pnpm 9+ |
-| **Desarrollo** | Editor | VS Code, WebStorm, o cualquier editor con soporte JSX |
-| **Desarrollo** | RAM | 4 GB mínimo (para Vite HMR y ESLint) |
+| **Cliente (navegador)** | Navegador         | Chrome 100+, Firefox 100+, Edge 100+, Safari 15+                  |
+| **Cliente (navegador)** | Memoria RAM       | 512 MB mínimo (navegador moderno con 1 pestaña)                   |
+| **Cliente (navegador)** | Conexión          | 1 Mbps mínimo (funciona offline con MSW en desarrollo)            |
+| **Servidor (hosting)**  | Plataforma        | GitHub Pages (CDN estático, sin servidor de aplicaciones)         |
+| **Servidor (hosting)**  | Almacenamiento    | < 5 MB (build de estáticos: HTML, JS, CSS)                        |
+| **Servidor (API)**      | Plataforma        | API pública de GitHub (https://api.github.com)                    |
+| **Servidor (API)**      | Rate limit        | 60 requests/hora sin autenticación, 5000 req/h con token          |
+| **Desarrollo**          | Node.js           | v18+ (LTS)                                                        |
+| **Desarrollo**          | Package manager   | pnpm 9+                                                           |
+| **Desarrollo**          | Editor            | VS Code, WebStorm, o cualquier editor con soporte JSX             |
+| **Desarrollo**          | RAM               | 4 GB mínimo (para Vite HMR y ESLint)                              |
 
 ### 2.3 Casos de Uso del Sistema
 
 #### Listado de Casos de Uso
 
-| ID | Caso de Uso | Actor | RF Asociado | Prioridad |
-|----|-------------|-------|:-----------:|:---------:|
-| CU-01 | Buscar usuarios de GitHub | Usuario no autenticado | RF-01, RF-02, RF-03, RF-04, RF-09 | Alta |
-| CU-02 | Ver resultados de búsqueda | Usuario | RF-05, RF-06, RF-07 | Alta |
-| CU-03 | Manejar error de API | Usuario | RF-08, RF-10 | Alta |
-| CU-04 | Reintentar búsqueda fallida | Usuario | RF-08 | Alta |
-| CU-05 | Ver detalle de usuario | Usuario | RF-11, RF-12, RF-13 | Alta |
-| CU-06 | Cambiar tema claro/oscuro | Usuario | RF-15, RF-16, RF-17 | Alta |
-| CU-07 | Navegar con teclado (accesibilidad) | Usuario | RNF-09 | Media |
-| CU-08 | Ver skeleton durante carga | Usuario | RF-05, RF-13 | Alta |
-| CU-09 | Ver input de búsqueda vacío | Usuario | RF-01 | Alta |
-| CU-10 | Ver animaciones de entrada | Usuario | RF-24 | Media |
-| CU-11 | Ver logger de flujo en consola | Desarrollador | RF-27 | Baja |
-| CU-12 | Usar MSW en desarrollo | Desarrollador | RF-21 | Media |
-| CU-13 | Desplegar a GitHub Pages | Desarrollador | RF-22 | Alta |
-| CU-14 | Validar código con ESLint | Desarrollador | RNF-07 | Alta |
-| CU-15 | Construir proyecto para producción | Desarrollador | RNF-06 | Alta |
+| ID    | Caso de Uso                         | Actor                  |            RF Asociado            | Prioridad |
+| ----- | ----------------------------------- | ---------------------- | :-------------------------------: | :-------: |
+| CU-01 | Buscar usuarios de GitHub           | Usuario no autenticado | RF-01, RF-02, RF-03, RF-04, RF-09 |   Alta    |
+| CU-02 | Ver resultados de búsqueda          | Usuario                |        RF-05, RF-06, RF-07        |   Alta    |
+| CU-03 | Manejar error de API                | Usuario                |           RF-08, RF-10            |   Alta    |
+| CU-04 | Reintentar búsqueda fallida         | Usuario                |               RF-08               |   Alta    |
+| CU-05 | Ver detalle de usuario              | Usuario                |        RF-11, RF-12, RF-13        |   Alta    |
+| CU-06 | Cambiar tema claro/oscuro           | Usuario                |        RF-15, RF-16, RF-17        |   Alta    |
+| CU-07 | Navegar con teclado (accesibilidad) | Usuario                |              RNF-09               |   Media   |
+| CU-08 | Ver skeleton durante carga          | Usuario                |           RF-05, RF-13            |   Alta    |
+| CU-09 | Ver input de búsqueda vacío         | Usuario                |               RF-01               |   Alta    |
+| CU-10 | Ver animaciones de entrada          | Usuario                |               RF-24               |   Media   |
+| CU-11 | Ver logger de flujo en consola      | Desarrollador          |               RF-27               |   Baja    |
+| CU-12 | Usar MSW en desarrollo              | Desarrollador          |               RF-21               |   Media   |
+| CU-13 | Desplegar a GitHub Pages            | Desarrollador          |               RF-22               |   Alta    |
+| CU-14 | Validar código con ESLint           | Desarrollador          |              RNF-07               |   Alta    |
+| CU-15 | Construir proyecto para producción  | Desarrollador          |              RNF-06               |   Alta    |
 
 #### Especificación de Casos de Uso del Sistema (ECUS) — 3 Casos Críticos
 
@@ -240,17 +241,18 @@ Construir una aplicación web SPA (Single Page Application) en React 18 que perm
 
 ##### ECUS-01: Buscar usuarios de GitHub
 
-| Elemento | Descripción |
-|----------|-------------|
-| **ID** | CU-01 |
-| **Nombre** | Buscar usuarios de GitHub |
-| **Actor** | Usuario no autenticado (cualquier visitante de la aplicación) |
-| **Descripción** | El usuario escribe un término de búsqueda (username de GitHub) en el campo de texto del hero. El sistema aplica debounce de 500ms, cancela la petición anterior si existe, consulta la API de GitHub, valida los datos con Zod, los cachea con TanStack Query y renderiza una cuadrícula de tarjetas glass con los resultados |
-| **Precondición** | El usuario está en la página de inicio con el input de búsqueda visible y funcional |
-| **Postcondición (éxito)** | Se muestra una cuadrícula con N tarjetas glass (0 ≤ N ≤ 30) con foto, username, nombre, bio, repos, followers y following de cada usuario encontrado |
-| **Postcondición (fracaso)** | Se muestra ErrorDisplay con mensaje descriptivo y botón de reintento, más un toast notification con el código de error |
+| Elemento                    | Descripción                                                                                                                                                                                                                                                                                                                   |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **ID**                      | CU-01                                                                                                                                                                                                                                                                                                                         |
+| **Nombre**                  | Buscar usuarios de GitHub                                                                                                                                                                                                                                                                                                     |
+| **Actor**                   | Usuario no autenticado (cualquier visitante de la aplicación)                                                                                                                                                                                                                                                                 |
+| **Descripción**             | El usuario escribe un término de búsqueda (username de GitHub) en el campo de texto del hero. El sistema aplica debounce de 500ms, cancela la petición anterior si existe, consulta la API de GitHub, valida los datos con Zod, los cachea con TanStack Query y renderiza una cuadrícula de tarjetas glass con los resultados |
+| **Precondición**            | El usuario está en la página de inicio con el input de búsqueda visible y funcional                                                                                                                                                                                                                                           |
+| **Postcondición (éxito)**   | Se muestra una cuadrícula con N tarjetas glass (0 ≤ N ≤ 30) con foto, username, nombre, bio, repos, followers y following de cada usuario encontrado                                                                                                                                                                          |
+| **Postcondición (fracaso)** | Se muestra ErrorDisplay con mensaje descriptivo y botón de reintento, más un toast notification con el código de error                                                                                                                                                                                                        |
 
 **Flujo Normal**:
+
 ```
 1.  El usuario accede a la aplicación (GET /)
 2.  El sistema renderiza PageHeader con el input de búsqueda
@@ -291,6 +293,7 @@ Construir una aplicación web SPA (Single Page Application) en React 18 que perm
 ```
 
 **Flujo Alternativo**:
+
 ```
 PASO 12a: El usuario escribe un nuevo término mientras se ejecuta la petición
            → TanStack Query detecta cambio en queryKey
@@ -304,6 +307,7 @@ PASO 23a: searchTerm tiene menos de 3 caracteres
 ```
 
 **Excepciones**:
+
 ```
 E-01: Rate limit excedido (HTTP 403)
       → userService.js lanza ApiError("HTTP Error: 403 Forbidden", 403)
@@ -325,6 +329,7 @@ E-03: Datos inválidos de API (ZodError)
 ```
 
 **Reglas de Negocio**:
+
 ```
 RN-01: No se ejecuta búsqueda si searchTerm tiene menos de 3 caracteres
 RN-02: La petición anterior se aborta si el queryKey cambia
@@ -342,17 +347,18 @@ RN-06: No se re-ejecuta la query al volver a la pestaña (refetchOnWindowFocus: 
 
 ##### ECUS-02: Ver detalle de usuario
 
-| Elemento | Descripción |
-|----------|-------------|
-| **ID** | CU-05 |
-| **Nombre** | Ver detalle de usuario |
-| **Actor** | Usuario no autenticado |
-| **Descripción** | El usuario hace clic en una tarjeta de resultado de búsqueda. El sistema navega a la ruta `/user/:login`, obtiene los datos detallados del usuario desde la API de GitHub, los valida con Zod, los cachea con TanStack Query y renderiza una página de perfil completa con layout bento grid asimétrico que incluye avatar, nombre, bio, estadísticas animadas (repos, followers, following, gists), ubicación, website y enlace externo a GitHub |
-| **Precondición** | El usuario ha realizado una búsqueda exitosa (CU-01) y ve una cuadrícula de tarjetas de usuario |
-| **Postcondición (éxito)** | Se muestra la página de detalle del usuario con bento grid de 5 cards (repos doble ancho, followers, following, gists, terminal simulada), footer con ubicación, website y enlace a GitHub. Las estadísticas tienen contadores animados con spring physics |
-| **Postcondición (fracaso)** | Se muestra una pantalla de error con mensaje descriptivo y enlace "Regresar al Buscador" |
+| Elemento                    | Descripción                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **ID**                      | CU-05                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| **Nombre**                  | Ver detalle de usuario                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| **Actor**                   | Usuario no autenticado                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| **Descripción**             | El usuario hace clic en una tarjeta de resultado de búsqueda. El sistema navega a la ruta `/user/:login`, obtiene los datos detallados del usuario desde la API de GitHub, los valida con Zod, los cachea con TanStack Query y renderiza una página de perfil completa con layout bento grid asimétrico que incluye avatar, nombre, bio, estadísticas animadas (repos, followers, following, gists), ubicación, website y enlace externo a GitHub |
+| **Precondición**            | El usuario ha realizado una búsqueda exitosa (CU-01) y ve una cuadrícula de tarjetas de usuario                                                                                                                                                                                                                                                                                                                                                   |
+| **Postcondición (éxito)**   | Se muestra la página de detalle del usuario con bento grid de 5 cards (repos doble ancho, followers, following, gists, terminal simulada), footer con ubicación, website y enlace a GitHub. Las estadísticas tienen contadores animados con spring physics                                                                                                                                                                                        |
+| **Postcondición (fracaso)** | Se muestra una pantalla de error con mensaje descriptivo y enlace "Regresar al Buscador"                                                                                                                                                                                                                                                                                                                                                          |
 
 **Flujo Normal**:
+
 ```
 1.  El usuario visualiza la cuadrícula de resultados de búsqueda
 2.  El usuario hace clic en una tarjeta UserCard
@@ -388,6 +394,7 @@ RN-06: No se re-ejecuta la query al volver a la pestaña (refetchOnWindowFocus: 
 ```
 
 **Flujo Alternativo**:
+
 ```
 PASO 3a: El usuario navega directamente a /user/{username} sin pasar por búsqueda
           → El flujo continúa desde PASO 4 sin cambios
@@ -402,6 +409,7 @@ PASO 17a: isLoading es true durante más de 5 segundos
 ```
 
 **Excepciones**:
+
 ```
 E-01: Usuario no encontrado (HTTP 404)
       → ApiError("HTTP Error: 404 Not Found", 404)
@@ -418,6 +426,7 @@ E-03: Datos inválidos
 ```
 
 **Reglas de Negocio**:
+
 ```
 RN-01: La query solo se ejecuta si login tiene valor (enabled: !!login)
 RN-02: Los datos de detalle se cachean independientemente de los datos de búsqueda
@@ -431,17 +440,18 @@ RN-03: staleTime y gcTime aplican igual que en búsqueda (5min y 10min)
 
 ##### ECUS-03: Cambiar tema claro/oscuro
 
-| Elemento | Descripción |
-|----------|-------------|
-| **ID** | CU-06 |
-| **Nombre** | Cambiar tema claro/oscuro |
-| **Actor** | Usuario no autenticado |
-| **Descripción** | El usuario hace clic en el botón de cambio de tema (ThemeToggle). El sistema alterna entre el tema claro "Holographic Terminal" (fondo #F0EDE8, acentos teal) y el tema oscuro "Cyberpunk" (fondo #0A0A0F, acentos cyan #00F0FF) añadiendo o removiendo la clase `.dark` del elemento `<html>`. Las variables CSS en `:root` y `.dark` cambian automáticamente, lo que provoca que todos los componentes se repinten con los nuevos colores sin necesidad de lógica condicional en JSX. La preferencia se persiste en localStorage |
-| **Precondición** | La aplicación está renderizada con un tema activo (claro u oscuro). El botón ThemeToggle es visible y funcional |
-| **Postcondición (éxito)** | La UI completa se repinta con los colores del tema alternativo. La preferencia se guarda en localStorage. El icono del botón cambia (sol ↔ luna) con animación de rotación |
-| **Postcondición (fracaso)** | No aplica. El cambio de tema no depende de APIs externas ni de condiciones de red. El único caso de fracaso sería un error en JavaScript que impida la ejecución del event handler |
+| Elemento                    | Descripción                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **ID**                      | CU-06                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| **Nombre**                  | Cambiar tema claro/oscuro                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| **Actor**                   | Usuario no autenticado                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| **Descripción**             | El usuario hace clic en el botón de cambio de tema (ThemeToggle). El sistema alterna entre el tema claro "Holographic Terminal" (fondo #F0EDE8, acentos teal) y el tema oscuro "Cyberpunk" (fondo #0A0A0F, acentos cyan #00F0FF) añadiendo o removiendo la clase `.dark` del elemento `<html>`. Las variables CSS en `:root` y `.dark` cambian automáticamente, lo que provoca que todos los componentes se repinten con los nuevos colores sin necesidad de lógica condicional en JSX. La preferencia se persiste en localStorage |
+| **Precondición**            | La aplicación está renderizada con un tema activo (claro u oscuro). El botón ThemeToggle es visible y funcional                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| **Postcondición (éxito)**   | La UI completa se repinta con los colores del tema alternativo. La preferencia se guarda en localStorage. El icono del botón cambia (sol ↔ luna) con animación de rotación                                                                                                                                                                                                                                                                                                                                                         |
+| **Postcondición (fracaso)** | No aplica. El cambio de tema no depende de APIs externas ni de condiciones de red. El único caso de fracaso sería un error en JavaScript que impida la ejecución del event handler                                                                                                                                                                                                                                                                                                                                                 |
 
 **Flujo Normal**:
+
 ```
 1.  El usuario visualiza la interfaz con el tema actual (ej: claro "Holographic Terminal")
 2.  El usuario hace clic en el botón ThemeToggle (icono de luna si está en claro, sol si está en oscuro)
@@ -468,6 +478,7 @@ RN-03: staleTime y gcTime aplican igual que en búsqueda (5min y 10min)
 ```
 
 **Flujo Alternativo**:
+
 ```
 No aplica. El caso de uso tiene una único flujo lineal sin bifurcaciones.
 
@@ -481,6 +492,7 @@ Variante: El usuario cierra el navegador y vuelve a abrir la aplicación
 ```
 
 **Excepciones**:
+
 ```
 E-01: localStorage no disponible (navegador en modo incógnito restrictivo o bloqueado)
       → try/catch implicito: el error se silencia
@@ -492,6 +504,7 @@ E-02: document.documentElement no disponible (ejecución en SSR o testing)
 ```
 
 **Reglas de Negocio**:
+
 ```
 RN-01: El tema persiste en localStorage bajo la clave "theme"
 RN-02: La prioridad de selección de tema inicial: 1) localStorage, 2) prefers-color-scheme, 3) "light"
@@ -573,23 +586,21 @@ classDiagram
         +Promise~any~ request(url, options)
     }
 
-    GitHubUserSchema <.. userAdapter : valida
+    userAdapter ..> GitHubUserSchema : valida
     userAdapter ..> UserProfile : crea
-    ApiError <-- httpClient : lanza
-    httpClient <-- fetchUsersAPI : usa
-    httpClient <-- fetchUserDetailAPI : usa
-    userAdapter <-- fetchUsersAPI : usa
-    userAdapter <-- fetchUserDetailAPI : usa
+    httpClient --> ApiError : lanza
+    fetchUsersAPI --> httpClient : usa
+    fetchUserDetailAPI --> httpClient : usa
 ```
 
 #### Entidades del Dominio
 
-| Entidad | Propiedades | Descripción |
-|---------|------------|-------------|
-| **UserProfile** | id, username, name, photo, profileUrl, type, bio, repos, followers, following, gists, location, website, origin | Modelo interno estandarizado. No depende de la estructura de GitHub. Si la API cambia, solo se modifica el adapter |
-| **GitHubUserSchema** | (Zod schema) | Define la estructura exacta que se espera de la API. Usa `.optional().default()` para campos que pueden faltar |
-| **ApiError** | message, status, name | Error personalizado con código HTTP. Se usa en toda la cadena: httpClient → service → facade → UI |
-| **Repository** | *(no implementado)* | name, description, stars, forks, language, url. Planeado para futura expansión del detalle de usuario |
+| Entidad              | Propiedades                                                                                                     | Descripción                                                                                                        |
+| -------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **UserProfile**      | id, username, name, photo, profileUrl, type, bio, repos, followers, following, gists, location, website, origin | Modelo interno estandarizado. No depende de la estructura de GitHub. Si la API cambia, solo se modifica el adapter |
+| **GitHubUserSchema** | (Zod schema)                                                                                                    | Define la estructura exacta que se espera de la API. Usa `.optional().default()` para campos que pueden faltar     |
+| **ApiError**         | message, status, name                                                                                           | Error personalizado con código HTTP. Se usa en toda la cadena: httpClient → service → facade → UI                  |
+| **Repository**       | _(no implementado)_                                                                                             | name, description, stars, forks, language, url. Planeado para futura expansión del detalle de usuario              |
 
 ---
 
@@ -599,19 +610,19 @@ classDiagram
 
 GitExplorer es una **Single Page Application (SPA)** construida sobre un stack moderno que prioriza rendimiento, mantenibilidad y experiencia de desarrollador:
 
-| Capa | Tecnología | Propósito |
-|------|-----------|-----------|
-| **Bundler** | Vite 5.4 | HMR instantáneo en desarrollo. Producción con code-splitting automático. Sin bundler en dev (ESM nativo) |
-| **UI Framework** | React 18.3 | Componentes funcionales con hooks. Arquitectura declarativa. Sin clases |
-| **Enrutamiento** | React Router v7 | SPA routing con lazy loading. `createBrowserRouter` con loaders |
-| **Estado servidor** | TanStack Query v5 | Caché, fetching, sincronización y retry automático. Sin Redux |
-| **Estilos** | Tailwind CSS v4 | Framework utilitario con diseño atómico. Variables CSS para el sistema de temas |
-| **Animaciones** | Motion v12 | Spring physics para animaciones naturales (stiffness, damping). AnimatePresence para transiciones de salida |
-| **Validación** | Zod v4 | Esquemas de validación en runtime. Parseo y transformación de datos externos |
-| **Iconos** | Lucide React v1.16 | Iconos SVG limpios y consistentes. Personalizables por CSS |
-| **Notificaciones** | Sonner v2 | Toast livianos con richColors y animaciones |
-| **Testing** | Vitest | *(instalado, sin tests escritos)* |
-| **Mock API** | MSW | Intercepta peticiones HTTP en desarrollo usando Service Worker |
+| Capa                | Tecnología         | Propósito                                                                                                   |
+| ------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| **Bundler**         | Vite 5.4           | HMR instantáneo en desarrollo. Producción con code-splitting automático. Sin bundler en dev (ESM nativo)    |
+| **UI Framework**    | React 18.3         | Componentes funcionales con hooks. Arquitectura declarativa. Sin clases                                     |
+| **Enrutamiento**    | React Router v7    | SPA routing con lazy loading. `createBrowserRouter` con loaders                                             |
+| **Estado servidor** | TanStack Query v5  | Caché, fetching, sincronización y retry automático. Sin Redux                                               |
+| **Estilos**         | Tailwind CSS v4    | Framework utilitario con diseño atómico. Variables CSS para el sistema de temas                             |
+| **Animaciones**     | Motion v12         | Spring physics para animaciones naturales (stiffness, damping). AnimatePresence para transiciones de salida |
+| **Validación**      | Zod v4             | Esquemas de validación en runtime. Parseo y transformación de datos externos                                |
+| **Iconos**          | Lucide React v1.16 | Iconos SVG limpios y consistentes. Personalizables por CSS                                                  |
+| **Notificaciones**  | Sonner v2          | Toast livianos con richColors y animaciones                                                                 |
+| **Testing**         | Vitest             | _(instalado, sin tests escritos)_                                                                           |
+| **Mock API**        | MSW                | Intercepta peticiones HTTP en desarrollo usando Service Worker                                              |
 
 **Principios de diseño de la plataforma**:
 
@@ -670,11 +681,11 @@ La arquitectura sigue el patrón **Feature-Sliced Design (FSD)** con 6 capas jer
 
 **Reglas de la arquitectura**:
 
-| Regla | Descripción | Violación detectada por |
-|-------|-------------|------------------------|
-| Dependencias en una sola dirección | Las capas superiores solo pueden importar de capas inferiores (ej. widget importa de feature, feature de entity, etc.) | ESLint (import/no-restricted-paths) |
-| Encapsulación vía Public APIs | Se accede a los elementos de un slice únicamente a través de su archivo `index.js` (Public API). Se prohíben las importaciones internas cruzadas | Revisión estática / Manual en code review |
-| Aislamiento de Shared | La capa Shared contiene utilidades puramente técnicas y reutilizables, libre de conceptos de negocio de otras capas | Ningún archivo en `src/shared/` importa de capas superiores |
+| Regla                              | Descripción                                                                                                                                      | Violación detectada por                                     |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
+| Dependencias en una sola dirección | Las capas superiores solo pueden importar de capas inferiores (ej. widget importa de feature, feature de entity, etc.)                           | ESLint (import/no-restricted-paths)                         |
+| Encapsulación vía Public APIs      | Se accede a los elementos de un slice únicamente a través de su archivo `index.js` (Public API). Se prohíben las importaciones internas cruzadas | Revisión estática / Manual en code review                   |
+| Aislamiento de Shared              | La capa Shared contiene utilidades puramente técnicas y reutilizables, libre de conceptos de negocio de otras capas                              | Ningún archivo en `src/shared/` importa de capas superiores |
 
 ### 3.3 Arquitectura de la Solución (Despliegue)
 
@@ -761,33 +772,36 @@ La arquitectura sigue el patrón **Feature-Sliced Design (FSD)** con 6 capas jer
 ```
 
 **Flujo de despliegue**:
+
 ```
 Desarrollador ejecuta:
     pnpm build        → Vite genera dist/ con bundles optimizados
     pnpm deploy       → gh-pages sube dist/ a la rama gh-pages
-    
+
 GitHub Actions (o manual):
     1. `vite build --mode production`
     2. `gh-pages -d dist`
-    
+
 Resultado:
     https://{user}.github.io/myprojectapi01/
 ```
 
 **Configuración de Vite para GitHub Pages**:
+
 ```js
 // vite.config.js
 export default defineConfig({
-  base: "/myprojectapi01/",       // base path para GitHub Pages
+  base: "/myprojectapi01/", // base path para GitHub Pages
   plugins: [react(), tailwindcss()],
   resolve: {
-    alias: { "@": "/src" },       // path alias
+    alias: { "@": "/src" }, // path alias
   },
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {           // code-splitting manual
-          "lucide": ["lucide-react"],
+        manualChunks: {
+          // code-splitting manual
+          lucide: ["lucide-react"],
         },
       },
     },
@@ -817,74 +831,74 @@ sequenceDiagram
     participant UL as UserList.jsx
     participant UC as UserCard.jsx
 
-    U->>PH: Escribe "mojombo" en el input
-    PH->>US: handleSearch(e) → setSearchTerm("mojombo")
-    US->>D: searchTerm cambia
-    D->>D: clearTimeout(anterior)
-    D->>D: setTimeout(500ms, callback)
+    U->>PH: "Escribe 'mojombo' en el input"
+    PH->>US: "handleSearch(e) -> setSearchTerm('mojombo')"
+    US->>D: "searchTerm cambia"
+    D->>D: "clearTimeout(anterior)"
+    D->>D: "setTimeout(500ms, callback)"
 
     Note over U,D: Usuario sigue escribiendo...
-    U->>PH: Escribe "mojom"
-    PH->>US: setSearchTerm("mojom")
-    US->>D: searchTerm cambia
-    D->>D: clearTimeout(anterior) ← cancela timeout previo
-    D->>D: setTimeout(500ms, callback)
+    U->>PH: "Escribe 'mojom'"
+    PH->>US: "setSearchTerm('mojom')"
+    US->>D: "searchTerm cambia"
+    D->>D: "clearTimeout(anterior) (cancela timeout previo)"
+    D->>D: "setTimeout(500ms, callback)"
 
     Note over U,D: Usuario deja de escribir 500ms
-    D->>F: debouncedSearchTerm = "mojom"
-    F->>Q: useUserQuery("mojom")
+    D->>F: "debouncedSearchTerm = 'mojom'"
+    F->>Q: "useUserQuery('mojom')"
 
-    alt ¿Caché fresca (staleTime 5min)?
-        Q->>Q: Devuelve datos cacheados
-        Q-->>F: { data: UserProfile[], status: "success" }
+    alt "¿Caché fresca (staleTime 5min)?"
+        Q->>Q: "Devuelve datos cacheados"
+        Q-->>F: "data: UserProfile[] (status: success)"
     else No hay caché
-        Q->>S: fetchUsersAPI("mojom", signal)
-        S->>H: httpClient(url, { signal })
-        H->>G: GET /search/users?q=mojom
+        Q->>S: "fetchUsersAPI('mojom', signal)"
+        S->>H: "httpClient(url, { signal })"
+        H->>G: "GET /search/users?q=mojom"
         Note over H,G: signal permite abortar si queryKey cambia
 
         alt Éxito (HTTP 200)
-            G-->>H: { items: [ {...}, {...} ] }
-            H-->>S: data.items (raw)
-            S->>A: usersCollectionAdapter(data.items)
-            A->>A: GitHubUserSchema.parse(rawUser) para cada uno
-            A-->>S: UserProfile[]
-            S-->>Q: Array<UserProfile>
-            Q->>Q: Cachea con queryKey ["users", "mojom"]
-            Q-->>F: { data: UserProfile[], status: "success" }
+            G-->>H: "JSON items list"
+            H-->>S: "data.items (raw)"
+            S->>A: "usersCollectionAdapter(data.items)"
+            A->>A: "GitHubUserSchema.parse(rawUser) para cada uno"
+            A-->>S: "UserProfile[]"
+            S-->>Q: "Array de UserProfile"
+            Q->>Q: "Cachea con queryKey ['users', 'mojom']"
+            Q-->>F: "data: UserProfile[] (status: success)"
         else Error HTTP (403, 404, 422)
-            G-->>H: HTTP Error
-            H->>H: Lanza ApiError(status)
-            H-->>S: ApiError propagado
-            S-->>Q: ApiError propagado
-            Q-->>F: { error: ApiError, status: "error" }
+            G-->>H: "HTTP Error"
+            H->>H: "Lanza ApiError(status)"
+            H-->>S: "ApiError propagado"
+            S-->>Q: "ApiError propagado"
+            Q-->>F: "error: ApiError (status: error)"
         else Error de red (sin internet)
-            H->>H: Lanza ApiError("Network request failed", 0)
-            H-->>S: ApiError propagado
-            S-->>Q: ApiError propagado
-            Q-->>F: { error: ApiError, status: "error" }
+            H->>H: "Lanza ApiError('Network request failed', 0)"
+            H-->>S: "ApiError propagado"
+            S-->>Q: "ApiError propagado"
+            Q-->>F: "error: ApiError (status: error)"
         end
     end
 
-    F->>F: Traduce estados: isLoading, isError, isEmpty, isSuccess
-    F-->>US: { users, isLoading, isError, error, isEmpty, ... }
+    F->>F: "Traduce estados: isLoading, isError, isEmpty, isSuccess"
+    F-->>US: "users, isLoading, isError, error, isEmpty, isSuccess"
 
-    US->>SR: Pasa props
+    US->>SR: "Pasa props"
 
     alt isLoading
-        SR-->>U: Muestra SkeletonGrid (6 skeletons animados)
+        SR-->>U: "Muestra SkeletonGrid (6 skeletons animados)"
     else isError
-        SR->>SR: Muestra ErrorDisplay con botón Retry
-        SR->>F: notificación toast con código de error
-        SR-->>U: Muestra panel de error + toast
+        SR->>SR: "Muestra ErrorDisplay con botón Retry"
+        SR->>F: "notificación toast con código de error"
+        SR-->>U: "Muestra panel de error + toast"
     else isEmpty
-        SR-->>U: Muestra NotFound "No se encontraron usuarios"
+        SR-->>U: "Muestra NotFound 'No se encontraron usuarios'"
     else isSuccess
-        SR->>UL: { users: UserProfile[] }
-        UL->>UC: props (username, photo, name, bio, repos, followers, following)
-        UL-->>U: Renderiza grid de UserCards con glassmorphism
-        U->>UC: Hace clic en una tarjeta
-        UC->>US: onClick → navega a /user/{username}
+        SR->>UL: "users: UserProfile[]"
+        UL->>UC: "props (username, photo, name, bio, repos, followers, following)"
+        UL-->>U: "Renderiza grid de UserCards con glassmorphism"
+        U->>UC: "Hace clic en una tarjeta"
+        UC->>US: "onClick -> navega a /user/{username}"
     end
 ```
 
@@ -966,12 +980,12 @@ sequenceDiagram
 
 #### Reglas del modelo conceptual
 
-| Relación | Cardinalidad | Descripción |
-|----------|:-----------:|-------------|
-| **User → Repository** | 1 : N | Un usuario puede tener 0 o más repositorios públicos |
-| **User → Organization** | M : N | Un usuario puede ser miembro de 0 o más organizaciones |
-| **User → User (followers)** | M : N | Seguidores y seguidos (relación no implementada en esta versión) |
-| **Organization → Repository** | 1 : N | Una organización puede tener 0 o más repositorios |
+| Relación                      | Cardinalidad | Descripción                                                      |
+| ----------------------------- | :----------: | ---------------------------------------------------------------- |
+| **User → Repository**         |    1 : N     | Un usuario puede tener 0 o más repositorios públicos             |
+| **User → Organization**       |    M : N     | Un usuario puede ser miembro de 0 o más organizaciones           |
+| **User → User (followers)**   |    M : N     | Seguidores y seguidos (relación no implementada en esta versión) |
+| **Organization → Repository** |    1 : N     | Una organización puede tener 0 o más repositorios                |
 
 **Nota sobre la herencia**: `type: "User" | "Organization"` en el esquema Zod funciona como un **discriminador**. Ambos tipos se validan con el mismo `GitHubUserSchema` pero se renderizan con componentes diferentes mediante `ResultFactory`. No hay herencia real de clases — es composición de componentes.
 
@@ -985,82 +999,82 @@ stateDiagram-v2
 
     state IDLE {
         [*] --> RenderInput
-        RenderInput --> WaitingInput: usuario ve el input
+        RenderInput --> WaitingInput: "usuario ve el input"
     }
 
-    IDLE --> LOADING: searchTerm cambia\ncon debounce ≥3 chars
+    IDLE --> LOADING: "searchTerm cambia con debounce >= 3 chars"
 
     state LOADING {
-        [*] --> Debouncing: usuario escribe
-        Debouncing --> Cancelling: escribe otro char\nantes de 500ms
-        Cancelling --> Debouncing: nuevo setTimeout 500ms
-        Debouncing --> Fetching: 500ms sin escribir
-        
+        [*] --> Debouncing: "usuario escribe"
+        Debouncing --> Cancelling: "escribe otro char antes de 500ms"
+        Cancelling --> Debouncing: "nuevo setTimeout 500ms"
+        Debouncing --> Fetching: "500ms sin escribir"
+
         state Fetching {
             [*] --> CacheCheck
-            CacheCheck --> CacheHit: staleTime vigente
-            CacheCheck --> APICall: caché vencida o inexistente
-            APICall --> Aborting: queryKey cambia
-            Aborting --> Fetching: nuevo término
-            APICall --> DataReady: respuesta exitosa
-            APICall --> ErrorOccurred: error HTTP o de red
+            CacheCheck --> CacheHit: "staleTime vigente"
+            CacheCheck --> APICall: "caché vencida o inexistente"
+            APICall --> Aborting: "queryKey cambia"
+            Aborting --> Fetching: "nuevo término"
+            APICall --> DataReady: "respuesta exitosa"
+            APICall --> ErrorOccurred: "error HTTP o de red"
         }
     }
 
-    LOADING --> SUCCESS: fetch exitoso\ncon datos
-    LOADING --> EMPTY: fetch exitoso\nsin resultados
-    LOADING --> ERROR: fetch falló
+    LOADING --> SUCCESS: "fetch exitoso con datos"
+    LOADING --> EMPTY: "fetch exitoso sin resultados"
+    LOADING --> ERROR: "fetch falló"
 
     state SUCCESS {
-        [*] --> RenderCards: grid de UserCards
-        RenderCards --> NavigatingCardClick: usuario hace clic
-        NavigatingCardClick --> [*]: navega a /user/{login}
-        
-        RenderCards --> ReSearching: usuario escribe\nnuevo término
+        [*] --> RenderCards: "grid de UserCards"
+        RenderCards --> NavigatingCardClick: "usuario hace clic"
+        NavigatingCardClick --> [*]: "navega a /user/{login}"
+
+        RenderCards --> ReSearching: "usuario escribe nuevo término"
         ReSearching --> LOADING
     }
-    SUCCESS --> LOADING: usuario escribe\nnuevo término
+    SUCCESS --> LOADING: "usuario escribe nuevo término"
 
     state EMPTY {
         [*] --> ShowNotFound
     }
-    EMPTY --> LOADING: usuario escribe\nnuevo término
+    EMPTY --> LOADING: "usuario escribe nuevo término"
 
     state ERROR {
         [*] --> ShowError
-        ShowError --> Retrying: usuario hace clic\nen "Reintentar"
+        ShowError --> Retrying: "usuario hace clic en 'Reintentar'"
         Retrying --> LOADING
     }
-    ERROR --> LOADING: retry
+    ERROR --> LOADING: "retry"
 
-    SUCCESS --> [*]: usuario cierra app
-    EMPTY --> [*]: usuario cierra app
-    ERROR --> [*]: usuario cierra app
-    IDLE --> [*]: usuario cierra app
+    SUCCESS --> [*]: "usuario cierra app"
+    EMPTY --> [*]: "usuario cierra app"
+    ERROR --> [*]: "usuario cierra app"
+    IDLE --> [*]: "usuario cierra app"
 ```
 
 **Descripción de estados**:
 
-| Estado | Descripción | Indicador en UI |
-|--------|-------------|----------------|
-| **IDLE** | Estado inicial. El usuario ve el input de búsqueda vacío. Sin datos, sin skeletons, sin errores | Input glass vacío, sin grid de resultados |
-| **LOADING** | El usuario escribió y el sistema está obteniendo datos. Incluye sub-estados de debouncing, fetching y posible cancelación | SkeletonGrid con 6 cards animadas |
-| **SUCCESS** | La API devolvió datos válidos y fueron procesados correctamente | Grid de UserCards con información de cada usuario |
-| **EMPTY** | La API devolvió una respuesta exitosa pero sin resultados | NotFound: "No se encontraron usuarios para '{termino}'" |
-| **ERROR** | La API falló (HTTP error, rate-limit, red, o validación Zod) | ErrorDisplay con mensaje + botón Retry + toast |
+| Estado      | Descripción                                                                                                               | Indicador en UI                                         |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| **IDLE**    | Estado inicial. El usuario ve el input de búsqueda vacío. Sin datos, sin skeletons, sin errores                           | Input glass vacío, sin grid de resultados               |
+| **LOADING** | El usuario escribió y el sistema está obteniendo datos. Incluye sub-estados de debouncing, fetching y posible cancelación | SkeletonGrid con 6 cards animadas                       |
+| **SUCCESS** | La API devolvió datos válidos y fueron procesados correctamente                                                           | Grid de UserCards con información de cada usuario       |
+| **EMPTY**   | La API devolvió una respuesta exitosa pero sin resultados                                                                 | NotFound: "No se encontraron usuarios para '{termino}'" |
+| **ERROR**   | La API falló (HTTP error, rate-limit, red, o validación Zod)                                                              | ErrorDisplay con mensaje + botón Retry + toast          |
 
 **Transiciones clave**:
 
-| Transición | Evento | Acción |
-|------------|--------|--------|
-| IDLE → LOADING | `debouncedSearchTerm` cambia con ≥ 3 caracteres | `queryKey` cambia, se ejecuta `queryFn` |
-| LOADING → LOADING | Usuario escribe otro carácter durante debounce | `clearTimeout` + nuevo `setTimeout` |
-| LOADING → SUCCESS | `status === "success"` y `data.length > 0` | `useUserSearchFacade` setea `isSuccess = true` |
-| LOADING → EMPTY | `status === "success"` y `data.length === 0` | `useUserSearchFacade` setea `isEmpty = true` |
-| LOADING → ERROR | `status === "error"` | `useUserSearchFacade` setea `isError = true`, muestra toast |
-| ERROR → LOADING | Usuario hace clic en Retry | `refetch()` ejecuta `queryFn` nuevamente |
-| SUCCESS → LOADING | Usuario escribe nuevo término | `queryKey` cambia, comienza nuevo ciclo |
-| SUCCESS → NavigatingCardClick | Usuario hace clic en tarjeta | `navigate(/user/${login})` — sale del estado de búsqueda |
+| Transición                    | Evento                                          | Acción                                                      |
+| ----------------------------- | ----------------------------------------------- | ----------------------------------------------------------- |
+| IDLE → LOADING                | `debouncedSearchTerm` cambia con ≥ 3 caracteres | `queryKey` cambia, se ejecuta `queryFn`                     |
+| LOADING → LOADING             | Usuario escribe otro carácter durante debounce  | `clearTimeout` + nuevo `setTimeout`                         |
+| LOADING → SUCCESS             | `status === "success"` y `data.length > 0`      | `useUserSearchFacade` setea `isSuccess = true`              |
+| LOADING → EMPTY               | `status === "success"` y `data.length === 0`    | `useUserSearchFacade` setea `isEmpty = true`                |
+| LOADING → ERROR               | `status === "error"`                            | `useUserSearchFacade` setea `isError = true`, muestra toast |
+| ERROR → LOADING               | Usuario hace clic en Retry                      | `refetch()` ejecuta `queryFn` nuevamente                    |
+| SUCCESS → LOADING             | Usuario escribe nuevo término                   | `queryKey` cambia, comienza nuevo ciclo                     |
+| SUCCESS → NavigatingCardClick | Usuario hace clic en tarjeta                    | `navigate("/user/" + login)` — sale del estado de búsqueda  |
 
 ---
 
@@ -1320,56 +1334,56 @@ Entonces MSW debe interceptar GET /users/mojombo
 
 Cada escenario Gherkin se mapea a archivos de código específicos. Esta tabla sirve como puente entre los criterios de aceptación y la implementación:
 
-| HU | Escenario | Archivo(s) de código | Función/Línea clave |
-|:--:|:---------:|----------------------|---------------------|
-| HU-01 | E1: Búsqueda exitosa | `useDebouncedSearch.js`, `useUserQuery.js`, `userService.js`, `SearchResults.jsx` | `setTimeout(500ms)`, `queryKey: ["users", term]`, `fetchUsersAPI()` |
-| HU-01 | E2: Sin resultados | `SearchResults.jsx`, `NotFound.jsx` | `isEmpty && <NotFound />` |
-| HU-01 | E3: <3 caracteres | `useUserQuery.js` | `enabled: searchTerm.length >= 3` |
-| HU-01 | E4: Cancelación | `httpClient.js`, `useUserQuery.js` | `AbortSignal`, `signal` |
-| HU-01 | E5: Caché | `config.js` | `STALE_TIME = 1000 * 60 * 5` |
-| HU-02 | E1: Navegación al detalle | `UserDetail.jsx`, `useUserDetailQuery.js` | `useParams()`, `queryKey: ["user-detail", login]` |
-| HU-02 | E2: Contador animado | `UserDetail.jsx` — `AnimatedCounter` | `animate(0, value, { duration: 1.2 })` |
-| HU-02 | E3: Sin bio | `UserDetail.jsx` | `!user.bio && <p>texto alternativo</p>` |
-| HU-02 | E4: Error 404 | `UserDetail.jsx` | `isError && <div>error message</div>` |
-| HU-02 | E5: Skeleton | `UserDetailSkeleton.jsx` | `isLoading && <UserDetailSkeleton />` |
-| HU-03 | E1: Cambio de tema | `useTheme.js`, `ThemeToggle.jsx`, `index.css` | `toggleTheme()`, `root.classList.toggle("dark")` |
-| HU-03 | E2: Persistencia | `useTheme.js` | `localStorage.setItem("theme", theme)` |
-| HU-03 | E3: Preferencia sistema | `useTheme.js` | `window.matchMedia("(prefers-color-scheme: dark)")` |
-| HU-03 | E4: Default light | `useTheme.js` | `return "light"` (default) |
-| HU-03 | E5: Animación | `ThemeToggle.jsx` | `AnimatePresence`, `rotate: -45 → 0` |
-| HU-04 | E1: Skeleton búsqueda | `SkeletonCard.jsx`, `SkeletonGrid.jsx` | `6 <SkeletonCard />` |
-| HU-04 | E2: Skeleton detalle | `UserDetailSkeleton.jsx` | `5 placeholders glass` |
-| HU-04 | E3: Transición | `SearchResults.jsx`, `motion` | `staggerChildren: 0.06` |
-| HU-04 | E4: Sin skeleton inicial | `UserSearch.jsx` | `searchTerm === "" && !isLoading` |
-| HU-04 | E5: Skeleton dark | `index.css` | `.dark` variables CSS aplican automáticamente |
-| HU-05 | E1: MSW activo en dev | `main.jsx`, `mocks/browser.js` | `import.meta.env.DEV && worker.start()` |
-| HU-05 | E2: MSW inactivo en prod | `main.jsx` | `import.meta.env.PROD → no start` |
-| HU-05 | E3: Mocks realistas | `mocks/handlers.js` | `http.get("https://api.github.com/search/users", ...)` |
-| HU-05 | E4: Mock 403 | `mocks/handlers.js` | `return res(ctx.status(403))` |
-| HU-05 | E5: Mock detalle | `mocks/handlers.js` | `http.get("https://api.github.com/users/:login", ...)` |
+|  HU   |         Escenario         | Archivo(s) de código                                                              | Función/Línea clave                                                 |
+| :---: | :-----------------------: | --------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| HU-01 |   E1: Búsqueda exitosa    | `useDebouncedSearch.js`, `useUserQuery.js`, `userService.js`, `SearchResults.jsx` | `setTimeout(500ms)`, `queryKey: ["users", term]`, `fetchUsersAPI()` |
+| HU-01 |    E2: Sin resultados     | `SearchResults.jsx`, `NotFound.jsx`                                               | `isEmpty && <NotFound />`                                           |
+| HU-01 |     E3: <3 caracteres     | `useUserQuery.js`                                                                 | `enabled: searchTerm.length >= 3`                                   |
+| HU-01 |      E4: Cancelación      | `httpClient.js`, `useUserQuery.js`                                                | `AbortSignal`, `signal`                                             |
+| HU-01 |         E5: Caché         | `config.js`                                                                       | `STALE_TIME = 1000 * 60 * 5`                                        |
+| HU-02 | E1: Navegación al detalle | `UserDetail.jsx`, `useUserDetailQuery.js`                                         | `useParams()`, `queryKey: ["user-detail", login]`                   |
+| HU-02 |   E2: Contador animado    | `UserDetail.jsx` — `AnimatedCounter`                                              | `animate(0, value, { duration: 1.2 })`                              |
+| HU-02 |        E3: Sin bio        | `UserDetail.jsx`                                                                  | `!user.bio && <p>texto alternativo</p>`                             |
+| HU-02 |       E4: Error 404       | `UserDetail.jsx`                                                                  | `isError && <div>error message</div>`                               |
+| HU-02 |       E5: Skeleton        | `UserDetailSkeleton.jsx`                                                          | `isLoading && <UserDetailSkeleton />`                               |
+| HU-03 |    E1: Cambio de tema     | `useTheme.js`, `ThemeToggle.jsx`, `index.css`                                     | `toggleTheme()`, `root.classList.toggle("dark")`                    |
+| HU-03 |     E2: Persistencia      | `useTheme.js`                                                                     | `localStorage.setItem("theme", theme)`                              |
+| HU-03 |  E3: Preferencia sistema  | `useTheme.js`                                                                     | `window.matchMedia("(prefers-color-scheme: dark)")`                 |
+| HU-03 |     E4: Default light     | `useTheme.js`                                                                     | `return "light"` (default)                                          |
+| HU-03 |       E5: Animación       | `ThemeToggle.jsx`                                                                 | `AnimatePresence`, `rotate: -45 → 0`                                |
+| HU-04 |   E1: Skeleton búsqueda   | `SkeletonCard.jsx`, `SkeletonGrid.jsx`                                            | `6 <SkeletonCard />`                                                |
+| HU-04 |   E2: Skeleton detalle    | `UserDetailSkeleton.jsx`                                                          | `5 placeholders glass`                                              |
+| HU-04 |      E3: Transición       | `SearchResults.jsx`, `motion`                                                     | `staggerChildren: 0.06`                                             |
+| HU-04 | E4: Sin skeleton inicial  | `UserSearch.jsx`                                                                  | `searchTerm === "" && !isLoading`                                   |
+| HU-04 |     E5: Skeleton dark     | `index.css`                                                                       | `.dark` variables CSS aplican automáticamente                       |
+| HU-05 |   E1: MSW activo en dev   | `main.jsx`, `mocks/browser.js`                                                    | `import.meta.env.DEV && worker.start()`                             |
+| HU-05 | E2: MSW inactivo en prod  | `main.jsx`                                                                        | `import.meta.env.PROD → no start`                                   |
+| HU-05 |    E3: Mocks realistas    | `mocks/handlers.js`                                                               | `http.get("https://api.github.com/search/users", ...)`              |
+| HU-05 |       E4: Mock 403        | `mocks/handlers.js`                                                               | `return res(ctx.status(403))`                                       |
+| HU-05 |     E5: Mock detalle      | `mocks/handlers.js`                                                               | `http.get("https://api.github.com/users/:login", ...)`              |
 
 ---
 
 ## Apéndice A: Mapa de Archivos por Artefacto
 
-| Artefacto | Archivo(s) clave |
-|-----------|------------------|
-| Formulación del problema | `01-Guia-del-Proyecto.md`, `README.md` |
-| Objetivos | `01-Guia-del-Proyecto.md`, `AGENTS.md` |
-| Modelo CANVAS | Este documento (sección 1.4) |
-| Requerimientos funcionales | Este documento (sección 2.1) |
-| Casos de Uso + ECUS | Este documento (sección 2.3) |
-| Modelo de las entidades | `src/entities/user/model/schema.js`, `src/entities/user/model/adapter.js`, `src/shared/api/ApiError.js` |
-| Diagrama de Subsistemas | `02-Arquitectura-y-Patrones.md`, este documento (sección 3.2) |
-| Arquitectura de despliegue | `vite.config.js`, `package.json` (scripts), este documento (sección 3.3) |
-| Diagrama de secuencia | Este documento (sección 4.1) |
-| Diagrama E/R conceptual | Este documento (sección 4.2) |
-| Diagrama de transición de estados | Este documento (sección 4.3) |
-| Historias de Usuario + ATDD | Este documento (sección 5), `SIMULACRO_SCRUM.md` |
-| TanStack Query | `src/entities/user/api/useUserQuery.js`, `src/entities/user/api/useUserDetailQuery.js`, `src/features/search-user/model/useUserSearchFacade.js` |
-| Zod + Adapter | `src/entities/user/model/schema.js`, `src/entities/user/model/adapter.js` |
-| Glassmorphism + tema dual | `src/shared/styles/index.css`, `src/shared/lib/hooks/useTheme.js` |
-| FSD (6 capas) | `src/docs/02-Arquitectura-y-Patrones.md`, estructura de carpetas `src/` |
+| Artefacto                         | Archivo(s) clave                                                                                                                                |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Formulación del problema          | `01-Guia-del-Proyecto.md`, `README.md`                                                                                                          |
+| Objetivos                         | `01-Guia-del-Proyecto.md`, `AGENTS.md`                                                                                                          |
+| Modelo CANVAS                     | Este documento (sección 1.4)                                                                                                                    |
+| Requerimientos funcionales        | Este documento (sección 2.1)                                                                                                                    |
+| Casos de Uso + ECUS               | Este documento (sección 2.3)                                                                                                                    |
+| Modelo de las entidades           | `src/entities/user/model/schema.js`, `src/entities/user/model/adapter.js`, `src/shared/api/ApiError.js`                                         |
+| Diagrama de Subsistemas           | `02-Arquitectura-y-Patrones.md`, este documento (sección 3.2)                                                                                   |
+| Arquitectura de despliegue        | `vite.config.js`, `package.json` (scripts), este documento (sección 3.3)                                                                        |
+| Diagrama de secuencia             | Este documento (sección 4.1)                                                                                                                    |
+| Diagrama E/R conceptual           | Este documento (sección 4.2)                                                                                                                    |
+| Diagrama de transición de estados | Este documento (sección 4.3)                                                                                                                    |
+| Historias de Usuario + ATDD       | Este documento (sección 5), `SIMULACRO_SCRUM.md`                                                                                                |
+| TanStack Query                    | `src/entities/user/api/useUserQuery.js`, `src/entities/user/api/useUserDetailQuery.js`, `src/features/search-user/model/useUserSearchFacade.js` |
+| Zod + Adapter                     | `src/entities/user/model/schema.js`, `src/entities/user/model/adapter.js`                                                                       |
+| Glassmorphism + tema dual         | `src/shared/styles/index.css`, `src/shared/lib/hooks/useTheme.js`                                                                               |
+| FSD (6 capas)                     | `src/docs/02-Arquitectura-y-Patrones.md`, estructura de carpetas `src/`                                                                         |
 
 ---
 

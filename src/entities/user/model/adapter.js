@@ -20,6 +20,10 @@ import { GitHubUserSchema } from "@/entities/user/model/schema";
 /**
  * Convierte un usuario crudo de GitHub en un usuario limpio para la App.
  *
+ * @complexity
+ * - Time: O(1) - Constant time to validate and map a single user object.
+ * - Space: O(1) - Constant auxiliary space used for properties.
+ * 
  * @param {Object} rawUser - Los datos crudos (sin procesar) que nos manda la API de GitHub.
  * @returns {UserProfile} El perfil de usuario limpio y estandarizado.
  */
@@ -53,6 +57,10 @@ export const userAdapter = (rawUser) => {
 /**
  * Si GitHub nos manda una lista de 30 usuarios, usamos esta función para
  * pasar los 30 usuarios por el adaptador uno por uno de forma automática.
+ * 
+ * @complexity
+ * - Time: O(N) - Linear time relative to the number of users in the list.
+ * - Space: O(N) - Linear space to store the mapped array.
  * 
  * @param {Array<Object>} rawUsersList - Lista de usuarios crudos.
  * @returns {Array<UserProfile>} Lista de usuarios limpios.
