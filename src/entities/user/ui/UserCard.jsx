@@ -14,6 +14,20 @@ const VARIANTS = {
   "accent-glow": "glass-card-hover",
 };
 
+/**
+ * @typedef {Object} UserAvatarProps
+ * @property {string} url - URL de la imagen del avatar.
+ * @property {string} login - Username del usuario para tags de animación.
+ * @property {string} [variant="default"] - Variante de diseño visual.
+ */
+
+/**
+ * Componente que renderiza la imagen de avatar animada del usuario.
+ *
+ * @component
+ * @param {UserAvatarProps} props - Propiedades del avatar.
+ * @returns {JSX.Element} Imagen del avatar animada.
+ */
 const UserAvatar = ({ url, login, variant = "default" }) => {
   const isMinimal = variant === "minimal";
 
@@ -47,6 +61,19 @@ UserAvatar.propTypes = {
   variant: PropTypes.string,
 };
 
+/**
+ * @typedef {Object} UserHeaderProps
+ * @property {string} login - Username del usuario de GitHub.
+ * @property {string} [variant="default"] - Variante visual de diseño.
+ */
+
+/**
+ * Componente que renderiza el encabezado con el nombre de usuario y enlace de perfil.
+ *
+ * @component
+ * @param {UserHeaderProps} props - Propiedades del header.
+ * @returns {JSX.Element} Sección de encabezado de la tarjeta.
+ */
 const UserHeader = ({ login, variant = "default" }) => {
   const isMinimal = variant === "minimal";
 
@@ -70,6 +97,19 @@ UserHeader.propTypes = {
   variant: PropTypes.string,
 };
 
+/**
+ * @typedef {Object} UserFooterProps
+ * @property {string} login - Username del usuario de GitHub.
+ * @property {string} [variant="default"] - Variante de diseño visual.
+ */
+
+/**
+ * Componente que renderiza el botón de pie de página para navegar al detalle.
+ *
+ * @component
+ * @param {UserFooterProps} props - Propiedades del footer.
+ * @returns {JSX.Element|null} Botón animado o null si es variante minimal.
+ */
 const UserFooter = ({ login, variant = "default" }) => {
   if (variant === "minimal") return null;
 
@@ -98,6 +138,31 @@ UserFooter.propTypes = {
   variant: PropTypes.string,
 };
 
+/**
+ * @typedef {Object} UserCardProps
+ * @property {React.ReactNode} children - Hijos del compuesto (UserCard.Avatar, UserCard.Header, etc.).
+ * @property {"default"|"glass"|"minimal"|"accent-glow"} [variant="default"] - Variante de diseño visual de la tarjeta.
+ * @property {string} [className] - Clases de estilo Tailwind CSS adicionales.
+ * @property {string} [login] - El identificador único del usuario en GitHub.
+ */
+
+/**
+ * Tarjeta contenedora de usuario animada con efecto de glassmorphism.
+ * Utiliza el Compound Component Pattern (Avatar, Header, Footer).
+ *
+ * @component
+ * @param {UserCardProps} props - Propiedades de la tarjeta.
+ * @returns {JSX.Element} Contenedor animado de la tarjeta.
+ *
+ * @example
+ * ```jsx
+ * <UserCard variant="glass" login="mojombo">
+ *   <UserCard.Avatar url="https://..." login="mojombo" />
+ *   <UserCard.Header login="mojombo" />
+ *   <UserCard.Footer login="mojombo" />
+ * </UserCard>
+ * ```
+ */
 const UserCard = ({ children, variant = "default", className, login }) => {
   const cardRef = useRef(null);
   const variantClass = VARIANTS[variant] || VARIANTS.default;
