@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <g transform="rotate(-45 16 16)">
+    <!-- Outer boundary of Poke Ball (Base) -->
+    <circle cx="16" cy="16" r="10" fill="#FFFFFF" stroke="#1A202C" stroke-width="1.5" />
+    <!-- Red Top Half -->
+    <path d="M6,16 A10,10 0 0,1 26,16 Z" fill="#EF4444" stroke="#1A202C" stroke-width="1.5" />
+    <!-- Center Band -->
+    <line x1="6" y1="16" x2="26" y2="16" stroke="#1A202C" stroke-width="2.5" />
+    <!-- Center Button (Outer) -->
+    <circle cx="16" cy="16" r="3.5" fill="#FFFFFF" stroke="#1A202C" stroke-width="1.5" />
+    <!-- Center Button (Inner) -->
+    <circle cx="16" cy="16" r="1.2" fill="#FFFFFF" stroke="#1A202C" stroke-width="0.5" />
+    <!-- Light Reflection on Red Shell -->
+    <path d="M8.5,12.5 A7.5,7.5 0 0,1 14,8.5" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" opacity="0.6" />
+  </g>
+</svg>
