@@ -1,46 +1,34 @@
-import { GitHubUserSchema } from "@/entities/user/model/schema";
-
 /**
- * @file userAdapter.js
- * @description
- * 📚 EXPLICACIÓN PARA JUNIORS: EL PATRÓN ADAPTER (ADAPTADOR)
- * Imagina que vas de viaje a otro país y el enchufe de la pared es diferente.
- * Necesitas un "Adaptador" para conectar tu cargador.
- * 
- * Aquí pasa lo mismo: La API de GitHub nos envía un objeto desordenado con
- * propiedades como `avatar_url` o `html_url`. Pero nuestra aplicación prefiere
- * nombres más claros como `photo` o `profileUrl`.
- * 
- * Este archivo es nuestro enchufe. Toma los datos crudos de GitHub, verifica
- * que sean correctos (usando Zod) y los traduce al formato que le gusta a nuestra app.
+ * @file adapter.js
+ * @description Data adapter module implementing the GoF Adapter Pattern.
+ * Normalizes external API responses into standard internal domain models while enforcing schema validation via Zod.
  */
+
+import { GitHubUserSchema } from "@/entities/user/model/schema";
 
 /** @typedef {import('@/entities/user/model/schema').UserProfile} UserProfile */
 
 /**
- * Convierte un usuario crudo de GitHub en un usuario limpio para la App.
+ * Transforms raw GitHub user API data into a normalized domain model.
+ * Performs runtime validation using Zod schema models.
  *
  * @complexity
- * - Time: O(1) - Constant time to validate and map a single user object.
- * - Space: O(1) - Constant auxiliary space used for properties.
+ * - Time: O(1) - Constant time mapping of properties and schema parsing.
+ * - Space: O(1) - Constant auxiliary memory space.
  * 
- * @param {Object} rawUser - Los datos crudos (sin procesar) que nos manda la API de GitHub.
- * @returns {UserProfile} El perfil de usuario limpio y estandarizado.
+ * @function userAdapter
+ * @param {Object} rawUser - Untrusted object representation from the external GitHub API.
+ * @throws {import('zod').ZodError} Throws if schema validation rules are violated.
+ * @returns {UserProfile} Validated and standardized user profile object.
  */
 export const userAdapter = (rawUser) => {
-  // 1. VALIDACIÓN (SEGURIDAD PRIMERO)
-  // Usamos 'Zod' como un guardia de seguridad. Le decimos: "Oye, asegúrate de que
-  // 'rawUser' traiga lo que esperamos (un string en login, un número en id, etc)".
-  // Si falta algo o viene mal, Zod lanzará un error y detendrá todo.
   const data = GitHubUserSchema.parse(rawUser);
 
-  // 2. TRANSFORMACIÓN (EL ADAPTADOR)
-  // Aquí traducimos el idioma de GitHub al idioma de nuestra aplicación.
   return {
     id: data.id,
-    username: data.login,       // GitHub lo llama 'login', nosotros 'username'
+    username: data.login,
     name: data.name || data.login,
-    photo: data.avatar_url,     // GitHub lo llama 'avatar_url', nosotros 'photo'
+    photo: data.avatar_url,
     profileUrl: data.html_url,
     type: data.type,
     bio: data.bio || "",
@@ -55,17 +43,17 @@ export const userAdapter = (rawUser) => {
 };
 
 /**
- * Si GitHub nos manda una lista de 30 usuarios, usamos esta función para
- * pasar los 30 usuarios por el adaptador uno por uno de forma automática.
+ * Transforms a collection of raw GitHub user objects.
+ * Maps individual items sequentially through the user adapter.
  * 
  * @complexity
- * - Time: O(N) - Linear time relative to the number of users in the list.
- * - Space: O(N) - Linear space to store the mapped array.
+ * - Time: O(N) - Linear time proportional to the collection size.
+ * - Space: O(N) - Linear memory space used to store the newly mapped collection.
  * 
- * @param {Array<Object>} rawUsersList - Lista de usuarios crudos.
- * @returns {Array<UserProfile>} Lista de usuarios limpios.
+ * @function usersCollectionAdapter
+ * @param {Array<Object>} [rawUsersList=[]] - Array containing unparsed user elements.
+ * @returns {Array<UserProfile>} Collection of normalized user profiles.
  */
 export const usersCollectionAdapter = (rawUsersList = []) => {
   return rawUsersList.map(userAdapter);
 };
-
