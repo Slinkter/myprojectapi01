@@ -1,26 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 :root {
-  --accent: #0ea5e9; /* Sky 500 */
-  --accent-soft: rgba(14, 165, 233, 0.08); /* Sky 500 soft */
+  --accent: #6366f1; /* Indigo 500 */
+  --accent-soft: rgba(99, 102, 241, 0.08); /* Indigo 500 soft */
   --bg: #f8fafc; /* Slate 50 */
   --surface: #ffffff; /* Pure white */
   --text: #0f172a; /* Slate 900 */
   --text-mute: #475569; /* Slate 600 */
   --border: #e2e8f0; /* Slate 200 */
-  --dot-color: rgba(148, 163, 184, 0.08);
+  --dot-color: rgba(99, 102, 241, 0.05);
 }
 
 .dark {
-  --accent: #38bdf8; /* Sky 400 */
-  --accent-soft: rgba(56, 189, 248, 0.08); /* Sky 400 soft */
-  --bg: #0b0f19; /* Deep Slate Black */
-  --surface: #111827; /* Gray 900 */
-  --text: #f8fafc; /* Slate 50 */
+  --accent: #818cf8; /* Indigo 400 */
+  --accent-soft: rgba(129, 140, 248, 0.08); /* Indigo 400 soft */
+  --bg: #030712; /* Deep Midnight Slate Black */
+  --surface: #0f172a; /* Slate 900 */
+  --text: #f9fafb; /* Gray 50 */
   --text-mute: #94a3b8; /* Slate 400 */
-  --border: #1f2937; /* Gray 800 */
-  --dot-color: rgba(255, 255, 255, 0.03);
+  --border: #1e293b; /* Slate 800 */
+  --dot-color: rgba(129, 140, 248, 0.02);
 }
 
 @theme {
@@ -43,9 +43,9 @@
   --color-app-card: var(--surface);
   --color-app-glass-border: var(--border);
 
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-heading: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 @utility bg-grid-pattern {
@@ -58,12 +58,12 @@
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: 1rem; /* rounded-2xl */
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -2px rgba(0, 0, 0, 0.01);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
     border-color: var(--accent);
-    box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.1), 0 8px 10px -6px rgba(14, 165, 233, 0.1);
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.1), 0 8px 10px -6px rgba(99, 102, 241, 0.1);
   }
 }
 
@@ -80,7 +80,7 @@
 
   &:focus-within {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
   }
 }
 
@@ -100,12 +100,13 @@
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 
   &:hover {
-    background-color: #0284c7; /* Sky 600 */
-    box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.2);
+    background-color: #4f46e5; /* Indigo 600 */
+    box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.25);
   }
 
   .dark &:hover {
-    background-color: #7dd3fc; /* Sky 300 */
+    background-color: #a5b4fc; /* Indigo 300 */
+    color: #030712;
   }
 
   &:active {
@@ -125,7 +126,7 @@
   letter-spacing: 0.05em;
   background-color: var(--accent-soft);
   color: var(--accent);
-  border: 1px solid rgba(14, 165, 233, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.15);
   border-radius: 9999px; /* pill */
 }
 

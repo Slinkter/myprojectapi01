@@ -26,7 +26,7 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
             transition={{ duration: 0.5, type: "spring", stiffness: 80 }}
             className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight leading-[1.1]"
           >
-            Explora el <span className="bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent">network</span>
+            Explora el <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">network</span>
             <br />
             de GitHub
           </motion.h1>

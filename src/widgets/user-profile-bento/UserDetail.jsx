@@ -194,7 +194,7 @@ const UserDetail = () => {
               initial={{ width: 0 }}
               animate={{ width: "75%" }}
               transition={{ duration: 1.2, ease: "easeOut" }}
-              className="h-full bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 rounded-full"
+              className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full"
             />
           </div>
         </motion.div>
