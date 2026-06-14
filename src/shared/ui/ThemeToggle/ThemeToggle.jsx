@@ -25,7 +25,7 @@ export const ThemeToggle = ({ theme, toggleTheme }) => {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       onClick={toggleTheme}
-      className="w-10 h-10 btn-glass flex items-center justify-center shadow-sm cursor-pointer relative group overflow-hidden shrink-0"
+      className="w-10 h-10 rounded-full border border-border bg-surface text-text hover:text-accent hover:border-accent flex items-center justify-center shadow-sm cursor-pointer relative group overflow-hidden shrink-0 transition-colors duration-200"
       aria-label={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
       aria-pressed={isDark}
     >
