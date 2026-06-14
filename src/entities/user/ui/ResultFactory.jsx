@@ -7,7 +7,7 @@
 
 import PropTypes from "prop-types";
 import UserCard from "./UserCard";
-import { Building2, Sparkles } from "lucide-react";
+import { Building2 } from "lucide-react";
 
 /**
  * Tarjeta especializada para Organizaciones con Badge Bento Glass

@@ -7,7 +7,7 @@ import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion, animate } from "motion/react";
 import PropTypes from "prop-types";
-import { ArrowLeft, Globe, MapPin, Link as LinkIcon, GitFork, Users, Heart, Code, Sparkles } from "lucide-react";
+import { ArrowLeft, Globe, MapPin, Link as LinkIcon, GitFork, Users, Heart, Code } from "lucide-react";
 import { UserDetailSkeleton, useUserDetailQuery } from "@/entities/user";
 import { cn, THEME } from "@/shared";
 
@@ -90,15 +90,6 @@ const UserDetail = () => {
     isError, 
     error 
   } = useUserDetailQuery(login);
-
-  const [blink, setBlink] = useState(true);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setBlink((b) => !b);
-    }, 530);
-    return () => clearInterval(interval);
-  }, []);
 
   if (isLoading) return <UserDetailSkeleton />;
 

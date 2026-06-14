@@ -2,12 +2,12 @@
  * @file UserSearch.jsx
  * @description
  * 📚 EXPLICACIÓN PARA JUNIORS: CICLO DE VIDA, HOISTING Y SCOPE
- * 
+ *
  * SECUENCIA DE EJECUCIÓN (CÓMO REACT ARMA ESTO):
- * 
+ *
  * [PASO 1] HOISTING (Elevación) DE IMPORTACIONES:
- * Antes de que cualquier código se ejecute, Javascript "eleva" (hoisting) todas las 
- * declaraciones 'import' al principio del archivo. Esto asegura que tengamos las 
+ * Antes de que cualquier código se ejecute, Javascript "eleva" (hoisting) todas las
+ * declaraciones 'import' al principio del archivo. Esto asegura que tengamos las
  * dependencias (como la Fachada o los componentes visuales) listas en memoria global.
  */
 
@@ -43,7 +43,7 @@ const SearchPage = () => {
         searchTerm={searchTerm}
         handleSearch={(e) => setSearchTerm(e.target.value)}
       />
-      
+
       <ErrorBoundary>
         <SearchResults
           isLoading={isLoading}
@@ -63,4 +63,3 @@ const SearchPage = () => {
 // [PASO 5] EXPORTACIÓN:
 SearchPage.displayName = "SearchPage";
 export default SearchPage;
-

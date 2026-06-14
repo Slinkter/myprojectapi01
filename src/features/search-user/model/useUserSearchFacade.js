@@ -6,7 +6,7 @@
  * mesero (la fachada). A ti no te importa cómo el chef prepara la comida en la
  * cocina (la lógica compleja de debouncing y React Query). Solo te importa
  * recibir la comida lista.
- * 
+ *
  * Este Hook hace exactamente eso: oculta toda la lógica compleja de buscar usuarios
  * y le entrega al componente "UserSearch" solo lo que necesita para pintar la pantalla.
  */
@@ -71,7 +71,8 @@ export const useUserSearchFacade = () => {
         });
       } else if (error.status === 403) {
         toast.error("Límite excedido", {
-          description: "Has hecho demasiadas peticiones a GitHub. Intenta luego.",
+          description:
+            "Has hecho demasiadas peticiones a GitHub. Intenta luego.",
         });
       }
     }
@@ -105,4 +106,3 @@ export const useUserSearchFacade = () => {
     isEmpty,
   };
 };
-

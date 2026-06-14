@@ -7,4 +7,5 @@ export { default as ErrorDisplay } from "./ui/ErrorDisplay/ErrorDisplay";
 export { default as ThemeToggle } from "./ui/ThemeToggle/ThemeToggle";
 export { httpClient } from "./api/httpClient";
 export { ApiError } from "./api/ApiError";
+export { queryClient } from "./api/queryClient";
 export { THEME } from "./styles/theme";

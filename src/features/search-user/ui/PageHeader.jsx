@@ -26,8 +26,7 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
             transition={{ duration: 0.5, type: "spring", stiffness: 80 }}
             className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight text-text leading-[1.1]"
           >
-            Explora el{" "}
-            <span className="text-accent">network</span>
+            Explora el <span className="text-accent">network</span>
             <br />
             de GitHub
           </motion.h1>
@@ -38,7 +37,8 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-sm sm:text-base text-text-mute max-w-md mx-auto leading-relaxed"
           >
-            Busca perfiles, organizaciones y descubre desarrolladores en tiempo real.
+            Busca perfiles, organizaciones y descubre desarrolladores en tiempo
+            real.
           </motion.p>
         </div>
       </div>
@@ -49,19 +49,21 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
         transition={{ duration: 0.6, delay: 0.3 }}
         className="w-full max-w-lg px-4 sm:px-0"
       >
-        <div
-          className={cn(
-            THEME.glassInput,
-            isFocused && "border-accent"
-          )}
-        >
+        <div className={cn(THEME.glassInput, isFocused && "border-accent")}>
           {isSearching ? (
             <Spinner className="text-accent text-lg" aria-hidden="true" />
           ) : (
             <motion.div
-              animate={isFocused ? { rotate: 10, scale: 1.05 } : { rotate: 0, scale: 1 }}
+              animate={
+                isFocused
+                  ? { rotate: 10, scale: 1.05 }
+                  : { rotate: 0, scale: 1 }
+              }
               transition={{ type: "spring", stiffness: 200, damping: 15 }}
-              className={cn("transition-colors duration-200", isFocused ? "text-accent" : "text-text-mute")}
+              className={cn(
+                "transition-colors duration-200",
+                isFocused ? "text-accent" : "text-text-mute",
+              )}
             >
               <Search className="text-base" aria-hidden="true" />
             </motion.div>
@@ -93,7 +95,12 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
                 <XCircle size={18} aria-hidden="true" />
               </motion.button>
             ) : (
-              <div className={cn(THEME.glass, "hidden sm:flex items-center gap-1 px-2 py-0.5 rounded-lg text-[9px] font-mono text-text-mute font-medium select-none shrink-0")}>
+              <div
+                className={cn(
+                  THEME.glass,
+                  "hidden sm:flex items-center gap-1 px-2 py-0.5 rounded-lg text-[9px] font-mono text-text-mute font-medium select-none shrink-0",
+                )}
+              >
                 <span>⌘</span>
                 <span>K</span>
               </div>

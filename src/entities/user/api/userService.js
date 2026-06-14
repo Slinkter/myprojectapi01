@@ -3,15 +3,18 @@
  * @description
  * 📚 EXPLICACIÓN PARA JUNIORS: LA CAPA DE SERVICIO (SERVICES)
  * Este archivo se encarga exclusivamente de comunicarse con el mundo exterior
- * (Internet, en este caso la API de GitHub). 
- * 
+ * (Internet, en este caso la API de GitHub).
+ *
  * NO contiene lógica visual, NO sabe qué es React. Simplemente pide datos usando
- * 'fetch' (a través de nuestra utilidad httpClient), captura los errores si se 
- * cae el internet, y por último, pasa los datos sucios por nuestro "Adaptador" 
+ * 'fetch' (a través de nuestra utilidad httpClient), captura los errores si se
+ * cae el internet, y por último, pasa los datos sucios por nuestro "Adaptador"
  * antes de devolverlos a la aplicación.
  */
 
-import { usersCollectionAdapter, userAdapter } from "@/entities/user/model/adapter";
+import {
+  usersCollectionAdapter,
+  userAdapter,
+} from "@/entities/user/model/adapter";
 import { API_BASE_URL } from "@/shared/config/config";
 import { httpClient } from "@/shared/api/httpClient";
 import { ApiError } from "@/shared/api/ApiError";
@@ -43,7 +46,6 @@ export const fetchUsersAPI = async (searchTerm = "", signal) => {
     // 3. LIMPIEZA DE DATOS (EL ADAPTADOR)
     // No devolvemos la basura de GitHub a la app, la limpiamos primero.
     return usersCollectionAdapter(rawUsers);
-    
   } catch (error) {
     console.error("Service: Falló la petición de usuarios:", error);
 
@@ -53,7 +55,7 @@ export const fetchUsersAPI = async (searchTerm = "", signal) => {
     if (error instanceof ZodError) {
       throw new ApiError(`Error de Validación de Datos: ${error.message}`, 422);
     }
-    
+
     throw error;
   }
 };
@@ -75,7 +77,6 @@ export const fetchUserDetailAPI = async (login, signal) => {
 
     // Pasamos el usuario individual por el Adaptador
     return userAdapter(rawUser);
-    
   } catch (error) {
     console.error(`Service: Falló la búsqueda del usuario ${login}:`, error);
 
@@ -83,9 +84,7 @@ export const fetchUserDetailAPI = async (login, signal) => {
     if (error instanceof ZodError) {
       throw new ApiError(`Error de Validación de Datos: ${error.message}`, 422);
     }
-    
+
     throw error;
   }
 };
-
-

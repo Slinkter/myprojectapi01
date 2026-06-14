@@ -1,6 +1,4 @@
-import React from "react";
 import PropTypes from "prop-types";
-import { log } from "@/shared/logger/logger";
 
 // UI Components
 import { ErrorDisplay } from "@/shared";
@@ -17,7 +15,7 @@ import { NotFoundPage as NotFound } from "@/pages/not-found";
 
 /**
  * Search Results Component
- * 
+ *
  * @param {Object} props - Component props
  * @param {boolean} props.isLoading - Loading state
  * @param {boolean} props.isError - Error state
@@ -45,10 +43,10 @@ const SearchResults = ({
   // 2. Error State (with specific handling for 403 Rate Limit via ErrorDisplay)
   if (isError) {
     return (
-      <ErrorDisplay 
-        message={error?.message || "Algo salió mal al consultar GitHub"} 
-        status={error?.status} 
-        onRetry={handleRetry} 
+      <ErrorDisplay
+        message={error?.message || "Algo salió mal al consultar GitHub"}
+        status={error?.status}
+        onRetry={handleRetry}
       />
     );
   }

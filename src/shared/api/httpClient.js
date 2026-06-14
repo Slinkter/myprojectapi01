@@ -12,7 +12,7 @@ import { log } from "@/shared/logger/logger";
 
 /**
  * Perform an HTTP request
- * 
+ *
  * @async
  * @function httpClient
  * @param {string} url - Target URL
@@ -22,7 +22,7 @@ import { log } from "@/shared/logger/logger";
  */
 export const httpClient = async (url, options = {}) => {
   log.flow("fetch");
-  
+
   try {
     const response = await fetch(url, {
       ...options,
@@ -36,7 +36,7 @@ export const httpClient = async (url, options = {}) => {
       log.redux("HTTP Error", { status: response.status, url });
       throw new ApiError(
         `HTTP Error: ${response.status} ${response.statusText}`,
-        response.status
+        response.status,
       );
     }
 
@@ -47,7 +47,7 @@ export const httpClient = async (url, options = {}) => {
       log.flow("success");
       return data;
     }
-    
+
     log.flow("success");
     return null;
   } catch (error) {
@@ -57,9 +57,8 @@ export const httpClient = async (url, options = {}) => {
     }
 
     if (error instanceof ApiError) throw error;
-    
+
     // Handle network or other errors
     throw new ApiError(error.message || "Network request failed", 0);
   }
 };
-
