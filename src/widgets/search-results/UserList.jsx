@@ -20,7 +20,7 @@ const UserList = ({ userList }) => {
     <div className="w-full py-4">
       <div className="divider mb-6" />
       <div className="flex items-center gap-3 mb-4">
-        <span className="font-mono text-[10px] tracking-wider text-swiss-text-mute font-bold">
+        <span className="font-mono text-[10px] tracking-wider text-text-mute font-bold">
           {userList.length} RESULTADO{userList.length !== 1 ? "S" : ""}
         </span>
       </div>

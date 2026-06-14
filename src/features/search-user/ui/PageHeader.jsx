@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "motion/react";
 import { Search, XCircle, Loader2 } from "lucide-react";
 import { cn } from "@/shared/lib/utils/utils";
-import { SWISS_STYLE_TOKENS } from "@/shared";
+import { TAILWIND_STYLE_TOKENS } from "@/shared";
 
 const Spinner = ({ className }) => {
   return <Loader2 className={cn("animate-spin", className)} />;
@@ -21,21 +21,21 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
       <div className="text-center space-y-6 max-w-2xl mx-auto px-4">
         <div className="space-y-4">
           <motion.h1
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, type: "spring", stiffness: 90 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight text-text leading-[1.1] uppercase" // Swiss Style: Bold uppercase
+            transition={{ duration: 0.5, type: "spring", stiffness: 80 }}
+            className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight leading-[1.1]"
           >
-            EXPLORA EL <span className="text-swiss-accent">NETWORK</span>
+            Explora el <span className="bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent">network</span>
             <br />
-            DE GITHUB
+            de GitHub
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.15 }}
-            className="text-xs sm:text-sm text-swiss-text-mute max-w-md mx-auto leading-relaxed font-bold uppercase tracking-wider" // Swiss details: uppercase tracking
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-sm sm:text-base text-text-mute max-w-md mx-auto leading-relaxed"
           >
             Busca perfiles, organizaciones y descubre desarrolladores en tiempo
             real.
@@ -44,25 +44,25 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
       </div>
 
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.25 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
         className="w-full max-w-lg px-4 sm:px-0"
       >
-        <div className={cn(SWISS_STYLE_TOKENS.input, isFocused && "border-swiss-accent")}>
+        <div className={cn(TAILWIND_STYLE_TOKENS.input, isFocused && "border-accent")}>
           {isSearching ? (
-            <Spinner className="text-swiss-accent text-lg" aria-hidden="true" />
+            <Spinner className="text-accent text-lg" aria-hidden="true" />
           ) : (
             <motion.div
               animate={
                 isFocused
-                  ? { rotate: 5, scale: 1.02 }
-                  : { rotate: 0, scale: 1 }
+                  ? { scale: 1.05 }
+                  : { scale: 1 }
               }
-              transition={{ type: "spring", stiffness: 220, damping: 18 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15 }}
               className={cn(
                 "transition-colors duration-200",
-                isFocused ? "text-swiss-accent" : "text-swiss-text-mute",
+                isFocused ? "text-accent" : "text-text-mute",
               )}
             >
               <Search className="text-base" aria-hidden="true" />
@@ -71,8 +71,8 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
 
           <input
             type="text"
-            className="flex-1 bg-transparent border-none outline-none text-sm sm:text-base text-text placeholder:text-swiss-text-mute/45 font-bold uppercase tracking-wide selection:bg-swiss-accent/15"
-            placeholder="BUSCAR USUARIOS..."
+            className="flex-1 bg-transparent border-none outline-none text-sm sm:text-base text-text placeholder:text-text-mute/40 font-medium selection:bg-accent/20"
+            placeholder="Buscar usuarios..."
             value={searchTerm}
             onChange={handleSearch}
             onFocus={() => setIsFocused(true)}
@@ -83,23 +83,20 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
           <AnimatePresence>
             {searchTerm ? (
               <motion.button
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={() => handleSearch({ target: { value: "" } })}
-                className="text-swiss-text-mute hover:text-text transition-colors cursor-pointer"
+                className="text-text-mute hover:text-text transition-colors cursor-pointer"
                 aria-label="Limpiar búsqueda"
               >
                 <XCircle size={18} aria-hidden="true" />
               </motion.button>
             ) : (
               <div
-                className={cn(
-                  SWISS_STYLE_TOKENS.outline,
-                  "hidden sm:flex items-center gap-1 px-2 py-0.5 rounded-none text-[9px] font-mono text-swiss-text-mute font-bold select-none shrink-0",
-                )}
+                className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 rounded border border-border bg-bg text-[9px] font-mono text-text-mute font-medium select-none shrink-0"
               >
                 <span>⌘</span>
                 <span>K</span>

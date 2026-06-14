@@ -5,13 +5,13 @@ import { motion } from "motion/react";
 import { cn } from "@/shared/lib/utils/utils";
 import { ChevronRight } from "lucide-react";
 
-const SWISS_BUTTON_BASE_CLASS = "btn-swiss";
+const TAILWIND_BUTTON_BASE_CLASS = "btn-tailwind";
 
 const CARD_STYLE_VARIANTS = {
-  default: "swiss-card",
-  glass: "swiss-card", // Replaced glass with flat swiss card style
-  minimal: "border-b border-border/40 hover:bg-surface/50 transition-all duration-200",
-  "accent-glow": "swiss-card border-accent", // Border indicator on active
+  default: "tailwind-card",
+  glass: "tailwind-card", // Aligned with modern slate Tailwind style
+  minimal: "border border-border/40 rounded-xl hover:border-accent hover:bg-surface/30 transition-all duration-300",
+  "accent-glow": "tailwind-card border-accent/30 hover:border-accent shadow-[0_4px_20px_-4px_rgba(14,165,233,0.08)]",
 };
 
 /**
@@ -40,13 +40,13 @@ const UserAvatar = ({ avatarUrl, username, variant = "default" }) => {
           alt={`Avatar de ${username}`}
           loading="lazy"
           variants={{
-            initial: { opacity: 0, scale: 0.98 },
+            initial: { opacity: 0, scale: 0.95 },
             animate: { opacity: 1, scale: 1 },
-            hover: { scale: 1.02 },
+            hover: { scale: 1.05 },
           }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
           className={cn(
-            "rounded-none border border-border object-cover z-10 relative", // Sharp corners
+            "rounded-full object-cover border border-border ring-4 ring-accent/5 dark:ring-accent/10 z-10 relative", // Tailwind style rounded-full with soft ring
             isMinimalLayout ? "w-10 h-10" : "w-16 h-16"
           )}
         />
@@ -80,8 +80,8 @@ const UserHeader = ({ username, variant = "default" }) => {
   return (
     <div className={cn("space-y-1 flex-1 min-w-0 leading-snug", isMinimalLayout ? "px-0 pb-0 text-left" : "px-5 pb-1 text-center")}>
       <h3 className={cn(
-        "font-heading font-extrabold truncate text-text leading-snug tracking-tight", // Swiss Style: Extrabold
-        isMinimalLayout ? "text-sm" : "text-xs uppercase tracking-wider"
+        "font-heading font-bold truncate text-text leading-snug tracking-tight", // Tailwind bold heading
+        isMinimalLayout ? "text-sm" : "text-sm uppercase tracking-wide"
       )}>
         {username}
       </h3>
@@ -117,16 +117,16 @@ const UserFooter = ({ username, variant = "default" }) => {
     <div className="px-5 pb-5 pt-1 mt-auto w-full z-10 overflow-hidden">
       <Link to={`/user/${username}`} className="w-full block">
         <motion.button
-          className={cn(SWISS_BUTTON_BASE_CLASS, "w-full text-[10px] py-2.5 rounded-none flex items-center justify-center gap-1.5")} // Sharp corners
+          className={cn(TAILWIND_BUTTON_BASE_CLASS, "w-full text-xs py-2.5 rounded-xl flex items-center justify-center gap-1.5")} // rounded-xl
           aria-label={`Ver perfil de ${username}`}
           variants={{
-            initial: { opacity: 0.9 },
+            initial: { opacity: 0.95 },
             hover: { opacity: 1 },
           }}
-          transition={{ duration: 0.1 }}
+          transition={{ duration: 0.2 }}
         >
           <span>Ver perfil</span>
-          <ChevronRight size={12} />
+          <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
         </motion.button>
       </Link>
     </div>
@@ -147,7 +147,7 @@ UserFooter.propTypes = {
  */
 
 /**
- * Tarjeta contenedora de usuario animada con estética minimalista suiza.
+ * Tarjeta contenedora de usuario animada con estética de Tailwind CSS.
  * Utiliza el Compound Component Pattern (Avatar, Header, Footer).
  *
  * @component
@@ -173,14 +173,14 @@ const UserCard = ({ children, variant = "default", className, username }) => {
         whileHover="hover"
         animate="animate"
         variants={{
-          initial: { opacity: 0, y: 8 },
+          initial: { opacity: 0, y: 12 },
           animate: { opacity: 1, y: 0 },
-          hover: { y: -2 }, // Subtler hover motion for Swiss minimalist feel
+          hover: { y: -4 }, // Tailwind style smooth translation hover
         }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
+        transition={{ type: "spring", stiffness: 200, damping: 18 }}
         className={cn(
           variantClassName,
-          "flex h-full w-full overflow-hidden rounded-none", // Sharp edges
+          "flex h-full w-full overflow-hidden rounded-2xl", // rounded-2xl
           isMinimalLayout ? "flex-row items-center gap-4 p-4" : "flex-col"
         )}
       >

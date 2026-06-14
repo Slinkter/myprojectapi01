@@ -10,14 +10,14 @@ import UserCard from "./UserCard";
 import { Building2 } from "lucide-react";
 
 /**
- * Tarjeta especializada para Organizaciones con estilo minimalista suizo.
+ * Tarjeta especializada para Organizaciones con estilo Tailwind CSS.
  */
 const OrganizationCard = ({ organization, variant = "default" }) => (
   <UserCard variant={variant} username={organization.username} className="relative">
     <UserCard.Avatar avatarUrl={organization.photo} username={organization.username} variant={variant} />
     
     {variant !== "minimal" && (
-      <div className="absolute top-3 right-3 z-20 flex items-center gap-1 px-2 py-0.5 rounded-none border border-swiss-border bg-swiss-bg text-swiss-text-mute text-[9px] font-mono font-bold uppercase tracking-tight select-none shadow-sm">
+      <div className="absolute top-3 right-3 z-20 flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-border bg-surface text-accent text-[9px] font-mono font-bold uppercase tracking-tight select-none shadow-sm">
         <Building2 size={10} />
         <span>ORG</span>
       </div>
@@ -28,7 +28,7 @@ const OrganizationCard = ({ organization, variant = "default" }) => (
     {/* Specialized visual description for orgs if displayed in list */}
     {variant !== "minimal" && (
       <div className="px-5 pb-1 -mt-3 text-center">
-        <span className="font-mono text-[9px] text-swiss-text-mute/80 uppercase tracking-wider flex items-center justify-center gap-1">
+        <span className="font-mono text-[9px] text-text-mute/80 uppercase tracking-wider flex items-center justify-center gap-1">
           ORGANIZACIÓN VERIFICADA
         </span>
       </div>

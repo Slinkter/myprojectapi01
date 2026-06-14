@@ -59,7 +59,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter basename="/myprojectapi01">
-        <div className="w-full min-h-screen bg-bg flex flex-col items-center relative">
+        <div className="w-full min-h-screen bg-bg bg-grid-pattern flex flex-col items-center relative">
           {/* Floating Theme Toggle (Apple style) */}
           <div className="absolute top-6 right-6 sm:top-8 sm:right-12 z-50">
             <ThemeToggle theme={theme} toggleTheme={toggleTheme} />

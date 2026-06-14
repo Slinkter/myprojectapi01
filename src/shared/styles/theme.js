@@ -1,13 +1,12 @@
 /**
  * @file theme.js
- * @description Centralized design tokens and CSS class aliases for Swiss Minimalism.
+ * @description Centralized design tokens and CSS class aliases for Tailwind CSS website aesthetic.
  */
 
-export const SWISS_STYLE_TOKENS = {
-  outline: "swiss-outline",
-  card: "swiss-card",
-  input: "swiss-input",
-  button: "btn-swiss",
-  badge: "badge-swiss",
+export const TAILWIND_STYLE_TOKENS = {
+  card: "tailwind-card",
+  input: "tailwind-input",
+  button: "btn-tailwind",
+  badge: "badge-tailwind",
   stack: "layout-stack",
 };
