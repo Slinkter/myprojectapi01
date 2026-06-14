@@ -57,9 +57,10 @@ Para mantener la cohesión y la integridad de nuestra arquitectura **FSD**, sigu
 
 ## 🎨 Convenciones de Programación Visual
 
-*   **Glassmorphism:** Para tarjetas, inputs y contenedores, usa las clases utilitarias definidas en `index.css`: `.glass`, `.glass-card`, `.glass-card-hover`, `.glass-input`, `.btn-glass`, `.badge`.
-*   **Variables de Temas:** Evita colores duros en Tailwind. Usa siempre variables semánticas (ej. `bg-bg`, `text-text`, `border-border`, `text-accent`) declaradas en `src/shared/styles/index.css`.
-*   **Sistema de Doble Tema:** Las variables `:root` = light mode, `.dark` = dark mode. No agregues clases condicionales de tema en JSX. El toggle vía `useTheme()` cambia la clase `.dark` en `<html>` y las variables se actualizan automáticamente.
+*   **Tailwind Website Branding:** Para tarjetas, inputs y botones, utiliza los componentes utilitarios y variables declarados en `index.css` (ej. `@utility tailwind-card`, `@utility tailwind-input`, `@utility btn-tailwind`, `@utility badge-tailwind`).
+*   **Variables de Temas:** Usa variables semánticas (ej. `bg-bg`, `text-text`, `border-border`, `text-accent`) declaradas en `src/shared/styles/index.css`.
+*   **Sistema de Doble Tema:** Las variables `:root` = light mode, y `.dark` = dark mode. No agregues clases condicionales de tema de Tailwind en JSX (`dark:bg-slate-900`, etc.). En su lugar, el toggle vía `useTheme()` conmuta la clase `.dark` en `<html>` y las variables de CSS semánticas cambian automáticamente.
+*   **Cursor Interactivo:** El cursor custom Pokéball se aplica a nivel global. Los elementos interactivos (`a`, `button`, etc.) cambian de forma automática a la Pokébola abierta al pasar sobre ellos sin requerir clases adicionales.
 *   **Física de Resortes:** Para animaciones elásticas premium, usa configuraciones de resorte en Motion (`type: "spring", stiffness: 100, damping: 15`).
 *   **Comentarios Didácticos (JSDoc):** Escribe firmas de tipo descriptivas para que VS Code provea autocompletado type-safe nativo:
     ```javascript

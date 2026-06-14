@@ -1211,7 +1211,7 @@ Tailwind v4 usa CSS custom properties como tokens.
   --color-app-accent: #0071e3;
   --color-app-border: rgba(0, 0, 0, 0.08);
   
-  --font-sans: "Inter", system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
 }
 ```
 

@@ -8,7 +8,7 @@ React:        v18.3
 Vite:         v5.4
 Tailwind:     v4
 Arquitectura: Feature-Sliced Design (FSD)
-Estilo:       Glassmorphism + Minimalismo técnico
+Estilo:       Tailwind CSS Website Branding Aesthetic
 ```
 
 ---
@@ -20,7 +20,7 @@ Estilo:       Glassmorphism + Minimalismo técnico
 3. [TanStack Query a profundidad](#-tanstack-query-a-profundidad)
 4. [Zod — Validación en Runtime](#-zod--validación-en-runtime)
 5. [Patrones de Diseño (GoF)](#-patrones-de-diseño-gof)
-6. [Glassmorphism + Sistema de Temas](#-glassmorphism--sistema-de-temas)
+6. [Tailwind CSS Website Branding + Sistema de Temas](#-tailwind-css-website-branding--sistema-de-temas)
 7. [Inmutabilidad y Spread Operator](#-inmutabilidad-y-spread-operator)
 8. [Closures en el proyecto](#-closures-en-el-proyecto)
 9. [DRY y SOLID aplicados](#-dry-y-solid-aplicados)
@@ -369,58 +369,35 @@ switch (data.type) {
 
 ---
 
-## 🎨 Glassmorphism + Sistema de Temas
+## 🎨 Tailwind CSS Website Branding + Sistema de Temas
 
-### Cómo funciona el glass
+### Estética e Identidad Visual
 
-Cada tarjeta o contenedor usa la clase `.glass` o `.glass-card`, que aplica:
+El proyecto adopta la identidad visual y los tokens de diseño del sitio oficial de tailwindcss.com, priorizando una interfaz de alta densidad de información estructurada:
 
-```css
-.glass-card {
-  background: var(--glass-bg); /* semi-transparente */
-  backdrop-filter: blur(20px); /* desenfoque del fondo */
-  border: 1px solid var(--glass-border); /* borde sutil */
-  box-shadow: var(--glass-shadow); /* sombra suave */
-  border-radius: 0.75rem; /* rounded-xl */
-}
-```
+- **Efecto de Cuadrícula:** Fondo texturizado usando patrones de rejilla de puntos suaves (`bg-grid-pattern`).
+- **Gradients Premium:** Se utilizan gradientes SaaS lineales de color **Indigo-Purple-Pink** (`from-indigo-500 via-purple-500 to-pink-500`) para titulares destacados y barras de progreso.
+- **Bento Grid Layout:** Presenta la información de detalles del desarrollador en un Bento Dashboard asimétrico con elevación al hover y micro-interacciones suaves.
 
-Esto crea el efecto "frosted glass" (vidrio esmerilado): ves el fondo a través de la tarjeta pero borroso.
+### Sistema de Doble Tema
 
-### Dos temas
+El cambio de tema conmutando la clase `.dark` en la etiqueta HTML actualiza de forma automática las variables CSS semánticas de la aplicación:
 
-|            | Light "Holographic Terminal" | Dark "Cyberpunk"            |
-| ---------- | ---------------------------- | --------------------------- |
-| Fondo      | `#F0EDE8` (cálido papel)     | `#0A0A0F` (oscuro profundo) |
-| Superficie | `#FFFFFF`                    | `#12121A`                   |
-| Acento     | `#0D9488` (teal)             | `#00F0FF` (neón cyan)       |
-| Texto      | `#1A1A2E`                    | `#E8E8F0`                   |
-| Borde      | `#E5E2DC`                    | `#1E1E2A`                   |
+| Propiedad | Light Mode | Dark Mode |
+| :--- | :--- | :--- |
+| Fondo base (`bg-bg`) | `#f8fafc` (Slate 50) | `#030712` (Midnight Black) |
+| Superficie (`bg-surface`) | `#ffffff` (Blanco) | `#0f172a` (Slate 900) |
+| Bordes (`border-border`) | `#e2e8f0` (Slate 200) | `#1e293b` (Slate 800) |
+| Texto principal (`text-text`) | `#0f172a` (Slate 900) | `#f8fafc` (Slate 50) |
+| Acento principal (`text-accent` / `--accent`) | `#6366f1` (Indigo 500) | `#38bdf8` (Sky 400) |
 
-El toggle de tema (`ThemeToggle`) agrega o quita la clase `.dark` en `<html>`. Las variables CSS cambian automáticamente gracias a:
+### Tipografía Exclusiva
 
-```css
-:root { --glass-bg: rgba(255,255,255,0.6); ... }
-.dark { --glass-bg: rgba(255,255,255,0.04); ... }
-```
+- **Plus Jakarta Sans** — Fuente tipográfica sans-serif geométrica moderna utilizada para todos los elementos (títulos, cuerpo de texto, números y código), garantizando coherencia visual absoluta.
 
-### Clases utilitarias disponibles
+### Cursor Interactivo Pokéball
 
-| Clase               | Uso                                                |
-| ------------------- | -------------------------------------------------- |
-| `.glass`            | Efecto vidrio base                                 |
-| `.glass-card`       | Tarjeta glass con bordes redondeados               |
-| `.glass-card-hover` | Igual que glass-card pero con glow accent al hover |
-| `.glass-input`      | Input con efecto glass, glow al focus              |
-| `.btn-glass`        | Botón glass con hover accent                       |
-| `.badge`            | Etiqueta glass pequeña                             |
-| `.divider`          | Línea divisoria sutil                              |
-
-### Tipografía
-
-- **Orbitron** — Headings (técnico, futurista)
-- **Inter** — Cuerpo de texto (legible, limpio)
-- **JetBrains Mono** — Datos técnicos, badges, código
+El cursor se sustituye por una Pokébola que gira 45 grados en reposo (hotspot de click en la punta `9 9`), y responde de manera reactiva **abriéndose por la mitad** y emitiendo un destello brillante dorado al posicionarse sobre cualquier elemento interactivo (`a`, `button`, selectores, enlaces).
 
 ---
 
@@ -673,7 +650,7 @@ src/
                      │               │             │
                      │         ┌─────▼──────┐      │
                      │         │  UserCard  │      │
-                     │         │ (glass)    │      │
+                     │         │            │      │
                      │         └────────────┘      │
                      └─────────────────────────────┘
 ```

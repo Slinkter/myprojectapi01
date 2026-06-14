@@ -52,11 +52,12 @@ Composiciones de nivel de página que cargan widgets o features.
 ### 3. `widgets/`
 Organiza features y entities en componentes complejos y auto-contenidos de UI.
 *   `search-results/`: Gestiona la visualización condicional de los resultados (cargando, error, lista, no encontrado).
-*   `user-profile-bento/`: Dashboard Bento ultra-premium para detalles del usuario.
+*   `user-profile-bento/`: Dashboard Bento ultra-premium para detalles del usuario, modularizado en subcomponentes de UI (`ProfileHeader`, `BentoStatsGrid`, etc.) para desacoplar el maquetado.
 
 ### 4. `features/`
 Acciones interactivas que aportan valor directo al usuario.
 *   `search-user/`: Barra de búsqueda, debouncing, y estado de búsqueda a través de la Fachada (`useUserSearchFacade.js`).
+*   `view-user-details/`: Gestión de parámetros y estados de carga de perfiles mediante la Fachada (`useUserDetailFacade.js`).
 
 ### 5. `entities/`
 Conceptos de negocio (en este caso, el `user`). Define schemas, adaptadores, llamadas de servicio, hooks de consulta y componentes de UI puros (como tarjetas individuales o esqueletos).
@@ -105,8 +106,10 @@ Para garantizar la calidad de la arquitectura a nivel "Senior", aplicamos tres p
 *   **Función:** La API de GitHub devuelve una estructura compleja con propiedades variables (`avatar_url`, `html_url`). El adaptador las traduce al modelo estandarizado `UserProfile` con tipados limpios (`photo`, `username`, `repos`). A la vez, se realiza una validación estricta usando **Zod** para fallar inmediatamente si el contrato de la API cambia.
 
 ### 2. El Patrón Facade (GoF - Estructural)
-*   **Ubicación:** `src/features/search-user/model/useUserSearchFacade.js`
-*   **Función:** Centraliza la complejidad de coordinar el debounce, llamar a TanStack Query, despachar toasts ante límites de API, y manejar el estado de error. Los componentes visuales solo consumen esta fachada y se mantienen puros.
+*   **Ubicación:** 
+    *   `src/features/search-user/model/useUserSearchFacade.js`
+    *   `src/features/view-user-details/model/useUserDetailFacade.js`
+*   **Función:** Centralizan la complejidad de coordinar estados y llamadas de queries externos (TanStack Query, react-router-dom, timeouts o toasts de error) fuera de la capa visual. Los widgets y páginas simplemente consumen los datos orquestados por estas fachadas y se enfocan en renderizar la UI de forma limpia y declarativa.
 
 ### 3. El Patrón Factory (GoF - Creacional)
 *   **Ubicación:** `src/entities/user/ui/ResultFactory.jsx`

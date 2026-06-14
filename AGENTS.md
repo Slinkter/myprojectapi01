@@ -109,11 +109,11 @@ Page ➔ Widget ➔ Feature (Facade) ➔ Entity (Query Hook ➔ Adapter/Zod ➔ 
 
 ---
 
-## Design System — Glassmorphism + Minimalismo
+## Design System — Tailwind CSS Website Branding
 
-- Use glass utility classes: `glass`, `glass-card`, `glass-card-hover`, `glass-input`, `btn-glass`, `badge`, `divider`.
-- Theme variables: `bg-bg`, `bg-surface`, `text-text`, `text-text-mute`, `text-accent`, `border-border`, `bg-accent-soft`.
-- Typography: **Inter** is used exclusively for all texts, headings, and code. Fallback to system fonts like `-apple-system, BlinkMacSystemFont` on Apple devices.
+- Theme style matches the tailwindcss.com visual identity: Slate colors, subtle grid dot overlay background patterns, and Indigo-Purple-Pink gradients (`from-indigo-500 via-purple-500 to-pink-500`).
+- Typography: **Plus Jakarta Sans** is used exclusively for all texts, headings, and code, imported via Google Fonts.
+- Custom Cursor: Features a custom Poke Ball SVG cursor rotated by -45 degrees (hotspot: `9 9`), which reactive-opens on hover to reveal a glowing yellow energy star.
 
 ---
 
