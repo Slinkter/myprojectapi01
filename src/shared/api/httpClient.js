@@ -1,24 +1,21 @@
 /**
  * @file httpClient.js
- * @description
- * Envoltorio (wrapper) genérico alrededor de la API Fetch para centralizar lógica común como:
- * - Verificación de estados de respuesta
- * - Parseo de JSON
- * - Manejo genérico de errores
+ * @description Generic wrapper around the native Fetch API.
+ * Standardizes headers, formats JSON payloads, handles HTTP error codes, and catches cancellations.
  */
 
 import { ApiError } from "./ApiError";
 import { log } from "@/shared/logger/logger";
 
 /**
- * Perform an HTTP request
+ * Execute an asynchronous HTTP fetch request.
  *
  * @async
  * @function httpClient
- * @param {string} url - Target URL
- * @param {Object} [options={}] - Fetch options
- * @returns {Promise<any>} Parsed JSON response
- * @throws {ApiError} If the request fails or returns a non-OK status
+ * @param {string} url - Target URL address.
+ * @param {RequestInit} [options={}] - Fetch configuration options.
+ * @throws {ApiError} Throws ApiError if response status is not OK (2xx) or connection drops.
+ * @returns {Promise<any>} Promise resolving to parsed JSON object or null.
  */
 export const httpClient = async (url, options = {}) => {
   log.flow("fetch");
@@ -40,7 +37,6 @@ export const httpClient = async (url, options = {}) => {
       );
     }
 
-    // Handle empty responses
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
       const data = await response.json();
@@ -58,7 +54,6 @@ export const httpClient = async (url, options = {}) => {
 
     if (error instanceof ApiError) throw error;
 
-    // Handle network or other errors
     throw new ApiError(error.message || "Network request failed", 0);
   }
 };

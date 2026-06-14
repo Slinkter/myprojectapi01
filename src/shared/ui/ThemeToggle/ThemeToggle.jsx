@@ -4,18 +4,18 @@ import { motion, AnimatePresence } from "motion/react";
 
 /**
  * @file ThemeToggle.jsx
- * @description Un botón interactivo accesible que alterna el tema de la aplicación.
- * Cuenta con micro-animaciones rotacionales y transición fluida de iconos mediante AnimatePresence.
+ * @description Accessible toggle button component that switches between light and dark themes.
+ * Employs rotational spring micro-animations and smooth icon cross-fades via AnimatePresence.
  */
 
 /**
- * Componente ThemeToggle
- * 
- * @function ThemeToggle
- * @param {Object} props - Propiedades del componente
- * @param {string} props.theme - El tema activo actualmente ('light' | 'dark')
- * @param {Function} props.toggleTheme - Función callback para alternar el estado del tema
- * @returns {JSX.Element} El botón interactivo de alternancia de tema
+ * ThemeToggle component.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {string} props.theme - Active application theme ('light' or 'dark').
+ * @param {Function} props.toggleTheme - Toggle theme action handler.
+ * @returns {JSX.Element} Theme toggle button.
  */
 export const ThemeToggle = ({ theme, toggleTheme }) => {
   const isDark = theme === "dark";
@@ -62,4 +62,5 @@ ThemeToggle.propTypes = {
 };
 
 ThemeToggle.displayName = "ThemeToggle";
+
 export default ThemeToggle;

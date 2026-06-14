@@ -4,6 +4,21 @@ import { AlertTriangle, Clock, Key, RefreshCw } from "lucide-react";
 import { cn } from "@/shared/lib/utils/utils";
 import { TAILWIND_STYLE_TOKENS } from "@/shared";
 
+/**
+ * @file ErrorDisplay.jsx
+ * @description Renders diagnostic messages, standard connection errors, or rate-limiting (403) warning panels.
+ */
+
+/**
+ * RateLimitPane sub-component.
+ * Displays information related to GitHub API rate limits, diagnostics, and retry guidelines.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {string} props.message - Descriptive error message.
+ * @param {Function} props.onRetry - Retry query action callback.
+ * @returns {JSX.Element} Rate limit error page element.
+ */
 const RateLimitPane = ({ message, onRetry }) => {
   return (
     <motion.div
@@ -96,6 +111,19 @@ RateLimitPane.propTypes = {
   onRetry: PropTypes.func.isRequired,
 };
 
+RateLimitPane.displayName = "RateLimitPane";
+
+/**
+ * ErrorDisplay component.
+ * Displays styled alerts or delegates to specialized RateLimitPane on HTTP 403 blocks.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {string} props.message - Descriptive error message.
+ * @param {number} [props.status] - Optional HTTP status code from network response.
+ * @param {Function} props.onRetry - Action handler to retrigger query executions.
+ * @returns {JSX.Element} Error notification viewport.
+ */
 const ErrorDisplay = ({ message, status, onRetry }) => {
   if (status === 403) {
     return <RateLimitPane message={message} onRetry={onRetry} />;
@@ -106,7 +134,10 @@ const ErrorDisplay = ({ message, status, onRetry }) => {
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className={cn(TAILWIND_STYLE_TOKENS.card, "flex flex-col justify-center items-center text-center p-12 gap-6 max-w-lg mx-auto mt-10")}
+      className={cn(
+        TAILWIND_STYLE_TOKENS.card,
+        "flex flex-col justify-center items-center text-center p-12 gap-6 max-w-lg mx-auto mt-10",
+      )}
       role="alert"
       aria-live="assertive"
     >
@@ -143,8 +174,6 @@ ErrorDisplay.propTypes = {
   onRetry: PropTypes.func.isRequired,
 };
 
-ErrorDisplay.defaultProps = {
-  status: null,
-};
+ErrorDisplay.displayName = "ErrorDisplay";
 
 export default ErrorDisplay;

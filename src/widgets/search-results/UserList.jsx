@@ -3,6 +3,12 @@ import PropTypes from "prop-types";
 import { AnimatePresence, motion } from "motion/react";
 import { ResultFactory } from "@/entities/user";
 
+/**
+ * @file UserList.jsx
+ * @description Renders a grid listing of UserCard items resolved via factory logic.
+ * Wraps list item entries inside spring-physics motion tags.
+ */
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -15,6 +21,17 @@ const containerVariants = {
   },
 };
 
+/**
+ * UserList component.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {Object[]} props.userList - Collection of user profiles to render.
+ * @param {number} props.userList[].id - User profile ID.
+ * @param {string} props.userList[].username - User handle.
+ * @param {string} props.userList[].photo - User photo URL.
+ * @returns {JSX.Element} Mapped grid list.
+ */
 const UserList = ({ userList }) => {
   return (
     <div className="w-full py-4">
@@ -59,5 +76,7 @@ UserList.propTypes = {
     }),
   ).isRequired,
 };
+
+UserList.displayName = "UserList";
 
 export default React.memo(UserList);

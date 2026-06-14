@@ -5,28 +5,35 @@ import { motion } from "motion/react";
 import { cn } from "@/shared/lib/utils/utils";
 import { ChevronRight } from "lucide-react";
 
+/**
+ * @file UserCard.jsx
+ * @description Flexible compound card component styling displaying individual user profile metadata.
+ * Arranged inside motion tags for smooth interactive entry transitions.
+ */
+
 const TAILWIND_BUTTON_BASE_CLASS = "btn-tailwind";
 
 const CARD_STYLE_VARIANTS = {
   default: "tailwind-card",
-  glass: "tailwind-card", // Aligned with modern slate Tailwind style
+  glass: "tailwind-card",
   minimal: "border border-border/40 rounded-xl hover:border-accent hover:bg-surface/30 transition-all duration-300",
   "accent-glow": "tailwind-card border-accent/30 hover:border-accent shadow-[0_4px_20px_-4px_rgba(14,165,233,0.08)]",
 };
 
 /**
  * @typedef {Object} UserAvatarProps
- * @property {string} avatarUrl - URL de la imagen del avatar.
- * @property {string} username - Nombre de usuario de GitHub para tags de animación.
- * @property {string} [variant="default"] - Variante de diseño visual.
+ * @property {string} avatarUrl - Image URL.
+ * @property {string} username - GitHub handle.
+ * @property {string} [variant="default"] - Card styling presets.
  */
 
 /**
- * Componente que renderiza la imagen de avatar animada del usuario.
+ * UserAvatar sub-component.
+ * Renders user profile picture with layout animations.
  *
  * @component
- * @param {UserAvatarProps} props - Propiedades del avatar.
- * @returns {JSX.Element} Imagen del avatar animada.
+ * @param {UserAvatarProps} props - Component props.
+ * @returns {JSX.Element} Profile avatar image.
  */
 const UserAvatar = ({ avatarUrl, username, variant = "default" }) => {
   const isMinimalLayout = variant === "minimal";
@@ -46,7 +53,7 @@ const UserAvatar = ({ avatarUrl, username, variant = "default" }) => {
           }}
           transition={{ duration: 0.3, ease: "easeOut" }}
           className={cn(
-            "rounded-full object-cover border border-border ring-4 ring-accent/5 dark:ring-accent/10 z-10 relative", // Tailwind style rounded-full with soft ring
+            "rounded-full object-cover border border-border ring-4 ring-accent/5 dark:ring-accent/10 z-10 relative",
             isMinimalLayout ? "w-10 h-10" : "w-16 h-16"
           )}
         />
@@ -61,18 +68,21 @@ UserAvatar.propTypes = {
   variant: PropTypes.string,
 };
 
+UserAvatar.displayName = "UserCard.Avatar";
+
 /**
  * @typedef {Object} UserHeaderProps
- * @property {string} username - Nombre de usuario de GitHub.
- * @property {string} [variant="default"] - Variante visual de diseño.
+ * @property {string} username - GitHub handle.
+ * @property {string} [variant="default"] - Card styling presets.
  */
 
 /**
- * Componente que renderiza el encabezado con el nombre de usuario y enlace de perfil.
+ * UserHeader sub-component.
+ * Renders main header title displaying the username handle.
  *
  * @component
- * @param {UserHeaderProps} props - Propiedades del header.
- * @returns {JSX.Element} Sección de encabezado de la tarjeta.
+ * @param {UserHeaderProps} props - Component props.
+ * @returns {JSX.Element} Card header element.
  */
 const UserHeader = ({ username, variant = "default" }) => {
   const isMinimalLayout = variant === "minimal";
@@ -80,7 +90,7 @@ const UserHeader = ({ username, variant = "default" }) => {
   return (
     <div className={cn("space-y-1 flex-1 min-w-0 leading-snug", isMinimalLayout ? "px-0 pb-0 text-left" : "px-5 pb-1 text-center")}>
       <h3 className={cn(
-        "font-heading font-bold truncate text-text leading-snug tracking-tight", // Tailwind bold heading
+        "font-heading font-bold truncate text-text leading-snug tracking-tight",
         isMinimalLayout ? "text-sm" : "text-sm uppercase tracking-wide"
       )}>
         {username}
@@ -97,18 +107,21 @@ UserHeader.propTypes = {
   variant: PropTypes.string,
 };
 
+UserHeader.displayName = "UserCard.Header";
+
 /**
  * @typedef {Object} UserFooterProps
- * @property {string} username - Nombre de usuario de GitHub.
- * @property {string} [variant="default"] - Variante de diseño visual.
+ * @property {string} username - GitHub handle.
+ * @property {string} [variant="default"] - Card styling presets.
  */
 
 /**
- * Componente que renderiza el botón de pie de página para navegar al detalle.
+ * UserFooter sub-component.
+ * Renders CTA link action mapping to detail views.
  *
  * @component
- * @param {UserFooterProps} props - Propiedades del footer.
- * @returns {JSX.Element|null} Botón animado o null si es variante minimal.
+ * @param {UserFooterProps} props - Component props.
+ * @returns {JSX.Element|null} Card footer element.
  */
 const UserFooter = ({ username, variant = "default" }) => {
   if (variant === "minimal") return null;
@@ -117,7 +130,7 @@ const UserFooter = ({ username, variant = "default" }) => {
     <div className="px-5 pb-5 pt-1 mt-auto w-full z-10 overflow-hidden">
       <Link to={`/user/${username}`} className="w-full block">
         <motion.button
-          className={cn(TAILWIND_BUTTON_BASE_CLASS, "w-full text-xs py-2.5 rounded-xl flex items-center justify-center gap-1.5")} // rounded-xl
+          className={cn(TAILWIND_BUTTON_BASE_CLASS, "w-full text-xs py-2.5 rounded-xl flex items-center justify-center gap-1.5")}
           aria-label={`Ver perfil de ${username}`}
           variants={{
             initial: { opacity: 0.95 },
@@ -138,21 +151,23 @@ UserFooter.propTypes = {
   variant: PropTypes.string,
 };
 
+UserFooter.displayName = "UserCard.Footer";
+
 /**
  * @typedef {Object} UserCardProps
- * @property {React.ReactNode} children - Hijos del compuesto (UserCard.Avatar, UserCard.Header, etc.).
- * @property {"default"|"glass"|"minimal"|"accent-glow"} [variant="default"] - Variante de diseño visual de la tarjeta.
- * @property {string} [className] - Clases de estilo Tailwind CSS adicionales.
- * @property {string} [username] - El identificador único del usuario en GitHub.
+ * @property {React.ReactNode} children - Combined child components.
+ * @property {"default"|"glass"|"minimal"|"accent-glow"} [variant="default"] - Card styling presets.
+ * @property {string} [className] - Extra Tailwind styling overrides.
+ * @property {string} [username] - GitHub user handle.
  */
 
 /**
- * Tarjeta contenedora de usuario animada con estética de Tailwind CSS.
- * Utiliza el Compound Component Pattern (Avatar, Header, Footer).
+ * UserCard compound component.
+ * Layout primitive encapsulating individual cards representing search matches.
  *
  * @component
- * @param {UserCardProps} props - Propiedades de la tarjeta.
- * @returns {JSX.Element} Contenedor animado de la tarjeta.
+ * @param {UserCardProps} props - Component props.
+ * @returns {JSX.Element} Mapped card element.
  */
 const UserCard = ({ children, variant = "default", className, username }) => {
   const userCardRef = useRef(null);
@@ -175,12 +190,12 @@ const UserCard = ({ children, variant = "default", className, username }) => {
         variants={{
           initial: { opacity: 0, y: 12 },
           animate: { opacity: 1, y: 0 },
-          hover: { y: -4 }, // Tailwind style smooth translation hover
+          hover: { y: -4 },
         }}
         transition={{ type: "spring", stiffness: 200, damping: 18 }}
         className={cn(
           variantClassName,
-          "flex h-full w-full overflow-hidden rounded-2xl", // rounded-2xl
+          "flex h-full w-full overflow-hidden rounded-2xl",
           isMinimalLayout ? "flex-row items-center gap-4 p-4" : "flex-col"
         )}
       >
@@ -206,5 +221,7 @@ UserCard.propTypes = {
 UserCard.Avatar = UserAvatar;
 UserCard.Header = UserHeader;
 UserCard.Footer = UserFooter;
+
+UserCard.displayName = "UserCard";
 
 export default UserCard;

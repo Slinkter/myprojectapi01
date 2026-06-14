@@ -1,8 +1,14 @@
 /**
  * @file UserDetailSkeleton.jsx
- * @description Loading skeleton representing the exact asymmetric Bento Grid layout for high-fidelity loading.
+ * @description High-fidelity loading skeleton loader matching the Bento Grid details page layout structure.
  */
 
+/**
+ * UserDetailSkeleton component.
+ *
+ * @component
+ * @returns {JSX.Element} Loading skeletons grid.
+ */
 const UserDetailSkeleton = () => (
   <div className="max-w-4xl mx-auto space-y-8 md:space-y-12 py-8 md:py-12 px-4 animate-pulse">
     <div className="inline-block">
@@ -25,10 +31,10 @@ const UserDetailSkeleton = () => (
       </div>
     </section>
 
-    {/* Bento Grid Skeleton matching the new asymmetrical layout */}
+    {/* Bento Grid Skeleton */}
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       
-      {/* Bento 1 Skeleton: Repositories (Double width) */}
+      {/* Bento 1 Skeleton: Repositories */}
       <div className="md:col-span-2 p-8 rounded-2xl border border-border bg-surface flex flex-col justify-between gap-6 min-h-[220px]">
         <div className="flex justify-between items-center">
           <div className="w-12 h-12 rounded-lg bg-border" />
@@ -72,7 +78,7 @@ const UserDetailSkeleton = () => (
         </div>
       </div>
 
-      {/* Bento 5 Skeleton: Decortive TechFiller */}
+      {/* Bento 5 Skeleton: Diagnostics status */}
       <div className="p-6 rounded-2xl border border-border bg-surface flex flex-col justify-between min-h-[160px]">
         <div className="flex items-center gap-1.5 border-b border-border pb-2.5 w-full">
           <div className="w-2 h-2 rounded-full bg-border/40" />
@@ -96,5 +102,7 @@ const UserDetailSkeleton = () => (
     </footer>
   </div>
 );
+
+UserDetailSkeleton.displayName = "UserDetailSkeleton";
 
 export default UserDetailSkeleton;
