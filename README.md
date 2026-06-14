@@ -20,6 +20,22 @@ Cursor:         Pokéball interactiva y reactiva (SVG)
 
 ---
 
+## 📦 Índice de Módulos (Slices)
+
+1. [Slice 1: Stack Tecnológico y Propósito](#-slice-1-stack-tecnológico-y-propósito)
+2. [Slice 2: Feature-Sliced Design (FSD) en Práctica](#-slice-2-feature-sliced-design-fsd-en-práctica) (con Estructura en Árbol ASCII)
+3. [Slice 3: TanStack Query (Estado del Servidor)](#-slice-3-tanstack-query-estado-del-servidor) (con Diagramas de Red en Dev/Prod)
+4. [Slice 4: Zod (Validación de Datos en Runtime)](#-slice-4-zod-validación-de-datos-en-runtime)
+5. [Slice 5: Patrones de Diseño (GoF)](#-slice-5-patrones-de-diseño-gof)
+6. [Slice 6: Identidad Visual, Temas y Cursor Pokéball](#-slice-6-identidad-visual-temas-y-cursor-pokéball)
+7. [Slice 7: JavaScript Moderno (Inmutabilidad, Spread, Closures)](#-slice-7-javascript-moderno-inmutabilidad-spread-closures)
+8. [Slice 8: Buenas Prácticas (SOLID y DRY)](#-slice-8-buenas-prácticas-solid-y-dry)
+9. [Slice 9: Comandos del Ciclo de Vida del Proyecto](#-slice-9-comandos-del-ciclo-de-vida-del-proyecto)
+10. [Slice 10: Diagrama de Flujo de Datos Completo](#-slice-10-diagrama-de-flujo-de-datos-completo) (Árbol de Procesos ASCII)
+11. [Slice 11: Documentación Adicional y Guías de Estudio](#-slice-11-documentación-adicional-y-guías-de-estudio)
+
+---
+
 ## 🧩 Slice 1: Stack Tecnológico y Propósito
 
 Este módulo explica las herramientas del proyecto, su función y el motivo de su elección.
@@ -76,19 +92,40 @@ FSD divide la aplicación en capas verticales donde **las capas superiores puede
 
 ### 📂 Estructura del Código
 
-*   [`src/app/`](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/app/): Punto de entrada y configuración de rutas (`App.jsx`).
-*   [`src/pages/`](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/pages/): Páginas principales de la aplicación (`SearchPage`, `DetailPage`, `NotFoundPage`).
-*   [`src/widgets/`](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/widgets/):
-    *   `search-results/`: Orquesta la visualización condicional de resultados (grid, skeletons, errores).
-    *   `user-profile-bento/`: Dashboard asimétrico bento detallando el perfil de un desarrollador.
-*   [`src/features/`](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/features/):
-    *   `search-user/`: Barra de búsqueda con autocompletado y debouncing (`useUserSearchFacade.js`).
-    *   `view-user-details/`: Gestión de parámetros y estados de perfiles detallados (`useUserDetailFacade.js`).
-*   [`src/entities/`](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/entities/):
-    *   `user/api/`: Capa de servicios (`userService.js`) y hooks de red (`useUserQuery.js`).
-    *   `user/model/`: Esquemas de validación Zod (`schema.js`) y adaptadores de datos (`adapter.js`).
-    *   `user/ui/`: Tarjetas de usuario reutilizables y skeletons (`UserCard.jsx`, `ResultFactory.jsx`).
-*   [`src/shared/`](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/shared/): Utilidades comunes (`httpClient.js`, `useTheme.js`, `cn()`).
+```text
+src/
+├── app/                       # Configuración general y de enrutado
+│   ├── App.jsx
+│   └── main.jsx
+│
+├── pages/                     # Composiciones completas de páginas
+│   ├── search-page/
+│   ├── detail-page/
+│   └── not-found/
+│
+├── widgets/                   # Componentes de UI auto-contenidos complejos
+│   ├── search-results/        # Orquestación y grids de resultados (skeletons, error states)
+│   └── user-profile-bento/    # Layout detallado en Bento Grid (Dashboard)
+│
+├── features/                  # Acciones interactivas con valor de negocio
+│   ├── search-user/           # Lógica y barra del buscador (facade)
+│   └── view-user-details/     # Gestión de parámetros y fachada de detalles de usuario
+│
+├── entities/                  # Conceptos de negocio (user)
+│   └── user/
+│       ├── api/               # Servicios HTTP y query hooks (useUserQuery, useUserDetailQuery)
+│       ├── model/             # Schemas Zod y adaptadores (adapter, schema)
+│       └── ui/                # Tarjetas, fábricas y skeletons (UserCard, ResultFactory)
+│
+└── shared/                    # Infraestructura y elementos reutilizables
+    ├── api/                   # Cliente HTTP y clase ApiError
+    ├── config/                # Constantes globales
+    ├── lib/                   # Hooks generales y utils (cn, useTheme, useDebouncedSearch)
+    ├── logger/                # Logging con ASCII art
+    ├── mocks/                 # MSW en desarrollo local
+    ├── styles/                # index.css de Tailwind v4 y theme
+    └── ui/                    # ErrorBoundary, ErrorDisplay, ThemeToggle
+```
 
 ---
 
@@ -98,30 +135,122 @@ TanStack Query se encarga del estado de red, reemplazando a los gestores tradici
 
 ### ⚙️ Ciclo de Vida y Configuración
 
-El motor de consultas se inicializa con parámetros clave para optimizar la red:
+El motor de consultas se inicializa con parámetros clave para optimizar la red (`src/main.jsx`):
 *   `staleTime` (5 minutos): Tiempo durante el cual los datos se consideran "frescos" y no requieren recarga.
 *   `gcTime` (10 minutos): Tiempo de persistencia de datos en caché inactivos antes de ser eliminados.
+*   `retry: 1`: Reintenta 1 vez si falla antes de disparar error.
+
+```jsx
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+```
 
 ### 🔄 Flujo de Peticiones en Desarrollo (MSW) vs Producción
 
-```txt
-[En Búsqueda] ➔ Cambia Término ➔ ¿Existe en Caché Fresco?
-                                       │
-                      ┌────────────────┴────────────────┐
-                   SÍ │                                 │ NO
-                      ▼                                 ▼
-              Datos Instantáneos                Llamar a queryFn
-                                                        │
-                                          ┌─────────────┴─────────────┐
-                                      DEV │                           │ PROD
-                                          ▼                           ▼
-                                    Mock Intercept              API Real GitHub
-                                   (MSW Local Cache)          (Sujeto a Rate Limit)
+La interacción entre los componentes React, TanStack Query y la red difiere significativamente entre desarrollo y producción para optimizar la velocidad y evitar el bloqueo por límites de uso (Rate Limit) de la API de GitHub:
+
+#### 💻 Modo Desarrollo (MSW Interceptor)
+
+En desarrollo, se activa **Mock Service Worker (MSW)**. MSW levanta un Service Worker en el navegador que intercepta todas las peticiones salientes antes de que toquen internet, respondiendo con datos de prueba guardados localmente.
+
+```text
+┌───────────────┐
+│ Componente UI │
+└───────┬───────┘
+        │ 1. Invoca hook (ej: useUserQuery)
+        ▼
+┌───────────────┐      ¿Datos en caché y frescos?
+│ TanStack Query├─────────────────────────────────────────┐
+└───────┬───────┘                                         │ SÍ
+        │ NO (Cache Miss / Datos Expirados)               │ (Caché caliente, staleTime)
+        ▼                                                 ▼
+┌───────────────┐                                 ┌───────────────┐
+│ fetch() API   │                                 │ Retorna datos │
+└───────┬───────┘                                 │ instantáneos  │
+        │ Petición HTTP saliente                  └───────────────┘
+        ▼
+========================================================== LÍMITE DEL NAVEGADOR
+        │ (MSW intercepta la llamada de red en segundo plano)
+        ▼
+┌───────────────────────────────┐
+│ MSW (Mock Service Worker)     │
+│ - Retorna mock de handlers.js │ ◄── Evita el bloqueo del Rate Limit de GitHub (60 req/h)
+└───────────────────────────────┘
+```
+
+#### 🌐 Modo Producción (Conexión Real)
+
+En producción (cuando compilas con `pnpm build`), MSW se remueve por completo del bundle final. Las peticiones viajan directamente por internet para consultar los datos actualizados en vivo de la API de GitHub.
+
+```text
+┌───────────────┐
+│ Componente UI │
+└───────┬───────┘
+        │ 1. Invoca hook (ej: useUserQuery)
+        ▼
+┌───────────────┐      ¿Datos en caché y frescos?
+│ TanStack Query├─────────────────────────────────────────┐
+└───────┬───────┘                                         │ SÍ
+        │ NO (Cache Miss / Datos Expirados)               │ (Caché caliente, staleTime)
+        ▼                                                 ▼
+┌───────────────┐                                 ┌───────────────┐
+│ fetch() API   │                                 │ Retorna datos │
+└───────┬───────┘                                 │ instantáneos  │
+        │ Petición HTTP real                      └───────────────┘
+        ▼
+========================================================== INTERNET / RED
+        │ (Conexión de red normal a servidores públicos)
+        ▼
+┌───────────────────────────────┐
+│ API Real de GitHub            │
+│ - api.github.com              │ ◄── Sujeto a Rate Limits reales de la API
+└───────────────────────────────┘
+```
+
+### ⚙️ Las dos queries del proyecto
+
+**`useUserQuery.js`** — Búsqueda de usuarios:
+
+```js
+export const useUserQuery = (searchTerm) => {
+  return useQuery({
+    queryKey: ["users", searchTerm],
+    queryFn: ({ signal }) => fetchUsersAPI(searchTerm, signal),
+    staleTime: STALE_TIME,
+    gcTime: GC_TIME,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+};
+```
+
+**`useUserDetailQuery.js`** — Detalle de un usuario:
+
+```js
+export const useUserDetailQuery = (login) => {
+  return useQuery({
+    queryKey: ["user-detail", login],
+    queryFn: ({ signal }) => fetchUserDetailAPI(login, signal),
+    staleTime: STALE_TIME,
+    gcTime: GC_TIME,
+    retry: 1,
+    refetchOnWindowFocus: false,
+    enabled: !!login, // 👈 solo se ejecuta si login tiene valor
+  });
+};
 ```
 
 ### 🛑 Cancelación Automática (AbortSignal)
 
-Cuando el usuario escribe rápidamente, TanStack Query cancela de forma automática las llamadas anteriores inyectando un `AbortSignal` al método `fetch` en [httpClient.js](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/shared/api/httpClient.js).
+Cuando el usuario escribe rápidamente o cambia de vista, TanStack Query cancela de forma automática las llamadas anteriores inyectando un `AbortSignal` al método `fetch` en [httpClient.js](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/shared/api/httpClient.js).
 
 ---
 
@@ -234,3 +363,76 @@ pnpm lint         # Ejecuta el análisis estático de accesibilidad y ESLint
 pnpm test:run     # Ejecuta las pruebas unitarias del proyecto una sola vez
 pnpm deploy       # Compila y despliega el proyecto en GitHub Pages
 ```
+
+---
+
+## 🧩 Slice 10: Diagrama de Flujo de Datos Completo
+
+Flujo secuencial del sistema desde que el usuario escribe en la interfaz de búsqueda hasta que el adaptador procesa los datos y se pinta el resultado final en el navegador:
+
+```text
+Usuario escribe en el input
+       │
+       ▼
+setSearchTerm("mojombo")           ← actualiza inmediatamente el input
+       │
+       ▼
+useDebouncedSearch (500ms)         ← espera a que deje de escribir
+       │
+       ▼
+debouncedSearchTerm cambia         ← "mojombo"
+       │
+       ▼
+useUserQuery(["users", "mojombo"]) ← queryKey cambió
+       │
+       ├─ ¿Hay caché fresca?       ← staleTime 5min
+       │   └─ Sí → devuelve datos instantáneo (sin red)
+       │
+       └─ No → ejecuta queryFn
+              │
+              ▼
+       fetchUsersAPI("mojombo", signal)  ← signal permite cancelar
+              │
+              ▼
+       httpClient(url, { signal })       ← wrapper de fetch
+              │
+              ▼
+       GitHub API (o MSW en dev)
+              │
+              ▼
+       usersCollectionAdapter() → userAdapter() → Zod valida
+              │
+              ▼
+       TanStack cachea el resultado
+              │
+              ▼
+       useUserSearchFacade expone:
+         { users, isLoading, isError, isEmpty }
+              │
+              ▼
+       SearchResults renderiza:
+         loading → SkeletonGrid
+         error   → ErrorDisplay
+         empty   → NotFound
+         data    → UserList → ResultFactory → UserCard
+```
+
+---
+
+## 🧩 Slice 11: Documentación Adicional y Guías de Estudio
+
+Puedes explorar las siguientes guías de estudio ubicadas en `src/docs/` para profundizar en los conceptos teóricos y técnicos del proyecto:
+
+| Documento | Descripción |
+| :--- | :--- |
+| [`src/docs/01-Guia-del-Proyecto.md`](./src/docs/01-Guia-del-Proyecto.md) | Visión general, casos de uso y requerimientos del sistema. |
+| [`src/docs/02-Arquitectura-y-Patrones.md`](./src/docs/02-Arquitectura-y-Patrones.md) | Inmersión a la arquitectura FSD y los patrones GoF aplicados. |
+| [`src/docs/03-Guia-de-Desarrollo.md`](./src/docs/03-Guia-de-Desarrollo.md) | Setup rápido, pnpm, comandos básicos y flujos de trabajo. |
+| [`src/docs/GUIA_ESTUDIO.md`](./src/docs/GUIA_ESTUDIO.md) | 📚 Manual completo en formato libro de React para aprender desde cero. |
+| [`src/docs/FSD_NIVEL_POLLITO.md`](./src/docs/FSD_NIVEL_POLLITO.md) | 🐥 Guía visual de Feature-Sliced Design explicada nivel pollito. |
+| [`src/docs/BIG_O_POLLITO.md`](./src/docs/BIG_O_POLLITO.md) | 🚀 Guía explicativa sobre complejidad Big O nivel pollito. |
+| [`src/docs/PRUEBA_TECNICA.md`](./src/docs/PRUEBA_TECNICA.md) | 📝 Simulación de entrevista técnica frontend para práctica de código. |
+
+---
+
+> MIT © 2026 — Hecho con 💜 para que juniors aprendan React con buenas prácticas.
