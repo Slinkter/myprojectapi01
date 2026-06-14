@@ -1,688 +1,236 @@
-# GitExplorer — Guía de Estudio para Programadores Junior
+# GitExplorer — Guía del Desarrollador & Aprendizaje Interactiva
 
-> **React SPA para explorar perfiles de GitHub.** Construida con Feature-Sliced Design (FSD), TanStack Query, Tailwind CSS v4, Zod y Motion v12. Cada decisión técnica está pensada para enseñar buenas prácticas de ingeniería de software.
+> **React 18 SPA para explorar perfiles de GitHub.** Diseñada meticulosamente siguiendo la arquitectura **Feature-Sliced Design (FSD)** y patrones de diseño empresariales. 
+> 
+> *Nota: Este documento está estructurado en módulos independientes ("Slices") optimizados para facilitar la lectura de principiantes y permitir el procesamiento automatizado mediante NotebookLM.*
+
+---
+
+## 🧭 Especificaciones del Sistema
 
 ```txt
-Estado:       Producción
-React:        v18.3
-Vite:         v5.4
-Tailwind:     v4
-Arquitectura: Feature-Sliced Design (FSD)
-Estilo:       Tailwind CSS Website Branding Aesthetic
+React:          v18.3 (SPA)
+Vite:           v5.4 (Fast Dev Server)
+Tailwind:       v4 (Utility-First Design System)
+Arquitectura:   Feature-Sliced Design (FSD)
+Diseño:         Estética Tailwind CSS Website Branding
+Tipografía:     Plus Jakarta Sans (Exclusiva)
+Cursor:         Pokéball interactiva y reactiva (SVG)
 ```
 
 ---
 
-## 📦 Índice
+## 🧩 Slice 1: Stack Tecnológico y Propósito
 
-1. [Stack Tecnológico — Cada librería explicada](#-stack-tecnológico--cada-librería-explicada)
-2. [Feature-Sliced Design (FSD) — Las 6 capas](#-feature-sliced-design-fsd--las-6-capas)
-3. [TanStack Query a profundidad](#-tanstack-query-a-profundidad)
-4. [Zod — Validación en Runtime](#-zod--validación-en-runtime)
-5. [Patrones de Diseño (GoF)](#-patrones-de-diseño-gof)
-6. [Tailwind CSS Website Branding + Sistema de Temas](#-tailwind-css-website-branding--sistema-de-temas)
-7. [Inmutabilidad y Spread Operator](#-inmutabilidad-y-spread-operator)
-8. [Closures en el proyecto](#-closures-en-el-proyecto)
-9. [DRY y SOLID aplicados](#-dry-y-solid-aplicados)
-10. [Scope y Hoisting](#-scope-y-hoisting)
-11. [Estructura del Proyecto](#-estructura-del-proyecto)
-12. [Diagrama de Flujo de Datos](#-diagrama-de-flujo-de-datos)
-13. [Comandos](#-comandos)
-14. [Documentación Adicional](#-documentación-adicional)
+Este módulo explica las herramientas del proyecto, su función y el motivo de su elección.
 
----
+### 🛠️ Capa de Producción
 
-## 📦 Stack Tecnológico — Cada librería explicada
+| Herramienta | Función | ¿Por qué la elegimos para aprender? |
+| :--- | :--- | :--- |
+| **React 18.3** | UI declarativa basada en componentes. | Estándar moderno de la industria. Permite composición y hooks reutilizables. |
+| **Vite 5.4** | Empaquetador (bundler) ultrarrápido. | Servidor local instantáneo (HMR) y compilaciones de producción optimizadas. |
+| **TanStack Query v5** | Gestor de estado del servidor y caché. | Elimina la necesidad de usar Redux/Context para datos de API. Resuelve la caché y reintentos. |
+| **Tailwind CSS v4** | Estilado rápido con clases de utilidad. | Permite diseñar interfaces profesionales directamente en HTML sin hojas CSS complejas. |
+| **Motion v12** | Animaciones basadas en física de resortes. | Anima elementos simulando físicas reales (resortes elásticos), logrando un look premium. |
+| **React Router v7** | Enrutamiento del lado del cliente. | Cambia de vista instantáneamente sin recargar la página del navegador (experiencia SPA). |
+| **Zod v4** | Validador de esquemas en tiempo de ejecución. | Asegura que la API de GitHub responda con datos válidos antes de que toquen la UI. |
+| **Sonner v2** | Sistema de notificaciones contextuales (toasts). | Toasts elegantes, accesibles y con soporte directo para cola de notificaciones. |
 
-### Producción
+### 💻 Capa de Desarrollo
 
-| Librería                  | Versión | ¿Qué hace?                                                                    | ¿Por qué la usamos?                                                                                                             |
-| ------------------------- | ------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| **React**                 | 18.3    | Biblioteca para construir interfaces de usuario con componentes reutilizables | Estándar de la industria. JSX, hooks, y el ecosistema más grande del frontend                                                   |
-| **Vite**                  | 5.4     | Bundler (empaquetador) para desarrollo y producción                           | HMR (Hot Module Replacement) instantáneo. No empaqueta todo en dev, solo los archivos que cambian                               |
-| **TanStack Query**        | ^5.100  | Librería para manejar estado del servidor (fetch, caché, sincronización)      | Reemplaza a Redux para datos de API. Sin boilerplate, con stale-while-revalidate, retry automático, y cancelación de peticiones |
-| **Tailwind CSS**          | v4      | Framework CSS utilitario                                                      | Escribes estilos directamente en el HTML con clases atómicas. Sin nombres de clases inventados, sin CSS separado                |
-| **Motion**                | ^12.38  | Animaciones con resortes físicos (antes se llamaba Framer Motion)             | Anima con físicas reales (stiffness + damping). Las transiciones se sienten orgánicas, no lineales                              |
-| **React Router**          | ^7.15   | Enrutador para SPA (Single Page Application)                                  | Cambia de página sin recargar el navegador. Permite lazy loading con `React.lazy()`                                             |
-| **Zod**                   | ^4.4    | Validador de esquemas en tiempo de ejecución                                  | Garantiza que los datos que llegan de la API sean exactamente lo que esperamos. Si no, lanza error antes de que llegue a la UI  |
-| **Lucide React**          | ^1.16   | Paquete de iconos en SVG                                                      | Iconos limpios, consistentes y personalizables por CSS (color, tamaño, stroke)                                                  |
-| **Sonner**                | ^2.0    | Notificaciones toast                                                          | Liviano, accesible, con richColors y animaciones suaves                                                                         |
-| **clsx + tailwind-merge** | —       | Utilidades para manejar clases condicionales                                  | `clsx` une clases, `tailwind-merge` resuelve conflictos. Juntos forman `cn()` — la función que usamos en todo el proyecto       |
-| **PropTypes**             | ^15.8   | Validación de propiedades (props) en desarrollo                               | Ayuda a detectar errores de tipo: si un componente espera un string y recibe un número, PropTypes avisa en consola              |
-
-### Desarrollo
-
-| Librería                      | ¿Qué hace?                                                                                              |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------- |
-| **ESLint**                    | Analiza el código en busca de errores, malas prácticas y problemas de accesibilidad (jsx-a11y)          |
-| **MSW (Mock Service Worker)** | Intercepta peticiones HTTP en el navegador durante desarrollo. Permite trabajar sin conexión a internet |
-| **gh-pages**                  | Sube el build de producción a GitHub Pages con un solo comando                                          |
-| **@tailwindcss/vite**         | Plugin que integra Tailwind v4 con Vite                                                                 |
-| **PostCSS**                   | Procesador de CSS que Tailwind usa internamente                                                         |
-| **Autoprefixer**              | Agrega prefijos de navegador (-webkit-, -moz-) automáticamente                                          |
+*   **ESLint:** Analiza el código de forma estática previniendo bugs, malas prácticas y fallos de accesibilidad (WCAG).
+*   **MSW (Mock Service Worker):** Intercepta llamadas de red locales y devuelve respuestas simuladas para trabajar sin conexión y evitar bloqueos por Rate Limit de GitHub.
 
 ---
 
-## 🧱 Feature-Sliced Design (FSD) — Las 6 capas
+## 🧩 Slice 2: Feature-Sliced Design (FSD) en Práctica
 
-Este proyecto sigue **Feature-Sliced Design (FSD)** (Diseño Orientado a Características). El código está dividido en 6 capas con una regla de oro:
+FSD divide la aplicación en capas verticales donde **las capas superiores pueden importar de las inferiores, pero nunca al revés**.
 
-> **Las capas externas/superiores pueden importar de las internas/inferiores, pero no al revés.**
-
+```txt
+┌────────────────────────────────────────────────────────┐
+│ 1. app (Configuración global, Estilos y Rutas)         │
+└───────────┬────────────────────────────────────────────┘
+            ▼
+┌────────────────────────────────────────────────────────┐
+│ 2. pages (Estructuras y layouts de pantallas)          │
+└───────────┬────────────────────────────────────────────┘
+            ▼
+┌────────────────────────────────────────────────────────┐
+│ 3. widgets (Módulos independientes complejos de UI)    │
+└───────────┬────────────────────────────────────────────┘
+            ▼
+┌────────────────────────────────────────────────────────┐
+│ 4. features (Acciones interactivas con valor de negocio)│
+└───────────┬────────────────────────────────────────────┘
+            ▼
+┌────────────────────────────────────────────────────────┐
+│ 5. entities (Conceptos de negocio, en este caso 'user')│
+└───────────┬────────────────────────────────────────────┘
+            ▼
+┌────────────────────────────────────────────────────────┐
+│ 6. shared (Código transversal, API, Hooks y Utils)     │
+└────────────────────────────────────────────────────────┘
 ```
-app ➔ pages ➔ widgets ➔ features ➔ entities ➔ shared
-```
 
-### Capa 1: Shared (`src/shared/`) — Elementos reutilizables comunes
+### 📂 Estructura del Código
 
-- Contiene utilidades (`lib/utils/`), hooks reutilizables (`lib/hooks/`), componentes atómicos (`ui/`), config (`config/`), estilos generales (`styles/`), mocks (`mocks/`) y el cliente HTTP (`api/httpClient.js`).
-
-### Capa 2: Entities (`src/entities/`) — Conceptos de negocio
-
-- Define el modelo de negocio y UI básica de la entidad `user` (schemas, adaptadores, hooks de consulta `useUserQuery`/`useUserDetailQuery` y componentes básicos como `UserCard`).
-
-### Capa 3: Features (`src/features/`) — Acciones de usuario
-
-- Implementa interacciones que aportan valor directo (como la barra de búsqueda `PageHeader` y el coordinamiento del buscador en la fachada `useUserSearchFacade`).
-
-### Capa 4: Widgets (`src/widgets/`) — Bloques autónomos
-
-- Composición compleja de features y entities en unidades de UI independientes (por ejemplo, el orquestador de resultados `SearchResults` y el bento grid de detalles `UserDetail`).
-
-### Capa 5: Pages (`src/pages/`) — Vistas de pantalla
-
-- Páginas que combinan widgets para armar las distintas pantallas de la aplicación (`SearchPage`, `DetailPage`, `NotFoundPage`).
-
-### Capa 6: App (`src/app/`) — Inicialización general
-
-- Configuración global y punto de montaje (`App.jsx` para rutas, `main.jsx` para iniciar React y QueryClient).
+*   [`src/app/`](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/app/): Punto de entrada y configuración de rutas (`App.jsx`).
+*   [`src/pages/`](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/pages/): Páginas principales de la aplicación (`SearchPage`, `DetailPage`, `NotFoundPage`).
+*   [`src/widgets/`](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/widgets/):
+    *   `search-results/`: Orquesta la visualización condicional de resultados (grid, skeletons, errores).
+    *   `user-profile-bento/`: Dashboard asimétrico bento detallando el perfil de un desarrollador.
+*   [`src/features/`](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/features/):
+    *   `search-user/`: Barra de búsqueda con autocompletado y debouncing (`useUserSearchFacade.js`).
+    *   `view-user-details/`: Gestión de parámetros y estados de perfiles detallados (`useUserDetailFacade.js`).
+*   [`src/entities/`](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/entities/):
+    *   `user/api/`: Capa de servicios (`userService.js`) y hooks de red (`useUserQuery.js`).
+    *   `user/model/`: Esquemas de validación Zod (`schema.js`) y adaptadores de datos (`adapter.js`).
+    *   `user/ui/`: Tarjetas de usuario reutilizables y skeletons (`UserCard.jsx`, `ResultFactory.jsx`).
+*   [`src/shared/`](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/shared/): Utilidades comunes (`httpClient.js`, `useTheme.js`, `cn()`).
 
 ---
 
-## ⚡ TanStack Query a profundidad
+## 🧩 Slice 3: TanStack Query (Estado del Servidor)
 
-### ¿Por qué TanStack Query y no Redux?
+TanStack Query se encarga del estado de red, reemplazando a los gestores tradicionales mediante almacenamiento en caché inteligente.
 
-**Redux** es para estado global de la aplicación (tema, usuario logueado, carrito de compras). **TanStack Query** es para estado del servidor (datos que vienen de una API). Mezclarlos es un error común.
+### ⚙️ Ciclo de Vida y Configuración
 
-TanStack Query nos da **gratis**:
+El motor de consultas se inicializa con parámetros clave para optimizar la red:
+*   `staleTime` (5 minutos): Tiempo durante el cual los datos se consideran "frescos" y no requieren recarga.
+*   `gcTime` (10 minutos): Tiempo de persistencia de datos en caché inactivos antes de ser eliminados.
 
-- Caché automática con tiempo de expiración (`staleTime`)
-- Re-fetch cuando el usuario regresa a la pestaña
-- Retry automático si la petición falla
-- Loading / error / success states sin boilerplate
-- Cancelación de peticiones cuando el query key cambia
+### 🔄 Flujo de Peticiones en Desarrollo (MSW) vs Producción
 
-### Configuración global (`src/main.jsx`)
-
-```jsx
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutos: los datos se consideran frescos
-      gcTime: 10 * 60 * 1000, // 10 minutos: se mantienen en caché después de desuscribirse
-      retry: 1, // reintenta 1 vez si falla
-      refetchOnWindowFocus: false, // no recarga al cambiar de pestaña
-    },
-  },
-});
+```txt
+[En Búsqueda] ➔ Cambia Término ➔ ¿Existe en Caché Fresco?
+                                       │
+                      ┌────────────────┴────────────────┐
+                   SÍ │                                 │ NO
+                      ▼                                 ▼
+              Datos Instantáneos                Llamar a queryFn
+                                                        │
+                                          ┌─────────────┴─────────────┐
+                                      DEV │                           │ PROD
+                                          ▼                           ▼
+                                    Mock Intercept              API Real GitHub
+                                   (MSW Local Cache)          (Sujeto a Rate Limit)
 ```
 
-### Las dos queries del proyecto
+### 🛑 Cancelación Automática (AbortSignal)
 
-**`useUserQuery.js`** — Búsqueda de usuarios:
+Cuando el usuario escribe rápidamente, TanStack Query cancela de forma automática las llamadas anteriores inyectando un `AbortSignal` al método `fetch` en [httpClient.js](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/shared/api/httpClient.js).
+
+---
+
+## 🧩 Slice 4: Zod (Validación de Datos en Runtime)
+
+TypeScript valida tipos al compilar, pero **Zod valida los datos recibidos de la red en tiempo de ejecución**.
 
 ```js
-export const useUserQuery = (searchTerm) => {
-  return useQuery({
-    queryKey: ["users", searchTerm],
-    queryFn: ({ signal }) => fetchUsersAPI(searchTerm, signal),
-    staleTime: STALE_TIME,
-    gcTime: GC_TIME,
-    retry: 1,
-    refetchOnWindowFocus: false,
-  });
-};
-```
-
-**`useUserDetailQuery.js`** — Detalle de un usuario:
-
-```js
-export const useUserDetailQuery = (login) => {
-  return useQuery({
-    queryKey: ["user-detail", login],
-    queryFn: ({ signal }) => fetchUserDetailAPI(login, signal),
-    staleTime: STALE_TIME,
-    gcTime: GC_TIME,
-    retry: 1,
-    refetchOnWindowFocus: false,
-    enabled: !!login, // 👈 solo se ejecuta si login tiene valor
-  });
-};
-```
-
-### 🔄 TanStack Query en Desarrollo (MSW) vs Producción (API Real)
-
-La interacción entre los componentes React, TanStack Query y la red difiere significativamente entre desarrollo y producción para optimizar la velocidad y evitar el bloqueo por límites de uso (Rate Limit) de la API de GitHub:
-
-#### 💻 Modo Desarrollo (MSW Interceptor)
-
-En desarrollo, se activa **Mock Service Worker (MSW)**. MSW levanta un Service Worker en el navegador que intercepta todas las peticiones salientes antes de que toquen internet, respondiendo con datos de prueba guardados localmente.
-
-```text
-┌───────────────┐
-│ Componente UI │
-└───────┬───────┘
-        │ 1. Invoca hook (ej: useUserQuery)
-        ▼
-┌───────────────┐      ¿Datos en caché y frescos?
-│ TanStack Query├─────────────────────────────────────────┐
-└───────┬───────┘                                         │ SÍ
-        │ NO (Cache Miss / Datos Expirados)               │ (Caché caliente, staleTime)
-        ▼                                                 ▼
-┌───────────────┐                                 ┌───────────────┐
-│ fetch() API   │                                 │ Retorna datos │
-└───────┬───────┘                                 │ instantáneos  │
-        │ Petición HTTP saliente                  └───────────────┘
-        ▼
-========================================================== LÍMITE DEL NAVEGADOR
-        │ (MSW intercepta la llamada de red en segundo plano)
-        ▼
-┌───────────────────────────────┐
-│ MSW (Mock Service Worker)     │
-│ - Retorna mock de handlers.js │ ◄── Evita el bloqueo del Rate Limit de GitHub (60 req/h)
-└───────────────────────────────┘
-```
-
-#### 🌐 Modo Producción (Conexión Real)
-
-En producción (cuando compilas con `pnpm build`), MSW se remueve por completo del bundle final. Las peticiones viajan directamente por internet para consultar los datos actualizados en vivo de la API de GitHub.
-
-```text
-┌───────────────┐
-│ Componente UI │
-└───────┬───────┘
-        │ 1. Invoca hook (ej: useUserQuery)
-        ▼
-┌───────────────┐      ¿Datos en caché y frescos?
-│ TanStack Query├─────────────────────────────────────────┐
-└───────┬───────┘                                         │ SÍ
-        │ NO (Cache Miss / Datos Expirados)               │ (Caché caliente, staleTime)
-        ▼                                                 ▼
-┌───────────────┐                                 ┌───────────────┐
-│ fetch() API   │                                 │ Retorna datos │
-└───────┬───────┘                                 │ instantáneos  │
-        │ Petición HTTP real                      └───────────────┘
-        ▼
-========================================================== INTERNET / RED
-        │ (Conexión de red normal a servidores públicos)
-        ▼
-┌───────────────────────────────┐
-│ API Real de GitHub            │
-│ - api.github.com              │ ◄── Sujeto a Rate Limits reales de la API
-└───────────────────────────────┘
-```
-
----
-
-### queryKey — La clave del caché
-
-TanStack Query usa el `queryKey` para identificar cada petición. Si el key cambia, la anterior se **aborta automáticamente** (gracias al `signal`) y se inicia la nueva:
-
-```js
-queryKey: ["users", "mojombo"]; // busca "mojombo"
-queryKey: ["users", "defunkt"]; // 👈 cambió, aborta la anterior, busca "defunkt"
-```
-
-El `signal` es un `AbortSignal` que TanStack Query inyecta en `queryFn`. Se lo pasamos a `fetch`:
-
-```js
-// httpClient.js
-const response = await fetch(url, { signal, ...options });
-// Si el query key cambia, fetch se cancela automáticamente
-```
-
-### Flujo completo de datos
-
-```
-Usuario escribe en el input
-       │
-       ▼
-setSearchTerm("mojombo")           ← actualiza inmediatamente el input
-       │
-       ▼
-useDebouncedSearch (500ms)         ← espera a que deje de escribir
-       │
-       ▼
-debouncedSearchTerm cambia         ← "mojombo"
-       │
-       ▼
-useUserQuery(["users", "mojombo"]) ← queryKey cambió
-       │
-       ├─ ¿Hay caché fresca?       ← staleTime 5min
-       │   └─ Sí → devuelve datos instantáneo (sin red)
-       │
-       └─ No → ejecuta queryFn
-              │
-              ▼
-       fetchUsersAPI("mojombo", signal)  ← signal permite cancelar
-              │
-              ▼
-       httpClient(url, { signal })       ← wrapper de fetch
-              │
-              ▼
-       GitHub API (o MSW en dev)
-              │
-              ▼
-       usersCollectionAdapter() → userAdapter() → Zod valida
-              │
-              ▼
-       TanStack cachea el resultado
-              │
-              ▼
-       useUserSearchFacade expone:
-         { users, isLoading, isError, isEmpty }
-              │
-              ▼
-       SearchResults renderiza:
-         loading → SkeletonGrid
-         error   → ErrorDisplay
-         empty   → NotFound
-         data    → UserList → UserCard
-```
-
----
-
-## 🔍 Zod — Validación en Runtime
-
-### ¿Por qué validar en runtime?
-
-TypeScript valida en **tiempo de compilación**. Pero la API de GitHub devuelve datos en **tiempo de ejecución**. Si GitHub cambia su API o viene un campo `null` donde esperamos un string, TypeScript no lo detecta. Zod sí.
-
-### Esquema (`src/entities/user/model/schema.js`)
-
-```js
+// src/entities/user/model/schema.js
 export const GitHubUserSchema = z.object({
   id: z.number(),
   login: z.string(),
   avatar_url: z.string().url(),
   html_url: z.string().url(),
-  name: z.string().nullable().optional(),
-  bio: z.string().nullable().optional(),
-  public_repos: z.number().optional().default(0), // si falta, usa 0
-  followers: z.number().optional().default(0),
-  // ...
+  public_repos: z.number().optional().default(0),
 });
 ```
 
-### Adapter + Zod (`src/entities/user/model/adapter.js`)
-
-```js
-export const userAdapter = (rawUser) => {
-  const data = GitHubUserSchema.parse(rawUser); // ← valida O lanza ZodError
-  return {
-    username: data.login, // renombramos propiedades
-    photo: data.avatar_url,
-    repos: data.public_repos,
-    // ...
-  };
-};
-```
-
-Si la API devuelve algo inesperado (ej. `login` viene `undefined`), `GitHubUserSchema.parse()` lanza un `ZodError` que el servicio captura y convierte en `ApiError(422)` — "Unprocessable Entity". La app nunca recibe datos inválidos.
+Si la API responde con un campo nulo o un tipo alterado, Zod lo captura inmediatamente en el adaptador lanzando un error descriptivo antes de que llegue a renderizarse en la interfaz, evitando fallos inesperados de UI.
 
 ---
 
-## 🏗️ Patrones de Diseño (GoF)
+## 🧩 Slice 5: Patrones de Diseño (GoF)
 
-### Adapter (Estructural) — `src/entities/user/model/adapter.js`
+Implementamos tres patrones clásicos integrados en las rebanadas FSD:
 
-**Problema**: La API de GitHub devuelve objetos con propiedades como `avatar_url`, `html_url`, `public_repos`. Nuestra app quiere `photo`, `profileUrl`, `repos`.
+### 🔄 1. Patrón Adapter (Estructural)
+*   **Archivo:** [adapter.js](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/entities/user/model/adapter.js)
+*   **Propósito:** Traduce variables externas (`public_repos`, `avatar_url`) a campos internos unificados de la aplicación (`repos`, `photo`). Limpia y desacopla la API del resto del código.
 
-**Solución**: Un adaptador que recibe los datos crudos, los valida con Zod, y devuelve un objeto con la estructura que nuestra app entiende. Si mañana cambiamos la API, solo tocamos el adaptador.
+### 🧱 2. Patrón Facade (Fachada - Estructural)
+*   **Archivos:** [useUserSearchFacade.js](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/features/search-user/model/useUserSearchFacade.js) y [useUserDetailFacade.js](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/features/view-user-details/model/useUserDetailFacade.js)
+*   **Propósito:** Simplifican el acceso a lógica compleja. Exponen únicamente booleanos limpios (`isLoading`, `isError`, `isSuccess`) y colecciones, abstrayendo a los componentes visuales de hooks de ruta o de consultas a bases de datos.
 
-### Facade (Estructural) — `src/features/search-user/model/useUserSearchFacade.js`
-
-**Problema**: El componente `UserSearch` tendría que manejar debounce, TanStack Query, estados de carga/error/vacío, toasts de error y retry. Cientos de líneas.
-
-**Solución**: Una fachada que oculta toda esa complejidad y expone solo lo que la UI necesita:
-
-```js
-const { users, isLoading, isError, isEmpty, handleRetry } =
-  useUserSearchFacade();
-```
-
-### Factory (Creacional) — `src/entities/user/ui/ResultFactory.jsx`
-
-**Problema**: La búsqueda puede devolver usuarios individuales u organizaciones. Cada tipo tiene una tarjeta diferente.
-
-**Solución**: Una factoría que examina el `data.type` y devuelve el componente adecuado:
-
-```js
-switch (data.type) {
-  case "Organization":
-    return <OrganizationCard />;
-  case "User":
-    return <UserCard />;
-}
-```
+### 🏭 3. Patrón Factory (Creacional)
+*   **Archivo:** [ResultFactory.jsx](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/entities/user/ui/ResultFactory.jsx)
+*   **Propósito:** Decide dinámicamente si instanciar una tarjeta de organización (`OrganizationCard`) o de usuario común (`UserCard`) basándose en el parámetro de tipo devuelto por la API.
 
 ---
 
-## 🎨 Tailwind CSS Website Branding + Sistema de Temas
+## 🧩 Slice 6: Identidad Visual, Temas y Cursor Pokéball
 
-### Estética e Identidad Visual
+### 🎨 Estética Tailwind Website
 
-El proyecto adopta la identidad visual y los tokens de diseño del sitio oficial de tailwindcss.com, priorizando una interfaz de alta densidad de información estructurada:
+Inspirada en el sitio oficial de tailwindcss.com, implementa las siguientes directrices estéticas de alta calidad:
+*   **Grilla de Fondo:** Una textura elegante de puntos de rejilla mediante la clase `.bg-grid-pattern`.
+*   **Tipografía Unificada:** Se utiliza únicamente **Plus Jakarta Sans** para mantener la coherencia y el look SaaS moderno.
+*   **Degradados de Color:** Gradiantes dinámicos de color **Indigo-Purple-Pink** aplicados a encabezados y barras de progreso.
 
-- **Efecto de Cuadrícula:** Fondo texturizado usando patrones de rejilla de puntos suaves (`bg-grid-pattern`).
-- **Gradients Premium:** Se utilizan gradientes SaaS lineales de color **Indigo-Purple-Pink** (`from-indigo-500 via-purple-500 to-pink-500`) para titulares destacados y barras de progreso.
-- **Bento Grid Layout:** Presenta la información de detalles del desarrollador en un Bento Dashboard asimétrico con elevación al hover y micro-interacciones suaves.
+### 🌓 Sistema de Doble Tema
 
-### Sistema de Doble Tema
+El estado del tema conmutado mediante el hook [useTheme.js](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/shared/lib/hooks/useTheme.js) añade la clase `.dark` a la raíz del documento, actualizando de forma automática los colores semánticos:
 
-El cambio de tema conmutando la clase `.dark` en la etiqueta HTML actualiza de forma automática las variables CSS semánticas de la aplicación:
-
-| Propiedad | Light Mode | Dark Mode |
+| Variable | Tema Claro | Tema Oscuro |
 | :--- | :--- | :--- |
-| Fondo base (`bg-bg`) | `#f8fafc` (Slate 50) | `#030712` (Midnight Black) |
-| Superficie (`bg-surface`) | `#ffffff` (Blanco) | `#0f172a` (Slate 900) |
-| Bordes (`border-border`) | `#e2e8f0` (Slate 200) | `#1e293b` (Slate 800) |
-| Texto principal (`text-text`) | `#0f172a` (Slate 900) | `#f8fafc` (Slate 50) |
-| Acento principal (`text-accent` / `--accent`) | `#6366f1` (Indigo 500) | `#38bdf8` (Sky 400) |
+| `bg-bg` (Fondo) | `#f8fafc` (Slate 50) | `#030712` (Midnight Black) |
+| `bg-surface` (Paneles) | `#ffffff` (Blanco) | `#0f172a` (Slate 900) |
+| `border-border` (Bordes) | `#e2e8f0` (Slate 200) | `#1e293b` (Slate 800) |
+| `text-text` (Texto) | `#0f172a` (Slate 900) | `#f8fafc` (Slate 50) |
+| `text-accent` (Acento) | `#6366f1` (Indigo 500) | `#38bdf8` (Sky 400) |
 
-### Tipografía Exclusiva
+### 🔴 Cursor Pokéball Interactivo (SVG)
 
-- **Plus Jakarta Sans** — Fuente tipográfica sans-serif geométrica moderna utilizada para todos los elementos (títulos, cuerpo de texto, números y código), garantizando coherencia visual absoluta.
-
-### Cursor Interactivo Pokéball
-
-El cursor se sustituye por una Pokébola que gira 45 grados en reposo (hotspot de click en la punta `9 9`), y responde de manera reactiva **abriéndose por la mitad** y emitiendo un destello brillante dorado al posicionarse sobre cualquier elemento interactivo (`a`, `button`, selectores, enlaces).
+El cursor del navegador se reemplaza por un gráfico vectorial SVG:
+*   **Estado General:** Pokébola cerrada rotada en 45 grados. El punto activo de click está configurado en las coordenadas del extremo superior izquierdo (`9 9`).
+*   **Estado Hover:** Al situarse sobre botones, inputs, selectores o enlaces, la Pokébola se abre a la mitad mediante transiciones de CSS, revelando una estrella de energía dorada brillante.
 
 ---
 
-## 🔒 Inmutabilidad y Spread Operator
+## 🧩 Slice 7: JavaScript Moderno (Inmutabilidad, Spread, Closures)
 
-### ¿Qué es inmutabilidad?
+### 🔒 Inmutabilidad
+Evitamos mutar los datos originales del servidor. Generamos copias nuevas de arrays y objetos usando métodos nativos como `.map()`, `.filter()`, y `.slice()`. Esto permite a React detectar de manera eficiente las actualizaciones comparando referencias en lugar de analizar propiedades internas.
 
-No modificar los datos originales. Cada cambio crea una **copia nueva** con la modificación.
-
-### Spread operator (`...`)
-
-Crea copias superficiales (shallow copy) sin mutar el original:
-
+### ⚡ Operador de Propagación (Spread Operator `...`)
+Usado en [httpClient.js](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/shared/api/httpClient.js) para combinar opciones de configuración de red y headers de forma segura sin mutar el objeto original:
 ```js
-// httpClient.js — merge inmutable de objetos
-const response = await fetch(url, {
-  ...options, // copia todas las propiedades de options
+const options = {
+  ...defaultOptions,
   headers: {
     "Content-Type": "application/json",
-    ...options.headers, // si options ya traía headers, los mezcla sin pisar
-  },
-});
-```
-
-### Métodos de array inmutables (los que usamos)
-
-| Método      | ¿Muta? | ¿Qué devuelve?                       |
-| ----------- | ------ | ------------------------------------ |
-| `.map()`    | ❌ No  | Nuevo array transformado             |
-| `.filter()` | ❌ No  | Nuevo array filtrado                 |
-| `.find()`   | ❌ No  | El elemento encontrado (o undefined) |
-| `.slice()`  | ❌ No  | Nuevo array con una porción          |
-
-Los que **NUNCA** usamos (porque mutan): `.push()`, `.pop()`, `.splice()`, `.sort()`, `.reverse()`.
-
-### ¿Por qué es importante en React?
-
-React detecta cambios comparando referencias. Si mutas un array, la referencia sigue siendo la misma y React **no se entera** del cambio. Siempre debes crear un nuevo array/objeto.
-
----
-
-## 🔐 Closures en el proyecto
-
-### ¿Qué es un closure?
-
-Una función que "recuerda" las variables del lugar donde fue creada, incluso después de que ese lugar ya terminó de ejecutarse.
-
-### Ejemplo: `useDebouncedSearch.js`
-
-```js
-useEffect(() => {
-  const handler = setTimeout(() => {
-    setDebouncedValue(inputValue); // ← captura inputValue del scope del effect
-  }, delay);
-
-  return () => {
-    clearTimeout(handler); // ← captura handler del scope del effect
-  };
-}, [inputValue, delay]);
-```
-
-Aquí ocurren dos closures:
-
-1. **`() => setDebouncedValue(inputValue)`** — esta arrow function captura `inputValue`. Aunque el `useEffect` ya terminó, cuando pasan los 500ms y el `setTimeout` se ejecuta, todavía "recuerda" cuál era `inputValue` en ese momento.
-
-2. **`() => clearTimeout(handler)`** — la cleanup captura `handler` (el ID del timeout). Si el usuario escribe otra letra, React ejecuta esta cleanup **antes** de re-ejecutar el effect, y cancela el timeout anterior.
-
-### Otros closures
-
-- **`useTheme.js`** — `toggleTheme` captura `theme` del estado del hook
-- **`useIntersectionObserver.js`** — la callback del observer captura `setIsIntersecting`
-- **`httpClient.js`** — cualquier `.catch()` captura variables del scope del `fetch`
-
-Cada vez que escribes `() => { ... }` dentro de otra función y accedes a una variable exterior, estás usando un closure. En React ocurre **constantemente**.
-
----
-
-## 🧹 DRY y SOLID aplicados
-
-### DRY (Don't Repeat Yourself)
-
-| Archivo                                  | Evita repetir                                                                                |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `src/shared/lib/utils/utils.js` — `cn()` | La lógica de unir clases condicionales con `clsx` + resolver conflictos con `tailwind-merge` |
-| `src/shared/api/httpClient.js`           | El manejo de `fetch`, headers, errores HTTP y `ApiError` en un solo lugar                    |
-| `src/entities/user/model/adapter.js`     | La transformación y validación de datos de GitHub → `UserProfile`                            |
-
-### SOLID
-
-| Principio                 | ¿Dónde se aplica?                                                                                                                                |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **S**ingle Responsibility | `PageHeader` solo renderiza el hero. `SearchResults` solo decide qué estado mostrar. `UserSearch` solo orquesta. Cada uno hace **una sola cosa** |
-| **O**pen/Closed           | `ResultFactory` — puedes agregar un nuevo tipo de tarjeta (ej. `TeamCard`) sin modificar el código existente, solo agregas un `case`             |
-| **L**iskov                | `ApiError` extiende `Error` sin romper su interfaz. Puede usarse donde se espere un `Error`                                                      |
-| **I**nterface Segregation | Los componentes reciben solo las props que necesitan (`isLoading`, `users`), no objetos gigantes con datos que no usan                           |
-| **D**ependency Inversion  | La capa de dominio (`userAdapter`) **no sabe** que React, HTTP, ni la UI existen. Las capas externas dependen de la interna                      |
-
----
-
-## 📐 Scope y Hoisting
-
-### Scope (alcance de variables)
-
-En `UserSearch.jsx`:
-
-```js
-import { useUserSearchFacade } from "@/...";  // ← Global Scope
-
-const UserSearch = () => {
-  const { users, isLoading } = useUserSearchFacade();  // ← Local Scope
-  return ( ... );
+    ...customHeaders,
+  }
 };
 ```
 
-- **Global scope**: Importaciones, disponibles en todo el archivo
-- **Local scope**: Variables dentro del componente, solo existen mientras el componente se renderiza
-
-### Hoisting (elevación)
-
-JavaScript "eleva" las declaraciones al principio de su scope antes de ejecutar el código:
-
-```js
-// Esto funciona aunque la función esté definida después
-saludar(); // "Hola!"
-function saludar() {
-  console.log("Hola!");
-}
-
-// Esto NO funciona con const/let
-despedir(); // ReferenceError
-const despedir = () => console.log("Chau!");
-```
-
-Las **importaciones** también son hoisted — por eso el orden no importa.
+### 🔐 Closures
+El hook [useDebouncedSearch.js](file:///c:/Users/LJCR/Documents/GitHub/myprojectapi01/src/shared/lib/hooks/useDebouncedSearch.js) utiliza closures para "recordar" el valor actual de búsqueda dentro del temporizador de `setTimeout`, cancelando y reiniciando el temporizador si el usuario presiona otra tecla antes de transcurrir 500ms.
 
 ---
 
-## 📁 Estructura del Proyecto (Feature-Sliced Design)
+## 🧩 Slice 8: Buenas Prácticas (SOLID y DRY)
 
-```
-src/
-├── app/                       # Configuración general y de enrutado
-│   ├── App.jsx
-│   └── main.jsx
-│
-├── pages/                     # Composiciones completas de páginas
-│   ├── search-page/
-│   ├── detail-page/
-│   └── not-found/
-│
-├── widgets/                   # Componentes de UI auto-contenidos complejos
-│   ├── search-results/        # Orquestación y grids de resultados
-│   └── user-profile-bento/    # Layout detallado en Bento Grid
-│
-├── features/                  # Acciones interactivas con valor de negocio
-│   └── search-user/           # Lógica y barra del buscador (facade)
-│
-├── entities/                  # Conceptos de negocio (user)
-│   └── user/
-│       ├── api/               # Servicios HTTP y query hooks
-│       ├── model/             # Schemas Zod y adaptadores
-│       └── ui/                # Tarjetas, fábricas y skeletons
-│
-└── shared/                    # Infraestructura y elementos reutilizables
-    ├── api/                   # Cliente HTTP y clase ApiError
-    ├── config/                # Constantes globales
-    ├── lib/                   # Hooks generales y utils (cn)
-    ├── logger/                # Logging con ASCII art
-    ├── mocks/                 # MSW en desarrollo local
-    ├── styles/                # index.css de Tailwind v4 y theme
-    └── ui/                    # ErrorBoundary, ErrorDisplay, ThemeToggle
-```
+*   **Responsabilidad Única (Single Responsibility):** Cada componente se limita a una función específica. `PageHeader` gestiona el buscador, `BentoStatsGrid` renderiza las estadísticas y `ResultFactory` decide la tarjeta a renderizar.
+*   **Inversión de Dependencias:** El adaptador de dominio (`userAdapter`) no conoce la lógica visual ni de red. Las capas exteriores dependen de los tipos y mapeos que dicta esta capa interna.
+*   **DRY (Don't Repeat Yourself):** Centralización de estilos a través de componentes utilitarios de Tailwind CSS (`tailwind-card`, `tailwind-input`) y normalización del fetch en `httpClient`.
 
 ---
 
-## 🔄 Diagrama de Flujo de Datos
+## 🧩 Slice 9: Comandos del Ciclo de Vida del Proyecto
 
-```
-                     ┌──────────────┐
-                     │   Usuario    │
-                     │  escribe en  │
-                     │   el input   │
-                     └──────┬───────┘
-                            │
-                     ┌──────▼───────┐
-                     │  setSearch   │
-                     │  Term(value) │
-                     └──────┬───────┘
-                            │
-                     ┌──────▼───────┐
-                     │ useDebounced │
-                     │ Search(500ms)│
-                     └──────┬───────┘
-                            │ debouncedSearchTerm cambia
-                            │
-                     ┌──────▼──────────────────┐
-                     │   useUserQuery(["users",  │
-                     │    debouncedSearchTerm]) │
-                     └──────┬───────────────────┘
-                            │
-                    ┌───────┴────────┐
-                    │                │
-              ¿Hay caché?      No hay caché
-              (staleTime)           │
-                    │               ▼
-              ┌─────▼────┐   ┌─────────────┐
-              │ Devuelve │   │ queryFn se  │
-              │ instantá-│   │ ejecuta con │
-              │ neo   ✓  │   │ signal para │
-              └──────────┘   │ cancelación │
-                             └──────┬──────┘
-                                    ▼
-                             ┌──────────────┐
-                             │ fetchUsersAPI │
-                             │ (searchTerm,  │
-                             │  signal)      │
-                             └──────┬───────┘
-                                    ▼
-                             ┌──────────────┐
-                             │  httpClient   │
-                             │  (fetch)      │
-                             └──────┬───────┘
-                                    ▼
-                             ┌──────────────────┐
-                             │ GitHub API / MSW  │
-                             └──────┬───────────┘
-                                    ▼
-                             ┌──────────────────┐
-                             │ userAdapter +    │
-                             │ Zod validation   │
-                             └──────┬───────────┘
-                                    ▼
-                             ┌──────────────────┐
-                             │ TanStack Query   │
-                             │ guarda en caché  │
-                             └──────┬───────────┘
-                                    ▼
-                     ┌──────────────┴──────────────┐
-                     │    useUserSearchFacade      │
-                     │  { users, isLoading, ... }  │
-                     └──────────────┬──────────────┘
-                                    ▼
-                     ┌──────────────┴──────────────┐
-                     │       SearchResults         │
-                     │                             │
-                     │  loading  → SkeletonGrid    │
-                     │  error    → ErrorDisplay    │
-                     │  empty    → NotFound        │
-                     │  success  → UserList        │
-                     │               │             │
-                     │         ┌─────▼──────┐      │
-                     │         │  UserCard  │      │
-                     │         │            │      │
-                     │         └────────────┘      │
-                     └─────────────────────────────┘
-```
-
----
-
-## 🚀 Comandos
+Ejecuta las siguientes instrucciones utilizando tu consola local:
 
 ```bash
-pnpm install      # Instala dependencias
-pnpm dev          # Servidor desarrollo (http://localhost:5173)
-pnpm build        # Build producción (en /dist)
-pnpm preview      # Previsualiza el build
-pnpm lint         # ESLint con reglas de accesibilidad
-pnpm deploy       # Build + sube a GitHub Pages
-pnpm py           # Build + sirve con Python (puerto 5000)
+pnpm install      # Instala las dependencias y prepara el proyecto
+pnpm dev          # Inicia el servidor de desarrollo (http://localhost:5173)
+pnpm build        # Compila el build de producción optimizado en /dist
+pnpm preview      # Previsualiza de manera local la compilación de producción
+pnpm lint         # Ejecuta el análisis estático de accesibilidad y ESLint
+pnpm test:run     # Ejecuta las pruebas unitarias del proyecto una sola vez
+pnpm deploy       # Compila y despliega el proyecto en GitHub Pages
 ```
-
----
-
-## 📖 Documentación Adicional
-
-| Documento                                                                            | Descripción                                                       |
-| ------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
-| [`src/docs/01-Guia-del-Proyecto.md`](./src/docs/01-Guia-del-Proyecto.md)             | Visión general, casos de uso y requerimientos                     |
-| [`src/docs/02-Arquitectura-y-Patrones.md`](./src/docs/02-Arquitectura-y-Patrones.md) | Feature-Sliced Design (FSD) y patrones GoF a detalle              |
-| [`src/docs/03-Guia-de-Desarrollo.md`](./src/docs/03-Guia-de-Desarrollo.md)           | Setup, comandos y flujo de trabajo                                |
-| [`src/docs/GUIA_ESTUDIO.md`](./src/docs/GUIA_ESTUDIO.md)                             | 📚 Manual completo de React desde cero                            |
-| [`src/docs/FSD_NIVEL_POLLITO.md`](./src/docs/FSD_NIVEL_POLLITO.md)                   | 🐥 Guía FSD visual explicada nivel pollito con diagramas          |
-| [`src/docs/BIG_O_POLLITO.md`](./src/docs/BIG_O_POLLITO.md)                           | 🚀 Guía de Notación Big O y complejidad logarítmica nivel pollito |
-| [`src/docs/PRUEBA_TECNICA.md`](./src/docs/PRUEBA_TECNICA.md)                         | 📝 Simulación de entrevista técnica frontend                      |
-
----
-
-> MIT © 2026 — Hecho con 💜 para que juniors aprendan React con buenas prácticas.
