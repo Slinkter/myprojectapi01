@@ -29,7 +29,7 @@ La interfaz nativa de GitHub (github.com) está diseñada para la gestión de re
 | **Sin modo oscuro nativo** (hasta fechas recientes) y sin personalización visual                                      | Fatiga visual en sesiones prolongadas                                                                                              |
 | **Sin una arquitectura que sirva como caso de estudio**: GitHub.com es un monolito Ruby on Rails                      | Los desarrolladores junior no pueden inspeccionar el código para aprender buenas prácticas                                         |
 
-**GitExplorer resuelve esto** ofreciendo una SPA React liviana con búsqueda con debounce, caché inteligente (TanStack Query), validación de datos en runtime (Zod), diseño glassmorphism con tema dual (claro/oscuro) y una arquitectura Feature-Sliced Design (FSD) que sirve como modelo de referencia para ingeniería de software frontend.
+**GitExplorer resuelve esto** ofreciendo una SPA React liviana con búsqueda con debounce, caché inteligente (TanStack Query), validación de datos en runtime (Zod), estética Tailwind CSS Website Branding, tema dual (claro/oscuro), cursor Pokéball y una arquitectura Feature-Sliced Design (FSD) que sirve como modelo de referencia para ingeniería de software frontend.
 
 ### 1.2 Objetivos
 
@@ -43,7 +43,7 @@ Construir una aplicación web SPA (Single Page Application) en React 18 que perm
 | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | OE-1 | Implementar un sistema de búsqueda con debounce de 500ms y TanStack Query que reduzca las llamadas a la API de GitHub y cachee resultados con staleTime de 5 minutos                                                                                   | Las búsquedas repetidas del mismo término son instantáneas (0ms de red), el rate-limit de GitHub no se excede                                                 |
 | OE-2 | Aplicar los patrones estructurales Adapter (para transformación de datos), Facade (para simplificación de lógica de UI) y Factory (para creación condicionada de componentes), documentándolos como caso de estudio para desarrolladores junior        | Cada patrón está identificado con su archivo fuente, diagrama y explicación didáctica en la documentación                                                     |
-| OE-3 | Diseñar un sistema de doble tema (claro "Holographic Terminal" / oscuro "Cyberpunk") con efecto glassmorphism basado en `backdrop-filter: blur(20px)` y variables CSS que se alternan mediante una clase `.dark` en `<html>`, sin condicionales en JSX | El toggle de tema persiste en localStorage, respeta `prefers-color-scheme` del sistema, y todos los componentes se repintan automáticamente sin props de tema |
+| OE-3 | Diseñar un sistema de doble tema (claro "Slate Light" / oscuro "Midnight Dark") con estética Tailwind CSS Website Branding, grilla de fondo, tipografía Plus Jakarta Sans y variables CSS que se alternan mediante una clase `.dark` en `<html>`, sin condicionales en JSX | El toggle de tema persiste en localStorage, respeta `prefers-color-scheme` del sistema, y todos los componentes se repintan automáticamente sin props de tema |
 | OE-4 | Documentar cada decisión técnica como material de estudio para programadores junior, incluyendo la arquitectura Feature-Sliced Design (FSD), closures, hoisting, scope, inmutabilidad, DRY, SOLID y el ciclo Scrum completo con 4 sprints simulados    | El proyecto contiene 7+ documentos técnicos en `src/docs/` y un README que funciona como guía de estudio integral                                             |
 
 ### 1.3 Justificación y Alcance
@@ -59,16 +59,16 @@ Construir una aplicación web SPA (Single Page Application) en React 18 que perm
 - Zod en runtime protege contra cambios silenciosos en la API de GitHub
 - El sistema de temas basado 100% en CSS variables (sin JSX condicional) es un patrón reusable en cualquier proyecto React
 
-**Valor de producto**: Un desarrollador puede buscar perfiles de GitHub y ver información clave (repos, followers, bio, ubicación) en 1-2 clics, con animaciones suaves, sin recargas de página y con una estética glassmorphism que prioriza legibilidad.
+**Valor de producto**: Un desarrollador puede buscar perfiles de GitHub y ver información clave (repos, followers, bio, ubicación) en 1-2 clics, con animaciones suaves, sin recargas de página y con una estética Tailwind CSS Website Branding que prioriza la legibilidad y un cursor Pokéball interactivo.
 
 #### Alcance
 
 | Incluye                                                                                            | No incluye                                                  |
 | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
 | Búsqueda de usuarios de GitHub por username                                                        | Autenticación OAuth con GitHub                              |
-| Visualización de resultados en tarjetas glass con foto, username, bio, repos, followers, following | Modificación de datos en GitHub (crear repos, issues, etc.) |
+| Visualización de resultados en tarjetas interactivas con foto, username, bio, repos, followers, following | Modificación de datos en GitHub (crear repos, issues, etc.) |
 | Detalle de perfil con bento grid asimétrico                                                        | Base de datos propia (toda la data viene de GitHub API)     |
-| Tema claro "Holographic Terminal" y oscuro "Cyberpunk"                                             | Soporte offline total (solo mocks en desarrollo con MSW)    |
+| Tema claro "Slate Light" y oscuro "Midnight Dark" con estética Tailwind CSS Website Branding y cursor Pokéball | Soporte offline total (solo mocks en desarrollo con MSW)    |
 | MSW para mock de API en desarrollo                                                                 | Server-Side Rendering (CSR puro)                            |
 | Lazy loading de rutas con `React.lazy()` + `Suspense`                                              | PWA con Service Workers                                     |
 | Caché con TanStack Query (staleTime 5min, gcTime 10min)                                            | Testing automatizado (Vitest instalado pero sin tests)      |
@@ -164,7 +164,7 @@ Construir una aplicación web SPA (Single Page Application) en React 18 que perm
 | RF-15 | El sistema debe tener un botón de cambio de tema (claro/oscuro) con animación de transición                                                                                         | Alta      |      —       |
 | RF-16 | El sistema debe persistir la preferencia de tema en localStorage                                                                                                                    | Alta      |    RF-15     |
 | RF-17 | El sistema debe detectar la preferencia de tema del sistema (`prefers-color-scheme`) en la primera visita                                                                           | Alta      |    RF-15     |
-| RF-18 | El sistema debe aplicar el efecto glassmorphism (`backdrop-filter: blur(20px)`) en tarjetas, inputs y botones                                                                       | Alta      |      —       |
+| RF-18 | El sistema debe aplicar la estética Tailwind CSS Website Branding (rejilla de fondo, bordes Slate y gradiente Indigo-Purple-Pink) en tarjetas, inputs y botones                     | Alta      |      —       |
 | RF-19 | El sistema debe cargar las rutas de forma diferida con `React.lazy()` + `Suspense`                                                                                                  | Alta      |      —       |
 | RF-20 | El sistema debe usar path alias `@/*` para todas las importaciones internas                                                                                                         | Alta      |      —       |
 | RF-21 | El sistema debe funcionar en modo desarrollo sin conexión a internet usando MSW (Mock Service Worker)                                                                               | Media     |    RF-03     |
@@ -445,7 +445,7 @@ RN-03: staleTime y gcTime aplican igual que en búsqueda (5min y 10min)
 | **ID**                      | CU-06                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | **Nombre**                  | Cambiar tema claro/oscuro                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | **Actor**                   | Usuario no autenticado                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| **Descripción**             | El usuario hace clic en el botón de cambio de tema (ThemeToggle). El sistema alterna entre el tema claro "Holographic Terminal" (fondo #F0EDE8, acentos teal) y el tema oscuro "Cyberpunk" (fondo #0A0A0F, acentos cyan #00F0FF) añadiendo o removiendo la clase `.dark` del elemento `<html>`. Las variables CSS en `:root` y `.dark` cambian automáticamente, lo que provoca que todos los componentes se repinten con los nuevos colores sin necesidad de lógica condicional en JSX. La preferencia se persiste en localStorage |
+| **Descripción**             | El usuario hace clic en el botón de cambio de tema (ThemeToggle). El sistema alterna entre el tema claro "Slate Light" (fondo #f8fafc, acento Indigo #6366f1) y el tema oscuro "Midnight Dark" (fondo #030712, acento Sky #38bdf8) añadiendo o removiendo la clase `.dark` del elemento `<html>`. Las variables CSS en `:root` y `.dark` cambian automáticamente, lo que provoca que todos los componentes se repinten con los nuevos colores sin necesidad de lógica condicional en JSX. La preferencia se persiste en localStorage |
 | **Precondición**            | La aplicación está renderizada con un tema activo (claro u oscuro). El botón ThemeToggle es visible y funcional                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | **Postcondición (éxito)**   | La UI completa se repinta con los colores del tema alternativo. La preferencia se guarda en localStorage. El icono del botón cambia (sol ↔ luna) con animación de rotación                                                                                                                                                                                                                                                                                                                                                         |
 | **Postcondición (fracaso)** | No aplica. El cambio de tema no depende de APIs externas ni de condiciones de red. El único caso de fracaso sería un error en JavaScript que impida la ejecución del event handler                                                                                                                                                                                                                                                                                                                                                 |
@@ -453,7 +453,7 @@ RN-03: staleTime y gcTime aplican igual que en búsqueda (5min y 10min)
 **Flujo Normal**:
 
 ```
-1.  El usuario visualiza la interfaz con el tema actual (ej: claro "Holographic Terminal")
+1.  El usuario visualiza la interfaz con el tema actual (ej: claro "Slate Light")
 2.  El usuario hace clic en el botón ThemeToggle (icono de luna si está en claro, sol si está en oscuro)
 3.  Motion v12 ejecuta whileTap: scale(0.95) para feedback táctil
 4.  El sistema ejecuta toggleTheme() definido en useTheme.js
@@ -465,16 +465,15 @@ RN-03: staleTime y gcTime aplican igual que en búsqueda (5min y 10min)
     c. theme === "light" → root.classList.remove("dark")
 8.  El navegador detecta el cambio de clase en <html>
 9.  Todas las variables CSS definidas en .dark {...} entran en vigencia:
-    --glass-bg: rgba(255,255,255,0.04)  (antes 0.6)
-    --accent: #00F0FF                    (antes #0D9488)
-    --bg: #0A0A0F                        (antes #F0EDE8)
-    --surface: #12121A                   (antes #FFFFFF)
-    --text: #E8E8F0                      (antes #1A1A2E)
-    --border: #1E1E2A                    (antes #E5E2DC)
-10. Todos los componentes que usan var(--bg), var(--text), var(--accent), etc. se repintan automáticamente
+    --bg: #030712                        (antes #f8fafc)
+    --surface: #0f172a                   (antes #ffffff)
+    --border: #1e293b                    (antes #e2e8f0)
+    --text: #f8fafc                      (antes #0f172a)
+    --accent: #38bdf8                    (antes #6366f1)
+10. Todos los componentes que usan las variables semánticas se repintan automáticamente
 11. El icono del botón cambia de luna a sol con animación de rotación (AnimatePresence mode="wait")
 12. localStorage.setItem("theme", "dark") persiste la preferencia
-13. El usuario visualiza la interfaz con el tema oscuro "Cyberpunk"
+13. El usuario visualiza la interfaz con el tema oscuro "Midnight Dark"
 ```
 
 **Flujo Alternativo**:
@@ -896,7 +895,7 @@ sequenceDiagram
     else isSuccess
         SR->>UL: "users: UserProfile[]"
         UL->>UC: "props (username, photo, name, bio, repos, followers, following)"
-        UL-->>U: "Renderiza grid de UserCards con glassmorphism"
+        UL-->>U: "Renderiza grid de UserCards con la estética Tailwind Website Branding"
         U->>UC: "Hace clic en una tarjeta"
         UC->>US: "onClick -> navega a /user/{username}"
     end
@@ -1382,7 +1381,7 @@ Cada escenario Gherkin se mapea a archivos de código específicos. Esta tabla s
 | Historias de Usuario + ATDD       | Este documento (sección 5), `SIMULACRO_SCRUM.md`                                                                                                |
 | TanStack Query                    | `src/entities/user/api/useUserQuery.js`, `src/entities/user/api/useUserDetailQuery.js`, `src/features/search-user/model/useUserSearchFacade.js` |
 | Zod + Adapter                     | `src/entities/user/model/schema.js`, `src/entities/user/model/adapter.js`                                                                       |
-| Glassmorphism + tema dual         | `src/shared/styles/index.css`, `src/shared/lib/hooks/useTheme.js`                                                                               |
+| Tailwind Branding + tema dual     | `src/shared/styles/index.css`, `src/shared/lib/hooks/useTheme.js`                                                                               |
 | FSD (6 capas)                     | `src/docs/02-Arquitectura-y-Patrones.md`, estructura de carpetas `src/`                                                                         |
 
 ---

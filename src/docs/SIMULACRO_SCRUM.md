@@ -12,7 +12,7 @@
 4. [Product Backlog — User Stories](#-product-backlog--user-stories)
 5. [Sprint 0 — Fundación (Setup + Arquitectura)](#-sprint-0--fundación-setup--arquitectura)
 6. [Sprint 1 — Corazón del Producto (Búsqueda + API)](#-sprint-1--corazón-del-producto-búsqueda--api)
-7. [Sprint 2 — Detalle de Usuario + Diseño Glassmorphism](#-sprint-2--detalle-de-usuario--diseño-glassmorphism)
+7. [Sprint 2 — Detalle de Usuario + Diseño Tailwind Website Branding](#-sprint-2--detalle-de-usuario--diseño-tailwind-website-branding)
 8. [Sprint 3 — Calidad, Documentación y Despliegue](#-sprint-3--calidad-documentación-y-despliegue)
 9. [Definition of Done (DoD)](#-definition-of-done-dod)
 10. [Sprint Reviews](#-sprint-reviews)
@@ -39,7 +39,7 @@ _Nota: En un equipo Scrum real todos los developers son multifuncionales. Esta d
 
 ## 🎯 Product Vision
 
-> **GitExplorer** es una SPA (Single Page Application) que permite a desarrolladores explorar perfiles de GitHub de forma rápida, visual y sin distracciones. A diferencia de la interfaz nativa de GitHub, GitExplorer ofrece búsqueda con debounce, caché inteligente, diseño glassmorphism con tema dual (claro/oscuro) y una arquitectura limpia de 4 capas que sirve como caso de estudio para buenas prácticas frontend.
+> **GitExplorer** es una SPA (Single Page Application) que permite a desarrolladores explorar perfiles de GitHub de forma rápida, visual y sin distracciones. A diferencia de la interfaz nativa de GitHub, GitExplorer ofrece búsqueda con debounce, caché inteligente, diseño Tailwind CSS Website Branding con tema dual (claro/oscuro) y una arquitectura limpia de 4 capas que sirve como caso de estudio para buenas prácticas frontend.
 
 ---
 
@@ -50,7 +50,7 @@ _Nota: En un equipo Scrum real todos los developers son multifuncionales. Esta d
 | **E-1: Fundación**               | Setup del proyecto Vite + React, Feature-Sliced Design (FSD), Tailwind v4, ESLint, path aliases               | Sprint 0 | ✅ Completado |
 | **E-2: Búsqueda de Usuarios**    | Integración con GitHub API, TanStack Query, debounce, adaptador con Zod, estados loading/error/empty | Sprint 1 | ✅ Completado |
 | **E-3: Detalle de Perfil**       | Página de detalle con bento grid, repositorios, datos completos                                      | Sprint 2 | ✅ Completado |
-| **E-4: Diseño y Experiencia**    | Glassmorphism, tema claro/oscuro, animaciones, micro-interacciones                                   | Sprint 2 | ✅ Completado |
+| **E-4: Diseño y Experiencia**    | Tailwind Website Branding, tema claro/oscuro, animaciones, micro-interacciones                       | Sprint 2 | ✅ Completado |
 | **E-5: Calidad y Documentación** | Guías de estudio, documentación Scrum, testing setup, MSW para mocks                                 | Sprint 3 | ✅ Completado |
 | **E-6: Despliegue**              | GitHub Pages, build optimizado, base path /myprojectapi01/                                           | Sprint 3 | ✅ Completado |
 
@@ -91,8 +91,8 @@ _Nota: En un equipo Scrum real todos los developers son multifuncionales. Esta d
 
 | ID    | User Story                                                                                                                                       | Prioridad | Story Points |
 | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | :----------: |
-| US-15 | **Como** usuario, **quiero** una interfaz con efecto glassmorphism **para** una experiencia visual moderna y atractiva                           | 🔥 Alta   |      5       |
-| US-16 | **Como** usuario, **quiero** poder cambiar entre tema claro ("Holographic Terminal") y oscuro ("Cyberpunk") **para** adaptar la app a mi entorno | 🔥 Alta   |      3       |
+| US-15 | **Como** usuario, **quiero** una interfaz con la estética Tailwind CSS Website Branding **para** una experiencia visual moderna y atractiva     | 🔥 Alta   |      5       |
+| US-16 | **Como** usuario, **quiero** poder cambiar entre tema claro ("Slate Light") y oscuro ("Midnight Dark") **para** adaptar la app a mi entorno      | 🔥 Alta   |      3       |
 | US-17 | **Como** usuario, **quiero** que la experiencia sea inmersiva sin navbar **para** concentrarme en la búsqueda desde el primer momento            | 🔥 Alta   |      1       |
 | US-18 | **Como** usuario, **quiero** animaciones suaves al navegar entre páginas **para** una experiencia fluida y agradable                             | 🔥 Media  |      3       |
 | US-19 | **Como** usuario, **quiero** ver una tarjeta con glow accent al hacer hover **para** sentir que los elementos son interactivos                   | 🔥 Media  |      2       |
@@ -183,7 +183,7 @@ David: Ayer configuré ESLint (Task-02) y verifiqué el build (Task-04).
        Sin bloqueos.
 
 Sofía: Ayer hice Task-01 (scaffold Vite) y Task-03 (pnpm).
-       Hoy ayudo con Task-08 (ApiError) y empiezo a investigar glassmorphism.
+       Hoy ayudo con Task-08 (ApiError) y empiezo a investigar la estética Tailwind Website Branding.
        Sin bloqueos.
 ```
 
@@ -309,13 +309,13 @@ Sofía: Ayer avancé PageHeader (Task-15) con el glass-input.
 
 ---
 
-## 🏃 Sprint 2 — Detalle de Usuario + Diseño Glassmorphism
+## 🏃 Sprint 2 — Detalle de Usuario + Diseño Tailwind Website Branding
 
 ### Sprint Planning
 
 | Aspecto                | Detalle                                                                                                         |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------- |
-| **Sprint Goal**        | Implementar la página de detalle de usuario con bento grid y rediseñar toda la UI con glassmorphism + tema dual |
+| **Sprint Goal**        | Implementar la página de detalle de usuario con bento grid y rediseñar toda la UI con la estética Tailwind Website Branding + tema dual |
 | **Duración**           | 2 semanas                                                                                                       |
 | **Sprint Backlog**     | US-12, US-13, US-14, US-15, US-16, US-17, US-18, US-19, US-20                                                   |
 | **Total Story Points** | 32                                                                                                              |
@@ -339,7 +339,7 @@ US-13 (5 pts) — Bento grid
 US-14 (2 pts) — Skeleton de detalle
   └── Task-38: Crear UserDetailSkeleton.jsx
 
-US-15 (5 pts) — Rediseño glassmorphism
+US-15 (5 pts) — Rediseño Tailwind Website Branding
   ├── Task-39: Definir variables CSS glass en :root y .dark
   ├── Task-40: Crear clases utilitarias (.glass, .glass-card, .glass-input, .btn-glass)
   └── Task-41: Aplicar glass a UserCard, PageHeader, NotFound, ErrorDisplay
@@ -369,7 +369,7 @@ US-20 (3 pts) — Responsive
 ✅ US-12 — UserDetail con datos completos
 ✅ US-13 — Bento grid layout
 ✅ US-14 — Skeleton de detalle
-✅ US-15 — Glassmorphism en toda la UI
+✅ US-15 — Estética Tailwind Website Branding en toda la UI
 ✅ US-16 — Tema claro/oscuro con toggle
 ✅ US-17 — Navbar eliminado
 ✅ US-18 — Animaciones con Motion
@@ -380,7 +380,7 @@ US-20 (3 pts) — Responsive
 ### Daily Scrum — Ejemplo Día 14
 
 ```
-Sofía: Ayer terminé las variables CSS de glassmorphism (Task-39) con :root y .dark.
+Sofía: Ayer terminé las variables CSS de la estética Tailwind Website Branding (Task-39) con :root y .dark.
        Hoy Task-40: clases utilitarias y Task-41: aplicar a todos los componentes.
        Bloqueo: Tailwind v4 no soporta @apply con clases personalizadas.
 
@@ -401,9 +401,9 @@ Lucía: Ayer Task-36: diseño del bento grid. Hoy Task-37: poblar celdas.
 + ✅ Página de detalle con bento grid (avatar, bio, stats, repos, metadata)
 + ✅ Navegación desde UserCard a /user/:login con React Router
 + ✅ Skeleton de detalle con 6 áreas de carga
-+ ✅ Glassmorphism completo: .glass-card, .glass-input, .btn-glass, .badge
-+ ✅ Tema claro "Holographic Terminal" (fondo #F0EDE8, acento teal)
-+ ✅ Tema oscuro "Cyberpunk" (fondo #0A0A0F, acento cyan #00F0FF)
++ ✅ Estética Tailwind Website Branding completa: rejilla de fondo, bordes Slate y gradiente Indigo-Purple-Pink
++ ✅ Tema claro "Slate Light" (fondo #f8fafc, acento Indigo #6366f1)
++ ✅ Tema oscuro "Midnight Dark" (fondo #030712, acento Sky #38bdf8)
 + ✅ ThemeToggle con sol/luna animado
 + ✅ Sin navbar — UX inmersiva desde el hero
 + ✅ Animaciones de entrada con Motion v12
@@ -417,7 +417,7 @@ Lucía: Ayer Task-36: diseño del bento grid. Hoy Task-37: poblar celdas.
 
 | 👍 What went well                                               | 👎 What to improve                                    | 🔧 Action items                                                 |
 | --------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------------------------------- |
-| El rediseño glassmorphism quedó muy profesional                 | No anticipamos la limitación de @apply en Tailwind v4 | Documentar en AGENTS.md: "Never use @apply with custom classes" |
+| El rediseño de marca Tailwind quedó muy profesional                 | No anticipamos la limitación de @apply en Tailwind v4 | Documentar en AGENTS.md: "Never use @apply with custom classes" |
 | Los dos temas son visualmente muy distintos                     | El bento grid en mobile necesitó ajustes extra        | Probar responsive desde el principio del diseño                 |
 | Motion v12 se integró sin problemas                             |                                                       |                                                                 |
 | El equipo se coordinó bien a pesar de las dependencias cruzadas |                                                       |                                                                 |
@@ -605,14 +605,14 @@ Cada User Story debe cumplir TODOS estos criterios para considerarse "Done":
 **Demo**:
 
 1. Flujo completo: buscar → tarjeta → clic → detalle en bento grid
-2. Tema claro (Holographic Terminal) ↔ oscuro (Cyberpunk)
-3. Efecto glassmorphism con blur, hover glow, animaciones
+2. Tema claro (Slate Light) ↔ oscuro (Midnight Dark)
+3. Estética Tailwind Website Branding con rejilla de fondo, hover glow, cursor Pokéball, y animaciones
 4. Responsive: mobile, tablet, desktop
 5. Sin navbar — UX inmersiva
 
 **Feedback**:
 
-- Stakeholder: "El glassmorphism quedó espectacular. Los dos temas son muy distintos y ambos se ven premium"
+- Stakeholder: "La estética de marca de Tailwind quedó espectacular. Los dos temas son muy distintos y ambos se ven premium"
 - Stakeholder: "El bento grid es muy atractivo visualmente"
 - PO: "¿Podemos agregar la guía de estudio que mencionamos?"
 
@@ -693,7 +693,7 @@ Cada User Story debe cumplir TODOS estos criterios para considerarse "Done":
 
 | Liked                        | Learned                       | Lacked                                | Longed For          |
 | ---------------------------- | ----------------------------- | ------------------------------------- | ------------------- |
-| Glassmorphism espectacular   | Tailwind v4 no soporta @apply | Pruebas responsive desde el principio | Tests automatizados |
+| Estética de marca espectacular | Tailwind v4 no soporta @apply | Pruebas responsive desde el principio | Tests automatizados |
 | Dos temas muy distintos      |                               | Documentación del diseño system       |                     |
 | Motion v12 fácil integración |                               |                                       |                     |
 
@@ -761,7 +761,7 @@ David: Ayer terminé userService.js y conecté el fetch con signal.
 Lucía: Ya la definimos: ["users", searchTerm]. Hoy Task-17: mostrar resultados.
        Sin bloqueos.
 
-Sofía: Ayer PageHeader con glass-input listo.
+Sofía: Ayer PageHeader con tailwind-input listo.
        Hoy Task-18: hook useDebouncedSearch.js.
        Sin bloqueos.
 ```
@@ -773,7 +773,7 @@ Sofía: Ayer terminé las variables CSS del tema claro/oscuro.
        Hoy Task-42: crear useTheme.js con toggle.
        Sin bloqueos.
 
-Lucía: Ayer UserCard con glassmorphism aplicado.
+Lucía: Ayer UserCard con la estética Tailwind Website Branding aplicada.
        Hoy Task-43: ThemeToggle.jsx con icono sol/luna.
        Bloqueo: Lucide React no tiene icono de GitHub, usamos Globe.
 
@@ -886,7 +886,7 @@ Este documento simuló un proyecto Scrum real con:
 2. **Feature-Sliced Design (FSD) en el mundo real** — no teoría, código funcionando
 3. **TanStack Query a profundidad** — caché, staleTime, signal, query keys
 4. **Zod para validación en runtime** — protegiendo la app de datos corruptos
-5. **Glassmorphism + CSS variables** — sistema de diseño profesional
+5. **Tailwind Website Branding + CSS variables** — sistema de diseño profesional
 6. **Patrones GoF** — Adapter, Facade, Factory en un proyecto real
 7. **Scrum de verdad** — todas las ceremonias, artefactos y roles
 8. **Deploy a GitHub Pages** — app en producción real
