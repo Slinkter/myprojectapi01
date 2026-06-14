@@ -144,6 +144,23 @@
 
   body {
     @apply bg-bg text-text font-sans antialiased m-0 min-h-screen relative overflow-x-hidden;
+    /* Custom Indigo dot cursor */
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='3.5' fill='%236366f1' stroke='white' stroke-width='1'/%3E%3C/svg%3E") 8 8, auto;
+  }
+
+  .dark body {
+    /* Custom Sky-blue dot cursor for Dark Mode */
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='3.5' fill='%2338bdf8' stroke='white' stroke-width='1'/%3E%3C/svg%3E") 8 8, auto;
+  }
+
+  a, button, select, [role="button"], .cursor-pointer {
+    /* Custom Indigo pointer on hover */
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='5' fill='%23818cf8' stroke='white' stroke-width='1.5'/%3E%3C/svg%3E") 10 10, pointer;
+  }
+
+  .dark a, .dark button, .dark select, .dark [role="button"], .dark .cursor-pointer {
+    /* Custom Sky-blue pointer on hover for Dark Mode */
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='5' fill='%2338bdf8' stroke='white' stroke-width='1.5'/%3E%3C/svg%3E") 10 10, pointer;
   }
 
   ::selection {
