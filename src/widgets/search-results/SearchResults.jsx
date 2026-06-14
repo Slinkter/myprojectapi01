@@ -53,7 +53,7 @@ const SearchResults = ({
 
   // 3. Success State (Empty vs Data)
   if (isEmpty) return <NotFound searchTerm={debouncedSearchTerm} />;
-  if (isSuccess) return <UserList users={users} />;
+  if (isSuccess) return <UserList userList={users} />;
 
   return null;
 };

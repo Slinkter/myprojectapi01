@@ -5,19 +5,19 @@ import { motion } from "motion/react";
 import { cn } from "@/shared/lib/utils/utils";
 import { ChevronRight } from "lucide-react";
 
-const BTN_BASE = "btn-glass";
+const SWISS_BUTTON_BASE_CLASS = "btn-swiss";
 
-const VARIANTS = {
-  default: "glass-card",
-  glass: "glass-card-hover",
-  minimal: "border border-border/40 rounded-xl hover:border-accent transition-all duration-200",
-  "accent-glow": "glass-card-hover",
+const CARD_STYLE_VARIANTS = {
+  default: "swiss-card",
+  glass: "swiss-card", // Replaced glass with flat swiss card style
+  minimal: "border-b border-border/40 hover:bg-surface/50 transition-all duration-200",
+  "accent-glow": "swiss-card border-accent", // Border indicator on active
 };
 
 /**
  * @typedef {Object} UserAvatarProps
- * @property {string} url - URL de la imagen del avatar.
- * @property {string} login - Username del usuario para tags de animación.
+ * @property {string} avatarUrl - URL de la imagen del avatar.
+ * @property {string} username - Nombre de usuario de GitHub para tags de animación.
  * @property {string} [variant="default"] - Variante de diseño visual.
  */
 
@@ -28,26 +28,26 @@ const VARIANTS = {
  * @param {UserAvatarProps} props - Propiedades del avatar.
  * @returns {JSX.Element} Imagen del avatar animada.
  */
-const UserAvatar = ({ url, login, variant = "default" }) => {
-  const isMinimal = variant === "minimal";
+const UserAvatar = ({ avatarUrl, username, variant = "default" }) => {
+  const isMinimalLayout = variant === "minimal";
 
   return (
-    <div className={cn("flex flex-col items-center relative", isMinimal ? "pt-0 pb-0" : "pt-6 pb-2")}>
+    <div className={cn("flex flex-col items-center relative", isMinimalLayout ? "pt-0 pb-0" : "pt-6 pb-2")}>
       <div className="relative">
         <motion.img
-          layoutId={`avatar-${login}`}
-          src={url}
-          alt={`Avatar de ${login}`}
+          layoutId={`avatar-${username}`}
+          src={avatarUrl}
+          alt={`Avatar de ${username}`}
           loading="lazy"
           variants={{
-            initial: { opacity: 0, scale: 0.95 },
+            initial: { opacity: 0, scale: 0.98 },
             animate: { opacity: 1, scale: 1 },
-            hover: { scale: 1.04 },
+            hover: { scale: 1.02 },
           }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           className={cn(
-            "rounded-xl object-cover z-10 relative",
-            isMinimal ? "w-10 h-10" : "w-16 h-16"
+            "rounded-none border border-border object-cover z-10 relative", // Sharp corners
+            isMinimalLayout ? "w-10 h-10" : "w-16 h-16"
           )}
         />
       </div>
@@ -56,14 +56,14 @@ const UserAvatar = ({ url, login, variant = "default" }) => {
 };
 
 UserAvatar.propTypes = {
-  url: PropTypes.string.isRequired,
-  login: PropTypes.string.isRequired,
+  avatarUrl: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   variant: PropTypes.string,
 };
 
 /**
  * @typedef {Object} UserHeaderProps
- * @property {string} login - Username del usuario de GitHub.
+ * @property {string} username - Nombre de usuario de GitHub.
  * @property {string} [variant="default"] - Variante visual de diseño.
  */
 
@@ -74,32 +74,32 @@ UserAvatar.propTypes = {
  * @param {UserHeaderProps} props - Propiedades del header.
  * @returns {JSX.Element} Sección de encabezado de la tarjeta.
  */
-const UserHeader = ({ login, variant = "default" }) => {
-  const isMinimal = variant === "minimal";
+const UserHeader = ({ username, variant = "default" }) => {
+  const isMinimalLayout = variant === "minimal";
 
   return (
-    <div className={cn("space-y-1 flex-1 min-w-0 leading-snug", isMinimal ? "px-0 pb-0 text-left" : "px-5 pb-1 text-center")}>
+    <div className={cn("space-y-1 flex-1 min-w-0 leading-snug", isMinimalLayout ? "px-0 pb-0 text-left" : "px-5 pb-1 text-center")}>
       <h3 className={cn(
-        "font-heading font-bold truncate text-text leading-snug",
-        isMinimal ? "text-sm" : "text-xs tracking-wider uppercase"
+        "font-heading font-extrabold truncate text-text leading-snug tracking-tight", // Swiss Style: Extrabold
+        isMinimalLayout ? "text-sm" : "text-xs uppercase tracking-wider"
       )}>
-        {login}
+        {username}
       </h3>
       <p className="font-mono text-[10px] text-text-mute truncate select-all leading-normal">
-        github.com/{login}
+        github.com/{username}
       </p>
     </div>
   );
 };
 
 UserHeader.propTypes = {
-  login: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   variant: PropTypes.string,
 };
 
 /**
  * @typedef {Object} UserFooterProps
- * @property {string} login - Username del usuario de GitHub.
+ * @property {string} username - Nombre de usuario de GitHub.
  * @property {string} [variant="default"] - Variante de diseño visual.
  */
 
@@ -110,20 +110,20 @@ UserHeader.propTypes = {
  * @param {UserFooterProps} props - Propiedades del footer.
  * @returns {JSX.Element|null} Botón animado o null si es variante minimal.
  */
-const UserFooter = ({ login, variant = "default" }) => {
+const UserFooter = ({ username, variant = "default" }) => {
   if (variant === "minimal") return null;
 
   return (
     <div className="px-5 pb-5 pt-1 mt-auto w-full z-10 overflow-hidden">
-      <Link to={`/user/${login}`} className="w-full block">
+      <Link to={`/user/${username}`} className="w-full block">
         <motion.button
-          className={cn(BTN_BASE, "w-full text-[10px] py-2.5 rounded-xl flex items-center justify-center gap-1.5")}
-          aria-label={`Ver perfil de ${login}`}
+          className={cn(SWISS_BUTTON_BASE_CLASS, "w-full text-[10px] py-2.5 rounded-none flex items-center justify-center gap-1.5")} // Sharp corners
+          aria-label={`Ver perfil de ${username}`}
           variants={{
-            initial: { opacity: 0.6, y: 5 },
-            hover: { opacity: 1, y: 0 },
+            initial: { opacity: 0.9 },
+            hover: { opacity: 1 },
           }}
-          transition={{ type: "spring", stiffness: 200, damping: 15 }}
+          transition={{ duration: 0.1 }}
         >
           <span>Ver perfil</span>
           <ChevronRight size={12} />
@@ -134,7 +134,7 @@ const UserFooter = ({ login, variant = "default" }) => {
 };
 
 UserFooter.propTypes = {
-  login: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   variant: PropTypes.string,
 };
 
@@ -143,37 +143,28 @@ UserFooter.propTypes = {
  * @property {React.ReactNode} children - Hijos del compuesto (UserCard.Avatar, UserCard.Header, etc.).
  * @property {"default"|"glass"|"minimal"|"accent-glow"} [variant="default"] - Variante de diseño visual de la tarjeta.
  * @property {string} [className] - Clases de estilo Tailwind CSS adicionales.
- * @property {string} [login] - El identificador único del usuario en GitHub.
+ * @property {string} [username] - El identificador único del usuario en GitHub.
  */
 
 /**
- * Tarjeta contenedora de usuario animada con efecto de glassmorphism.
+ * Tarjeta contenedora de usuario animada con estética minimalista suiza.
  * Utiliza el Compound Component Pattern (Avatar, Header, Footer).
  *
  * @component
  * @param {UserCardProps} props - Propiedades de la tarjeta.
  * @returns {JSX.Element} Contenedor animado de la tarjeta.
- *
- * @example
- * ```jsx
- * <UserCard variant="glass" login="mojombo">
- *   <UserCard.Avatar url="https://..." login="mojombo" />
- *   <UserCard.Header login="mojombo" />
- *   <UserCard.Footer login="mojombo" />
- * </UserCard>
- * ```
  */
-const UserCard = ({ children, variant = "default", className, login }) => {
-  const cardRef = useRef(null);
-  const variantClass = VARIANTS[variant] || VARIANTS.default;
-  const isMinimal = variant === "minimal";
+const UserCard = ({ children, variant = "default", className, username }) => {
+  const userCardRef = useRef(null);
+  const variantClassName = CARD_STYLE_VARIANTS[variant] || CARD_STYLE_VARIANTS.default;
+  const isMinimalLayout = variant === "minimal";
 
   return (
     <div
-      ref={cardRef}
+      ref={userCardRef}
       className={cn(
         "h-full w-full mx-auto group",
-        isMinimal ? "min-h-[70px]" : "min-h-[190px] max-w-full sm:max-w-[280px]",
+        isMinimalLayout ? "min-h-[70px]" : "min-h-[190px] max-w-full sm:max-w-[280px]",
         className
       )}
     >
@@ -182,19 +173,19 @@ const UserCard = ({ children, variant = "default", className, login }) => {
         whileHover="hover"
         animate="animate"
         variants={{
-          initial: { opacity: 0, y: 12 },
+          initial: { opacity: 0, y: 8 },
           animate: { opacity: 1, y: 0 },
-          hover: { y: -4 },
+          hover: { y: -2 }, // Subtler hover motion for Swiss minimalist feel
         }}
-        transition={{ type: "spring", stiffness: 180, damping: 15 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
         className={cn(
-          variantClass,
-          "flex h-full w-full overflow-hidden",
-          isMinimal ? "flex-row items-center gap-4 p-4" : "flex-col"
+          variantClassName,
+          "flex h-full w-full overflow-hidden rounded-none", // Sharp edges
+          isMinimalLayout ? "flex-row items-center gap-4 p-4" : "flex-col"
         )}
       >
-        {isMinimal ? (
-          <Link to={`/user/${login || ""}`} className="flex items-center gap-4 w-full">
+        {isMinimalLayout ? (
+          <Link to={`/user/${username || ""}`} className="flex items-center gap-4 w-full">
             {children}
           </Link>
         ) : (
@@ -209,7 +200,7 @@ UserCard.propTypes = {
   children: PropTypes.node.isRequired,
   variant: PropTypes.oneOf(["default", "glass", "minimal", "accent-glow"]),
   className: PropTypes.string,
-  login: PropTypes.string,
+  username: PropTypes.string,
 };
 
 UserCard.Avatar = UserAvatar;

@@ -8,4 +8,4 @@ export { default as ThemeToggle } from "./ui/ThemeToggle/ThemeToggle";
 export { httpClient } from "./api/httpClient";
 export { ApiError } from "./api/ApiError";
 export { queryClient } from "./api/queryClient";
-export { THEME } from "./styles/theme";
+export { SWISS_STYLE_TOKENS } from "./styles/theme";

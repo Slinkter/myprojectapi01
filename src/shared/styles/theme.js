@@ -1,13 +1,13 @@
 /**
  * @file theme.js
- * @description Centralized Tailwind CSS v4 design tokens and layouts.
+ * @description Centralized design tokens and CSS class aliases for Swiss Minimalism.
  */
 
-export const THEME = {
-  glass: "glass",
-  glassCard: "glass-card",
-  glassCardPro: "glass-card-pro",
-  glassInput: "glass-input",
-  badge: "badge",
-  layoutStack: "layout-stack",
+export const SWISS_STYLE_TOKENS = {
+  outline: "swiss-outline",
+  card: "swiss-card",
+  input: "swiss-input",
+  button: "btn-swiss",
+  badge: "badge-swiss",
+  stack: "layout-stack",
 };

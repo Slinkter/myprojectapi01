@@ -15,13 +15,13 @@ const containerVariants = {
   },
 };
 
-const UserList = ({ users }) => {
+const UserList = ({ userList }) => {
   return (
     <div className="w-full py-4">
       <div className="divider mb-6" />
       <div className="flex items-center gap-3 mb-4">
-        <span className="font-mono text-[10px] tracking-wider text-text-mute font-medium">
-          {users.length} resultado{users.length !== 1 ? "s" : ""}
+        <span className="font-mono text-[10px] tracking-wider text-swiss-text-mute font-bold">
+          {userList.length} RESULTADO{userList.length !== 1 ? "S" : ""}
         </span>
       </div>
       <motion.div
@@ -33,15 +33,15 @@ const UserList = ({ users }) => {
         className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5 md:gap-6"
       >
         <AnimatePresence mode="popLayout">
-          {users.map((user) => (
+          {userList.map((userProfile) => (
             <motion.div
-              key={user.id}
+              key={userProfile.id}
               layout
-              initial={{ opacity: 0, scale: 0.92 }}
+              initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.92 }}
+              exit={{ opacity: 0, scale: 0.98 }}
             >
-              <ResultFactory data={user} variant="accent-glow" />
+              <ResultFactory userProfile={userProfile} variant="default" />
             </motion.div>
           ))}
         </AnimatePresence>
@@ -51,7 +51,7 @@ const UserList = ({ users }) => {
 };
 
 UserList.propTypes = {
-  users: PropTypes.arrayOf(
+  userList: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       username: PropTypes.string.isRequired,
