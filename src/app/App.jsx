@@ -1,9 +1,14 @@
-import { useState, useEffect, Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
-import { useTheme, ErrorBoundary, ThemeToggle, queryClient } from "@/shared";
-import { SkeletonGrid } from "@/widgets/search-results";
+import {
+  useTheme,
+  ErrorBoundary,
+  ThemeToggle,
+  queryClient,
+  useMsw,
+} from "@/shared";
 
 const SearchPage = lazy(() => import("@/pages/search-page/SearchPage.jsx"));
 const DetailPage = lazy(() => import("@/pages/detail-page/DetailPage.jsx"));
@@ -20,50 +25,12 @@ const App = () => {
   console.log(
     "📦 [PASO 2: App Shell] Renderizando providers globales (QueryClient, Router, Theme) e inicializando MSW...",
   );
-
-  /**
-   * Determinamos si estamos en entorno de desarrollo.
-   * En desarrollo (pnpm dev), Vite establece MODE como 'development'.
-   */
-  const isDev = import.meta.env.MODE === "development";
-
-  /**
-   * Estado de construcción del entorno (isBuild).
-   * - En PRODUCCIÓN: `true` (el entorno está construido e inmediato).
-   * - En DESARROLLO: `false` (esperamos a que se 'construya' el entorno con MSW).
-   */
-  const [isBuild, setIsBuild] = useState(!isDev);
   const [theme, toggleTheme] = useTheme();
 
-  // Inicialización de Mock Service Worker (MSW) para desarrollo offline
-  useEffect(() => {
-    if (isDev) {
-      const initMocks = async () => {
-        try {
-          // 👈 Importación dinámica: Carga MSW solo en desarrollo. Evita que se incluya en el build de producción.
-          const { worker } = await import("@/shared/mocks/browser");
-          
-          // 👈 Inicia el interceptor. No pide datos ahora, sino que activa el Service Worker como un proxy local de red.
-          await worker.start({
-            // 👈 bypass: Si la URL no está en handlers.js (ej. Google Fonts), viaja directo a internet sin advertencias.
-            onUnhandledRequest: "bypass",
-            serviceWorker: {
-              // 👈 Prefija con BASE_URL para localizar el script correctamente en la subruta de GitHub Pages.
-              url: `${import.meta.env.BASE_URL}mockServiceWorker.js`,
-            },
-          });
-          setIsBuild(true); // 👈 Entorno listo. Permite continuar con el renderizado del árbol React.
-        } catch (error) {
-          console.error("[MSW] Failed to enable mocking:", error);
-          setIsBuild(true); // 👈 Fallback: Permite renderizar igual para intentar conectar con la API real de GitHub.
-        }
-      };
-      initMocks();
-    }
-  }, [isDev]);
+  const isMswReady = useMsw();
 
-  // No renderizar hasta que el build del entorno esté completado
-  if (!isBuild) return null;
+  // No renderizar hasta que el build del entorno esté completado (MSW listo si es desarrollo)
+  if (!isMswReady) return null;
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -83,13 +50,11 @@ const App = () => {
 
           <div className="w-full max-w-7xl px-6 md:px-12 py-8 pb-24 flex-1 relative">
             <ErrorBoundary>
-              <Suspense fallback={<SkeletonGrid />}>
-                <Routes>
-                  <Route path="/" element={<SearchPage />} />
-                  <Route path="/user/:login" element={<DetailPage />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </Suspense>
+              <Routes>
+                <Route path="/" element={<SearchPage />} />
+                <Route path="/user/:login" element={<DetailPage />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
             </ErrorBoundary>
           </div>
         </div>
