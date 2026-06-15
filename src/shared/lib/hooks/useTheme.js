@@ -1,78 +1,78 @@
 /**
  * @file useTheme.js
  * @description
- * Hook personalizado para manejar el tema de la aplicación (modo claro/oscuro).
- * Provee el estado del tema y funcionalidad para alternarlo, persistiendo en localStorage.
+ * Hook personalizado para inyectar y gestionar el sistema de temática oscura/clara de la aplicación.
+ * Mantiene la sincronización entre el estado local (React), la persistencia (localStorage) y 
+ * la clase raíz del documento de HTML (útil para la estrategia CSS de Tailwind Dark Mode).
  */
 
 import { useState, useEffect } from "react";
 
 /**
- * Custom hook for managing application theme
+ * Hook para gestionar el tema de color de la aplicación.
+ * Prioriza la decisión del usuario guardada previamente. Si es la primera visita, 
+ * intenta detectar la preferencia del sistema operativo de manera automática.
  *
  * @hook
  * @function useTheme
- * @returns {[string, Function]} Tuple containing current theme and toggle function
- * @returns {string} returns[0] - Current theme ('light' | 'dark')
- * @returns {Function} returns[1] - Function to toggle between themes
- *
- * @description
- * Manages the application's color theme with the following features:
- * - Persists user preference in localStorage
- * - Detects system color scheme preference on first load
- * - Updates document root class for CSS theme switching
- * - Defaults to light theme if no preference is found
- *
- * Theme Priority:
- * 1. Saved theme from localStorage
- * 2. System preference (prefers-color-scheme)
- * 3. Default to 'light'
+ * @returns {[string, function(): void]} Tupla conteniendo: [temaActual, funcionAlternarTema]
  *
  * @example
- * function App() {
+ * ```typescript
+ * function Header() {
  *   const [theme, toggleTheme] = useTheme();
  *
  *   return (
- *     <div>
- *       <p>Current theme: {theme}</p>
- *       <button onClick={toggleTheme}>Toggle Theme</button>
- *     </div>
+ *     <button onClick={toggleTheme}>
+ *       Cambiar a modo {theme === 'light' ? 'Oscuro' : 'Claro'}
+ *     </button>
  *   );
  * }
+ * ```
  */
 export const useTheme = () => {
+  // Inicialización perezosa (Lazy initialization) del estado para evitar 
+  // parpadeos en el renderizado inicial leyendo sincronamente el localStorage.
   const [theme, setTheme] = useState(() => {
-    // 1. Check for saved theme in localStorage
+    // 1. Buscamos si el usuario ya eligió un tema anteriormente.
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
       return savedTheme;
     }
-    // 2. If no saved theme, check system preference
+    
+    // 2. Si no hay preferencia guardada, verificamos la preferencia del Sistema Operativo.
+    // Usamos el API matchMedia para leer la directiva CSS nativa prefers-color-scheme.
     const prefersDark = window.matchMedia?.(
       "(prefers-color-scheme: dark)"
     ).matches;
-    // 3. Default to light theme if no system preference
+    
+    // 3. Fallback final al tema claro si no hay preferencias detectables.
     return prefersDark ? "dark" : "light";
   });
 
   /**
-   * Toggles between light and dark themes
+   * Alterna el tema actual entre "light" (claro) y "dark" (oscuro).
    * @function toggleTheme
    */
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
-  // Effect to update localStorage and HTML class when theme changes
+  // Efecto secundario que sincroniza React con el DOM real y el almacenamiento del navegador.
   useEffect(() => {
     const root = document.documentElement;
+    
+    // Se añade o quita la clase "dark" en la etiqueta <html>
+    // Esto activa los selectores "dark:*" de TailwindCSS en toda la aplicación.
     if (theme === "dark") {
       root.classList.add("dark");
     } else {
       root.classList.remove("dark");
     }
+    
+    // Persistimos la elección para que no se pierda al recargar la página.
     localStorage.setItem("theme", theme);
-  }, [theme]);
+  }, [theme]); // El efecto se dispara cada vez que el estado 'theme' cambia.
 
   return [theme, toggleTheme];
 };

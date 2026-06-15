@@ -58,7 +58,39 @@ The project includes comprehensive documentation in `src/docs/`:
 - Prefer functional components with hooks over class components.
 - Keep components small and focused on single responsibility.
 - Use utility-first Tailwind CSS.
-- Write JSDoc comments for functions, components, and complex logic.
+- **Mandatory Documentation:** Write JSDoc comments for ALL functions, components, and complex logic.
+
+### 🎓 JSDoc & Educational Standards
+
+Every file must follow the **Universal JSDoc** standard:
+1. **File Header:** `@file` and `@description`.
+2. **Technical Senior:** Detailed explanation of the logic using standard JSDoc tags (`@param`, `@returns`, `@hook`, `@example`).
+3. **🎓 CONCEPTO JUNIOR:** A block comment explaining a fundamental programming or React concept related to the code.
+
+```javascript
+/**
+ * 🎓 CONCEPTO JUNIOR: [Nombre del Concepto]
+ * [Explicación didáctica y sencilla del concepto para principiantes]
+ */
+```
+
+### 📡 Logging & Traceability (9-Step Flow)
+
+Use the central `log` utility (`@/shared`) to trace the execution flow. Adhere to the established **9-Step Educational Flow**:
+
+| Paso | Capa | Archivo de ejemplo |
+| :--- | :--- | :--- |
+| 1 | Mounting | `main.jsx` |
+| 2 | App Shell | `App.jsx` |
+| 3 | Pages | `SearchPage.jsx` |
+| 4 | Widgets | `SearchResults.jsx` |
+| 5 | Factory | `ResultFactory.jsx` |
+| 6 | Facade | `useUserSearchFacade.js` |
+| 7 | Query Hook | `useUserQuery.js` |
+| 8 | Service | `userService.js` |
+| 9 | Adapter | `adapter.js` |
+
+Use `log.flow("...")` at the beginning of each of these logical blocks to maintain visibility.
 
 ### Imports & Path Aliases
 

@@ -132,3 +132,21 @@ Imagínalo como carpetas físicas organizadas en estantes tridimensionales:
 1. **La regla de la frontera:** Nunca importes un archivo interno directamente (ej: `import X from '@/entities/user/ui/UserCard'`). Siempre importa desde el index principal del slice (ej: `import { UserCard } from '@/entities/user'`).
 2. **La regla de la flecha única:** Si estás escribiendo código en `entities`, no puedes importar nada que esté en `features`, `widgets`, `pages` ni `app`.
 3. **No repitas lógica (DRY):** Las herramientas que uses en más de dos lugares del pastel de bodas van en la base: la capa `shared`.
+
+---
+
+## 📡 6. El Detective de Código: ¡El Logger de 9 Pasos! 🔍
+
+Para saber qué está pasando en cada piso de nuestro pastel, hemos contratado a un "detective" (el **logger**). Si abres la consola de tu navegador (F12), verás cómo el detective te cuenta el viaje de los datos paso a paso:
+
+1. **Paso 1:** ¡Poniendo los cimientos! (Mounting)
+2. **Paso 2:** Armando el armazón de la casa. (Shell)
+3. **Paso 3:** Entrando a una habitación. (Pages)
+4. **Paso 4:** Encendiendo la televisión. (Widgets)
+5. **Paso 5:** Eligiendo qué película ver. (Factory)
+6. **Paso 6:** El control remoto inteligente. (Facade)
+7. **Paso 7:** Buscando la señal de cable. (Query Hook)
+8. **Paso 8:** La antena recibiendo la señal. (Service)
+9. **Paso 9:** Decodificando la imagen para que se vea bien. (Adapter)
+
+¡Si sigues estos números en la consola, nunca te perderás en el código! 🚀

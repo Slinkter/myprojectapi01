@@ -30,6 +30,39 @@ El archivo `package.json` define scripts simplificados para el ciclo de vida del
 
 ---
 
+## 📐 Estándares de Documentación y Trazabilidad
+
+Para que este proyecto cumpla su propósito educativo, todo código nuevo debe seguir estas dos reglas inquebrantables:
+
+### 1. Documentación Maestro-Aprendiz (Universal JSDoc)
+No basta con decir *qué* hace el código; hay que explicar *cómo* se conecta con la teoría. Cada archivo debe incluir:
+*   **Encabezado de archivo:** Con `@file` y `@description`.
+*   **Anotaciones Técnicas:** Uso de `@param`, `@returns`, `@typedef`, `@hook`, `@example`.
+*   **🎓 CONCEPTO JUNIOR:** Un bloque de comentario que explica un concepto fundamental (Virtual DOM, Inmutabilidad, Closures, etc.) relacionado con el código actual.
+
+```javascript
+/**
+ * 🎓 CONCEPTO JUNIOR: Inmutabilidad
+ * React necesita saber cuándo algo cambió para redibujar. Si cambias un objeto directamente,
+ * React no se entera. Por eso usamos el spread operator (...) para crear una COPIA nueva.
+ */
+```
+
+### 2. El Flujo de 9 Pasos (log.flow)
+Para mantener la visibilidad del ciclo de vida, utiliza la utilidad `log.flow()` de `@/shared` en los puntos estratégicos de la arquitectura:
+
+1.  **Mounting** (`main.jsx`)
+2.  **App Shell** (`App.jsx`)
+3.  **Pages** (`Page.jsx`)
+4.  **Widgets** (`Widget.jsx`)
+5.  **Factory** (`ResultFactory.jsx`)
+6.  **Facade** (`useFacade.js`)
+7.  **Query Hook** (`useQuery.js`)
+8.  **Service** (`service.js`)
+9.  **Adapter** (`adapter.js`)
+
+---
+
 ## 📐 Flujo de Trabajo para Nuevas Funcionalidades (FSD)
 
 Para mantener la cohesión y la integridad de nuestra arquitectura **FSD**, sigue estos pasos al agregar lógica:

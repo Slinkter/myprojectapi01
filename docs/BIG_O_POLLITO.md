@@ -94,3 +94,14 @@ const buscarUsuarioConstante = (mapa, usernameBuscado) => {
   return mapa[usernameBuscado]; // O(1): Acceso instantáneo
 };
 ```
+
+---
+
+## 🎓 APLICACIÓN EN ESTE PROYECTO
+En este repositorio, hemos documentado la **complejidad algorítmica** de todas las funciones críticas en su **JSDoc**. 
+
+**Ejemplos reales que puedes encontrar en el código:**
+- `userAdapter` (en `adapter.js`): Marcada como **O(1)** (Tiempo Constante).
+- `usersCollectionAdapter` (en `adapter.js`): Marcada como **O(N)** (Tiempo Lineal).
+
+¡Revisa el código para ver cómo los ingenieros senior planificamos el rendimiento de la app! 🚀

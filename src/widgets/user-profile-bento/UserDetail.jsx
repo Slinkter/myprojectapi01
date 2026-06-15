@@ -1,6 +1,6 @@
 /**
  * @file UserDetail.jsx
- * @description Detailed profile widget view implemented as a Tailwind CSS Bento Grid layout dashboard.
+ * @description Widget visual que compone el Dashboard (Bento Grid) del perfil de usuario.
  */
 
 import { Link } from "react-router-dom";
@@ -11,6 +11,7 @@ import { useUserDetailFacade } from "@/features/view-user-details";
 import ProfileHeader from "./ui/ProfileHeader";
 import ProfileFooter from "./ui/ProfileFooter";
 import BentoStatsGrid from "./ui/BentoStatsGrid";
+import { log } from "@/shared";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -37,22 +38,26 @@ const itemVariants = {
 };
 
 /**
- * UserDetail widget component.
- * Displays GitHub developer analytics bento dashboard by composing specialized sub-components.
- * Separation of concerns (SoC): delegates business logic to the view-user-details facade.
+ * 🎓 CONCEPTO JUNIOR: Widgets (Separación de Intereses - SoC)
+ * Fíjate que este componente no se llama `DetailPage`. Es un "Widget" que vive dentro de la página.
+ * Su responsabilidad no es el ruteo (URL), sino construir la Cuadrícula Visual (Dashboard).
+ * 
+ * Además, delega la lógica de negocio al `useUserDetailFacade()`. Si el día de mañana
+ * decidimos cambiar React Query por Redux, este archivo no cambia ni una sola línea de código.
+ *
+ * Componente UserDetail (Widget).
+ * Muestra el dashboard analítico del desarrollador componiendo sub-componentes especializados.
  *
  * @component
- * @returns {JSX.Element|null} Layout dashboard structure.
- */
-/**
- * [PASO 4C: Widget Component]
- * Componente orquestador del detalle del usuario en formato Bento Grid.
- * Delega la lógica de negocio a su fachada y renderiza la maqueta estructurando ProfileHeader, BentoStatsGrid y ProfileFooter.
+ * @returns {JSX.Element|null} Estructura visual del dashboard Bento.
  */
 const UserDetail = () => {
-  console.log("🧩 [PASO 4C: Widget Component] Montando UserDetail Bento Dashboard...");
+  log.flow("🧩 [PASO 4C: Widget Component] Montando UserDetail Bento Dashboard...");
+  
+  // Obtenemos los datos y estados desde nuestra "Caja Negra" (Facade)
   const { user, isLoading, isError, error } = useUserDetailFacade();
 
+  // Renderizado condicional prioritario
   if (isLoading) return <UserDetailSkeleton />;
 
   if (isError) {
@@ -74,6 +79,7 @@ const UserDetail = () => {
     );
   }
 
+  // Guard Clause final: Si no está cargando, no hay error, pero tampoco hay usuario, no dibujamos nada.
   if (!user) return null;
 
   return (
@@ -83,10 +89,10 @@ const UserDetail = () => {
       animate="visible"
       className="max-w-4xl mx-auto space-y-8 md:space-y-12 py-8 md:py-12 px-4 relative"
     >
-      {/* Decorative ambient background glow */}
+      {/* Fondo decorativo (Decorative ambient background glow) */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-tr from-accent/5 to-indigo-500/5 rounded-full blur-3xl pointer-events-none -z-10" />
 
-      {/* Back button link */}
+      {/* Botón de volver */}
       <motion.div variants={itemVariants} className="inline-block group">
         <Link to="/" className="cursor-pointer">
           <button
@@ -103,13 +109,14 @@ const UserDetail = () => {
         </Link>
       </motion.div>
 
-      {/* Profile Header section */}
+      {/* 
+        🎓 CONCEPTO JUNIOR: Prop Drilling y Variantes de Animación
+        Observa que pasamos `variants={itemVariants}` a los sub-componentes.
+        Esto permite que el contenedor padre (`motion.div` de arriba) controle el "Stagger" (cascada).
+        Cuando el padre dice "Anímense", todos los hijos saben cómo moverse porque recibieron estas variantes por props.
+      */}
       <ProfileHeader user={user} variants={itemVariants} />
-
-      {/* Bento Grid layout stats */}
       <BentoStatsGrid user={user} variants={itemVariants} />
-
-      {/* Footer link badges */}
       <ProfileFooter user={user} variants={itemVariants} />
     </motion.div>
   );

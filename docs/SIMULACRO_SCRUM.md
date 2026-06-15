@@ -632,8 +632,8 @@ Cada User Story debe cumplir TODOS estos criterios para considerarse "Done":
 **Feedback**:
 
 - Stakeholder: "Excelente. La app está lista para producción"
-- Stakeholder: "La documentación es muy completa, especialmente la guía de estudio"
-- PO: "Producto finalizado. Pasamos a mantenimiento"
+- Stakeholder: "La documentación es increíble; el enfoque didáctico Junior y el sistema de logs de 9 pasos convierten el código en una herramienta de aprendizaje única"
+- PO: "Producto finalizado. El Artefacto de Ingeniería Nivel Master está completo"
 
 ---
 

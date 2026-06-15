@@ -194,7 +194,8 @@ Construir una aplicación web SPA (Single Page Application) en React 18 que perm
 | RNF-12 | La aplicación debe seguir la arquitectura Feature-Sliced Design (FSD) en 6 capas: app → pages → widgets → features → entities → shared | Arquitectura  | Las capas superiores no importan de las inferiores                 |
 | RNF-13 | La aplicación debe usar el patrón Facade para ocultar la complejidad de TanStack Query de los componentes                              | Arquitectura  | Los componentes solo llaman a facades, no a queries directamente   |
 | RNF-14 | La aplicación debe usar el patrón Adapter para transformar datos de la API al modelo interno                                           | Arquitectura  | Ninguna propiedad de la API cruda llega a presentation             |
-| RNF-15 | La aplicación debe usar el patrón Factory para renderizar diferentes tipos de resultados (User vs Organization)                        | Arquitectura  | `ResultFactory` decide qué componente renderizar según `data.type` |
+| RNF-16 | La aplicación debe ser autodocumentada para fines educativos, explicando el 'porqué' técnico y el concepto teórico asociado en cada archivo | Calidad       | 100% cobertura de JSDoc con '🎓 CONCEPTO JUNIOR' |
+| RNF-17 | La aplicación debe permitir la trazabilidad completa del flujo de una petición en consola mediante un sistema de logs numerados de 1 a 9           | Calidad       | Traza completa visible en consola de desarrollo        |
 
 #### Requerimientos de Hardware y Software
 

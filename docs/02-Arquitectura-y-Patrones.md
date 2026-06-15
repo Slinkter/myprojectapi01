@@ -77,22 +77,40 @@ Contenedor transversal de herramientas técnicas, estilos y componentes atómico
 
 ---
 
+## 📡 Trazabilidad Educativa: El Flujo de 9 Pasos (log.flow)
+
+Una de las innovaciones de este proyecto es el sistema de logging numerado que permite a los desarrolladores visualizar la ejecución de la arquitectura en tiempo real desde la consola del navegador.
+
+| Paso | Nombre | Responsabilidad Técnica |
+| :--- | :--- | :--- |
+| **1** | **Mounting** | Inicialización de React y anclaje al DOM real (`main.jsx`). |
+| **2** | **App Shell** | Configuración de Providers (Query, Router, Theme) (`App.jsx`). |
+| **3** | **Pages** | Composición de la vista y orquestación de alto nivel (`SearchPage.jsx`). |
+| **4** | **Widgets** | Orquestación de lógica visual y renderizado condicional (`SearchResults.jsx`). |
+| **5** | **Factory** | Selección dinámica del componente visual según el tipo de dato (`ResultFactory.jsx`). |
+| **6** | **Facade** | **Cerebro de la feature:** Orquestación de hooks, estados y efectos (`useUserSearchFacade.js`). |
+| **7** | **Query Hook** | Gestión de caché y estado del servidor con TanStack Query (`useUserQuery.js`). |
+| **8** | **Service** | Comunicación pura con la infraestructura de red (`userService.js`). |
+| **9** | **Adapter** | **Filtro de Seguridad:** Validación con Zod y normalización de datos (`adapter.js`). |
+
+---
+
 ## 🗺️ Mapa de Flujo de Datos
 
-El flujo de información se desplaza de forma estructurada e unidireccional:
+El flujo de información se desplaza de forma estructurada e unidireccional, siguiendo la traza del logger:
 
-```mermaid
-graph TD
-    UI[Pages / Widgets / Features] -->|Invoca Facade Hook| Facade[useUserSearchFacade]
-    Facade -->|Usa Query Hook| Query[useUserQuery]
-    Query -->|Llama a Servicio| Service[userService]
-    Service -->|Petición HTTP| HTTP[httpClient]
-    HTTP -->|Respuesta JSON| API[GitHub API]
-    API -->|Datos Crudos| HTTP
-    HTTP -->|Valida y Limpia| Adapter[userAdapter + Zod Schema]
-    Adapter -->|Datos Tipados y Seguros| Service
-    Service -->|Retorna Modelo Limpio| Query
-    Query -->|Renderiza con Datos| UI
+```text
+[CLIENTE UI]
+      │
+(3) Pages ──────┐
+      │         │
+(4) Widgets ─── (6) Facade <───────┐
+      │         │                  │
+(5) Factory ────┘           (7) Query Hook
+      │                            │
+      └─────────────────────> (8) Service ──────> [RED / API]
+                                   │                   │
+                            (9) Adapter <──────────────┘
 ```
 
 ---
@@ -103,14 +121,15 @@ Para garantizar la calidad de la arquitectura a nivel "Senior", aplicamos tres p
 
 ### 1. El Patrón Adapter (GoF - Estructural)
 *   **Ubicación:** `src/entities/user/model/adapter.js`
-*   **Función:** La API de GitHub devuelve una estructura compleja con propiedades variables (`avatar_url`, `html_url`). El adaptador las traduce al modelo estandarizado `UserProfile` con tipados limpios (`photo`, `username`, `repos`). A la vez, se realiza una validación estricta usando **Zod** para fallar inmediatamente si el contrato de la API cambia.
+*   **Filosofía:** "No confíes en los datos externos". La API de GitHub devuelve una estructura compleja con propiedades variables (`avatar_url`, `html_url`). El adaptador las traduce al modelo estandarizado `UserProfile` con tipados limpios (`photo`, `username`, `repos`). 
+*   **Seguridad:** Realiza una validación estricta usando **Zod** para fallar inmediatamente si el contrato de la API cambia, protegiendo a la UI de errores de "undefined".
 
 ### 2. El Patrón Facade (GoF - Estructural)
-*   **Ubicación:** 
-    *   `src/features/search-user/model/useUserSearchFacade.js`
-    *   `src/features/view-user-details/model/useUserDetailFacade.js`
-*   **Función:** Centralizan la complejidad de coordinar estados y llamadas de queries externos (TanStack Query, react-router-dom, timeouts o toasts de error) fuera de la capa visual. Los widgets y páginas simplemente consumen los datos orquestados por estas fachadas y se enfocan en renderizar la UI de forma limpia y declarativa.
+*   **Ubicación:** `src/features/search-user/model/useUserSearchFacade.js`
+*   **Filosofía:** "Simplifica la complejidad". Centraliza la coordinación de múltiples hooks (TanStack Query, react-router-dom, useDebounce) y efectos (toasts de error) en un solo punto de entrada. 
+*   **Beneficio:** Los widgets y páginas simplemente consumen booleanos (`isLoading`, `isError`) y funciones (`setSearchTerm`), quedando 100% desacoplados de la implementación de red o ruteo.
 
 ### 3. El Patrón Factory (GoF - Creacional)
 *   **Ubicación:** `src/entities/user/ui/ResultFactory.jsx`
-*   **Función:** Instancia dinámicamente componentes basándose en el tipo de entidad que recibe de la API. Decide si renderizar una tarjeta de organización (`OrganizationCard`) o de usuario estándar (`UserCard`), encapsulando las decisiones de renderizado.
+*   **Filosofía:** "Delega la creación". Instancia dinámicamente componentes basándose en el campo `type` de la API (User vs Organization).
+*   **Beneficio:** Si mañana GitHub añade un tipo "Bot" o "Enterprise", solo modificamos la Factory en un lugar, sin tocar la lógica de los widgets de resultados.

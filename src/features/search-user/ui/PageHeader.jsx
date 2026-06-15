@@ -1,10 +1,21 @@
+/**
+ * @file PageHeader.jsx
+ * @description Componente de presentación (Dumb Component) que renderiza la barra de búsqueda y el título principal.
+ * No realiza peticiones de red por sí mismo; expone eventos para que un componente inteligente (Smart Component / Facade) los maneje.
+ */
+
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "motion/react";
 import { Search, XCircle, Loader2 } from "lucide-react";
 import { cn } from "@/shared/lib/utils/utils";
-import { TAILWIND_STYLE_TOKENS } from "@/shared";
+import { TAILWIND_STYLE_TOKENS, log } from "@/shared";
 
+/**
+ * 🎓 CONCEPTO JUNIOR: Componentes "Dumb" (Mudos / Presentacionales)
+ * Este Spinner no guarda estado, ni pide datos a una API. Solo sabe cómo dibujarse y rotar.
+ * Lo hace súper reutilizable en toda la app.
+ */
 const Spinner = ({ className }) => {
   return <Loader2 className={cn("animate-spin", className)} />;
 };
@@ -14,12 +25,28 @@ Spinner.propTypes = {
 };
 
 /**
- * [PASO 4A: Feature Component]
- * Componente que representa la barra de búsqueda (buscador).
- * Implementa animaciones y micro-interacciones (foco, spinner) para la búsqueda de usuarios.
+ * 🎓 CONCEPTO JUNIOR: Controlled Components (Componentes Controlados)
+ * Mira cómo el `input` abajo tiene `value={searchTerm}` y `onChange={handleSearch}`.
+ * El input no guarda lo que escribes por su cuenta. Delega toda la responsabilidad a React.
+ * A esto se le llama ser un Componente Controlado: React tiene la verdad absoluta de lo que hay escrito,
+ * y nos lo pasa a través de las "props".
+ *
+ * Componente PageHeader (Buscador).
+ * Implementa animaciones y micro-interacciones visuales para mejorar la Experiencia de Usuario (UX).
+ *
+ * @component
+ * @param {Object} props - Propiedades inyectadas por el Facade padre.
+ * @param {string} props.searchTerm - El texto actual escrito en la barra de búsqueda.
+ * @param {Function} props.handleSearch - Handler que se ejecuta cada vez que el usuario teclea.
+ * @param {boolean} props.isSearching - Indica si hay una petición a la API en curso (dibuja el spinner).
+ * @returns {JSX.Element} Encabezado de la página de búsqueda.
  */
 const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
-  console.log("🧩 [PASO 4A: Feature Component] Montando PageHeader (Buscador)...");
+  log.flow(
+    "🧩 [PASO 4A: Feature Component] Montando PageHeader (Buscador)...",
+  );
+
+  // Estado puramente visual/local. Solo sirve para saber si el borde del input debe pintarse de color brillante.
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -32,7 +59,10 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
             transition={{ duration: 0.5, type: "spring", stiffness: 80 }}
             className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight leading-[1.1]"
           >
-            Explora el <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">network</span>
+            Explora el{" "}
+            <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+              network
+            </span>
             <br />
             de GitHub
           </motion.h1>
@@ -55,16 +85,17 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
         transition={{ duration: 0.6, delay: 0.3 }}
         className="w-full max-w-lg px-4 sm:px-0"
       >
-        <div className={cn(TAILWIND_STYLE_TOKENS.input, isFocused && "border-accent")}>
+        <div
+          className={cn(
+            TAILWIND_STYLE_TOKENS.input,
+            isFocused && "border-accent", // Fusión de clases dinámica según el estado del foco
+          )}
+        >
           {isSearching ? (
             <Spinner className="text-accent text-lg" aria-hidden="true" />
           ) : (
             <motion.div
-              animate={
-                isFocused
-                  ? { scale: 1.05 }
-                  : { scale: 1 }
-              }
+              animate={isFocused ? { scale: 1.05 } : { scale: 1 }}
               transition={{ type: "spring", stiffness: 200, damping: 15 }}
               className={cn(
                 "transition-colors duration-200",
@@ -94,6 +125,7 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
                 exit={{ opacity: 0, scale: 0.8 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                // Emulamos un evento de "input" falso pasándole target.value vacío para limpiar el buscador
                 onClick={() => handleSearch({ target: { value: "" } })}
                 className="text-text-mute hover:text-text transition-colors cursor-pointer"
                 aria-label="Limpiar búsqueda"
@@ -101,9 +133,7 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
                 <XCircle size={18} aria-hidden="true" />
               </motion.button>
             ) : (
-              <div
-                className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 rounded border border-border bg-bg text-[9px] font-mono text-text-mute font-medium select-none shrink-0"
-              >
+              <div className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 rounded border border-border bg-bg text-[9px] font-mono text-text-mute font-medium select-none shrink-0">
                 <span>⌘</span>
                 <span>K</span>
               </div>
@@ -115,6 +145,9 @@ const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
   );
 };
 
+// 🎓 CONCEPTO JUNIOR: PropTypes
+// Sirven para proteger al componente de que se le pasen "tipos" equivocados.
+// Si alguien intenta mandar isSearching="sí" (string) en vez de boolean, React gritará en consola en Modo Desarrollo.
 PageHeader.propTypes = {
   searchTerm: PropTypes.string.isRequired,
   handleSearch: PropTypes.func.isRequired,

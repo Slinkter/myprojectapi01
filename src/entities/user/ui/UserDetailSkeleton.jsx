@@ -1,16 +1,24 @@
 /**
  * @file UserDetailSkeleton.jsx
- * @description High-fidelity loading skeleton loader matching the Bento Grid details page layout structure.
+ * @description Componente Placeholder de alta fidelidad que imita la estructura detallada
+ * de la cuadrícula Bento de la página de perfil del usuario.
  */
 
 /**
- * UserDetailSkeleton component.
+ * 🎓 CONCEPTO JUNIOR: CSS Grid para Skeletons
+ * Observa cómo usamos la misma estructura exacta de cuadriculas (`grid-cols-1 sm:grid-cols-2...`)
+ * que el componente real que va a reemplazar. La meta suprema de un Skeleton Loader de alta calidad
+ * es garantizar el "Layout Shift" igual a Cero (es decir, la pantalla no "salta" ni se reajusta
+ * cuando el `isLoading` cambia de verdadero a falso y el componente real se pinta).
+ *
+ * Componente UserDetailSkeleton.
  *
  * @component
- * @returns {JSX.Element} Loading skeletons grid.
+ * @returns {JSX.Element} Pantalla completa simulada de perfil de usuario cargando.
  */
 const UserDetailSkeleton = () => (
   <div className="max-w-4xl mx-auto space-y-8 md:space-y-12 py-8 md:py-12 px-4 animate-pulse">
+    {/* Simulación del "Botón volver atrás" */}
     <div className="inline-block">
       <div className="flex items-center gap-2">
         <div className="w-4 h-4 rounded bg-border" />
@@ -18,7 +26,7 @@ const UserDetailSkeleton = () => (
       </div>
     </div>
 
-    {/* Header Skeleton Block */}
+    {/* Header Skeleton Block (Avatar y Nombres) */}
     <section className="flex flex-col sm:flex-row gap-8 items-center sm:items-start p-8 border border-border bg-surface rounded-2xl">
       <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border border-border bg-border/30 flex-shrink-0" />
       <div className="space-y-4 sm:pt-2 w-full flex-1">

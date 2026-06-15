@@ -1,19 +1,30 @@
+/**
+ * @file ProfileFooter.jsx
+ * @description Sub-componente que renderiza la fila final del widget Bento (Ubicación, Website, y Botón de Github).
+ */
+
 import { motion } from "motion/react";
 import PropTypes from "prop-types";
 import { MapPin, Link as LinkIcon, Globe } from "lucide-react";
 
 /**
- * ProfileFooter component.
- * Displays meta information pills (location, blog/website) and primary GitHub CTA link.
+ * 🎓 CONCEPTO JUNIOR: Enlaces Seguros (Rel Noopener Noreferrer)
+ * Si te fijas en los botones de "Ver en Github" o "Website", usamos `target="_blank"` para abrir otra pestaña.
+ * ¡NUNCA uses `target="_blank"` sin `rel="noopener noreferrer"`! 
+ * Si no lo pones, la nueva pestaña que abras tiene control oculto sobre tu aplicación mediante la variable global `window.opener`.
+ * Es una vulnerabilidad clásica de seguridad web (Tabnabbing). `noopener` rompe ese cordón umbilical.
+ *
+ * Componente ProfileFooter.
+ * Muestra información "meta" en pastillas visuales (pills).
  *
  * @component
- * @param {Object} props - Component props.
- * @param {Object} props.user - Normalized user details object.
- * @param {string} [props.user.location] - Optional location string.
- * @param {string} [props.user.website] - Optional personal site/blog URL.
- * @param {string} props.user.profileUrl - Target GitHub URL.
- * @param {Object} props.variants - Motion animation variants.
- * @returns {JSX.Element} Footer element.
+ * @param {Object} props - Propiedades inyectadas.
+ * @param {Object} props.user - Detalles de usuario normalizados.
+ * @param {string} [props.user.location] - Ciudad o país (opcional).
+ * @param {string} [props.user.website] - URL del blog/sitio (opcional).
+ * @param {string} props.user.profileUrl - URL principal del perfil en GitHub.
+ * @param {Object} props.variants - Variantes de animación.
+ * @returns {JSX.Element} Pie de página de la tarjeta de perfil.
  */
 const ProfileFooter = ({ user, variants }) => {
   return (
@@ -21,6 +32,11 @@ const ProfileFooter = ({ user, variants }) => {
       variants={variants}
       className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 pt-6 text-xs font-semibold border-t border-border"
     >
+      {/* 
+        🎓 CONCEPTO JUNIOR: Renderizado con Operador Lógico Cortocircuito (&&)
+        Si `user.location` está vacío, o es falso o null, la ejecución se "corta" ahí mismo 
+        y React simplemente ignora el <div>. Es la forma más limpia de hacer Ifs en JSX.
+      */}
       {user.location && (
         <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-border bg-surface text-text-mute shadow-sm select-none">
           <MapPin size={14} className="text-accent" />

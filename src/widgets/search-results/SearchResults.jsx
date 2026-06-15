@@ -1,52 +1,59 @@
+/**
+ * @file SearchResults.jsx
+ * @description Widget Orquestador para los Resultados de Búsqueda.
+ * Centraliza la lógica de "Renderizado Condicional" (Conditional Rendering) aislando a la página 
+ * de la responsabilidad de decidir qué componente pintar en cada momento.
+ */
+
 import PropTypes from "prop-types";
 
 // UI Components
-import { ErrorDisplay } from "@/shared";
+import { ErrorDisplay, log } from "@/shared";
 import SkeletonGrid from "./SkeletonGrid";
 import UserList from "./UserList";
 import { NotFoundPage as NotFound } from "@/pages/not-found";
 
 /**
- * @file SearchResults.jsx
- * @description
- * Maneja el renderizado condicional de los estados de búsqueda para la función de Usuarios.
- * Aislado de UserSearch para cumplir con el Principio de Responsabilidad Única.
- */
-
-/**
- * Search Results Component
+ * 🎓 CONCEPTO JUNIOR: Renderizado Condicional con Patrón Guardia (Guard Clauses)
+ * Muchos principiantes usan un bloque `return ( isLoading ? <Carga /> : <Lista /> )` gigante, 
+ * o peor aún, meten múltiples ternarios anidados.
+ * Aquí usamos "Cláusulas de Guarda" (`if (condición) return...`). Esto lee como una lista de verificación de arriba hacia abajo.
+ * Es muchísimo más limpio: "Si carga, dibuja esto y TERMINA. Si hay error, dibuja esto y TERMINA...".
  *
- * @param {Object} props - Component props
- * @param {boolean} props.isLoading - Loading state
- * @param {boolean} props.isError - Error state
- * @param {Object} props.error - Error object from API
- * @param {boolean} props.isSuccess - Success state
- * @param {boolean} props.isEmpty - Empty results state
- * @param {Array} props.users - List of users to display
- * @param {string} props.debouncedSearchTerm - The current search term
- * @param {Function} props.handleRetry - Callback to retry the search
- * @returns {JSX.Element|null}
+ * Componente Orquestador de Resultados de Búsqueda.
+ *
+ * @component
+ * @param {Object} props - Propiedades inyectadas por la página.
+ * @param {boolean} props.isLoading - Estado de carga activa.
+ * @param {boolean} props.isError - Indica si la petición falló.
+ * @param {Object} props.error - Objeto de error técnico (si existe).
+ * @param {boolean} props.isSuccess - Indica si la petición fue exitosa.
+ * @param {boolean} props.isEmpty - Indica si la respuesta llegó vacía (0 resultados).
+ * @param {Array} props.users - El arreglo de perfiles de usuario.
+ * @param {string} props.debouncedSearchTerm - El término de búsqueda que produjo este resultado.
+ * @param {Function} props.handleRetry - Función para reintentar la búsqueda en caso de error.
+ * @returns {JSX.Element|null} El componente apropiado para el estado actual de la red.
  */
-/**
- * [PASO 4B: Widget Component]
- * Componente orquestador que decide el renderizado condicional de los estados de búsqueda
- * (cargando skeletons, mostrando error, o listando las tarjetas resultantes).
- */
-const SearchResults = ({
-  isLoading,
-  isError,
-  error,
-  isSuccess,
-  isEmpty,
-  users,
-  debouncedSearchTerm,
-  handleRetry,
-}) => {
-  console.log("🧩 [PASO 4B: Widget Component] Montando SearchResults (Orquestador)...");
-  // 1. Loading State
+const SearchResults = (props) => {
+  log.flow(
+    "🧩 [PASO 4B: Widget Component] Montando SearchResults (Orquestador)...",
+  );
+
+  const {
+    isLoading,
+    isError,
+    error,
+    isSuccess,
+    isEmpty,
+    users,
+    debouncedSearchTerm,
+    handleRetry,
+  } = props;
+  
+  // 1. Estado de Carga (Prioridad Máxima)
   if (isLoading) return <SkeletonGrid />;
 
-  // 2. Error State (with specific handling for 403 Rate Limit via ErrorDisplay)
+  // 2. Estado de Error (con delegación especial para Límites de Tasa de API - HTTP 403)
   if (isError) {
     return (
       <ErrorDisplay
@@ -57,10 +64,11 @@ const SearchResults = ({
     );
   }
 
-  // 3. Success State (Empty vs Data)
+  // 3. Estado de Éxito (Derivaciones: Vacío vs Con Datos)
   if (isEmpty) return <NotFound searchTerm={debouncedSearchTerm} />;
   if (isSuccess) return <UserList userList={users} />;
 
+  // 4. Fallback por si ninguno de los estados anteriores se cumple.
   return null;
 };
 

@@ -166,6 +166,25 @@
 
 - **Zod:** Biblioteca de validación de esquemas que verifica tipos en tiempo de ejecución.
 
+- **JSDoc (Universal):** Sistema de documentación que permite definir tipos, descripciones y ejemplos directamente en el código JavaScript, mejorando el IntelliSense y la mantenibilidad.
+
+- **log.flow (Logger Educativo):** Sistema de trazabilidad profesional que numera y explica cada paso de la arquitectura durante la ejecución de una petición.
+
+---
+
+# 🎓 CAPÍTULO 0: LA FILOSOFÍA MAESTRO-APRENDIZ
+
+Antes de entrar en código, este proyecto te enseña a **documentar para enseñar**.
+
+## 0.1 Universal JSDoc
+En este repositorio, no aceptamos código sin documentar. Cada archivo sigue el estándar:
+1. **Contexto Senior:** Explicación técnica de por qué se tomó una decisión (ej. por qué usar un `useMemo` o un `useEffect`).
+2. **🎓 CONCEPTO JUNIOR:** Un bloque dedicado a explicar la teoría básica detrás de la implementación (ej. qué es una Closure).
+
+## 0.2 El Logger de 9 Pasos (Traceability)
+Para entender React, debes ver qué pasa "bajo el capó". Abre la consola (F12) y verás el flujo `log.flow`:
+1. **Mounting** -> 2. **Shell** -> 3. **Pages** -> 4. **Widgets** -> 5. **Factory** -> 6. **Facade** -> 7. **Query** -> 8. **Service** -> 9. **Adapter**.
+
 ---
 
 # 🎓 CAPÍTULO 1: FUNDAMENTOS DE JAVASCRIPT MODERNO

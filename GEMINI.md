@@ -41,6 +41,16 @@ The system is built using **Feature-Sliced Design (FSD)** architecture, prioriti
 - **Purpose:** Offline-first development and testing.
 - **Mandate:** In development mode, mock handlers intercept requests automatically to avoid GitHub API rate limit blocks.
 
+### 7. Educational Logging System (log.flow)
+
+- **Mandate:** The application implements a **9-Step Traceability Flow** in the console. Every developer MUST maintain this flow when adding new layers.
+- **Visibility:** Each major step (Mounting -> Shell -> Pages -> Widgets -> Factory -> Facade -> Query -> Service -> Adapter) must be logged using `log.flow()`.
+
+### 8. Documentation Standards (Universal JSDoc)
+
+- **Mandate:** 100% of the codebase must be documented.
+- **Structure:** Files must include a file header, standard JSDoc tags, and a **🎓 CONCEPTO JUNIOR** section for educational purposes.
+
 ## 🛠️ Tech Stack
 
 - **Core:** React 18.3+, Vite 5.4, Zod.

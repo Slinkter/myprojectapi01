@@ -1,5 +1,17 @@
+/**
+ * @file handlers.js
+ * @description Interceptores de red para Mock Service Worker (MSW).
+ * Simulan el comportamiento de la API de GitHub localmente.
+ */
+
 import { http, HttpResponse } from "msw";
 
+/**
+ * 🎓 CONCEPTO JUNIOR: Mocking (Datos Simulados)
+ * Cuando desarrollamos, GitHub nos bloquea la API si hacemos más de 60 peticiones por hora.
+ * Para poder programar sin pausas, creamos "Mocks" (dobles de acción). Este arreglo `mockUsers` 
+ * actúa como nuestra base de datos local y personal.
+ */
 const mockUsers = [
   {
     id: 1,
@@ -29,13 +41,19 @@ const mockUsers = [
     html_url: "https://github.com/defunkt",
     type: "User",
     name: "Chris Wanstrath",
+    company: null,
+    blog: "http://chriswanstrath.com/",
+    location: null,
+    email: null,
+    hireable: null,
     bio: "🍔",
+    twitter_username: null,
     public_repos: 107,
     public_gists: 273,
-    followers: 22137,
-    following: 214,
-    location: "San Francisco",
-    blog: "http://chriswanstrath.com/",
+    followers: 21528,
+    following: 210,
+    created_at: "2007-10-20T05:24:19Z",
+    updated_at: "2023-11-01T11:42:01Z",
   },
   {
     id: 3,
@@ -44,13 +62,19 @@ const mockUsers = [
     html_url: "https://github.com/pjhyett",
     type: "User",
     name: "PJ Hyett",
-    bio: "Software engineer",
+    company: "GitHub, Inc.",
+    blog: "https://github.com/pjhyett",
+    location: "San Francisco",
+    email: null,
+    hireable: null,
+    bio: "Software developer",
+    twitter_username: null,
     public_repos: 8,
     public_gists: 21,
-    followers: 8312,
+    followers: 8256,
     following: 1,
-    location: "San Francisco",
-    blog: "https://pjhyett.com",
+    created_at: "2008-01-07T17:54:22Z",
+    updated_at: "2024-01-10T10:15:33Z",
   },
   {
     id: 4,
@@ -59,28 +83,82 @@ const mockUsers = [
     html_url: "https://github.com/wycats",
     type: "User",
     name: "Yehuda Katz",
-    bio: "Software engineer",
+    company: "Tilde, Inc.",
+    blog: "http://yehudakatz.com",
+    location: "Portland, OR",
+    email: null,
+    hireable: null,
+    bio: "Member of Ember.js, Rust, and TC39",
+    twitter_username: "wycats",
     public_repos: 284,
     public_gists: 760,
-    followers: 10123,
-    following: 4,
-    location: "Portland, OR",
-    blog: "http://yehudakatz.com",
+    followers: 10052,
+    following: 12,
+    created_at: "2008-01-12T05:38:33Z",
+    updated_at: "2024-02-12T14:22:01Z",
   },
   {
-    id: 5,
-    login: "ezmobius",
-    avatar_url: "https://avatars.githubusercontent.com/u/5?v=4",
-    html_url: "https://github.com/ezmobius",
-    type: "User",
-    name: "Ezra Zygmuntowicz",
-    bio: "Software engineer",
-    public_repos: 22,
-    public_gists: 92,
-    followers: 2541,
-    following: 12,
-    location: "Portland, OR",
-    blog: "http://ezmobius.com",
+    id: 1342004,
+    login: "google",
+    avatar_url: "https://avatars.githubusercontent.com/u/1342004?v=4",
+    html_url: "https://github.com/google",
+    type: "Organization",
+    name: "Google",
+    company: null,
+    blog: "https://opensource.google/",
+    location: null,
+    email: "opensource@google.com",
+    hireable: null,
+    bio: "Google ❤️ Open Source",
+    twitter_username: "GoogleOSS",
+    public_repos: 2612,
+    public_gists: 0,
+    followers: 35142,
+    following: 0,
+    created_at: "2012-01-18T01:30:18Z",
+    updated_at: "2024-03-01T10:00:00Z",
+  },
+  {
+    id: 69631,
+    login: "facebook",
+    avatar_url: "https://avatars.githubusercontent.com/u/69631?v=4",
+    html_url: "https://github.com/facebook",
+    type: "Organization",
+    name: "Meta",
+    company: null,
+    blog: "https://opensource.fb.com",
+    location: "Menlo Park, California",
+    email: null,
+    hireable: null,
+    bio: "We are working to build community through open source technology. ",
+    twitter_username: "MetaOpenSource",
+    public_repos: 102,
+    public_gists: 0,
+    followers: 15420,
+    following: 0,
+    created_at: "2009-04-02T03:35:22Z",
+    updated_at: "2024-02-28T12:00:00Z",
+  },
+  {
+    id: 6154722,
+    login: "microsoft",
+    avatar_url: "https://avatars.githubusercontent.com/u/6154722?v=4",
+    html_url: "https://github.com/microsoft",
+    type: "Organization",
+    name: "Microsoft",
+    company: null,
+    blog: "https://opensource.microsoft.com",
+    location: "Redmond, WA",
+    email: null,
+    hireable: null,
+    bio: "Open source projects and samples from Microsoft",
+    twitter_username: "Microsoft",
+    public_repos: 6023,
+    public_gists: 0,
+    followers: 58210,
+    following: 0,
+    created_at: "2013-12-10T19:06:48Z",
+    updated_at: "2024-03-05T09:00:00Z",
   },
   {
     id: 583231,
@@ -103,44 +181,102 @@ const mockUsers = [
     created_at: "2011-01-25T18:44:36Z",
     updated_at: "2024-01-22T12:13:38Z",
   },
+  {
+    id: 810438,
+    login: "vercel",
+    avatar_url: "https://avatars.githubusercontent.com/u/810438?v=4",
+    html_url: "https://github.com/vercel",
+    type: "Organization",
+    name: "Vercel",
+    company: null,
+    blog: "https://vercel.com",
+    location: null,
+    email: null,
+    hireable: null,
+    bio: "Vercel is the platform for frontend developers, providing the speed and reliability innovators need to create at the moment of inspiration.",
+    twitter_username: "vercel",
+    public_repos: 532,
+    public_gists: 0,
+    followers: 8400,
+    following: 0,
+    created_at: "2011-05-26T18:45:51Z",
+    updated_at: "2024-03-01T15:30:00Z",
+  },
+  {
+    id: 111111,
+    login: "slinkter",
+    avatar_url: "https://avatars.githubusercontent.com/u/1?v=4",
+    html_url: "https://github.com/slinkter",
+    type: "User",
+    name: "Master Developer",
+    company: "Engineering Lab",
+    blog: "https://example.com",
+    location: "Worldwide",
+    email: null,
+    hireable: true,
+    bio: "Senior Software Engineer specializing in high-fidelity React architectures.",
+    twitter_username: "slinkter",
+    public_repos: 150,
+    public_gists: 45,
+    followers: 9999,
+    following: 50,
+    created_at: "2010-01-01T00:00:00Z",
+    updated_at: "2024-06-14T00:00:00Z",
+  }
 ];
 
+/**
+ * 🎓 CONCEPTO JUNIOR: Controladores de MSW (Handlers)
+ * Estos "handlers" engañan a la función nativa `fetch()` del navegador. 
+ * Cuando tu código React hace: `fetch('https://api.github.com/users')`,
+ * MSW atrapa esa petición a mitad de camino y ejecuta la función que está aquí abajo
+ * en lugar de ir a internet.
+ *
+ * Colección de manejadores de peticiones HTTP para MSW.
+ *
+ * @type {import('msw').HttpHandler[]}
+ */
 export const handlers = [
-  // GET /users
+  // Intercepta GET /users
   http.get("https://api.github.com/users", () => {
-    // 👈 Simula obtener la lista general de usuarios iniciales (buscador vacío)
-    return HttpResponse.json(mockUsers.slice(0, 5));
+    // Simula obtener la lista general de usuarios iniciales (buscador vacío)
+    return HttpResponse.json(mockUsers.slice(0, 10));
   }),
 
-  // GET /search/users?q=...
+  // Intercepta GET /search/users?q=...
   http.get("https://api.github.com/search/users", ({ request }) => {
+    // 🎓 CONCEPTO JUNIOR: Objeto URL
+    // `new URL` es una API nativa de JavaScript súper útil para extraer partes de un link.
+    // Con `.searchParams.get("q")` extraemos lo que haya después del `?q=` automáticamente.
     const url = new URL(request.url);
-    const searchTerm = url.searchParams.get("q")?.toLowerCase() || ""; // 👈 Extrae el término de búsqueda de los query params
+    const searchTerm = url.searchParams.get("q")?.toLowerCase() || "";
 
     const filteredUsers = mockUsers.filter(
       (user) =>
         user.login.toLowerCase().includes(searchTerm) ||
-        (user.name && user.name.toLowerCase().includes(searchTerm)), // 👈 Filtra localmente el mock por coincidencia
+        (user.name && user.name.toLowerCase().includes(searchTerm)), 
     );
 
     return HttpResponse.json({
       total_count: filteredUsers.length,
       incomplete_results: false,
-      items: filteredUsers, // 👈 Devuelve los usuarios envueltos en la propiedad items como hace GitHub
+      items: filteredUsers, // La API real de búsqueda devuelve el arreglo dentro de `items`
     });
   }),
 
-  // GET /users/:login
+  // Intercepta GET /users/:login
   http.get("https://api.github.com/users/:login", ({ params }) => {
-    const { login } = params; // 👈 Captura el parámetro login de la URL
+    // `params` captura todo lo que pongas donde va el comodín `:login`
+    const { login } = params; 
     const user = mockUsers.find(
       (u) => u.login.toLowerCase() === login.toLowerCase(),
     );
 
     if (!user) {
-      return new HttpResponse(null, { status: 404 }); // 👈 Si no existe, simula un error 404
+      // Si buscas un usuario en MSW que no exista en el arreglo local, devuelve 404.
+      return new HttpResponse(null, { status: 404 });
     }
 
-    return HttpResponse.json(user); // 👈 Devuelve el objeto del usuario encontrado
+    return HttpResponse.json(user);
   }),
 ];

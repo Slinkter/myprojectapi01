@@ -1,24 +1,30 @@
 /**
  * @file ResultFactory.jsx
- * @description Factory component implementing the GoF Factory Pattern.
- * Dynamically resolves and mounts specialized cards based on the entity type (User vs. Organization).
+ * @description Componente factoría que implementa el Patrón Factory (GoF).
+ * Resuelve y monta dinámicamente tarjetas especializadas basadas en el tipo de entidad (User vs. Organization).
  */
 
 import PropTypes from "prop-types";
 import UserCard from "./UserCard";
 import { Building2 } from "lucide-react";
+import { log } from "@/shared";
 
 /**
- * OrganizationCard specialized sub-component.
- * Renders dedicated styling cards for entities categorized as Organizations.
+ * 🎓 CONCEPTO JUNIOR: Composición de Componentes
+ * Nota cómo `OrganizationCard` no reinventa la rueda. Reutiliza el componente `<UserCard>` y sus submódulos
+ * (`UserCard.Avatar`, `UserCard.Header`, etc.) pero le inyecta etiquetas ("ORG", "ORGANIZACIÓN VERIFICADA") 
+ * que son exclusivas de empresas.
+ *
+ * Sub-componente especializado OrganizationCard.
+ * Renderiza tarjetas con estilos dedicados para entidades categorizadas como Organizaciones.
  *
  * @component
- * @param {Object} props - Component props.
- * @param {Object} props.organization - Estandardized profile data.
- * @param {string} props.organization.username - GitHub handle.
- * @param {string} props.organization.photo - Profile photo URL.
- * @param {string} [props.variant="default"] - Card styling presets.
- * @returns {JSX.Element} Organization card component.
+ * @param {Object} props - Propiedades del componente.
+ * @param {Object} props.organization - Datos del perfil estandarizados.
+ * @param {string} props.organization.username - Handle de GitHub.
+ * @param {string} props.organization.photo - URL de la foto de perfil.
+ * @param {string} [props.variant="default"] - Variante de diseño de la tarjeta.
+ * @returns {JSX.Element} Componente de tarjeta de organización.
  */
 const OrganizationCard = ({ organization, variant = "default" }) => (
   <UserCard variant={variant} username={organization.username} className="relative">
@@ -56,25 +62,32 @@ OrganizationCard.propTypes = {
 OrganizationCard.displayName = "OrganizationCard";
 
 /**
- * ResultFactory component.
- * Decides whether to instantiate an OrganizationCard or a standard UserCard based on entity properties.
+ * 🎓 CONCEPTO JUNIOR: Factory Pattern (Patrón Factoría) en React
+ * Este componente no pinta estilos propios. Es una "fábrica". 
+ * Recibe un objeto genérico (`userProfile`), mira su propiedad `.type`, y decide inteligentemente
+ * qué componente React debe crear e instanciar (<OrganizationCard> o <UserCard> normal).
+ * Esto evita llenar nuestra página principal de `if` y `else` interminables.
+ *
+ * Componente ResultFactory.
+ * Decide si instanciar una OrganizationCard o una UserCard estándar basado en las propiedades de la entidad.
  *
  * @component
- * @param {Object} props - Component props.
- * @param {Object} props.userProfile - Domain model for the user/organization.
- * @param {string} props.userProfile.type - Domain entity type identifier ("User" or "Organization").
- * @param {string} props.userProfile.photo - Image URL.
- * @param {string} props.userProfile.username - Profile username handle.
- * @param {string} [props.variant="default"] - Card styling presets.
- * @returns {JSX.Element} Product card resolved dynamically by factory checks.
- */
-/**
- * [PASO 5: ResultFactory]
- * Factoría creacional dinámica. Recibe los perfiles de usuario y decide el tipo de tarjeta (UserCard vs OrganizationCard)
- * para agregar al DOM Virtual.
+ * @param {Object} props - Propiedades del componente.
+ * @param {Object} props.userProfile - Modelo de dominio del usuario/organización.
+ * @param {string} props.userProfile.type - Identificador del tipo de entidad ("User" o "Organization").
+ * @param {string} props.userProfile.photo - URL de la imagen.
+ * @param {string} props.userProfile.username - Handle del usuario.
+ * @param {string} [props.variant="default"] - Variante de diseño.
+ * @returns {JSX.Element} Tarjeta de producto resuelta dinámicamente.
+ * 
+ * @example
+ * ```tsx
+ * // Si le pasas un objeto type="Organization", devolverá el componente especial de empresa.
+ * <ResultFactory userProfile={profileData} variant="glass" />
+ * ```
  */
 const ResultFactory = ({ userProfile, variant = "default" }) => {
-  console.log(`🏭 [PASO 5: ResultFactory] Decidiendo tipo de tarjeta para el perfil: "${userProfile.username}" (${userProfile.type})`);
+  log.flow(`🏭 [PASO 5: ResultFactory] Decidiendo tipo de tarjeta para el perfil: "${userProfile.username}" (${userProfile.type})`);
   switch (userProfile.type) {
     case "Organization":
       return <OrganizationCard organization={userProfile} variant={variant} />;

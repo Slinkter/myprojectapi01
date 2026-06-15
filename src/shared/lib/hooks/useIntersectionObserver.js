@@ -1,93 +1,68 @@
 /**
- * @file Intersection Observer Hook
- * @description
- * Custom hook that detects when an element becomes visible in the viewport.
- * Uses the Intersection Observer API for efficient visibility detection.
+ * @file useIntersectionObserver.js
+ * @description Hook personalizado que detecta cuándo un elemento entra en la porción visible (viewport) de la pantalla.
+ * Utiliza la API nativa del navegador `IntersectionObserver` que es muchísimo más eficiente 
+ * que rastrear eventos de `scroll`, ya que se ejecuta de forma asíncrona fuera del hilo principal.
  */
 
 import { useState, useEffect } from "react";
 
 /**
- * Custom hook for detecting element visibility in viewport
+ * Hook para detectar la visibilidad de un elemento en el viewport del navegador.
  *
  * @hook
  * @function useIntersectionObserver
- * @param {React.RefObject} elementRef - Reference to the DOM element to observe
- * @param {Object} [options={}] - Intersection Observer configuration options
- * @param {number} [options.threshold=0.1] - Percentage of element visibility (0-1) required to trigger
- * @param {Element} [options.root] - Element used as viewport for checking visibility (defaults to browser viewport)
- * @param {string} [options.rootMargin] - Margin around root element (CSS margin syntax)
- * @returns {boolean} True if element is intersecting (visible), false otherwise
- *
- * @description
- * Wraps the Intersection Observer API to provide a simple boolean state
- * indicating whether the observed element is visible in the viewport.
- *
- * Common use cases:
- * - Infinite scroll / lazy loading
- * - Triggering animations on scroll
- * - Analytics tracking (viewport visibility)
- * - Performance optimization (render only visible content)
- *
- * The hook automatically:
- * - Creates and configures the observer
- * - Observes the target element
- * - Cleans up observer on unmount
- * - Re-observes if ref or options change
+ * @param {import('react').RefObject<HTMLElement>} elementRef - Referencia de React al elemento DOM a observar.
+ * @param {Object} [options={}] - Opciones de configuración para el Intersection Observer nativo.
+ * @param {number} [options.threshold=0.1] - Porcentaje de visibilidad del elemento (0 a 1) requerido para disparar el evento.
+ * @returns {boolean} Verdadero si el elemento está visible (interceptando), falso en caso contrario.
  *
  * @example
- * function InfiniteScroll() {
- *   const sentinelRef = useRef(null);
- *   const isVisible = useIntersectionObserver(sentinelRef, { threshold: 0.1 });
- *
- *   useEffect(() => {
- *     if (isVisible) {
- *       loadMoreItems();
- *     }
- *   }, [isVisible]);
+ * ```typescript
+ * function LazyImage() {
+ *   const imgRef = useRef(null);
+ *   const isVisible = useIntersectionObserver(imgRef, { threshold: 0.5 }); // 50% visible
  *
  *   return (
- *     <div>
- *       {items.map(item => <Item key={item.id} {...item} />)}
- *       <div ref={sentinelRef}>Loading...</div>
+ *     <div ref={imgRef}>
+ *       {isVisible ? <img src="high-res.jpg" /> : <div className="placeholder" />}
  *     </div>
  *   );
  * }
+ * ```
  */
 const useIntersectionObserver = (elementRef, { threshold = 0.1 } = {}) => {
   const [isIntersecting, setIsIntersecting] = useState(false);
 
   useEffect(() => {
-    const card = elementRef.current;
-    if (!card) return;
+    const targetElement = elementRef.current;
+    if (!targetElement) return;
 
-    // Create IntersectionObserver instance
-    // This browser API asynchronously observes changes in the intersection
-    // of a target element with an ancestor element or the viewport
+    // Instanciamos el observador nativo del navegador.
+    // Este delega el cálculo de posiciones al navegador, evitando reflows y cuellos de botella 
+    // asociados a técnicas antiguas como getBoundingClientRect() en eventos "onScroll".
     const observer = new IntersectionObserver(
-      // Callback function executed when visibility changes
       ([entry]) => {
-        // The callback receives a list of IntersectionObserverEntry objects,
-        // but we only care about the first (and only) one
-        // entry.isIntersecting is true when element is visible in viewport
+        // El callback recibe un arreglo de IntersectionObserverEntry.
+        // Nos interesa el estado 'isIntersecting' que nos dice si cruzó el umbral.
         setIsIntersecting(entry.isIntersecting);
       },
-      // Configuration object
       {
-        // threshold defines what percentage of element visibility
-        // must be reached to trigger the callback
-        // e.g., threshold of 0.1 means callback fires when 10% is visible
+        // El 'threshold' define qué porcentaje del elemento debe ser visible para disparar la función.
+        // Ej: 0.1 significa que cuando el 10% del elemento asome en pantalla, se considera visible.
         threshold,
       }
     );
 
-    observer.observe(card);
+    // Mandamos al observador a vigilar el elemento DOM
+    observer.observe(targetElement);
 
-    // Clean up observer when component unmounts
+    // Función de limpieza para evitar fugas de memoria (Memory Leaks) cuando el componente se destruye
     return () => {
-      observer.unobserve(card);
+      observer.unobserve(targetElement);
+      observer.disconnect();
     };
-  }, [elementRef, threshold]);
+  }, [elementRef, threshold]); // Re-ejecuta solo si cambia la referencia o el umbral
 
   return isIntersecting;
 };

@@ -467,6 +467,10 @@ const UserCard = React.memo(
    - WebP
    - srcset
 
+6. **Documentación de Ingeniería**
+   - Uso de **JSDoc Senior** (Explicar el "porqué").
+   - **Trazabilidad Educativa**: Implementar logs de flujo (ej. `log.flow`) para facilitar el debug y el aprendizaje de otros miembros del equipo.
+
 ---
 
 # 🎯 SECCIÓN B: EJERCICIOS PRÁCTICOS

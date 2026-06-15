@@ -17,7 +17,8 @@ Aunque la funcionalidad (buscar usuarios) parece sencilla, el objetivo real de e
 
 *   **Rendimiento:** Usa `TanStack Query` para cachear (guardar en memoria) los resultados. Si buscas el mismo usuario dos veces, la segunda vez será instantáneo.
 *   **Seguridad de Datos:** Usa `Zod` para validar que la API de GitHub nos devuelve exactamente lo que esperamos antes de usar los datos en nuestros componentes.
+*   **Trazabilidad Educativa:** Implementa un **Logger de 9 Pasos** en consola que permite seguir el flujo de datos desde el Mounting hasta el Adapter, ideal para aprender el ciclo de vida de React.
+*   **Documentación Maestro-Aprendiz:** El 100% del código incluye **JSDoc Universal** con secciones **🎓 CONCEPTO JUNIOR**, explicando la teoría detrás de cada bloque de código.
 *   **Escalabilidad:** Usa patrones como `Adapter` y `Facade` (explicados en el documento 02) para que el código sea fácil de cambiar en el futuro sin romper otras partes.
-*   **Estética Tailwind CSS Website Branding**: Diseño de alta densidad de información inspirado en la identidad visual de tailwindcss.com. Combina tonos Slate, cuadrículas de fondo sutiles, y degradados modernos de color Indigo-Purple-Pink en textos principales e indicadores de progreso. Prioriza el contraste y la legibilidad a través de la tipografía **Plus Jakarta Sans**.
-*   **Sistema de Doble Tema**: Light mode con fondo Slate claro (`#f8fafc`) y Dark mode con fondo Midnight oscuro (`#030712`) y paneles Slate oscuros (`#0f172a`), compartiendo una estética minimalista premium.
-*   **Animaciones de Alta Fidelidad y Cursor Pokéball**: Entrada en cascada organizada mediante resortes físicos de Motion, micro-pulsos al enfocar la búsqueda, y un cursor Pokéball interactivo que se abre y revela un destello de energía en hover.
+*   **Estética Bento Grid & Tailwind**: Diseño de alta densidad de información basado en el estilo Bento para los dashboards de usuario, inspirado en la identidad visual de tailwindcss.com.
+*   **Animaciones de Alta Fidelidad y Cursor Pokéball**: Entrada en cascada organizada mediante resortes físicos de Motion, micro-pulsos al enfocar la búsqueda, y un cursor Pokéball interactivo que se abre en hover.

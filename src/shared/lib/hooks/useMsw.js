@@ -1,41 +1,78 @@
+/**
+ * @file useMsw.js
+ * @description Hook especializado para arrancar Mock Service Worker (MSW).
+ * MSW sirve para interceptar las peticiones API y devolver datos de mentira en desarrollo,
+ * ahorrándonos consumo del límite de Github API.
+ */
+
 import { useState, useEffect } from "react";
 
 /**
- * [PASO 1A: Mock Service Worker Initialization Hook]
- * Custom hook to initialize the MSW interceptor in development environment.
- * Dynamically imports the worker to prevent bundling in production mode.
+ * 🎓 CONCEPTO JUNIOR: "Dynamic Imports" (Importaciones Dinámicas) y "Bundle Splitting"
+ * Fíjate que el estado se llama `isReady`. ¿Por qué la app debe esperar para renderizar?
+ * Porque MSW intercepta la red. Si React hace una petición antes de que MSW encienda, la petición escaparía hacia internet.
+ * Además, verás un `await import()`. Normalmente los `import` van arriba del todo (estáticos), pero al usar
+ * un `import()` con paréntesis (dinámico) logramos que el código de MSW NUNCA viaje en el paquete
+ * final de producción de los usuarios reales, haciendo que la web cargue muchísimo más rápido en producción.
  *
- * @returns {boolean} isReady - True if the environment is initialized (MSW started or bypassed in production).
+ * @hook
+ * @function useMsw
+ * @returns {boolean} isReady - Será falso mientras el worker carga. Cambia a verdadero cuando ya es seguro hacer peticiones.
+ * 
+ * @example
+ * ```typescript
+ * // En src/app/main.jsx
+ * const isMswReady = useMsw();
+ * 
+ * // No pinto <App /> hasta que isMswReady sea true.
+ * if (!isMswReady) return <Loading />
+ * return <App />
+ * ```
  */
 export const useMsw = () => {
+  // 1. Verificamos si Vite (nuestro empaquetador) nos dice que estamos en Modo Desarrollo.
   const isDev = import.meta.env.MODE === "development";
+  
+  // Si estamos en Producción (!isDev es true), el entorno ya está listo porque no instalaremos MSW.
+  // Si estamos en Dev, isReady empieza en false porque MSW tiene que arrancar.
   const [isReady, setIsReady] = useState(!isDev);
 
   useEffect(() => {
     if (isDev) {
+      // 🎓 CONCEPTO JUNIOR: Efectos Asíncronos (Async useEffect)
+      // useEffect NO permite devolver una Promesa directamente. (Ej: `useEffect(async () => {})` está prohibido en React).
+      // Para ejecutar código asíncrono, DEBEMOS crear una función async adentro y luego mandarla a llamar.
       const initMocks = async () => {
         try {
-          // 👈 Importación dinámica: Carga MSW solo en desarrollo. Evita que se incluya en el build de producción.
+          // Importación dinámica. Vite entiende esto y divide el código (Code Splitting).
           const { worker } = await import("@/shared/mocks/browser");
 
-          // 👈 Inicia el interceptor. No pide datos ahora, sino que activa el Service Worker como un proxy local de red.
+          // MSW inyecta un Service Worker en el navegador. Un Service Worker actúa como un policía de tránsito:
+          // detiene las peticiones fetch de la app, y si tiene datos de mentira configurados (handlers), los devuelve directamente.
           await worker.start({
-            // 👈 bypass: Si la URL no está en handlers.js (ej. Google Fonts), viaja directo a internet sin advertencias.
+            // onUnhandledRequest="bypass" le dice a MSW: "Si la app pide una imagen o algo que no hemos simulado, déjalo pasar a internet sin quejarte en la consola".
             onUnhandledRequest: "bypass",
             serviceWorker: {
-              // 👈 Prefija con BASE_URL para localizar el script correctamente en la subruta de GitHub Pages.
+              // El Service Worker se descarga del archivo public/mockServiceWorker.js
               url: `${import.meta.env.BASE_URL}mockServiceWorker.js`,
             },
           });
-          setIsReady(true); // 👈 Entorno listo. Permite continuar con el renderizado del árbol React.
+          
+          // Terminó de arrancar. Avisamos a React que ya puede pintar los componentes visuales.
+          setIsReady(true);
         } catch (error) {
-          console.error("[MSW] Failed to enable mocking:", error);
-          setIsReady(true); // 👈 Fallback: Permite renderizar igual para intentar conectar con la API real de GitHub.
+          console.error("[MSW] Falló al intentar encender los mocks:", error);
+          // 🎓 CONCEPTO JUNIOR: Graceful Degradation (Degradación grácil)
+          // Si por alguna razón MSW explota (archivo borrado, navegador no compatible), 
+          // igual cambiamos a true. Esto permite que la app funcione e intente golpear la API real en vez de dejar la pantalla en blanco por siempre.
+          setIsReady(true);
         }
       };
+      
+      // Ejecutamos la función asíncrona que acabamos de crear.
       initMocks();
     }
-  }, [isDev]);
+  }, [isDev]); // Se reevaluará solo si isDev cambia (lo cual casi nunca ocurre en tiempo real).
 
   return isReady;
 };
