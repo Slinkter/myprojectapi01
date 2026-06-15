@@ -27,6 +27,11 @@ import { NotFoundPage as NotFound } from "@/pages/not-found";
  * @param {Function} props.handleRetry - Callback to retry the search
  * @returns {JSX.Element|null}
  */
+/**
+ * [PASO 4B: Widget Component]
+ * Componente orquestador que decide el renderizado condicional de los estados de búsqueda
+ * (cargando skeletons, mostrando error, o listando las tarjetas resultantes).
+ */
 const SearchResults = ({
   isLoading,
   isError,
@@ -37,6 +42,7 @@ const SearchResults = ({
   debouncedSearchTerm,
   handleRetry,
 }) => {
+  console.log("🧩 [PASO 4B: Widget Component] Montando SearchResults (Orquestador)...");
   // 1. Loading State
   if (isLoading) return <SkeletonGrid />;
 

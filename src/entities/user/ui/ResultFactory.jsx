@@ -68,7 +68,13 @@ OrganizationCard.displayName = "OrganizationCard";
  * @param {string} [props.variant="default"] - Card styling presets.
  * @returns {JSX.Element} Product card resolved dynamically by factory checks.
  */
+/**
+ * [PASO 5: ResultFactory]
+ * Factoría creacional dinámica. Recibe los perfiles de usuario y decide el tipo de tarjeta (UserCard vs OrganizationCard)
+ * para agregar al DOM Virtual.
+ */
 const ResultFactory = ({ userProfile, variant = "default" }) => {
+  console.log(`🏭 [PASO 5: ResultFactory] Decidiendo tipo de tarjeta para el perfil: "${userProfile.username}" (${userProfile.type})`);
   switch (userProfile.type) {
     case "Organization":
       return <OrganizationCard organization={userProfile} variant={variant} />;

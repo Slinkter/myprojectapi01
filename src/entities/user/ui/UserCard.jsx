@@ -162,14 +162,16 @@ UserFooter.displayName = "UserCard.Footer";
  */
 
 /**
- * UserCard compound component.
- * Layout primitive encapsulating individual cards representing search matches.
+ * [PASO 5A: Entity Card]
+ * Representa una tarjeta de perfil de usuario individual.
+ * Se monta dinámicamente en la grilla y responde con animaciones de elevación al hover.
  *
  * @component
  * @param {UserCardProps} props - Component props.
  * @returns {JSX.Element} Mapped card element.
  */
 const UserCard = ({ children, variant = "default", className, username }) => {
+  console.log(`🎴 [PASO 5A: Entity Card] Instanciando UserCard para el usuario: "${username}"`);
   const userCardRef = useRef(null);
   const variantClassName = CARD_STYLE_VARIANTS[variant] || CARD_STYLE_VARIANTS.default;
   const isMinimalLayout = variant === "minimal";

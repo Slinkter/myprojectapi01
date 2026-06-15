@@ -8,14 +8,15 @@ import { SearchResults } from "@/widgets/search-results";
 import { ErrorBoundary } from "@/shared";
 
 /**
- * SearchPage page component.
- * Composes PageHeader and SearchResults widget inside an ErrorBoundary.
- * Separates presentation layout from query fetching states via the search-user feature facade.
+ * [PASO 3A: Search Page Mount]
+ * Componente que representa la pantalla de búsqueda.
+ * Coordina las features y widgets necesarios para interactuar con la búsqueda de perfiles.
  *
  * @component
  * @returns {JSX.Element} Search page viewport layout.
  */
 const SearchPage = () => {
+  console.log("🖥️ [PASO 3A: SearchPage] Montando la página de búsqueda principal...");
   // --- LOCAL SCOPE ---
   const {
     searchTerm,

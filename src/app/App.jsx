@@ -9,14 +9,16 @@ const SearchPage = lazy(() => import("@/pages/search-page/SearchPage.jsx"));
 const DetailPage = lazy(() => import("@/pages/detail-page/DetailPage.jsx"));
 
 /**
- * Componente Principal de la Aplicación
+ * [PASO 2: App Shell & Providers Setup]
+ * Orquesta la estructura global del Virtual DOM envolviendo el árbol bajo los proveedores
+ * necesarios de red (TanStack Query), ruteo (React Router DOM) y temas CSS.
  *
- * Actúa como el Shell de la aplicación, orquestando:
- * 1. Inicialización de Mocks (MSW) en desarrollo.
- * 2. Providers globales (Query, Router, Theme).
- * 3. Enrutamiento dinámico.
+ * @component
+ * @returns {JSX.Element} App provider framework shell.
  */
 const App = () => {
+  console.log("📦 [PASO 2: App Shell] Renderizando providers globales (QueryClient, Router, Theme) e inicializando MSW...");
+
   /**
    * Determinamos si estamos en entorno de desarrollo.
    * En desarrollo (pnpm dev), Vite establece MODE como 'development'.

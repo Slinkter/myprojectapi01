@@ -13,7 +13,13 @@ Spinner.propTypes = {
   className: PropTypes.string,
 };
 
+/**
+ * [PASO 4A: Feature Component]
+ * Componente que representa la barra de búsqueda (buscador).
+ * Implementa animaciones y micro-interacciones (foco, spinner) para la búsqueda de usuarios.
+ */
 const PageHeader = ({ searchTerm, handleSearch, isSearching }) => {
+  console.log("🧩 [PASO 4A: Feature Component] Montando PageHeader (Buscador)...");
   const [isFocused, setIsFocused] = useState(false);
 
   return (

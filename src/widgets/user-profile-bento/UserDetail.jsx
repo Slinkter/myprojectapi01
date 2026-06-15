@@ -44,7 +44,13 @@ const itemVariants = {
  * @component
  * @returns {JSX.Element|null} Layout dashboard structure.
  */
+/**
+ * [PASO 4C: Widget Component]
+ * Componente orquestador del detalle del usuario en formato Bento Grid.
+ * Delega la lógica de negocio a su fachada y renderiza la maqueta estructurando ProfileHeader, BentoStatsGrid y ProfileFooter.
+ */
 const UserDetail = () => {
+  console.log("🧩 [PASO 4C: Widget Component] Montando UserDetail Bento Dashboard...");
   const { user, isLoading, isError, error } = useUserDetailFacade();
 
   if (isLoading) return <UserDetailSkeleton />;
