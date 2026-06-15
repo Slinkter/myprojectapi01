@@ -81,7 +81,7 @@ const App = () => {
             richColors
           />
 
-          <div className="w-full max-w-screen-xl px-6 md:px-12 py-8 pb-24 flex-1 relative">
+          <div className="w-full max-w-7xl px-6 md:px-12 py-8 pb-24 flex-1 relative">
             <ErrorBoundary>
               <Suspense fallback={<SkeletonGrid />}>
                 <Routes>
