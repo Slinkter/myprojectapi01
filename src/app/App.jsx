@@ -17,7 +17,9 @@ const DetailPage = lazy(() => import("@/pages/detail-page/DetailPage.jsx"));
  * @returns {JSX.Element} App provider framework shell.
  */
 const App = () => {
-  console.log("📦 [PASO 2: App Shell] Renderizando providers globales (QueryClient, Router, Theme) e inicializando MSW...");
+  console.log(
+    "📦 [PASO 2: App Shell] Renderizando providers globales (QueryClient, Router, Theme) e inicializando MSW...",
+  );
 
   /**
    * Determinamos si estamos en entorno de desarrollo.
@@ -33,22 +35,27 @@ const App = () => {
   const [isBuild, setIsBuild] = useState(!isDev);
   const [theme, toggleTheme] = useTheme();
 
-  // Inicialización de Mock Service Worker (MSW)
+  // Inicialización de Mock Service Worker (MSW) para desarrollo offline
   useEffect(() => {
     if (isDev) {
       const initMocks = async () => {
         try {
+          // 👈 Importación dinámica: Carga MSW solo en desarrollo. Evita que se incluya en el build de producción.
           const { worker } = await import("@/shared/mocks/browser");
+          
+          // 👈 Inicia el interceptor. No pide datos ahora, sino que activa el Service Worker como un proxy local de red.
           await worker.start({
+            // 👈 bypass: Si la URL no está en handlers.js (ej. Google Fonts), viaja directo a internet sin advertencias.
             onUnhandledRequest: "bypass",
             serviceWorker: {
+              // 👈 Prefija con BASE_URL para localizar el script correctamente en la subruta de GitHub Pages.
               url: `${import.meta.env.BASE_URL}mockServiceWorker.js`,
             },
           });
-          setIsBuild(true);
+          setIsBuild(true); // 👈 Entorno listo. Permite continuar con el renderizado del árbol React.
         } catch (error) {
           console.error("[MSW] Failed to enable mocking:", error);
-          setIsBuild(true);
+          setIsBuild(true); // 👈 Fallback: Permite renderizar igual para intentar conectar con la API real de GitHub.
         }
       };
       initMocks();
