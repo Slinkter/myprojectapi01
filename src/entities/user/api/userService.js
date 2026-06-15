@@ -28,12 +28,12 @@ import { ZodError } from "zod";
  */
 export const fetchUsersAPI = async (searchTerm = "", signal) => {
   const url = searchTerm
-    ? `${API_BASE_URL}/search/users?q=${encodeURIComponent(searchTerm)}`
-    : `${API_BASE_URL}/users`;
+    ? `${API_BASE_URL}/search/users?q=${encodeURIComponent(searchTerm)}` // 👈 Si searchTerm tiene valor, busca por query
+    : `${API_BASE_URL}/users`; // 👈 Si está vacío, obtiene la lista general de usuarios iniciales
 
   try {
     const data = await httpClient(url, { signal });
-    const rawUsers = searchTerm ? data.items : data;
+    const rawUsers = searchTerm ? data.items : data; // 👈 Si buscamos, el JSON de GitHub envuelve la lista en .items. Si es la lista general, viene directo el array.
 
     return usersCollectionAdapter(rawUsers);
   } catch (error) {
@@ -59,7 +59,7 @@ export const fetchUsersAPI = async (searchTerm = "", signal) => {
  * @returns {Promise<UserProfile>} Promise resolving to a single normalized user profile.
  */
 export const fetchUserDetailAPI = async (login, signal) => {
-  const url = `${API_BASE_URL}/users/${login}`;
+  const url = `${API_BASE_URL}/users/${login}`; // 👈 Obtiene el detalle de un perfil individual usando su handle/login
 
   try {
     const rawUser = await httpClient(url, { signal });

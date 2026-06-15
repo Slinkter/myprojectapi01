@@ -108,38 +108,39 @@ const mockUsers = [
 export const handlers = [
   // GET /users
   http.get("https://api.github.com/users", () => {
+    // 👈 Simula obtener la lista general de usuarios iniciales (buscador vacío)
     return HttpResponse.json(mockUsers.slice(0, 5));
   }),
 
   // GET /search/users?q=...
   http.get("https://api.github.com/search/users", ({ request }) => {
     const url = new URL(request.url);
-    const searchTerm = url.searchParams.get("q")?.toLowerCase() || "";
+    const searchTerm = url.searchParams.get("q")?.toLowerCase() || ""; // 👈 Extrae el término de búsqueda de los query params
 
     const filteredUsers = mockUsers.filter(
       (user) =>
         user.login.toLowerCase().includes(searchTerm) ||
-        (user.name && user.name.toLowerCase().includes(searchTerm)),
+        (user.name && user.name.toLowerCase().includes(searchTerm)), // 👈 Filtra localmente el mock por coincidencia
     );
 
     return HttpResponse.json({
       total_count: filteredUsers.length,
       incomplete_results: false,
-      items: filteredUsers,
+      items: filteredUsers, // 👈 Devuelve los usuarios envueltos en la propiedad items como hace GitHub
     });
   }),
 
   // GET /users/:login
   http.get("https://api.github.com/users/:login", ({ params }) => {
-    const { login } = params;
+    const { login } = params; // 👈 Captura el parámetro login de la URL
     const user = mockUsers.find(
       (u) => u.login.toLowerCase() === login.toLowerCase(),
     );
 
     if (!user) {
-      return new HttpResponse(null, { status: 404 });
+      return new HttpResponse(null, { status: 404 }); // 👈 Si no existe, simula un error 404
     }
 
-    return HttpResponse.json(user);
+    return HttpResponse.json(user); // 👈 Devuelve el objeto del usuario encontrado
   }),
 ];
