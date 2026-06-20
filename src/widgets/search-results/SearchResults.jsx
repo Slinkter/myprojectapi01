@@ -8,7 +8,7 @@
 import PropTypes from "prop-types";
 
 // UI Components
-import { ErrorDisplay, log } from "@/shared";
+import { ErrorDisplay, log, useComponentProfiler } from "@/shared";
 import SkeletonGrid from "./SkeletonGrid";
 import UserList from "./UserList";
 import { NotFoundPage as NotFound } from "@/pages/not-found";
@@ -35,8 +35,9 @@ import { NotFoundPage as NotFound } from "@/pages/not-found";
  * @returns {JSX.Element|null} El componente apropiado para el estado actual de la red.
  */
 const SearchResults = (props) => {
-  log.flow(
-    "🧩 [PASO 4B: Widget Component] Montando SearchResults (Orquestador)...",
+  useComponentProfiler(
+    "SearchResults",
+    "🧩 [PASO 4B: Widget Component] Montando SearchResults (Orquestador)"
   );
 
   const {

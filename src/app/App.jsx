@@ -16,13 +16,14 @@ import {
   queryClient,
   useMsw,
   log,
+  useComponentProfiler,
 } from "@/shared";
 
 /**
  * 🎓 CONCEPTO JUNIOR: Lazy Loading (Carga Perezosa) con React.lazy
- * Si importamos todas las páginas arriba usando `import X from ...`, el usuario descargará 
+ * Si importamos todas las páginas arriba usando `import X from ...`, el usuario descargará
  * un archivo JS gigante (bundle) al entrar, aunque solo visite la portada.
- * 
+ *
  * `React.lazy` le dice a Webpack/Vite: "No descargues el código de DetailPage o SearchPage
  * hasta que el usuario intente navegar a esas URL". Esto hace que la carga inicial sea ultrarrápida.
  */
@@ -36,10 +37,11 @@ const DetailPage = lazy(() => import("@/pages/detail-page/DetailPage.jsx"));
  * @returns {JSX.Element|null} El armazón de la aplicación (Shell), o null si el entorno de red aún se está configurando.
  */
 const App = () => {
-  log.flow(
-    "📦 [PASO 2: App Shell] Renderizando providers globales (QueryClient, Router, Theme) e inicializando MSW...",
+  useComponentProfiler(
+    "App",
+    "📦 [PASO 2: App Shell] Renderizando providers globales (QueryClient, Router, Theme) e inicializando MSW"
   );
-  
+
   // Extraemos el tema actual ('light' | 'dark') del hook global para aplicarlo al Toaster (Notificaciones)
   const [theme, toggleTheme] = useTheme();
 
@@ -55,7 +57,6 @@ const App = () => {
       {/* BrowserRouter: Inyecta el historial del navegador para que funcionen los <Link> y <Route> */}
       <BrowserRouter basename="/myprojectapi01">
         <div className="w-full min-h-screen bg-bg bg-grid-pattern flex flex-col items-center relative">
-          
           <div className="absolute top-6 right-6 sm:top-8 sm:right-12 z-50">
             <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
           </div>
@@ -78,7 +79,7 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<SearchPage />} />
                 <Route path="/user/:login" element={<DetailPage />} />
-                
+
                 {/* Fallback de ruta: Si alguien entra a una URL que no existe, forzamos redirección al inicio */}
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>

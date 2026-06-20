@@ -7,7 +7,7 @@
 import PropTypes from "prop-types";
 import UserCard from "./UserCard";
 import { Building2 } from "lucide-react";
-import { log } from "@/shared";
+import { log, useComponentProfiler } from "@/shared";
 
 /**
  * 🎓 CONCEPTO JUNIOR: Composición de Componentes
@@ -23,38 +23,28 @@ import { log } from "@/shared";
  * @param {Object} props.organization - Datos del perfil estandarizados.
  * @param {string} props.organization.username - Handle de GitHub.
  * @param {string} props.organization.photo - URL de la foto de perfil.
- * @param {string} [props.variant="default"] - Variante de diseño de la tarjeta.
- * @returns {JSX.Element} Componente de tarjeta de organización.
+ * @param {string} [props.variant="default"] - Variante de diseño.
+ * @returns {JSX.Element} Tarjeta renderizada con decoradores empresariales.
  */
-const OrganizationCard = ({ organization, variant = "default" }) => (
-  <UserCard variant={variant} username={organization.username} className="relative">
-    <UserCard.Avatar avatarUrl={organization.photo} username={organization.username} variant={variant} />
-    
-    {variant !== "minimal" && (
-      <div className="absolute top-3 right-3 z-20 flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-border bg-surface text-accent text-[9px] font-mono font-bold uppercase tracking-tight select-none shadow-sm">
-        <Building2 size={10} />
-        <span>ORG</span>
-      </div>
-    )}
-
-    <UserCard.Header username={organization.username} variant={variant} />
-    
-    {variant !== "minimal" && (
-      <div className="px-5 pb-1 -mt-3 text-center">
-        <span className="font-mono text-[9px] text-text-mute/80 uppercase tracking-wider flex items-center justify-center gap-1">
-          ORGANIZACIÓN VERIFICADA
+const OrganizationCard = ({ organization, variant = "default" }) => {
+  return (
+    <UserCard variant={variant} username={organization.username}>
+      <UserCard.Avatar avatarUrl={organization.photo} username={organization.username} variant={variant} />
+      <UserCard.Header username={organization.username} variant={variant}>
+        <span className="flex items-center gap-1 mt-1 text-[10px] font-semibold tracking-wider text-pink-500 uppercase bg-pink-500/10 px-2 py-0.5 rounded-full border border-pink-500/20">
+          <Building2 size={10} className="animate-pulse" />
+          Organización
         </span>
-      </div>
-    )}
-    
-    <UserCard.Footer username={organization.username} variant={variant} />
-  </UserCard>
-);
+      </UserCard.Header>
+      <UserCard.Footer username={organization.username} variant={variant} />
+    </UserCard>
+  );
+};
 
 OrganizationCard.propTypes = {
   organization: PropTypes.shape({
-    photo: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
+    photo: PropTypes.string.isRequired,
   }).isRequired,
   variant: PropTypes.string,
 };
@@ -68,8 +58,7 @@ OrganizationCard.displayName = "OrganizationCard";
  * qué componente React debe crear e instanciar (<OrganizationCard> o <UserCard> normal).
  * Esto evita llenar nuestra página principal de `if` y `else` interminables.
  *
- * Componente ResultFactory.
- * Decide si instanciar una OrganizationCard o una UserCard estándar basado en las propiedades de la entidad.
+ * Componente factoría que recibe un modelo normalizado y decide qué tipo de tarjeta retornar.
  *
  * @component
  * @param {Object} props - Propiedades del componente.
@@ -87,7 +76,10 @@ OrganizationCard.displayName = "OrganizationCard";
  * ```
  */
 const ResultFactory = ({ userProfile, variant = "default" }) => {
-  log.flow(`🏭 [PASO 5: ResultFactory] Decidiendo tipo de tarjeta para el perfil: "${userProfile.username}" (${userProfile.type})`);
+  useComponentProfiler(
+    "ResultFactory",
+    `🏭 [PASO 5: ResultFactory] Decidiendo tipo de tarjeta para el perfil: "${userProfile.username}" (${userProfile.type})`
+  );
   switch (userProfile.type) {
     case "Organization":
       return <OrganizationCard organization={userProfile} variant={variant} />;

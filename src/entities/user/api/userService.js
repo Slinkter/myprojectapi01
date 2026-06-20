@@ -38,6 +38,8 @@ import { ZodError } from "zod";
  * ```
  */
 export const fetchUsersAPI = async (searchTerm = "", signal) => {
+  const timerLabel = `fetchUsersAPI_Net:${searchTerm}`;
+  log.time(timerLabel);
   log.flow(`🔌 [PASO 8: Service] Llamando a la API de GitHub para búsqueda: "${searchTerm}"`);
 
   // 1. Construcción dinámica de la URL según la presencia de un parámetro de búsqueda.
@@ -47,6 +49,7 @@ export const fetchUsersAPI = async (searchTerm = "", signal) => {
 
   try {
     const data = await httpClient(url, { signal });
+    log.timeEnd(timerLabel, `Llamada de red de búsqueda para "${searchTerm}" finalizada`);
     
     // 2. Normalización estructural cruda:
     // El endpoint de /search/users envuelve los resultados en una propiedad 'items'.
@@ -57,6 +60,7 @@ export const fetchUsersAPI = async (searchTerm = "", signal) => {
     // 3. Normalización al Modelo de Dominio e inyección de Type Safety.
     return usersCollectionAdapter(rawUsers);
   } catch (error) {
+    log.timeEnd(timerLabel, `Llamada de red de búsqueda para "${searchTerm}" falló`);
     console.error("Service: fetchUsersAPI falló su ejecución:", error);
 
     // Si el error ya es de la red (ApiError), lo lanzamos intacto.
@@ -72,11 +76,12 @@ export const fetchUsersAPI = async (searchTerm = "", signal) => {
 };
 
 /**
- * Obtiene los detalles de perfil individual de un usuario en GitHub.
+ * Recupera de forma asíncrona la información de perfil detallado de un programador desde GitHub.
+ * Utiliza el adaptador para inyectar validaciones estructuradas con Zod.
  *
  * @async
  * @function fetchUserDetailAPI
- * @param {string} login - Nombre de usuario (handle) del objetivo en GitHub.
+ * @param {string} login - Handle del desarrollador.
  * @param {AbortSignal} [signal] - Señal de aborto opcional para cancelación de la petición.
  * @throws {ApiError} Lanza ApiError por fallos de red o si el esquema de validación no coincide.
  * @returns {Promise<UserProfile>} Promesa que resuelve en un único perfil de usuario normalizado.
@@ -88,6 +93,8 @@ export const fetchUsersAPI = async (searchTerm = "", signal) => {
  * ```
  */
 export const fetchUserDetailAPI = async (login, signal) => {
+  const timerLabel = `fetchUserDetailAPI_Net:${login}`;
+  log.time(timerLabel);
   log.flow(`🔌 [PASO 8: Service] Llamando a la API de GitHub para detalles: "${login}"`);
 
   // Requisito estricto: login no puede estar vacío
@@ -95,10 +102,12 @@ export const fetchUserDetailAPI = async (login, signal) => {
 
   try {
     const rawUser = await httpClient(url, { signal });
+    log.timeEnd(timerLabel, `Llamada de red de detalles para "${login}" finalizada`);
 
     // Pasa el objeto crudo por el validador Zod y lo transforma al modelo interno.
     return userAdapter(rawUser);
   } catch (error) {
+    log.timeEnd(timerLabel, `Llamada de red de detalles para "${login}" falló`);
     console.error(`Service: fetchUserDetailAPI para "${login}" falló:`, error);
 
     if (error instanceof ApiError) throw error;

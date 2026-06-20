@@ -1,9 +1,4 @@
-/**
- * @file useUserDetailFacade.js
- * @description Hook Facade que orquesta la obtención y la gestión de estado para el perfil detallado del usuario.
- * Este patrón aísla los componentes visuales de saber *cómo* se lee la URL o *cómo* interactúa TanStack Query.
- */
-
+import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useUserDetailQuery } from "@/entities/user";
 import { log } from "@/shared";
@@ -42,6 +37,8 @@ import { log } from "@/shared";
 export const useUserDetailFacade = () => {
   log.flow("⚡ [PASO 6: Facade] Orquestando estado y lógica de detalle de usuario...");
 
+  const wasLoading = useRef(false);
+
   // 1. Extracción de dependencias del entorno de Enrutamiento (React Router)
   const { login } = useParams();
 
@@ -53,6 +50,20 @@ export const useUserDetailFacade = () => {
     error,
     isSuccess,
   } = useUserDetailQuery(login);
+
+  // Temporizador para medir el tiempo de carga de detalles
+  useEffect(() => {
+    if (login) {
+      const timerLabel = `DetalleUsuario:${login}`;
+      if (isLoading && !wasLoading.current) {
+        log.time(timerLabel);
+        wasLoading.current = true;
+      } else if (!isLoading && wasLoading.current) {
+        log.timeEnd(timerLabel, `Carga de detalle para "${login}" finalizada en la Fachada`);
+        wasLoading.current = false;
+      }
+    }
+  }, [isLoading, login]);
 
   // 3. Exposición de un contrato limpio (Interfaz unificada)
   return {

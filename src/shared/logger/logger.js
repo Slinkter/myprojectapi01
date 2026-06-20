@@ -18,7 +18,15 @@ const STYLES = {
   effect: "color: #64748b; font-style: italic;", // Slate
   error:
     "background: #ef4444; color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: bold;", // Red
+  time: "color: #eab308; font-weight: bold; font-family: monospace;", // Amber/Yellow for timings
 };
+
+// Guardamos el momento exacto en que se carga la utilidad
+const initTime = performance.now();
+let lastFlowTime = performance.now();
+
+// Mapa para temporizadores personalizados (como console.time)
+const activeTimers = new Map();
 
 /**
  * 🎓 CONCEPTO JUNIOR: Patrón Singleton / Namespacing
@@ -60,13 +68,54 @@ export const log = {
    * @param {string} msg - Texto o palabra clave que determina el mensaje a imprimir.
    */
   flow: (msg) => {
+    const now = performance.now();
+    const elapsed = now - initTime;
+    const delta = now - lastFlowTime;
+    lastFlowTime = now;
+
+    const prefix = `%c[T+${elapsed.toFixed(1)}ms | Δ+${delta.toFixed(1)}ms]`;
+
     if (msg === "fetch") {
-      console.log("%c⚡ [API FETCH] ──▶ Enviando petición...", STYLES.fetch);
+      console.log(`${prefix} %c⚡ [API FETCH] ──▶ Enviando petición...`, STYLES.time, STYLES.fetch);
     } else if (msg === "success") {
-      console.log("%c✨ [API SUCCESS] ──✔ Respuesta recibida", STYLES.success);
+      console.log(`${prefix} %c✨ [API SUCCESS] ──✔ Respuesta recibida`, STYLES.time, STYLES.success);
     } else {
-      console.log(`%c🔹 [FLOW] ${msg}`, STYLES.brand);
+      console.log(`${prefix} %c🔹 [FLOW] ${msg}`, STYLES.time, STYLES.brand);
     }
+  },
+
+  /**
+   * Inicia un temporizador con un nombre específico.
+   * @param {string} label - Identificador único del temporizador.
+   */
+  time: (label) => {
+    activeTimers.set(label, performance.now());
+  },
+
+  /**
+   * Detiene el temporizador y muestra el tiempo transcurrido en consola.
+   * @param {string} label - Identificador único del temporizador.
+   * @param {string} [msg] - Mensaje personalizado adicional.
+   */
+  timeEnd: (label, msg = "") => {
+    const startTime = activeTimers.get(label);
+    if (startTime === undefined) {
+      console.warn(`[LOGGER] No se encontró el temporizador activo para la etiqueta: "${label}"`);
+      return;
+    }
+    const duration = performance.now() - startTime;
+    activeTimers.delete(label);
+
+    const now = performance.now();
+    const elapsed = now - initTime;
+    const prefix = `%c[T+${elapsed.toFixed(1)}ms]`;
+
+    console.log(
+      `${prefix} %c⏱️ [TIMER] ${label}: ${duration.toFixed(2)}ms ${msg ? `(${msg})` : ""}`,
+      STYLES.time,
+      STYLES.time
+    );
+    return duration;
   },
 
   /**

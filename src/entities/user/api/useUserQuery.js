@@ -24,9 +24,18 @@ export const useUserQuery = (searchTerm) => {
     queryKey: ["users", searchTerm],
     
     // Función extractora que ejecuta el fetch real hacia la API
-    queryFn: () => {
+    queryFn: async () => {
+      const timerLabel = `useUserQueryFn:${searchTerm}`;
+      log.time(timerLabel);
       log.flow(`📡 [PASO 7: Query Hook] Buscando usuarios para: "${searchTerm}"...`);
-      return fetchUsersAPI(searchTerm);
+      try {
+        const result = await fetchUsersAPI(searchTerm);
+        log.timeEnd(timerLabel, `QueryFn para "${searchTerm}" resuelta con éxito`);
+        return result;
+      } catch (err) {
+        log.timeEnd(timerLabel, `QueryFn para "${searchTerm}" falló`);
+        throw err;
+      }
     },
     
     // Regla de optimización: Solo dispara la petición real a la API 

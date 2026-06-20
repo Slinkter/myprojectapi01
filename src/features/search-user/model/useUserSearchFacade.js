@@ -1,11 +1,4 @@
-/**
- * @file useUserSearchFacade.js
- * @description Facade hook que orquesta el flujo de búsqueda de usuarios.
- * Combina la recuperación de estado de consultas (TanStack Query), temporizadores de debounce, y 
- * disparadores de notificaciones de error para desacoplar completamente la UI de la lógica de negocio.
- */
-
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDebouncedSearch } from "@/shared";
 import { useUserSearchQuery as useUserQuery } from "@/entities/user";
 import { log } from "@/shared/logger/logger";
@@ -52,6 +45,8 @@ import { toast } from "sonner";
 export const useUserSearchFacade = () => {
   log.flow("⚡ [PASO 6: Facade] Orquestando estado y lógica de búsqueda de usuarios...");
 
+  const wasLoading = useRef(false);
+
   // 1. Manejo del input del usuario con Debounce para no inundar la API en cada tipeo.
   const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebouncedSearch(
     "",
@@ -97,6 +92,20 @@ export const useUserSearchFacade = () => {
   const isError = status === "error";
   const isSuccess = status === "success" && users?.length > 0;
   const isEmpty = status === "success" && users?.length === 0;
+
+  // Temporizador para medir el tiempo total de la búsqueda
+  useEffect(() => {
+    if (debouncedSearchTerm) {
+      const timerLabel = `BuscarUsuario:${debouncedSearchTerm}`;
+      if (isLoading && !wasLoading.current) {
+        log.time(timerLabel);
+        wasLoading.current = true;
+      } else if (!isLoading && wasLoading.current) {
+        log.timeEnd(timerLabel, `Búsqueda para "${debouncedSearchTerm}" finalizada en la Fachada`);
+        wasLoading.current = false;
+      }
+    }
+  }, [isLoading, debouncedSearchTerm]);
 
   return {
     searchTerm,

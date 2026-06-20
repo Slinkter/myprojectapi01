@@ -39,6 +39,8 @@ import { log } from "@/shared";
  * ```
  */
 export const userAdapter = (rawUser) => {
+  const timerLabel = `userAdapter_Zod:${rawUser?.login || "unknown"}`;
+  log.time(timerLabel);
   log.flow(`🧪 [PASO 9: Adapter] Validando y normalizando datos de GitHub con Zod...`);
 
   // 1. Validación en tiempo de ejecución con Zod.
@@ -47,7 +49,7 @@ export const userAdapter = (rawUser) => {
   const data = GitHubUserSchema.parse(rawUser);
 
   // 2. Normalización de datos (Traducción de contrato API -> Dominio Interno)
-  return {
+  const result = {
     id: data.id,
     username: data.login,
     name: data.name || data.login, // Fallback al username si no hay nombre real
@@ -63,6 +65,9 @@ export const userAdapter = (rawUser) => {
     website: data.blog || "",
     origin: "github",
   };
+
+  log.timeEnd(timerLabel, "Validación y normalización Zod completada");
+  return result;
 };
 
 /**

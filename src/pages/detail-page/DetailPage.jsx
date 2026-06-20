@@ -5,7 +5,7 @@
  */
 
 import { UserDetail } from "@/widgets/user-profile-bento";
-import { log } from "@/shared";
+import { log, useComponentProfiler } from "@/shared";
 
 /**
  * 🎓 CONCEPTO JUNIOR: Page Components en FSD
@@ -19,7 +19,10 @@ import { log } from "@/shared";
  * @returns {JSX.Element} Vista completa de los detalles del perfil.
  */
 const DetailPage = () => {
-  console.log("🖥️ [PASO 3B: DetailPage] Montando la página de detalle de usuario...");
+  useComponentProfiler(
+    "DetailPage",
+    "🖥️ [PASO 3B: DetailPage] Montando la página de detalle de usuario"
+  );
   return <UserDetail />;
 };
 

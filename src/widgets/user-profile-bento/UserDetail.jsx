@@ -11,7 +11,7 @@ import { useUserDetailFacade } from "@/features/view-user-details";
 import ProfileHeader from "./ui/ProfileHeader";
 import ProfileFooter from "./ui/ProfileFooter";
 import BentoStatsGrid from "./ui/BentoStatsGrid";
-import { log } from "@/shared";
+import { log, useComponentProfiler } from "@/shared";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -52,7 +52,10 @@ const itemVariants = {
  * @returns {JSX.Element|null} Estructura visual del dashboard Bento.
  */
 const UserDetail = () => {
-  log.flow("🧩 [PASO 4C: Widget Component] Montando UserDetail Bento Dashboard...");
+  useComponentProfiler(
+    "UserDetail",
+    "🧩 [PASO 4C: Widget Component] Montando UserDetail Bento Dashboard"
+  );
   
   // Obtenemos los datos y estados desde nuestra "Caja Negra" (Facade)
   const { user, isLoading, isError, error } = useUserDetailFacade();

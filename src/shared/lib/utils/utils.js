@@ -7,6 +7,12 @@ import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 /**
+ * 🎓 CONCEPTO JUNIOR: Combina Clases en React (cn = clsx + twMerge)
+ * En React, a menudo queremos cambiar los estilos de un componente según su estado (ej. si está activo, deshabilitado o tiene error).
+ * Usar `clsx` nos permite escribir condicionales de forma sencilla (ej. `isActive && "bg-blue-500"`).
+ * Sin embargo, si pasamos clases que chocan (ej. `px-2` y `px-4`), el navegador no sabrá cuál aplicar y puede romperse el diseño.
+ * `twMerge` soluciona esto combinando y limpiando las clases de Tailwind de forma inteligente para que la última siempre gane.
+ *
  * Utilidad maestra para fusionar clases de Tailwind CSS limpiamente.
  * Resuelve dos problemas críticos al construir componentes React reusables:
  * 1. Condicionales: Permite usar sintaxis limpia (objetos, booleanos) gracias a `clsx`.

@@ -15,7 +15,6 @@
 
 export { cn } from "./lib/utils/utils";
 export { useDebouncedSearch } from "./lib/hooks/useDebouncedSearch";
-export { default as useIntersectionObserver } from "./lib/hooks/useIntersectionObserver";
 export { useTheme } from "./lib/hooks/useTheme";
 export { default as ErrorBoundary } from "./ui/ErrorBoundary/ErrorBoundary";
 export { default as ErrorDisplay } from "./ui/ErrorDisplay/ErrorDisplay";
@@ -26,3 +25,4 @@ export { queryClient } from "./api/queryClient";
 export { TAILWIND_STYLE_TOKENS } from "./styles/theme";
 export { useMsw } from "./lib/hooks/useMsw";
 export { log } from "./logger/logger";
+export { useComponentProfiler } from "./lib/hooks/useComponentProfiler";

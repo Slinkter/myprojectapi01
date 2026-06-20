@@ -29,9 +29,18 @@ export const useUserDetailQuery = (login) => {
     queryKey: ["user-detail", login],
     
     // Inyecta el signal del abort controller para matar la petición si el componente se desmonta rápido
-    queryFn: ({ signal }) => {
+    queryFn: async ({ signal }) => {
+      const timerLabel = `useUserDetailQueryFn:${login}`;
+      log.time(timerLabel);
       log.flow(`📡 [PASO 7: Query Hook] Solicitando detalles para: "${login}"`);
-      return fetchUserDetailAPI(login, signal);
+      try {
+        const result = await fetchUserDetailAPI(login, signal);
+        log.timeEnd(timerLabel, `QueryFn de detalles para "${login}" resuelta con éxito`);
+        return result;
+      } catch (err) {
+        log.timeEnd(timerLabel, `QueryFn de detalles para "${login}" falló`);
+        throw err;
+      }
     },
     
     staleTime: STALE_TIME,

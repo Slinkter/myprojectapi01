@@ -6,7 +6,7 @@
 
 import { useUserSearchFacade, PageHeader } from "@/features/search-user";
 import { SearchResults } from "@/widgets/search-results";
-import { ErrorBoundary, log } from "@/shared";
+import { ErrorBoundary, log, useComponentProfiler } from "@/shared";
 
 /**
  * 🎓 CONCEPTO JUNIOR: Smart Components (Componentes Inteligentes o Contenedores)
@@ -21,8 +21,9 @@ import { ErrorBoundary, log } from "@/shared";
  * @returns {JSX.Element} Vista completa de la página de búsqueda.
  */
 const SearchPage = () => {
-  log.flow(
-    "🖥️ [PASO 3A: SearchPage] Montando la página de búsqueda principal...",
+  useComponentProfiler(
+    "SearchPage",
+    "🖥️ [PASO 3A: SearchPage] Montando la página de búsqueda principal"
   );
   
   // 1. Obtenemos todo el estado y la lógica de negocio del Facade.

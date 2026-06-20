@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { cn } from "@/shared/lib/utils/utils";
 import { ChevronRight } from "lucide-react";
-import { log } from "@/shared";
+import { log, useComponentProfiler } from "@/shared";
 
 /**
  * @file UserCard.jsx
@@ -179,7 +179,10 @@ UserFooter.displayName = "UserCard.Footer";
  * ```
  */
 const UserCard = ({ children, variant = "default", className, username }) => {
-  log.flow(`🎴 [PASO 5A: Entity Card] Instanciando UserCard para el usuario: "${username}"`);
+  useComponentProfiler(
+    "UserCard",
+    `🎴 [PASO 5A: Entity Card] Instanciando UserCard para el usuario: "${username}"`
+  );
   
   // useRef no causa re-renders, sirve para mantener una referencia directa al nodo del DOM.
   const userCardRef = useRef(null);

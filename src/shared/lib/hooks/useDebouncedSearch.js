@@ -8,6 +8,13 @@
 import { useState, useEffect } from "react";
 
 /**
+ * 🎓 CONCEPTO JUNIOR: Debounce (Anti-rebote)
+ * Cuando el usuario escribe en un campo de búsqueda, si mandáramos una petición al servidor con cada tecla presionada, 
+ * saturaríamos la red y nos bloquearían rápidamente.
+ * El "Debounce" es una técnica que retrasa la ejecución de una función hasta que haya pasado un tiempo de inactividad.
+ * Si el usuario presiona otra tecla antes de que termine el tiempo de espera, cancelamos el temporizador anterior y creamos uno nuevo.
+ * Así, solo se hace una petición cuando el usuario termina de escribir.
+ *
  * Hook para implementar "debounce" (retraso/anti-rebote) en valores de estado, 
  * particularmente útil para inputs de búsqueda de texto.
  *
