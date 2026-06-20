@@ -1,30 +1,9 @@
-/**
- * @file ProfileHeader.jsx
- * @description Sub-componente del widget Bento que muestra el encabezado principal (Avatar y Nombres).
- */
+
 
 import { motion } from "motion/react";
 import PropTypes from "prop-types";
 
-/**
- * 🎓 CONCEPTO JUNIOR: Animaciones Compartidas (Shared Layout Animations)
- * ¿Notaste el prop `layoutId={'avatar-' + user.username}` en la imagen?
- * Ese mismo `layoutId` existe en el avatar pequeñito de la tarjeta en la página anterior (SearchPage).
- * Framer Motion ve el ID, se da cuenta de que es el mismo "Avatar", y en vez de desaparecerlo, 
- * lo "teletransporta" y redimensiona fluidamente entre páginas. Esto da un aspecto de "App Nativa" (Hero Transition).
- *
- * Componente ProfileHeader.
- *
- * @component
- * @param {Object} props - Propiedades inyectadas.
- * @param {Object} props.user - Detalles de usuario normalizados.
- * @param {string} props.user.username - Github login username.
- * @param {string} props.user.name - Nombre real de Github.
- * @param {string} props.user.photo - URL de la imagen de avatar.
- * @param {string} props.user.bio - Biografía del usuario.
- * @param {Object} props.variants - Variantes de animación.
- * @returns {JSX.Element} Encabezado visual del perfil.
- */
+
 const ProfileHeader = ({ user, variants }) => {
   return (
     <motion.section

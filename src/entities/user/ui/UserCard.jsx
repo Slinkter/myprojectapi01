@@ -4,13 +4,9 @@ import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { cn } from "@/shared/lib/utils/utils";
 import { ChevronRight } from "lucide-react";
-import { log, useComponentProfiler } from "@/shared";
 
-/**
- * @file UserCard.jsx
- * @description Componente de tarjeta de usuario que muestra metadatos del perfil.
- * Implementa animaciones suaves de entrada mediante motion/react.
- */
+
+
 
 const TAILWIND_BUTTON_BASE_CLASS = "btn-tailwind";
 
@@ -21,17 +17,7 @@ const CARD_STYLE_VARIANTS = {
   "accent-glow": "tailwind-card border-accent/30 hover:border-accent shadow-[0_4px_20px_-4px_rgba(14,165,233,0.08)]",
 };
 
-/**
- * Sub-componente UserAvatar.
- * Renderiza la foto de perfil del usuario con animaciones de layout.
- *
- * @component
- * @param {Object} props - Propiedades del componente.
- * @param {string} props.avatarUrl - URL de la imagen.
- * @param {string} props.username - Handle de GitHub.
- * @param {string} [props.variant="default"] - Variante de diseño.
- * @returns {JSX.Element} Imagen de avatar.
- */
+
 const UserAvatar = ({ avatarUrl, username, variant = "default" }) => {
   const isMinimalLayout = variant === "minimal";
 
@@ -67,20 +53,7 @@ UserAvatar.propTypes = {
 
 UserAvatar.displayName = "UserCard.Avatar";
 
-/**
- * Sub-componente UserHeader.
- * Renderiza el título principal mostrando el username y el enlace secundario.
- * 
- * 🎓 CONCEPTO JUNIOR: Line-height y Vertical Spacing
- * Si el texto se "traspala" o se ve encimado, suele ser por la propiedad CSS `line-height` (en Tailwind `leading-*`).
- * Hemos ajustado el espaciado para que el Título (h3) y el Subtítulo (p) tengan aire suficiente.
- *
- * @component
- * @param {Object} props - Propiedades del componente.
- * @param {string} props.username - Handle de GitHub.
- * @param {string} [props.variant="default"] - Variante de diseño.
- * @returns {JSX.Element} Cabecera de la tarjeta.
- */
+
 const UserHeader = ({ username, variant = "default" }) => {
   const isMinimalLayout = variant === "minimal";
 
@@ -109,20 +82,14 @@ UserHeader.propTypes = {
 
 UserHeader.displayName = "UserCard.Header";
 
-/**
- * Sub-componente UserFooter.
- * Renderiza el botón/enlace de acción (Call To Action) hacia las vistas de detalle.
- *
- * @component
- * @param {Object} props - Propiedades del componente.
- * @param {string} props.username - Handle de GitHub.
- * @param {string} [props.variant="default"] - Variante de diseño.
- * @returns {JSX.Element|null} Pie de la tarjeta o null si la variante no lo requiere.
- */
+
 const UserFooter = ({ username, variant = "default" }) => {
-  // 🎓 CONCEPTO JUNIOR: Early Return
-  // Si pedimos una tarjeta minimalista, cortamos la ejecución y devolvemos `null`.
-  // React ignora los null y simplemente no dibuja esta porción en pantalla.
+  
+
+  
+
+  
+
   if (variant === "minimal") return null;
 
   return (
@@ -152,39 +119,8 @@ UserFooter.propTypes = {
 
 UserFooter.displayName = "UserCard.Footer";
 
-/**
- * 🎓 CONCEPTO JUNIOR: Compound Components (Componentes Compuestos)
- * Nota cómo al final del archivo hacemos `UserCard.Avatar = UserAvatar`.
- * Esto permite usar el componente así: `<UserCard><UserCard.Avatar /></UserCard>`.
- * Da muchísima flexibilidad porque el desarrollador puede cambiar el orden de las cosas por dentro
- * (poner el Avatar abajo y el Footer arriba) sin tener que enviarle 50 "props" al contenedor padre.
- *
- * Componente principal UserCard.
- * Representa una tarjeta de perfil de usuario individual.
- *
- * @component
- * @param {Object} props - Propiedades del componente.
- * @param {React.ReactNode} props.children - Componentes hijos combinados (Header, Avatar, Footer).
- * @param {"default"|"glass"|"minimal"|"accent-glow"} [props.variant="default"] - Variante de diseño.
- * @param {string} [props.className] - Clases adicionales de Tailwind para sobreescritura.
- * @param {string} [props.username] - Handle del usuario.
- * @returns {JSX.Element} Elemento de tarjeta mapeado.
- * 
- * @example
- * ```tsx
- * <UserCard username="octocat" variant="minimal">
- *   <UserCard.Avatar avatarUrl="img.jpg" username="octocat" />
- *   <UserCard.Header username="octocat" />
- * </UserCard>
- * ```
- */
+
 const UserCard = ({ children, variant = "default", className, username }) => {
-  useComponentProfiler(
-    "UserCard",
-    `🎴 [PASO 5A: Entity Card] Instanciando UserCard para el usuario: "${username}"`
-  );
-  
-  // useRef no causa re-renders, sirve para mantener una referencia directa al nodo del DOM.
   const userCardRef = useRef(null);
   
   const variantClassName = CARD_STYLE_VARIANTS[variant] || CARD_STYLE_VARIANTS.default;
@@ -199,7 +135,7 @@ const UserCard = ({ children, variant = "default", className, username }) => {
         className
       )}
     >
-      {/* motion.div reacciona a las acciones del ratón (hover, tap) sin CSS complejo */}
+      {}
       <motion.div
         initial="initial"
         whileHover="hover"
@@ -235,7 +171,8 @@ UserCard.propTypes = {
   username: PropTypes.string,
 };
 
-// Asignación estática de sub-componentes (Patrón Compound Component)
+
+
 UserCard.Avatar = UserAvatar;
 UserCard.Header = UserHeader;
 UserCard.Footer = UserFooter;

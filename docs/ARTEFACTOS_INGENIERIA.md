@@ -989,6 +989,20 @@ sequenceDiagram
 
 **Nota sobre la herencia**: `type: "User" | "Organization"` en el esquema Zod funciona como un **discriminador**. Ambos tipos se validan con el mismo `GitHubUserSchema` pero se renderizan con componentes diferentes mediante `ResultFactory`. No hay herencia real de clases — es composición de componentes.
 
+#### Compound Components: `UserCard` y `OrganizationCard`
+
+`UserCard.jsx` implementa el patrón **Compound Components** declarando tres sub-componentes estáticos que se ensamblan dentro del contenedor principal:
+
+| Sub-componente      | Binding              | Propósito                          |
+|---------------------|----------------------|-------------------------------------|
+| `UserCard.Avatar`   | `UserAvatar`         | Foto de perfil con animación layout |
+| `UserCard.Header`   | `UserHeader`         | Username + handle github.com/       |
+| `UserCard.Footer`   | `UserFooter`         | Botón "Ver perfil" con Link        |
+
+`OrganizationCard` (dentro de `ResultFactory.jsx`) reutiliza `UserCard` y sus sub-componentes, pero inyecta contenido extra en el slot `Header` (badge "Organización" con icono `Building2`). Usa `UserCard.Footer` para el botón de navegación.
+
+> ⚠️ **Error común:** Si se intenta usar un sub-componente que no existe, como `UserCard.Actions`, React lanza: *"Element type is invalid: expected a string or a class/function but got: undefined"*. La solución es verificar los sub-componentes disponibles en `UserCard` (solo `.Avatar`, `.Header`, `.Footer`).
+
 ### 4.3 Diagrama de Transición de Estados — Entidad `UserSearch`
 
 La entidad más relevante del proyecto es el **estado de la búsqueda de usuarios**, representado por las variables `status` e `isFetching` de TanStack Query, traducidas por `useUserSearchFacade` a variables booleanas legibles.

@@ -1,23 +1,10 @@
-/**
- * @file AccountStatus.jsx
- * @description Sub-componente del Bento Grid que muestra el diagnóstico y tipo de cuenta.
- */
+
 
 import { motion } from "motion/react";
 import PropTypes from "prop-types";
 import { cn, TAILWIND_STYLE_TOKENS } from "@/shared";
 
-/**
- * Componente AccountStatus.
- * Muestra el estado de sincronización y el tipo de cuenta del perfil en una celda Bento.
- *
- * @component
- * @param {Object} props - Propiedades inyectadas por el Widget padre.
- * @param {Object} props.user - Objeto con detalles normalizados del usuario.
- * @param {string} props.user.type - El tipo de cuenta (ej. "User", "Organization").
- * @param {Object} props.variants - Variantes de animación de Framer Motion.
- * @returns {JSX.Element} Elemento de estado de cuenta.
- */
+
 const AccountStatus = ({ user, variants }) => {
   return (
     <motion.div

@@ -1,7 +1,4 @@
-/**
- * @file NotFoundPage.jsx
- * @description Componente visual de repuesto (Fallback) que se renderiza cuando una búsqueda arroja cero resultados.
- */
+
 
 import PropTypes from "prop-types";
 import { motion } from "motion/react";
@@ -9,20 +6,7 @@ import { Search } from "lucide-react";
 import { cn } from "@/shared/lib/utils/utils";
 import { TAILWIND_STYLE_TOKENS } from "@/shared";
 
-/**
- * 🎓 CONCEPTO JUNIOR: Interpolación de Variables en JSX
- * Observa las llaves `{searchTerm}` dentro de la etiqueta `<span>`. En JSX, cualquier cosa dentro de llaves 
- * es evaluada como JavaScript puro. Esto nos permite inyectar la palabra exacta que el usuario buscó 
- * ("pepito", "react") dentro del HTML resultante.
- *
- * Componente NotFound.
- * Muestra una tarjeta amigable informando que no hay coincidencias.
- *
- * @component
- * @param {Object} props - Propiedades inyectadas al componente.
- * @param {string} props.searchTerm - El texto que el usuario ingresó y no produjo resultados.
- * @returns {JSX.Element} Tarjeta de error "Sin resultados".
- */
+
 const NotFound = ({ searchTerm }) => (
   <motion.div
     initial={{ opacity: 0, y: 12 }}

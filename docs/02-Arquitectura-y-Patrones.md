@@ -133,3 +133,10 @@ Para garantizar la calidad de la arquitectura a nivel "Senior", aplicamos tres p
 *   **Ubicación:** `src/entities/user/ui/ResultFactory.jsx`
 *   **Filosofía:** "Delega la creación". Instancia dinámicamente componentes basándose en el campo `type` de la API (User vs Organization).
 *   **Beneficio:** Si mañana GitHub añade un tipo "Bot" o "Enterprise", solo modificamos la Factory en un lugar, sin tocar la lógica de los widgets de resultados.
+
+### 4. El Patrón Compound Components (React - Estructural)
+*   **Ubicación:** `src/entities/user/ui/UserCard.jsx`
+*   **Filosofía:** "Composición flexible". `UserCard` declara sub-componentes estáticos (`.Avatar`, `.Header`, `.Footer`) que se ensamblan libremente dentro del contenedor principal.
+*   **Implementación:** `UserCard.Avatar = UserAvatar`, `UserCard.Header = UserHeader`, `UserCard.Footer = UserFooter`.
+*   **Caso real:** `OrganizationCard` (dentro de `ResultFactory`) reutiliza `UserCard` con sus sub-componentes, pero inyecta contenido extra (badge "Organización", icono `Building2`) en el slot `Header`. Usa `.Footer` en lugar de un inexistente `.Actions`.
+*   **Beneficio:** El consumidor (widget) decide el orden y la presencia de cada sub-componente sin depender de un props interface rígido. Si se intenta usar un sub-componente que no existe (ej: `UserCard.Actions`), React lanza el error *"Element type is invalid... You likely forgot to export your component"*, detectable en tiempo de desarrollo.

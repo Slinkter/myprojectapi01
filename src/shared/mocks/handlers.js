@@ -1,17 +1,8 @@
-/**
- * @file handlers.js
- * @description Interceptores de red para Mock Service Worker (MSW).
- * Simulan el comportamiento de la API de GitHub localmente.
- */
+
 
 import { http, HttpResponse } from "msw";
 
-/**
- * 🎓 CONCEPTO JUNIOR: Mocking (Datos Simulados)
- * Cuando desarrollamos, GitHub nos bloquea la API si hacemos más de 60 peticiones por hora.
- * Para poder programar sin pausas, creamos "Mocks" (dobles de acción). Este arreglo `mockUsers` 
- * actúa como nuestra base de datos local y personal.
- */
+
 const mockUsers = [
   {
     id: 1,
@@ -225,29 +216,25 @@ const mockUsers = [
   }
 ];
 
-/**
- * 🎓 CONCEPTO JUNIOR: Controladores de MSW (Handlers)
- * Estos "handlers" engañan a la función nativa `fetch()` del navegador. 
- * Cuando tu código React hace: `fetch('https://api.github.com/users')`,
- * MSW atrapa esa petición a mitad de camino y ejecuta la función que está aquí abajo
- * en lugar de ir a internet.
- *
- * Colección de manejadores de peticiones HTTP para MSW.
- *
- * @type {import('msw').HttpHandler[]}
- */
+
 export const handlers = [
-  // Intercepta GET /users
+  
+
   http.get("https://api.github.com/users", () => {
-    // Simula obtener la lista general de usuarios iniciales (buscador vacío)
+    
+
     return HttpResponse.json(mockUsers.slice(0, 10));
   }),
 
-  // Intercepta GET /search/users?q=...
+  
+
   http.get("https://api.github.com/search/users", ({ request }) => {
-    // 🎓 CONCEPTO JUNIOR: Objeto URL
-    // `new URL` es una API nativa de JavaScript súper útil para extraer partes de un link.
-    // Con `.searchParams.get("q")` extraemos lo que haya después del `?q=` automáticamente.
+    
+
+    
+
+    
+
     const url = new URL(request.url);
     const searchTerm = url.searchParams.get("q")?.toLowerCase() || "";
 
@@ -260,20 +247,24 @@ export const handlers = [
     return HttpResponse.json({
       total_count: filteredUsers.length,
       incomplete_results: false,
-      items: filteredUsers, // La API real de búsqueda devuelve el arreglo dentro de `items`
+      items: filteredUsers, 
+
     });
   }),
 
-  // Intercepta GET /users/:login
+  
+
   http.get("https://api.github.com/users/:login", ({ params }) => {
-    // `params` captura todo lo que pongas donde va el comodín `:login`
+    
+
     const { login } = params; 
     const user = mockUsers.find(
       (u) => u.login.toLowerCase() === login.toLowerCase(),
     );
 
     if (!user) {
-      // Si buscas un usuario en MSW que no exista en el arreglo local, devuelve 404.
+      
+
       return new HttpResponse(null, { status: 404 });
     }
 

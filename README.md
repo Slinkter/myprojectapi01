@@ -23,7 +23,13 @@ Estructura robusta que garantiza el desacoplamiento total:
 Visualiza el ciclo de vida de una petición y el renderizado en la consola del navegador con una traza profesional numerada:
 1.  **Mounting** -> 2. **Shell** -> 3. **Pages** -> 4. **Widgets** -> 5. **Factory** -> 6. **Facade** -> 7. **Query** -> 8. **Service** -> 9. **Adapter**.
 
-### 4. 🎨 UI/UX de Alta Fidelidad
+### 4. 🏭 ResultFactory y Compound Components
+- `ResultFactory` aplica el patrón **Factory** para instanciar `UserCard` o `OrganizationCard` según el tipo de perfil.
+- `UserCard` implementa **Compound Components** con tres sub-componentes: `.Avatar`, `.Header`, `.Footer`.
+- `OrganizationCard` reutiliza `UserCard` inyectando contenido extra (badge "Organización") en el slot `Header`.
+- **Error típico:** Usar un sub-componente inexistente (ej: `UserCard.Actions`) lanza *"Element type is invalid"*. La solución es verificar los sub-componentes disponibles.
+
+### 5. 🎨 UI/UX de Alta Fidelidad
 - **Estética Bento Grid:** Dashboards modernos para visualizar estadísticas de usuario.
 - **Motion v12:** Animaciones fluidas basadas en física.
 - **Tailwind CSS v4:** Sistema de diseño ultra-optimizado.
@@ -64,6 +70,10 @@ El proyecto cuenta con una biblioteca completa en `docs/`:
 | [Guía de Desarrollo](./docs/03-Guia-de-Desarrollo.md) | Estándares de código, JSDoc y Logging. |
 | [Artefactos de Ingeniería](./docs/ARTEFACTOS_INGENIERIA.md) | Documento técnico de 1000+ líneas. |
 | [Guía de Estudio](./docs/GUIA_ESTUDIO.md) | Manual de React desde cero hasta avanzado. |
+| [Prueba Técnica](./docs/PRUEBA_TECNICA.md) | Simulacro de entrevista técnica React. |
+| [Simulacro Scrum](./docs/SIMULACRO_SCRUM.md) | Simulación completa de proyecto Scrum. |
+| [FSD Nivel Pollito](./docs/FSD_NIVEL_POLLITO.md) | FSD explicado para principiantes. |
+| [Big O Nivel Pollito](./docs/BIG_O_POLLITO.md) | Complejidad algorítmica explicada simple. |
 
 ---
 
