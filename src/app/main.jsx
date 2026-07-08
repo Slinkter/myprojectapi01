@@ -9,33 +9,17 @@ import App from "@/app/App.jsx";
 import "@/shared/styles/index.css";
 
 /**
- * 🎓 CONCEPTO JUNIOR: Inicialización Asíncrona (Bootstraping)
- * Para que MSW intercepte las peticiones de red desde el primer segundo que carga la app, 
- * debemos esperar a que el Service Worker se active antes de renderizar React. 
- * Usamos una función asíncrona que retorna una Promesa para garantizar este orden.
+ * 🎓 CONCEPTO JUNIOR: Await de Alto Nivel (Top-Level Await)
+ * Tradicionalmente, solo podíamos usar 'await' dentro de funciones marcadas como 'async'.
+ * Con JavaScript moderno y Vite, podemos usar 'await' directamente en el cuerpo global de un archivo.
+ * Esto nos permite detener la ejecución del archivo secuencialmente hasta que el Service Worker 
+ * de MSW esté activo, montando React inmediatamente después de forma limpia y sin bloques '.then()'.
  */
 
-/**
- * Habilita el Mock Service Worker (MSW) en entornos locales de desarrollo.
- * Importa de manera dinámica el browser worker para evitar cargarlo en producción.
- * 
- * @async
- * @function enableMocking
- * @returns {Promise<ServiceWorkerRegistration|undefined>} Registro del Service Worker o promesa resuelta.
- * 
- * @example
- * ```javascript
- * enableMocking().then(() => {
- *   mountReactApp();
- * });
- * ```
- */
-async function enableMocking() {
-  if (import.meta.env.MODE !== "development") {
-    return;
-  }
+// Si estamos en desarrollo, esperamos a que MSW esté registrado y listo
+if (import.meta.env.MODE === "development") {
   const { worker } = await import("@/shared/mocks/browser");
-  return worker.start({
+  await worker.start({
     onUnhandledRequest: "bypass",
     serviceWorker: {
       url: `${import.meta.env.BASE_URL}mockServiceWorker.js`,
@@ -43,6 +27,5 @@ async function enableMocking() {
   });
 }
 
-enableMocking().then(() => {
-  ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-});
+// Una vez resuelto el bootstraping asíncrono, montamos la aplicación React
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
