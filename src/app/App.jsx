@@ -1,26 +1,28 @@
 /**
  * @file App.jsx
- * @description Componente raíz de la aplicación. Define el enrutamiento de páginas
- * y las envolturas básicas de carga y control de fallos (ErrorBoundary).
+ * @description Componente raíz de la aplicación. Orquesta la composición de
+ * proveedores de contexto, el layout de diseño y la configuración del enrutador de páginas.
  */
 
 import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ErrorBoundary } from "@/shared";
 import AppProviders from "./providers/AppProviders";
+import RootLayout from "./layouts/RootLayout";
 
 /**
- * 🎓 CONCEPTO JUNIOR: Enrutamiento Declarativo (React Router)
- * React Router permite mapear rutas del navegador (ej: '/user/mojombo') a componentes específicos.
- * Usamos 'Suspense' para mostrar un componente de carga mientras se descargan dinámicamente las páginas.
+ * 🎓 CONCEPTO JUNIOR: Arquitectura de Composición
+ * Al separar los proveedores técnicos (AppProviders) del contenedor visual (RootLayout),
+ * logramos una estructura modular de capas limpia. Si mañana cambias el diseño estético de la app,
+ * solo editas RootLayout sin tocar la lógica de red o enrutamiento.
  */
 
-// Carga perezosa (lazy load) de las páginas principales para optimizar la descarga inicial
+// Carga perezosa de páginas principales
 const SearchPage = lazy(() => import("@/pages/search-page/SearchPage.jsx"));
 const DetailPage = lazy(() => import("@/pages/detail-page/DetailPage.jsx"));
 
 /**
- * Componente interno para mostrar un Spinner centrado mientras cargan las vistas asíncronas.
+ * Componente interno para mostrar un Spinner centrado mientras cargan las vistas.
  * 
  * @component PageLoader
  * @returns {React.JSX.Element} Spinner de carga.
@@ -37,20 +39,22 @@ const PageLoader = () => {
  * Componente raíz de la aplicación React.
  * 
  * @component App
- * @returns {React.JSX.Element} Estructura limpia de la aplicación envuelta en proveedores.
+ * @returns {React.JSX.Element} Composición del árbol de la aplicación.
  */
 const App = () => {
   return (
     <AppProviders>
-      <ErrorBoundary>
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<SearchPage />} />
-            <Route path="/user/:login" element={<DetailPage />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Suspense>
-      </ErrorBoundary>
+      <RootLayout>
+        <ErrorBoundary>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<SearchPage />} />
+              <Route path="/user/:login" element={<DetailPage />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
+      </RootLayout>
     </AppProviders>
   );
 };
