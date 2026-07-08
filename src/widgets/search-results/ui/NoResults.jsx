@@ -1,13 +1,16 @@
-
-
 import PropTypes from "prop-types";
 import { motion } from "motion/react";
 import { Search } from "lucide-react";
-import { cn } from "@/shared/lib/utils/utils";
-import { TAILWIND_STYLE_TOKENS } from "@/shared";
+import { cn, TAILWIND_STYLE_TOKENS } from "@/shared";
 
-
-const NotFound = ({ searchTerm }) => (
+/**
+ * Componente que se muestra cuando una búsqueda en GitHub no retorna ningún resultado.
+ *
+ * 🎓 CONCEPTO JUNIOR: Presentational Components (Componentes de Presentación)
+ * Este componente es puramente de presentación (o tonto): no tiene estado interno ni sabe de dónde 
+ * vienen los datos; solo se encarga de pintar una interfaz bonita basándose en las props que recibe.
+ */
+const NoResults = ({ searchTerm }) => (
   <motion.div
     initial={{ opacity: 0, y: 12 }}
     animate={{ opacity: 1, y: 0 }}
@@ -33,10 +36,10 @@ const NotFound = ({ searchTerm }) => (
   </motion.div>
 );
 
-NotFound.propTypes = {
+NoResults.propTypes = {
   searchTerm: PropTypes.string.isRequired,
 };
 
-NotFound.displayName = "NotFound";
+NoResults.displayName = "NoResults";
 
-export default NotFound;
+export default NoResults;

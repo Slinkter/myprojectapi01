@@ -3,8 +3,7 @@
 import PropTypes from "prop-types";
 import { motion } from "motion/react";
 import { AlertTriangle, Clock, Key, RefreshCw } from "lucide-react";
-import { cn } from "@/shared/lib/utils/utils";
-import { TAILWIND_STYLE_TOKENS } from "@/shared";
+import { cn, TAILWIND_STYLE_TOKENS } from "@/shared";
 
 
 const RateLimitPane = ({ message, onRetry }) => {

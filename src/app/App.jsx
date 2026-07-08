@@ -1,3 +1,9 @@
+/**
+ * @file App.jsx
+ * @description Componente raíz y contenedor principal de la aplicación. Configura los proveedores
+ * de estado global (TanStack Query), los estilos de temas y el enrutador de páginas SPA.
+ */
+
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -8,16 +14,27 @@ import {
   ErrorBoundary,
   ThemeToggle,
   queryClient,
-  useMsw,
 } from "@/shared";
+
+/**
+ * 🎓 CONCEPTO JUNIOR: Proveedores (Providers) y Carga Diferida (Lazy Loading)
+ * 1. Los Providers envuelven el árbol de componentes para distribuir estado o configuraciones 
+ *    (como consultas HTTP o temas de diseño) sin pasar propiedades manualmente elemento por elemento.
+ * 2. React.lazy() permite cargar los componentes de las páginas por separado en bundles pequeños 
+ *    bajo demanda, descargándolos solo cuando el usuario navega a esa ruta específica (reduciendo el tiempo inicial).
+ */
 
 const SearchPage = lazy(() => import("@/pages/search-page/SearchPage.jsx"));
 const DetailPage = lazy(() => import("@/pages/detail-page/DetailPage.jsx"));
 
+/**
+ * Componente funcional raíz de la aplicación.
+ * 
+ * @component App
+ * @returns {React.JSX.Element} Estructura principal de enrutamiento y estado.
+ */
 const App = () => {
   const [theme, toggleTheme] = useTheme();
-  const isMswReady = useMsw();
-  if (!isMswReady) return null;
 
   return (
     <QueryClientProvider client={queryClient}>

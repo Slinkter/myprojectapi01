@@ -1,8 +1,5 @@
-
-
 import { motion } from "motion/react";
 import PropTypes from "prop-types";
-
 
 const ProfileHeader = ({ user, variants }) => {
   return (
@@ -38,7 +35,8 @@ const ProfileHeader = ({ user, variants }) => {
           </div>
         ) : (
           <p className="text-text-mute/50 text-[11px] italic font-sans">
-            Este desarrollador aún no ha añadido una biografía en su perfil de GitHub.
+            Este desarrollador aún no ha añadido una biografía en su perfil de
+            GitHub.
           </p>
         )}
       </div>

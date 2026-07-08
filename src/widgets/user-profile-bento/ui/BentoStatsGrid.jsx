@@ -9,6 +9,8 @@ import AccountStatus from "./AccountStatus";
 
 
 const BentoStatsGrid = ({ user, variants }) => {
+  const repoPercent = Math.min((user.repos / 100) * 100, 100);
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
       {}
@@ -22,7 +24,7 @@ const BentoStatsGrid = ({ user, variants }) => {
         )}
       >
         {}
-        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-40 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-br from-accent/5 via-transparent to-transparent opacity-40 pointer-events-none" />
 
         <div className="flex items-center justify-between relative z-10">
           <div className="w-10 h-10 rounded-lg bg-bg border border-border flex items-center justify-center text-accent">
@@ -51,9 +53,9 @@ const BentoStatsGrid = ({ user, variants }) => {
           {}
           <motion.div
             initial={{ width: 0 }}
-            animate={{ width: "75%" }}
+            animate={{ width: `${repoPercent}%` }}
             transition={{ duration: 1.2, ease: "easeOut" }}
-            className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full"
+            className="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full"
           />
         </div>
       </motion.div>

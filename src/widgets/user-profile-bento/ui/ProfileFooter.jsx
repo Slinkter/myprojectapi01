@@ -35,7 +35,7 @@ const ProfileFooter = ({ user, variants }) => {
         href={user.profileUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent text-white hover:bg-sky-600 shadow-sm transition-all duration-200 font-bold cursor-pointer"
+        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent text-white hover:bg-indigo-600 shadow-sm transition-all duration-200 font-bold cursor-pointer"
       >
         <Globe size={14} />
         <span>Ver en GitHub</span>

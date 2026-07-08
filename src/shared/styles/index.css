@@ -144,13 +144,10 @@
 
   body {
     @apply bg-bg text-text font-sans antialiased m-0 min-h-screen relative overflow-x-hidden;
-    /* Custom Pokéball cursor - visible in both light & dark themes */
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg transform='rotate(-45 16 16)'%3E%3Ccircle cx='16' cy='16' r='10' fill='%23FFFFFF' stroke='%231A202C' stroke-width='1.5'/%3E%3Cpath d='M6,16 A10,10 0 0,1 26,16 Z' fill='%23EF4444' stroke='%231A202C' stroke-width='1.5'/%3E%3Cline x1='6' y1='16' x2='26' y2='16' stroke='%231A202C' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%23FFFFFF' stroke='%231A202C' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='16' r='1.2' fill='%23FFFFFF' stroke='%231A202C' stroke-width='0.5'/%3E%3Cpath d='M8.5,12.5 A7.5,7.5 0 0,1 14,8.5' fill='none' stroke='%23FFFFFF' stroke-width='1' stroke-linecap='round' opacity='0.6'/%3E%3C/g%3E%3C/svg%3E") 9 9, auto;
   }
 
   a, button, select, [role="button"], .cursor-pointer {
-    /* Custom Opened Pokéball pointer on hover - visible in both light & dark themes */
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg transform='rotate(-45 16 16)'%3E%3Ccircle cx='16' cy='16' r='5' fill='%23818CF8' opacity='0.7'/%3E%3Cpolygon points='16,11 17.5,14.5 21,16 17.5,17.5 16,21 14.5,17.5 11,16 14.5,14.5' fill='%23FBBF24'/%3E%3Cg transform='translate(0, 3)'%3E%3Cpath d='M6,16 A10,10 0 0,0 26,16 Z' fill='%23FFFFFF' stroke='%231A202C' stroke-width='1.5'/%3E%3Cpath d='M12.5,16 L19.5,16 A3.5,3.5 0 0,1 12.5,16 Z' fill='%23FFFFFF' stroke='%231A202C' stroke-width='1.5'/%3E%3C/g%3E%3Cg transform='translate(0, -3)'%3E%3Cpath d='M6,16 A10,10 0 0,1 26,16 Z' fill='%23EF4444' stroke='%231A202C' stroke-width='1.5'/%3E%3Cpath d='M12.5,16 L19.5,16 A3.5,3.5 0 0,0 12.5,16 Z' fill='%23FFFFFF' stroke='%231A202C' stroke-width='1.5'/%3E%3Cpath d='M8.5,12.5 A7.5,7.5 0 0,1 14,8.5' fill='none' stroke='%23FFFFFF' stroke-width='1' stroke-linecap='round' opacity='0.6'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") 9 9, pointer;
+    cursor: pointer;
   }
 
   ::selection {

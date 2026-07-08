@@ -1,4 +1,4 @@
-import SkeletonCard from "@/entities/user/ui/SkeletonCard";
+import { SkeletonCard } from "@/entities/user";
 import { cn, TAILWIND_STYLE_TOKENS } from "@/shared";
 
 const SkeletonGrid = () => (

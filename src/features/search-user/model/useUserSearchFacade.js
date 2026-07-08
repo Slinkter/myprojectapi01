@@ -1,11 +1,38 @@
-import { useEffect, useRef } from "react";
+/**
+ * @file useUserSearchFacade.js
+ * @description Fachada (Facade Pattern) para centralizar y simplificar la lógica de
+ * búsqueda de usuarios en la interfaz, abstrayendo los hooks de enrutamiento y caché.
+ */
+
+import { useEffect } from "react";
 import { useDebouncedSearch } from "@/shared";
 import { useUserSearchQuery as useUserQuery } from "@/entities/user";
-
 import { toast } from "sonner";
 
+/**
+ * 🎓 CONCEPTO JUNIOR: Patrón Facade (Fachada)
+ * Un Facade simplifica el uso de subsistemas complejos (como el manejo de debounce, el cliente de caché 
+ * de TanStack Query y los toasters de notificación) envolviéndolos en un Hook limpio de pocas líneas. 
+ * El componente visual solo consume booleanos sencillos (como 'isLoading' o 'isError') sin conocer la complejidad interna.
+ */
+
+/**
+ * Hook de Fachada para controlar el estado y las interacciones de búsqueda de usuarios.
+ * 
+ * @function useUserSearchFacade
+ * @returns {Object} API simplificada de la fachada para el componente de UI.
+ * @returns {string} return.searchTerm - Término de búsqueda escrito actualmente.
+ * @returns {Function} return.setSearchTerm - Setea o actualiza el término de búsqueda escrito.
+ * @returns {string} return.debouncedSearchTerm - Término de búsqueda tras aplicar el debounce.
+ * @returns {import('@/entities/user').UserProfile[]} return.users - Listado de perfiles de usuario encontrados.
+ * @returns {Error|null} return.error - Error propagado si la consulta falla.
+ * @returns {Function} return.handleRetry - Fuerza la re-ejecución de la consulta HTTP de búsqueda.
+ * @returns {boolean} return.isLoading - Indica si hay una consulta de búsqueda en curso en la red.
+ * @returns {boolean} return.isError - Indica si la última consulta falló.
+ * @returns {boolean} return.isSuccess - Indica si la última consulta fue exitosa y arrojó perfiles.
+ * @returns {boolean} return.isEmpty - Indica si la búsqueda se completó exitosamente con 0 resultados.
+ */
 export const useUserSearchFacade = () => {
-  /*  */
   const [searchTerm, setSearchTerm, debouncedSearchTerm] =
     useDebouncedSearch("");
 
@@ -40,22 +67,6 @@ export const useUserSearchFacade = () => {
   const isError = status === "error";
   const isSuccess = status === "success" && users?.length > 0;
   const isEmpty = status === "success" && users?.length === 0;
-
-  const prevStatus = useRef(status);
-  useEffect(() => {
-    if (prevStatus.current !== status) {
-      const label =
-        status === "pending"
-          ? `TanStack Query: loading`
-          : status === "success"
-            ? `TanStack Query: success (${users.length} usuarios)`
-            : status === "error"
-              ? `TanStack Query: error`
-              : `TanStack Query: ${status}`;
-      console.log(`%c    📡 ${label}`, "color: #a855f7; font-weight: 500;");
-      prevStatus.current = status;
-    }
-  }, [status]);
 
   return {
     searchTerm,

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { ErrorDisplay } from "@/shared";
 import SkeletonGrid from "./SkeletonGrid";
 import UserList from "./UserList";
-import { NotFoundPage as NotFound } from "@/pages/not-found";
+import NotFound from "./ui/NoResults";
 
 const SearchResults = (props) => {
   //

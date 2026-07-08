@@ -1,23 +1,46 @@
+/**
+ * @file UserCard.jsx
+ * @description Componente de tarjeta de usuario interactiva estructurado bajo el patrón
+ * de diseño Compound Components (Componentes Compuestos) para dar flexibilidad de maquetación en React.
+ */
+
 import { useRef } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
-import { cn } from "@/shared/lib/utils/utils";
+import { cn } from "@/shared";
 import { ChevronRight } from "lucide-react";
 
-
-
+/**
+ * 🎓 CONCEPTO JUNIOR: Compound Components (Componentes Compuestos)
+ * Este patrón permite componer una UI flexible atando sub-componentes (como .Avatar, .Header, .Footer) 
+ * al componente principal (UserCard). El desarrollador que usa el componente decide el orden y la estructura 
+ * del JSX de forma libre y legible en lugar de depender de decenas de propiedades (props) restrictivas.
+ */
 
 const TAILWIND_BUTTON_BASE_CLASS = "btn-tailwind";
 
+/**
+ * Variaciones estéticas de clases CSS aplicables a las tarjetas de usuario.
+ * @type {Record<string, string>}
+ */
 const CARD_STYLE_VARIANTS = {
   default: "tailwind-card",
   glass: "tailwind-card",
   minimal: "border border-border/40 rounded-xl hover:border-accent hover:bg-surface/30 transition-all duration-300",
-  "accent-glow": "tailwind-card border-accent/30 hover:border-accent shadow-[0_4px_20px_-4px_rgba(14,165,233,0.08)]",
+  "accent-glow": "tailwind-card border-accent/30 hover:border-accent shadow-[0_4px_20px_-4px_rgba(99,102,241,0.08)]",
 };
 
-
+/**
+ * Subcomponente para renderizar la foto de perfil (avatar) del usuario.
+ * 
+ * @component UserCard.Avatar
+ * @param {Object} props - Propiedades del subcomponente.
+ * @param {string} props.avatarUrl - URL de la imagen del avatar de GitHub.
+ * @param {string} props.username - Username de la cuenta.
+ * @param {string} [props.variant="default"] - Estilo estético de la tarjeta.
+ * @returns {React.JSX.Element} Avatar animado.
+ */
 const UserAvatar = ({ avatarUrl, username, variant = "default" }) => {
   const isMinimalLayout = variant === "minimal";
 
@@ -53,7 +76,15 @@ UserAvatar.propTypes = {
 
 UserAvatar.displayName = "UserCard.Avatar";
 
-
+/**
+ * Subcomponente para renderizar la cabecera e información textual de la tarjeta.
+ * 
+ * @component UserCard.Header
+ * @param {Object} props - Propiedades del subcomponente.
+ * @param {string} props.username - Username de la cuenta de GitHub.
+ * @param {string} [props.variant="default"] - Variante estética de la tarjeta.
+ * @returns {React.JSX.Element} Cabecera textual de la tarjeta.
+ */
 const UserHeader = ({ username, variant = "default" }) => {
   const isMinimalLayout = variant === "minimal";
 
@@ -82,22 +113,27 @@ UserHeader.propTypes = {
 
 UserHeader.displayName = "UserCard.Header";
 
-
+/**
+ * Subcomponente para renderizar el botón inferior de redirección.
+ * 
+ * @component UserCard.Footer
+ * @param {Object} props - Propiedades del subcomponente.
+ * @param {string} props.username - Username de la cuenta de GitHub.
+ * @param {string} [props.variant="default"] - Variante estética de la tarjeta.
+ * @returns {React.JSX.Element|null} Botón con enlace al detalle.
+ */
 const UserFooter = ({ username, variant = "default" }) => {
-  
-
-  
-
-  
-
   if (variant === "minimal") return null;
 
   return (
     <div className="px-5 pb-5 pt-1 mt-auto w-full z-10 overflow-hidden">
-      <Link to={`/user/${username}`} className="w-full block">
-        <motion.button
+      <Link 
+        to={`/user/${username}`} 
+        className="w-full block"
+        aria-label={`Ver perfil de ${username}`}
+      >
+        <motion.div
           className={cn(TAILWIND_BUTTON_BASE_CLASS, "w-full text-xs py-2.5 rounded-xl flex items-center justify-center gap-1.5")}
-          aria-label={`Ver perfil de ${username}`}
           variants={{
             initial: { opacity: 0.95 },
             hover: { opacity: 1 },
@@ -106,7 +142,7 @@ const UserFooter = ({ username, variant = "default" }) => {
         >
           <span>Ver perfil</span>
           <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
-        </motion.button>
+        </motion.div>
       </Link>
     </div>
   );
@@ -119,7 +155,17 @@ UserFooter.propTypes = {
 
 UserFooter.displayName = "UserCard.Footer";
 
-
+/**
+ * Componente principal contenedor de la tarjeta de usuario.
+ * 
+ * @component UserCard
+ * @param {Object} props - Propiedades del componente.
+ * @param {React.ReactNode} props.children - Subcomponentes estructurados a ensamblar.
+ * @param {string} [props.variant="default"] - Variante estética de visualización.
+ * @param {string} [props.className] - Clases CSS adicionales.
+ * @param {string} [props.username] - Username de la cuenta de GitHub.
+ * @returns {React.JSX.Element} Tarjeta contenedora con animaciones físicas.
+ */
 const UserCard = ({ children, variant = "default", className, username }) => {
   const userCardRef = useRef(null);
   
@@ -135,7 +181,6 @@ const UserCard = ({ children, variant = "default", className, username }) => {
         className
       )}
     >
-      {}
       <motion.div
         initial="initial"
         whileHover="hover"
@@ -170,8 +215,6 @@ UserCard.propTypes = {
   className: PropTypes.string,
   username: PropTypes.string,
 };
-
-
 
 UserCard.Avatar = UserAvatar;
 UserCard.Header = UserHeader;
